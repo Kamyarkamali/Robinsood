@@ -51,6 +51,7 @@ function ThemeToggle() {
         onClick={() => setOpen(!open)}
         className="flex items-center justify-between gap-2
                    px-3 py-2 rounded-xl
+                   cursor-pointer
                    bg-white dark:bg-gray-900
                    border border-gray-200 dark:border-gray-700
                    shadow-sm hover:shadow-md
@@ -103,6 +104,7 @@ function ThemeToggle() {
             }}
             className={`w-full flex items-center gap-3 px-4 py-3
             text-sm transition-all duration-200
+            cursor-pointer
             hover:bg-gray-100 dark:hover:bg-gray-800
             ${
               theme === opt.value
