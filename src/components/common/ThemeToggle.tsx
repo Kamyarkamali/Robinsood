@@ -45,7 +45,7 @@ function ThemeToggle() {
   const current = options.find((o) => o.value === theme);
 
   return (
-    <div ref={ref} className="relative inline-block text-left">
+    <div ref={ref} className="relative inline-block text-left z-10">
       {/* دکمه اصلی */}
       <button
         onClick={() => setOpen(!open)}

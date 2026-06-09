@@ -52,15 +52,15 @@ function HamburgerMenu({ menu, setMenu }: Props) {
         {/* آیتم های داخل همبرگرمنو */}
         <div className="p-4 flex flex-col gap-3">
           <a className="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-            Home
+            {t("menu.home")}
           </a>
 
           <a className="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-            Market
+            {t("menu.market")}
           </a>
 
           <a className="p-3 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-800">
-            Trade
+            {t("menu.trade")}
           </a>
         </div>
       </div>

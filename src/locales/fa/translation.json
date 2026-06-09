@@ -9,5 +9,10 @@
   },
   "hamburgermenu": {
     "start": "منو"
+  },
+  "menu": {
+    "home": "خانه",
+    "market": "مارکت",
+    "trade": "ترید"
   }
 }

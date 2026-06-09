@@ -12,6 +12,8 @@ export interface ButtonProps {
   fontBold: string;
   borderRadios?: string;
   hover?: string;
+  gradientBorder?: boolean;
+  gradientBorderColor?: string;
   onClick?: () => void;
 }
 

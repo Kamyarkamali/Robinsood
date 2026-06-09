@@ -9,5 +9,10 @@
   },
   "hamburgermenu": {
     "start": "menu"
+  },
+  "menu": {
+    "home": "Home",
+    "market": "Market",
+    "trade": "Trade"
   }
 }
