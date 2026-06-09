@@ -1,8 +1,14 @@
 @import "tailwindcss";
 @custom-variant dark (&:where(.dark, .dark *));
 
+@font-face {
+  font-family: "myfont";
+  src: url("/fonts/myfont/LahzehWebfonts/woff2/Lahzeh-Medium.woff2");
+}
+
 body {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  font-family: "myfont";
 }
