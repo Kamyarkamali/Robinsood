@@ -10,6 +10,8 @@ import HamburgerMenu from "./HamburgerMenu";
 function Navbar() {
   const [menu, setMenu] = useState(false);
 
+  const { i18n } = useTranslation();
+
   const { t } = useTranslation();
 
   return (
@@ -33,7 +35,7 @@ function Navbar() {
           borderRadios="rounded-[16.1px]"
         >
           {t("navButton.platform")}
-          <div className="mr-3">
+          <div className={`${i18n.language === "fa" ? "mr-4" : "ml-4"}`}>
             <ArrowIcon size={24} />
           </div>
         </Button>
