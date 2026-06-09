@@ -58,10 +58,10 @@ function SectionButtons() {
               </span>
 
               <span
-                className={`border-t-2 w-24 sm:w-32 mt-1 transition-all duration-300 ${
+                className={`border-t-3 rounded-2xl w-24 sm:w-32 mt-1 transition-all duration-300 ${
                   isActive
                     ? "border-[#FFCC00] w-28"
-                    : "border-gray-200 dark:border-gray-600 group-hover:border-[#8777FF] group-hover:w-28"
+                    : "border-gray-200 dark:border-[#D9D9D914] group-hover:border-[#8777FF] group-hover:w-28"
                 }`}
               />
             </div>
