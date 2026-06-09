@@ -6,5 +6,8 @@
   },
   "navButton": {
     "platform": "Go to Platform"
+  },
+  "hamburgermenu": {
+    "start": "menu"
   }
 }

@@ -6,5 +6,8 @@
   },
   "navButton": {
     "platform": "انتقال به پلتفرم"
+  },
+  "hamburgermenu": {
+    "start": "منو"
   }
 }

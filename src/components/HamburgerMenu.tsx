@@ -1,7 +1,10 @@
 import { FiX } from "react-icons/fi";
 import type { Props } from "../types/interfaces";
+import { useTranslation } from "react-i18next";
 
 function HamburgerMenu({ menu, setMenu }: Props) {
+  const { t } = useTranslation();
+
   return (
     <>
       <div
@@ -34,7 +37,9 @@ function HamburgerMenu({ menu, setMenu }: Props) {
         `}
       >
         <div className="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700/40">
-          <h2 className="text-lg font-bold text-black dark:text-white">Menu</h2>
+          <h2 className="text-lg font-bold text-black dark:text-white">
+            {t("hamburgermenu.start")}
+          </h2>
 
           <button
             onClick={() => setMenu(false)}
