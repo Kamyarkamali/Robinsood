@@ -3,5 +3,8 @@
     "light": "Light",
     "dark": "Dark",
     "system": "System"
+  },
+  "navButton": {
+    "platform": "Go to Platform"
   }
 }

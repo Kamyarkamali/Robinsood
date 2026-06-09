@@ -41,7 +41,7 @@ function LanguageSwitcher() {
                    border border-gray-200 dark:border-gray-700
                    shadow-sm hover:shadow-md
                    transition-all duration-300
-                   min-w-[140px] justify-between"
+                   min-w-35 justify-between"
       >
         <div className="flex items-center gap-2">
           <img
@@ -99,7 +99,7 @@ function LanguageSwitcher() {
           <img
             src={fa}
             alt="Persian"
-            className="w-6 h-6 rounded-full object-cover
+            className="w-7 h-6 rounded-full object-fill
                        border border-gray-300 dark:border-gray-600"
           />
           <span className="text-sm font-medium">فارسی</span>
@@ -117,7 +117,7 @@ function LanguageSwitcher() {
           <img
             src={en}
             alt="English"
-            className="w-6 h-6 rounded-full object-cover
+            className="w-7 h-6 rounded-full object-fill
                        border border-gray-300 dark:border-gray-600"
           />
           <span className="text-sm font-medium">English</span>

@@ -56,7 +56,7 @@ function ThemeToggle() {
                    border border-gray-200 dark:border-gray-700
                    shadow-sm hover:shadow-md
                    transition-all duration-300
-                   min-w-[130px]
+                   min-w-32.5
                    text-sm"
       >
         <span className="flex items-center gap-2">
