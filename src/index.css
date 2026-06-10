@@ -2,13 +2,40 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @font-face {
-  font-family: "myfont";
-  src: url("/fonts/myfont/LahzehWebfonts/woff2/Lahzeh-Medium.woff2");
+  font-family: "Lahzeh";
+  src: url("./fonts/myfont/LahzehWebfonts/woff2/Lahzeh-Regular.woff2")
+    format("woff2");
+  font-weight: 400;
+}
+
+@font-face {
+  font-family: "Lahzeh";
+  src: url("./fonts/myfont/LahzehWebfonts/woff2/Lahzeh-Medium.woff2")
+    format("woff2");
+  font-weight: 500;
+}
+
+@font-face {
+  font-family: "Lahzeh";
+  src: url("./fonts/myfont/LahzehWebfonts/woff2/Lahzeh-Bold.woff2")
+    format("woff2");
+  font-weight: 700;
+}
+
+@font-face {
+  font-family: "Lahzeh";
+  src: url("./fonts/myfont/LahzehWebfonts/woff2/Lahzeh-ExtraBold.woff2")
+    format("woff2");
+  font-weight: 800;
+}
+
+@theme {
+  --font-lahzeh: "Lahzeh", sans-serif;
 }
 
 body {
+  font-family: "Lahzeh", sans-serif;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
-  font-family: "myfont";
 }

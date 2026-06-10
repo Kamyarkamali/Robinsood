@@ -27,3 +27,7 @@ export interface Props {
   menu: boolean;
   setMenu: (value: boolean) => void;
 }
+
+export interface ShowSectionItemsProps {
+  activeId: number;
+}

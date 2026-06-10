@@ -14,5 +14,20 @@
     "home": "Home",
     "market": "Market",
     "trade": "Trade"
+  },
+  "items": {
+    "item1": "Show all items",
+    "item2": "Challenge info",
+    "item3": "Today control params",
+    "item4": "Drawdown chart",
+    "item5": "Account stats",
+    "item6": "Calendar analysis",
+    "item7": "News status",
+    "item8": "Ai trading",
+    "item9": "Comparison",
+    "item10": "Trades"
+  },
+  "wellcome": {
+    "hello": "Dear Hooman, welcome to the challenges."
   }
 }
