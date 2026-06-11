@@ -29,5 +29,8 @@
   },
   "wellcome": {
     "hello": "Dear Hooman, welcome to the challenges."
+  },
+  "detailes": {
+    "messege": "You have owned this account for 10 days and have traded on 2 of those days."
   }
 }

@@ -31,3 +31,11 @@ export interface Props {
 export interface ShowSectionItemsProps {
   activeId: number;
 }
+
+export interface AlertCircleIconProps {
+  width?: number | string;
+  height?: number | string;
+  color?: string;
+  opacity?: number;
+  className?: string;
+}

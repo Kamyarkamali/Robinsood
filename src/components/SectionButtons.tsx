@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import ShowSectionItems from "./ShowSectionItems";
 import WellcomeComponent from "./WellcomeComponent";
 import { buttonStyles } from "../styles/buttonStyles";
+import DetailseComponent from "./DetailseComponent";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -15,7 +16,7 @@ function SectionButtons() {
 
   return (
     <div className="flex flex-col">
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-5 font-lahzeh font-extrabold">
+      <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-5 font-lahzeh font-extrabold">
         {buttonSection.map((items) => {
           const isActive = activeId === items.id;
 
@@ -24,7 +25,7 @@ function SectionButtons() {
               key={items.id}
               onClick={() => setActiveId(items.id)}
               hoverVariant="trading"
-              className={`cursor-pointer transition-all duration-300 ${
+              className={`cursor-pointer transition-all  duration-300 ${
                 isActive ? "scale-[1.03]" : "hover:-translate-y-1"
               }`}
               borderRadios="rounded-xl"
@@ -65,6 +66,9 @@ function SectionButtons() {
         <div className="w-full lg:w-auto flex justify-start lg:justify-end">
           <WellcomeComponent />
         </div>
+      </div>
+      <div className="w-full lg:w-auto flex justify-start mt-8">
+        <DetailseComponent />
       </div>
     </div>
   );
