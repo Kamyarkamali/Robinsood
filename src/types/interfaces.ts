@@ -39,3 +39,7 @@ export interface AlertCircleIconProps {
   opacity?: number;
   className?: string;
 }
+
+export interface Circle {
+  color: string;
+}

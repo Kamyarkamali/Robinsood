@@ -59,7 +59,7 @@ function ThemeToggle() {
                    min-w-32.5
                    text-sm"
       >
-        <span className="flex items-center gap-2">
+        <span className="flex items-center font-normal whitespace-nowrap gap-2">
           <span>{current?.icon}</span>
           <span>{current?.label}</span>
         </span>

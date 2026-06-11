@@ -32,5 +32,9 @@
   },
   "detailes": {
     "messege": "You have owned this account for 10 days and have traded on 2 of those days."
+  },
+  "support": {
+    "request": "Request account approval",
+    "mentor": "Support / Mentor Request"
   }
 }

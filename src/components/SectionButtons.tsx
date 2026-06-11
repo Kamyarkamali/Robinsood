@@ -6,6 +6,7 @@ import ShowSectionItems from "./ShowSectionItems";
 import WellcomeComponent from "./WellcomeComponent";
 import { buttonStyles } from "../styles/buttonStyles";
 import DetailseComponent from "./DetailseComponent";
+import InformationAccount from "./InformationAccount";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -30,7 +31,7 @@ function SectionButtons() {
               }`}
               borderRadios="rounded-xl"
               fontBold="font-bold"
-              textStyle="text-[16px] sm:text-[18px]"
+              textStyle="text-[14px] sm:text-[18px]"
               bgColor={isActive ? active : lightInactive + " " + darkInactive}
               width="w-full"
               height="h-[60px]"
@@ -60,15 +61,23 @@ function SectionButtons() {
       </div>
 
       <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        {/* قسمت آیتم ها */}
         <div className="w-full lg:flex-1 min-w-0">
           <ShowSectionItems activeId={activeId} />
         </div>
+
+        {/* کامپوننت خوش امدگویی */}
         <div className="w-full lg:w-auto flex justify-start lg:justify-end">
           <WellcomeComponent />
         </div>
       </div>
       <div className="w-full lg:w-auto flex justify-start mt-8">
         <DetailseComponent />
+      </div>
+
+      {/* اطلاعات حساب */}
+      <div className="w-full lg:w-auto flex justify-start mt-8">
+        <InformationAccount />
       </div>
     </div>
   );
@@ -79,3 +88,4 @@ export default SectionButtons;
 // ----------------------------------------------------------------------------------
 // دیتاهای گرفته شده هر آیتم برای نمایش باید به خط 75 به صورت پراپس پاس داده بشن
 //دیتا نام کاربر برایی خوش آمدگویی  باید در کامپوننت خط 62 نمایش داده بشه
+//اطلاعات حساب کاربر-کارت ها باید خط 80 داده بشه

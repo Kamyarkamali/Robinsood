@@ -12,7 +12,7 @@ function WellcomeComponent() {
         hoverVariant="trading"
         borderRadios="rounded-3xl"
         fontBold="font-bold"
-        textStyle="text-[14px] sm:text-[16px] md:text-[18px]"
+        textStyle="text-[14px] sm:text-[16px] md:text-[16px]"
         bgColor={lightInactive + " " + darkInactive}
         width="w-full sm:w-[280px] md:w-[320px] lg:w-[360px]"
         height="h-[80px]"
@@ -25,7 +25,7 @@ function WellcomeComponent() {
         </section>
 
         <div className="flex flex-col items-center justify-center text-center min-w-0">
-          <span className="whitespace-normal wrap-break-word leading-snug dark:text-white text-gray-800">
+          <span className="whitespace-normal font-medium wrap-break-word leading-snug dark:text-white text-gray-800">
             {t("wellcome.hello")}
           </span>
         </div>

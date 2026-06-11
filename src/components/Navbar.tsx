@@ -16,7 +16,7 @@ function Navbar() {
 
   return (
     <div className="pt-4 flex items-center justify-between">
-      <section className="flex items-center gap-3">
+      <section className="flex items-center gap-1 lg:gap-3">
         <LanguageSwitcher />
         <ThemeToggle />
       </section>
