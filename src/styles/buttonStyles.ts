@@ -24,19 +24,20 @@ export const buttonStyles = {
 export const cardOuter =
   "w-full sm:w-85 md:w-105 lg:w-105.75 h-41.25 " +
   "flex items-center justify-center " +
-  "rounded-4xl p-3 " +
+  "rounded-3xl p-3 " +
   "bg-white dark:bg-[#282828] " +
   "border border-[#00000010] dark:border-[#FDFDFD1A] " +
-  "shadow-[10px_10px_25px_rgba(0,0,0,0.12),-10px_-10px_25px_rgba(255,255,255,0.7)] " +
-  "dark:shadow-[12px_12px_30px_rgba(0,0,0,0.6),-6px_-6px_12px_rgba(255,255,255,0.05)] " +
+  // "shadow-[10px_10px_25px_rgba(0,0,0,0.12),-10px_-10px_25px_rgba(255,255,255,0.7)] " +
+  // "dark:shadow-[12px_12px_30px_rgba(0,0,0,0.6),-6px_-6px_12px_rgba(255,255,255,0.05)] " +
   "transition-all duration-300";
 
 //  (نئومورفیسم داخل)
 export const cardInner =
-  "w-full h-full p-4 rounded-4xl " +
+  "w-full h-full p-4 rounded-3xl " +
   "flex items-center justify-center " +
-  "bg-gradient-to-b from-white/40 to-white/10 dark:from-[#1f1f1f] dark:to-[#2a2a2a] " +
-  "border border-[#00000010] dark:border-[#FDFDFD1A] " +
-  "shadow-[inset_6px_6px_14px_rgba(0,0,0,0.12),inset_-6px_-6px_14px_rgba(255,255,255,0.6),0_18px_35px_-12px_rgba(0,0,0,0.25)] " +
-  "dark:shadow-[inset_6px_6px_14px_rgba(0,0,0,0.4),inset_-4px_-4px_10px_rgba(255,255,255,0.05),0_20px_40px_-12px_rgba(0,0,0,0.7)]";
+  "dark:bg-gradient-to-t dark:from-[#222222] shadow-lg dark:to-[#303030] dark:text-white dark:border-transparent dark:shadow-xl" +
+  "shadow-[0px_4px_8px_rgba(0,0,0,0.12)] " +
+  "dark:shadow-[0px_4px_8px_rgba(0,0,0,0.6)] ";
+// "shadow-[inset_6px_6px_14px_rgba(0,0,0,0.12),inset_-6px_-6px_14px_rgba(255,255,255,0.6),0_18px_35px_-12px_rgba(0,0,0,0.25)] " +
+// "dark:shadow-[inset_6px_6px_14px_rgba(0,0,0,0.4),inset_-4px_-4px_10px_rgba(255,255,255,0.05),0_20px_40px_-12px_rgba(0,0,0,0.7)]";
 // ---------------------------------------------------------------------------------------------------

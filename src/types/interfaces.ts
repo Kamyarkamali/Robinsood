@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import type { ChallengeStatus, IconColor } from "./type";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -40,6 +41,27 @@ export interface AlertCircleIconProps {
   className?: string;
 }
 
-export interface Circle {
+export interface ChartData {
+  current: number;
+  max: number;
   color: string;
+  bgColor: string;
+  glowColor?: string;
+}
+
+export interface Metric {
+  label?: string;
+  value?: string;
+  type?: "orange" | "blue";
+  text?: string;
+  val?: string | [];
+}
+
+export interface ChallengeCard {
+  id: string;
+  title: string;
+  status: ChallengeStatus;
+  iconColor: IconColor;
+  chart: ChartData;
+  metrics: Metric[];
 }
