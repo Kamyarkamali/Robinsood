@@ -3,7 +3,7 @@ export const buttonStyles = {
     "bg-gradient-to-r from-[#8777FF] to-[#812DFF] text-white shadow-[0_8px_20px_rgba(135,119,255,0.25)]",
 
   darkInactive:
-    "dark:bg-[#282828] dark:text-white dark:border-transparent dark:shadow-xl",
+    "dark:bg-gradient-to-t dark:from-[#222222] dark:to-[#303030] dark:text-white dark:border-transparent dark:shadow-xl",
 
   lightInactive: `
     bg-gray-50

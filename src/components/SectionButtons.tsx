@@ -7,6 +7,7 @@ import WellcomeComponent from "./WellcomeComponent";
 import { buttonStyles } from "../styles/buttonStyles";
 import DetailseComponent from "./DetailseComponent";
 import InformationAccount from "./InformationAccount";
+import ParametrComponent from "./ParametrComponent";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -29,12 +30,12 @@ function SectionButtons() {
               className={`cursor-pointer transition-all  duration-300 ${
                 isActive ? "scale-[1.03]" : "hover:-translate-y-1"
               }`}
-              borderRadios="rounded-xl"
+              borderRadios="rounded-3xl"
               fontBold="font-bold"
               textStyle="text-[14px] sm:text-[18px]"
               bgColor={isActive ? active : lightInactive + " " + darkInactive}
               width="w-full"
-              height="h-[60px]"
+              height="h-[80px]"
             >
               <div className="flex flex-col items-center text-center">
                 <span
@@ -79,6 +80,7 @@ function SectionButtons() {
       <div className="w-full lg:w-auto flex justify-start mt-8">
         <InformationAccount />
       </div>
+      <ParametrComponent />
     </div>
   );
 }

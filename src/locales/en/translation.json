@@ -36,5 +36,14 @@
   "support": {
     "request": "Request account approval",
     "mentor": "Support / Mentor Request"
+  },
+  "cards": {
+    "account": "Account Type",
+    "balance": "Balance",
+    "equity": "Equity",
+    "prop": "Prop Opportunities",
+    "compared": "+1.5% compared to yesterday",
+    "risk": "Risk: 2%",
+    "Last": "Last updated: 1404/10/22, 18:13:25"
   }
 }
