@@ -41,7 +41,7 @@ export default function ChallengeCardComponent({ card }: Props) {
           />
         </div>
 
-        <div className="w-full px-2 border-2 text-[13.91px] font-normal flex items-center justify-center flex-col gap-2 dark:border-[#3B3B3B] border-gray-200 rounded-t-[23px] flex-1 dark:bg-linear-to-t dark:from-[#222222] shadow-lg dark:to-[#303030] dark:text-white mx-auto text-[#aaa] pb-2 space-y-0.5">
+        <div className="w-full px-2 border-2 text-[13.91px] text-center font-normal flex items-center justify-center flex-col gap-2 dark:border-[#3B3B3B] border-gray-200 rounded-t-[23px] flex-1 dark:bg-linear-to-t dark:from-[#222222] shadow-lg dark:to-[#303030] dark:text-white mx-auto text-[#aaa] pb-2 space-y-0.5">
           {card.metrics.map((m, i) =>
             m.type === "orange" ? (
               <p key={i} className="text-orange-400 font-bold text-center">
