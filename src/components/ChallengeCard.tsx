@@ -41,7 +41,7 @@ export default function ChallengeCardComponent({ card }: Props) {
           />
         </div>
 
-        <div className="w-full px-2 border-2 text-[13.91px] text-center font-normal flex items-center justify-center flex-col gap-2 dark:border-[#3B3B3B] border-gray-200 rounded-t-[23px] flex-1 dark:bg-linear-to-t dark:from-[#222222] shadow-lg dark:to-[#303030] dark:text-white mx-auto text-[#aaa] pb-2 space-y-0.5">
+        <div className="w-full px-2 border-2 text-[13.91px] text-center font-normal flex items-center justify-center flex-col gap-2 dark:border-[#3B3B3B] border-gray-200 rounded-t-[23px] flex-1 dark:bg-linear-to-t dark:from-[#222222] dark:shadow-lg dark:to-[#303030] dark:text-white mx-auto text-[#aaa] pb-2 space-y-0.5">
           {card.metrics.map((m, i) =>
             m.type === "orange" ? (
               <p key={i} className="text-orange-400 font-bold text-center">
@@ -62,7 +62,7 @@ export default function ChallengeCardComponent({ card }: Props) {
               >
                 {i18n.language === "fa" ? m.label.fa : m.label.en}
 
-                <span className="dark:text-white flex  items-center justify-center text-[12px] font-bold">
+                <span className="dark:text-white flex items-center justify-center text-[12px] font-bold">
                   {m?.value}
                 </span>
               </div>
@@ -71,14 +71,14 @@ export default function ChallengeCardComponent({ card }: Props) {
         </div>
 
         <button
-          className={`w-full py-1.5 text-[15.91px] font-semibold dark:bg-linear-to-r ${card.status === "active" ? "dark:from-green-900" : "dark:from-red-900"} shadow-lg dark:to-[#282828] dark:text-white h-[49.73px] cursor-default border-t ${
+          className={`w-full py-1.5 text-[15.91px] border-t-0 font-semibold dark:bg-linear-to-r ${card.status === "active" ? "dark:from-green-900" : "dark:from-red-900"} shadow-lg dark:to-[#282828] dark:text-white h-[49.73px] cursor-default border-t ${
             card.status === "active"
-              ? "bg-[#081c08] text-[#34C759] border-t-[#103a10]"
-              : "bg-[#1c0808] text-[#FF383C] border-t-[#3a1010]"
+              ? " text-[#34C759] border-t-[#103a10]"
+              : " text-[#FF383C] border-t-[#3a1010]"
           }`}
         >
           <span
-            className={`${card.status === "active" ? "text-[#34C759]" : "text-[#FF383C]"}`}
+            className={` ${card.status === "active" ? "text-[#34C759]" : "text-[#FF383C]"}`}
           >
             {getStatusText(card.status, i18n.language)}
           </span>
