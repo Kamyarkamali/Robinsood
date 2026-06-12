@@ -16,76 +16,249 @@ export const buttonSection = [
 export const challengeCards: ChallengeCard[] = [
   {
     id: "6",
-    title: "درادون روزانه",
+    title: {
+      fa: "درادون روزانه",
+      en: "Daily Drawdown",
+    },
     status: "active",
     iconColor: "green",
-    chart: { current: 1000, max: 5000, color: "#22c55e", bgColor: "#0a2a0a" },
+    chart: {
+      current: 1000,
+      max: 5000,
+      color: "#22c55e",
+      bgColor: "#0a2a0a",
+    },
     metrics: [
-      { label: "درادون مجاز امروز", value: "$۹۵۰۰ = (۵%)" },
-      { label: "فاصله تا درادون روزانه", value: "" },
-      { type: "orange", text: "$۲۰۰(۲%) مصرف شده" },
-      { type: "blue", text: "$۳۰۰(۵%) مانده" },
+      {
+        label: {
+          fa: "درادون مجاز امروز",
+          en: "Today's Maximum Drawdown",
+        },
+        value: "$9500 (5%)",
+      },
+      {
+        label: {
+          fa: "فاصله تا درادون روزانه",
+          en: "Remaining Daily Drawdown",
+        },
+        value: "",
+      },
+      {
+        type: "orange",
+        text: {
+          fa: "مصرف شده",
+          en: "Used",
+        },
+      },
+      {
+        type: "blue",
+        text: {
+          fa: "مانده",
+          en: "Remaining",
+        },
+      },
     ],
   },
+
   {
     id: "5",
-    title: "درادون کل",
+    title: {
+      fa: "درادون کل",
+      en: "Overall Drawdown",
+    },
     status: "active",
     iconColor: "green",
-    chart: { current: 2000, max: 5000, color: "#22c55e", bgColor: "#0a2a0a" },
+    chart: {
+      current: 2000,
+      max: 5000,
+      color: "#22c55e",
+      bgColor: "#0a2a0a",
+    },
     metrics: [
-      { label: "درادون مجاز امروز", value: "$۹۵۰۰ = (۵%)" },
-      { label: "فاصله تا درادون روزانه", value: "" },
-      { type: "orange", text: "$۲۰۰(۲%) مصرف شده" },
-      { type: "blue", text: "$۳۰۰(۵%) مانده" },
+      {
+        label: {
+          fa: "درادون مجاز امروز",
+          en: "Maximum Daily Drawdown",
+        },
+        value: "$9500 (5%)",
+      },
+      {
+        label: {
+          fa: "فاصله تا درادون روزانه",
+          en: "Remaining Daily Drawdown",
+        },
+        value: "",
+      },
+      {
+        type: "orange",
+        text: {
+          fa: "مصرف شده",
+          en: "Used",
+        },
+      },
+      {
+        type: "blue",
+        text: {
+          fa: "مانده",
+          en: "Remaining",
+        },
+      },
     ],
   },
+
   {
     id: "4",
-    title: "روز های معاملاتی",
+    title: {
+      fa: "روزهای معاملاتی",
+      en: "Trading Days",
+    },
     status: "active",
     iconColor: "green",
-    chart: { current: 3000, max: 5000, color: "#22c55e", bgColor: "#0a2a0a" },
+    chart: {
+      current: 3000,
+      max: 5000,
+      color: "#22c55e",
+      bgColor: "#0a2a0a",
+    },
     metrics: [
-      { label: "تعداد روزهای معاملاتی", value: "۳ / ۵" },
-      { label: "روزهای مجاز چالش", value: "۴ روز الی بی‌نهایت" },
+      {
+        label: {
+          fa: "تعداد روزهای معاملاتی",
+          en: "Number of Trading Days",
+        },
+        value: "3 / 5",
+      },
+      {
+        label: {
+          fa: "روزهای مجاز چالش",
+          en: "Required Trading Days",
+        },
+        value: "4 Days to Unlimited",
+      },
     ],
   },
+
   {
     id: "3",
-    title: "لات",
+    title: {
+      fa: "لات",
+      en: "Lot",
+    },
     status: "inactive",
     iconColor: "red",
-    chart: { current: 3750, max: 5000, color: "#ef4444", bgColor: "#2a0a0a" },
+    chart: {
+      current: 3750,
+      max: 5000,
+      color: "#ef4444",
+      bgColor: "#2a0a0a",
+    },
     metrics: [
-      { label: "لات مجاز امروز", value: "۱.۵ / ۲" },
-      { label: "تعداد معاملات امروز", value: "۵" },
-      { label: "میانگین لات امروز", value: "۰.۳" },
+      {
+        label: {
+          fa: "لات مجاز امروز",
+          en: "Maximum Lot Size Today",
+        },
+        value: "1.5 / 2",
+      },
+      {
+        label: {
+          fa: "تعداد معاملات امروز",
+          en: "Number of Trades Today",
+        },
+        value: "5",
+      },
+      {
+        label: {
+          fa: "میانگین لات امروز",
+          en: "Average Lot Size Today",
+        },
+        value: "0.3",
+      },
     ],
   },
+
   {
     id: "1",
-    title: "درگیری حساب",
+    title: {
+      fa: "درگیری حساب",
+      en: "Account Exposure",
+    },
     status: "inactive",
     iconColor: "yellow",
-    chart: { current: 2250, max: 5000, color: "#eab308", bgColor: "#2a2200" },
+    chart: {
+      current: 2250,
+      max: 5000,
+      color: "#eab308",
+      bgColor: "#2a2200",
+    },
     metrics: [
-      { label: "MDL", value: "" },
-      { label: "", value: "۳۹۰۰$(۵%)" },
-      { label: "FL", value: "" },
-      { label: "", value: "۳۹۰۰$(۵%)" },
+      {
+        label: {
+          fa: "MDL",
+          en: "MDL",
+        },
+        value: "300000",
+      },
+      {
+        label: {
+          fa: "",
+          en: "",
+        },
+        value: "3900$ (5%)",
+      },
+      {
+        label: {
+          fa: "FL",
+          en: "FL",
+        },
+        value: "",
+      },
+      {
+        label: {
+          fa: "",
+          en: "",
+        },
+        value: "3900$ (5%)",
+      },
     ],
   },
+
   {
     id: "2",
-    title: "درگیری حساب",
+    title: {
+      fa: "درگیری حساب",
+      en: "Account Exposure",
+    },
     status: "inactive",
     iconColor: "yellow",
-    chart: { current: 1500, max: 5000, color: "#eab308", bgColor: "#2a2200" },
+    chart: {
+      current: 1500,
+      max: 5000,
+      color: "#eab308",
+      bgColor: "#2a2200",
+    },
     metrics: [
-      { label: "ریسک کل", value: "$۳۵(۰.۵۵%)" },
-      { label: "SL", value: "۰.۳" },
-      { label: "ریسک مارجین", value: "$۳۵(۰.۵۵%)" },
+      {
+        label: {
+          fa: "ریسک کل",
+          en: "Total Risk",
+        },
+        value: "$35 (0.55%)",
+      },
+      {
+        label: {
+          fa: "SL",
+          en: "SL",
+        },
+        value: "0.3",
+      },
+      {
+        label: {
+          fa: "ریسک مارجین",
+          en: "Margin Risk",
+        },
+        value: "$35 (0.55%)",
+      },
     ],
   },
 ];

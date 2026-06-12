@@ -1,13 +1,5 @@
 import { useEffect, useRef } from "react";
-
-interface Props {
-  current: number;
-  max: number;
-  color: string;
-  glowColor: string;
-  bgColor: string;
-  icon: React.ReactNode;
-}
+import type { Propss } from "../types/interfaces";
 
 export default function ChallengeChart({
   current,
@@ -16,7 +8,7 @@ export default function ChallengeChart({
   glowColor,
   bgColor,
   icon,
-}: Props) {
+}: Propss) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {

@@ -45,5 +45,13 @@
     "compared": "+1.5% compared to yesterday",
     "risk": "Risk: 2%",
     "Last": "Last updated: 1404/10/22, 18:13:25"
+  },
+  "chart1": {
+    "Daily": "Daily Drawdown",
+    "Today": "Today's Maximum Drawdown",
+    "Remaining": "Remaining Daily Drawdown",
+    "Used": "Used",
+    "Remaining2": "Remaining",
+    "Active": "Active in Challenge"
   }
 }

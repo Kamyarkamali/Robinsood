@@ -50,18 +50,34 @@ export interface ChartData {
 }
 
 export interface Metric {
-  label?: string;
+  label: {
+    fa: string;
+    en: string;
+  };
   value?: string;
   type?: "orange" | "blue";
-  text?: string;
+  textfa?: string;
+  texten?: string;
   val?: string | [];
 }
 
 export interface ChallengeCard {
   id: string;
-  title: string;
+  title: {
+    fa: string;
+    en: string;
+  };
   status: ChallengeStatus;
   iconColor: IconColor;
   chart: ChartData;
   metrics: Metric[];
+}
+
+export interface Propss {
+  current: number;
+  max: number;
+  color: string;
+  glowColor: string;
+  bgColor: string;
+  icon: React.ReactNode;
 }

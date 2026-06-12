@@ -7,7 +7,6 @@ import WellcomeComponent from "./WellcomeComponent";
 import { buttonStyles } from "../styles/buttonStyles";
 import DetailseComponent from "./DetailseComponent";
 import InformationAccount from "./InformationAccount";
-import ParametrComponent from "./ParametrComponent";
 import ChallengeGrid from "./ChallengeGrid";
 
 function SectionButtons() {
