@@ -1,4 +1,4 @@
-import type { ChallengeCard } from "../types/interfaces";
+import type { ChallengeCard, ChartData2, Progres } from "../types/interfaces";
 
 export const buttonSection = [
   { id: 1, en: "show all items", fa: "نمایش همه آیتم ها" },
@@ -260,5 +260,115 @@ export const challengeCards: ChallengeCard[] = [
         value: "$35 (0.55%)",
       },
     ],
+  },
+];
+
+// دیتاهای چارت دوم
+
+export const chartsData: ChartData2[] = [
+  {
+    id: 1,
+    title: "میانگین معاملات",
+    days: [
+      { label: "روز اول", value: 0.18, color: "#E53935" },
+      { label: "روز دوم", value: 0.52, color: "#FDD835" },
+      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
+      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+    ],
+    averageLine: 0.68,
+    plusPercent: 20,
+    minusPercent: -20,
+  },
+  {
+    id: 2,
+    title: "میانگین معاملات",
+    days: [
+      { label: "روز اول", value: 0.18, color: "#E53935" },
+      { label: "روز دوم", value: 0.52, color: "#FDD835" },
+      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
+      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+    ],
+    averageLine: 0.68,
+    plusPercent: 20,
+    minusPercent: -20,
+  },
+  {
+    id: 3,
+    title: "میانگین معاملات",
+    days: [
+      { label: "روز اول", value: 0.18, color: "#E53935" },
+      { label: "روز دوم", value: 0.52, color: "#FDD835" },
+      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
+      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+    ],
+    averageLine: 0.68,
+    plusPercent: 20,
+    minusPercent: -20,
+  },
+  {
+    id: 4,
+    title: "میانگین معاملات",
+    days: [
+      { label: "روز اول", value: 0.18, color: "#E53935" },
+      { label: "روز دوم", value: 0.52, color: "#FDD835" },
+      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
+      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+    ],
+    averageLine: 0.68,
+    plusPercent: 20,
+    minusPercent: -20,
+  },
+  {
+    id: 5,
+    title: "میانگین معاملات",
+    days: [
+      { label: "روز اول", value: 0.18, color: "#E53935" },
+      { label: "روز دوم", value: 0.52, color: "#FDD835" },
+      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
+      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+    ],
+    averageLine: 0.68,
+    plusPercent: 20,
+    minusPercent: -20,
+  },
+  {
+    id: 6,
+    title: "میانگین معاملات",
+    days: [
+      { label: "روز اول", value: 0.18, color: "#E53935" },
+      { label: "روز دوم", value: 0.52, color: "#FDD835" },
+      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
+      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+    ],
+    averageLine: 0.68,
+    plusPercent: 20,
+    minusPercent: -20,
+  },
+];
+
+export const progressCardsData: Progres[] = [
+  {
+    id: "profit",
+    title: "سود",
+    badgeText: "عالی داری پیش میری . چند تا تارگت باقی مونده .",
+    badgeType: "success",
+    currentValue: 653,
+    targetValue: 800,
+    currentLabel: "پیشرفت شما",
+    targetLabel: "تارگت",
+    currentPercent: 5,
+    targetPercent: 8,
+    unit: "currency",
+  },
+  {
+    id: "tradingDay",
+    title: "روز معاملاتی",
+    badgeText: "نیاز داری که تایم بیشتری صرف کنی .",
+    badgeType: "danger",
+    currentValue: 2,
+    targetValue: 5,
+    currentLabel: "تعداد روز معاملاتی شما",
+    targetLabel: "تعداد روز مورد نیاز",
+    unit: "day",
   },
 ];

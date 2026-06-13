@@ -81,3 +81,32 @@ export interface Propss {
   bgColor: string;
   icon: React.ReactNode;
 }
+
+export interface DayData {
+  label: string;
+  value: number;
+  color: string;
+}
+
+export interface ChartData2 {
+  id: number;
+  title: string;
+  days: DayData[];
+  averageLine: number;
+  plusPercent: number;
+  minusPercent: number;
+}
+
+export interface Progres {
+  id: "profit" | "tradingDay";
+  title: string;
+  badgeText: string;
+  badgeType: "success" | "danger";
+  currentValue: number;
+  targetValue: number;
+  currentLabel: string;
+  targetLabel: string;
+  currentPercent?: number;
+  targetPercent?: number;
+  unit: "currency" | "day";
+}

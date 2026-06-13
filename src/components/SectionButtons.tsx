@@ -8,6 +8,7 @@ import { buttonStyles } from "../styles/buttonStyles";
 import DetailseComponent from "./DetailseComponent";
 import InformationAccount from "./InformationAccount";
 import ChallengeGrid from "./ChallengeGrid";
+import TradingChartsGrid from "./TradingChartsGrid";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -83,6 +84,10 @@ function SectionButtons() {
 
       <div className="w-full lg:w-auto flex justify-start mt-8">
         <ChallengeGrid />
+      </div>
+      <div className="w-full lg:w-auto flex flex-col lg:flex-row mt-8">
+        {/* <ProgressCardsSection /> */}
+        <TradingChartsGrid />
       </div>
     </div>
   );

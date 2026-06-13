@@ -35,7 +35,6 @@ export default function ChallengeChart({
     ctx.fillStyle = bgColor;
     ctx.fill();
 
-    // track خاکستری
     ctx.beginPath();
     ctx.arc(cx, cy, r, startAngle, startAngle + totalAngle);
     ctx.strokeStyle = "#1a1a1a";
@@ -47,7 +46,6 @@ export default function ChallengeChart({
     ctx.shadowColor = glowColor;
     ctx.shadowBlur = 8;
 
-    // progress با گرادینت
     const grad = ctx.createLinearGradient(cx - r, cy, cx + r, cy);
     grad.addColorStop(0, color + "99");
     grad.addColorStop(1, color);
