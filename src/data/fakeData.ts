@@ -349,26 +349,50 @@ export const chartsData: ChartData2[] = [
 export const progressCardsData: Progres[] = [
   {
     id: "profit",
-    title: "سود",
-    badgeText: "عالی داری پیش میری . چند تا تارگت باقی مونده .",
+    title: {
+      fa: "سود",
+      en: "Profit",
+    },
+    badgeText: {
+      fa: "عالی داری پیش میری . چند تا تارگت باقی مونده .",
+      en: "Great job! You're making excellent progress. Only a few targets remain.",
+    },
     badgeType: "success",
     currentValue: 653,
     targetValue: 800,
-    currentLabel: "پیشرفت شما",
-    targetLabel: "تارگت",
+    currentLabel: {
+      fa: "پیشرفت شما",
+      en: "Your Progress",
+    },
+    targetLabel: {
+      fa: "تارگت",
+      en: "Target",
+    },
     currentPercent: 5,
     targetPercent: 8,
     unit: "currency",
   },
   {
     id: "tradingDay",
-    title: "روز معاملاتی",
-    badgeText: "نیاز داری که تایم بیشتری صرف کنی .",
+    title: {
+      fa: "روز معاملاتی",
+      en: "Trading Days",
+    },
+    badgeText: {
+      fa: "نیاز داری که تایم بیشتری صرف کنی .",
+      en: "You need to spend more time trading.",
+    },
     badgeType: "danger",
     currentValue: 2,
     targetValue: 5,
-    currentLabel: "تعداد روز معاملاتی شما",
-    targetLabel: "تعداد روز مورد نیاز",
+    currentLabel: {
+      fa: "تعداد روز معاملاتی شما",
+      en: "Your Trading Days",
+    },
+    targetLabel: {
+      fa: "تعداد روز مورد نیاز",
+      en: "Required Trading Days",
+    },
     unit: "day",
   },
 ];

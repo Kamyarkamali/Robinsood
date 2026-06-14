@@ -21,7 +21,7 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
   const svgWidth =
     paddingLeft + totalBars * (barWidth + gap) - gap + paddingRight;
 
-  const BASE_WIDTH = svgWidth; // 👈 مهم: بدون تغییر layout
+  const BASE_WIDTH = svgWidth;
 
   const svgHeight = chartHeight + paddingTop + paddingBottom;
 

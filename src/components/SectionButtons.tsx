@@ -9,6 +9,7 @@ import DetailseComponent from "./DetailseComponent";
 import InformationAccount from "./InformationAccount";
 import ChallengeGrid from "./ChallengeGrid";
 import TradingChartsGrid from "./TradingChartsGrid";
+import ProgressCardsSection from "./ProgressCardsSection";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -86,7 +87,7 @@ function SectionButtons() {
         <ChallengeGrid />
       </div>
       <div className="w-full lg:w-auto flex flex-col lg:flex-row mt-8">
-        {/* <ProgressCardsSection /> */}
+        <ProgressCardsSection />
         <TradingChartsGrid />
       </div>
     </div>

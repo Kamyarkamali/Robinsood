@@ -99,13 +99,25 @@ export interface ChartData2 {
 
 export interface Progres {
   id: "profit" | "tradingDay";
-  title: string;
-  badgeText: string;
+  title: {
+    fa: string;
+    en: string;
+  };
+  badgeText: {
+    fa: string;
+    en: string;
+  };
   badgeType: "success" | "danger";
   currentValue: number;
   targetValue: number;
-  currentLabel: string;
-  targetLabel: string;
+  currentLabel: {
+    fa: string;
+    en: string;
+  };
+  targetLabel: {
+    fa: string;
+    en: string;
+  };
   currentPercent?: number;
   targetPercent?: number;
   unit: "currency" | "day";
