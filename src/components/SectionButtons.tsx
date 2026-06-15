@@ -28,6 +28,7 @@ function SectionButtons() {
 
           return (
             <Button
+              textStyle=""
               key={items.id}
               onClick={() => setActiveId(items.id)}
               hoverVariant="trading"
@@ -36,14 +37,13 @@ function SectionButtons() {
               }`}
               borderRadios="rounded-3xl"
               fontBold="font-bold"
-              textStyle="text-[14px] sm:text-[18px]"
               bgColor={isActive ? active : lightInactive + " " + darkInactive}
               width="w-full"
-              height="h-[80px]"
+              height="lg:h-[80px] h-[60px]"
             >
               <div className="flex flex-col items-center text-center">
                 <span
-                  className={`leading-tight font-bold transition-all duration-300 ${
+                  className={`leading-tight text-[13px] lg:text-[16px] font-bold transition-all duration-300 ${
                     isActive
                       ? "text-white"
                       : "text-gray-600 dark:text-white group-hover:text-gray-900 dark:group-hover:text-gray-200"

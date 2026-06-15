@@ -8,7 +8,7 @@ export default function ChallengeGrid() {
         پارامترهای کنترلی امروز
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 p-2 sm:p-3 lg:p-4 w-full place-items-center">
+      <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 p-2 sm:p-3 lg:p-4 w-full place-items-center">
         {challengeCards.map((card) => (
           <ChallengeCardComponent key={card.id} card={card} />
         ))}
