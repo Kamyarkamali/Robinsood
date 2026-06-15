@@ -53,5 +53,27 @@
     "Used": "Used",
     "Remaining2": "Remaining",
     "Active": "Active in Challenge"
+  },
+  "chart": {
+    "balance": "Balance",
+    "profit": "Profit",
+    "target": "Target",
+    "dailyDrawdown": "Daily Drawdown",
+    "totalDrawdown": "Total Drawdown",
+    "equity": "Equity",
+    "toggleGrid": "Toggle Grid",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out"
+  },
+  "timeframes": {
+    "1min": "1 Min",
+    "1min+": "1 Min",
+    "5min": "5 Min",
+    "10min": "10 Min",
+    "30min": "30 Min",
+    "1h": "1 H",
+    "4h": "4 H",
+    "12h": "12 H",
+    "1day": "1 Day"
   }
 }

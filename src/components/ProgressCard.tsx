@@ -28,61 +28,142 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
       : val.toLocaleString("fa-IR");
 
   return (
-    <div className="p-4 flex flex-col gap-4 w-107 h-55.25 border-4 dark:bg-[#282828] bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] rounded-[21.24px] border-gray-300 dark:border-[#3C3C3C]">
-      <div className="flex items-center justify-start gap-3">
-        <h3 className="dark:text-white text-gray-500 text-lg font-semibold whitespace-nowrap">
+    <div
+      className="
+        w-full
+        min-h-[220px]
+        p-3 sm:p-4 lg:p-5
+        flex flex-col
+        gap-4
+        rounded-2xl
+        border-2
+        dark:bg-[#282828]
+        bg-white
+        dark:border-[#3C3C3C]
+        border-gray-300
+        shadow-sm
+      "
+    >
+      {/* Header */}
+      <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+        <h3
+          className="
+            dark:text-white
+            text-gray-700
+            font-semibold
+            text-sm
+            sm:text-base
+            lg:text-lg
+          "
+        >
           {i18n.language === "fa" ? data.title.fa : data.title.en}
         </h3>
+
         <span
-          className={`text-xs px-3 py-1 rounded-full text-[10.06px] dark:text-white  text-gray-500 font-normal`}
+          className="
+            px-2 py-1
+            sm:px-3
+            rounded-full
+            text-[10px]
+            sm:text-xs
+            dark:text-white
+            text-gray-600
+            bg-gray-100
+            dark:bg-[#3A3A3A]
+          "
         >
           {i18n.language === "fa" ? data.badgeText.fa : data.badgeText.en}
         </span>
       </div>
 
-      <div
-        className="flex items-center rounded-full p-1"
-        style={{ background: "#A8A8A81A", height: 52 }}
-      >
-        <div className="flex-1 text-center text-[#888] font-medium text-sm">
+      {/* Progress */}
+      <div className="flex items-center rounded-full p-1 bg-[#A8A8A81A] h-[48px] sm:h-[52px] overflow-hidden">
+        <div
+          className="
+            flex-1
+            text-center
+            text-[#888]
+            font-medium
+            text-[11px]
+            sm:text-sm
+            px-2
+          "
+        >
           {formatValue(data.targetValue, data.unit)}
         </div>
+
         <div
-          className={`${gradientClass} rounded-full flex items-center justify-center`}
-          style={{ width: `${fillPercent}%`, height: 44, minWidth: 80 }}
+          className={`${gradientClass} rounded-full flex items-center justify-center transition-all duration-500`}
+          style={{
+            width: `${fillPercent}%`,
+            minWidth: "70px",
+            height: "100%",
+          }}
         >
-          <span className="text-white font-bold text-base px-4 whitespace-nowrap">
+          <span
+            className="
+              text-white
+              font-bold
+              text-xs
+              sm:text-sm
+              lg:text-base
+              px-2 sm:px-4
+              whitespace-nowrap
+            "
+          >
             {formatValue(data.currentValue, data.unit)}
           </span>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 text-center">
+      {/* Stats */}
+      <div className="grid grid-cols-2 gap-3 text-center mt-auto">
         <div className="flex flex-col items-center gap-1">
-          <span className="dark:text-white text-gray-500 text-xl font-bold">
+          <span
+            className="
+              dark:text-white
+              text-gray-700
+              font-bold
+              text-lg
+              sm:text-xl
+            "
+          >
+            {statValue(data.targetValue)}
+          </span>
+
+          <span className="dark:text-gray-300 text-gray-500 text-xs sm:text-sm">
+            {i18n.language === "fa" ? data.targetLabel.fa : data.targetLabel.en}
+          </span>
+
+          {data.targetPercent !== undefined && (
+            <span className="dark:text-gray-400 text-gray-500 text-xs">
+              ({data.targetPercent}٪)
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-col items-center gap-1">
+          <span
+            className="
+              dark:text-white
+              text-gray-700
+              font-bold
+              text-lg
+              sm:text-xl
+            "
+          >
             {statValue(data.currentValue)}
           </span>
-          <span className="dark:text-white text-gray-500 font-normal text-xs">
+
+          <span className="dark:text-gray-300 text-gray-500 text-xs sm:text-sm">
             {i18n.language === "fa"
               ? data.currentLabel.fa
               : data.currentLabel.en}
           </span>
+
           {data.currentPercent !== undefined && (
-            <span className="dark:text-white text-gray-500 font-normal text-xs">
+            <span className="dark:text-gray-400 text-gray-500 text-xs">
               ({data.currentPercent}٪)
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col items-center gap-1">
-          <span className="text-white text-xl font-bold ">
-            {statValue(data.targetValue)}
-          </span>
-          <span className="dark:text-white text-gray-500 text-xs">
-            {i18n.language === "fa" ? data.targetLabel.fa : data.targetLabel.en}
-          </span>
-          {data.targetPercent !== undefined && (
-            <span className="dark:text-white text-gray-500 text-xs">
-              ({data.targetPercent}٪)
             </span>
           )}
         </div>
