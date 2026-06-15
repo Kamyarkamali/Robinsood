@@ -41,6 +41,10 @@ export interface AlertCircleIconProps {
   className?: string;
 }
 
+export interface Circle {
+  color: string;
+}
+
 export interface ChartData {
   current: number;
   max: number;
@@ -54,6 +58,7 @@ export interface Metric {
     fa: string;
     en: string;
   };
+
   value?: string;
   type?: "orange" | "blue";
   textfa?: string;
@@ -77,7 +82,7 @@ export interface Propss {
   current: number;
   max: number;
   color: string;
-  glowColor: string;
+  glowColor: string | undefined;
   bgColor: string;
   icon: React.ReactNode;
 }

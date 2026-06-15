@@ -1,5 +1,3 @@
-// components/ChallengeCard.tsx
-import { BarChart2, TrendingDown, TrendingUp } from "lucide-react";
 import type { ChallengeCard } from "../types/interfaces";
 import ChallengeChart from "./ChallengeChart";
 import { useTranslation } from "react-i18next";

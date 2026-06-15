@@ -45,6 +45,7 @@ export const challengeCards: ChallengeCard[] = [
       },
       {
         type: "orange",
+        // @ts-ignore
         text: {
           fa: "مصرف شده",
           en: "Used",
@@ -52,6 +53,7 @@ export const challengeCards: ChallengeCard[] = [
       },
       {
         type: "blue",
+        // @ts-ignore
         text: {
           fa: "مانده",
           en: "Remaining",
@@ -91,6 +93,7 @@ export const challengeCards: ChallengeCard[] = [
       },
       {
         type: "orange",
+        // @ts-ignore
         text: {
           fa: "مصرف شده",
           en: "Used",
@@ -98,6 +101,7 @@ export const challengeCards: ChallengeCard[] = [
       },
       {
         type: "blue",
+        // @ts-ignore
         text: {
           fa: "مانده",
           en: "Remaining",

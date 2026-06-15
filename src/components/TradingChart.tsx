@@ -317,31 +317,28 @@ export default function TradingChart() {
     );
   };
 
-  // Scrollbar
-  const sbRef = useRef<HTMLDivElement>(null);
-  const onSBClick = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = sbRef.current!.getBoundingClientRect();
-    const pct = (e.clientX - rect.left) / rect.width;
-    setScrollOffset(
-      Math.max(
-        0,
-        Math.min(
-          TOTAL - visibleCount,
-          Math.round(pct * TOTAL - visibleCount / 2),
-        ),
-      ),
-    );
-  };
-  useEffect(() => {
-    setScrollOffset(Math.max(0, TOTAL - visibleCount));
-  }, [timeFrame]);
+  // const sbRef = useRef<HTMLDivElement>(null);
 
-  const thumbLeft = (clampedOff / TOTAL) * 100;
-  const thumbWidth = (visibleCount / TOTAL) * 100;
+  // const onSBClick = (e: React.MouseEvent<HTMLDivElement>) => {
+  //   const rect = sbRef.current!.getBoundingClientRect();
+  //   const pct = (e.clientX - rect.left) / rect.width;
+  //   setScrollOffset(
+  //     Math.max(
+  //       0,
+  //       Math.min(
+  //         TOTAL - visibleCount,
+  //         Math.round(pct * TOTAL - visibleCount / 2),
+  //       ),
+  //     ),
+  //   );
+  // };
+  // useEffect(() => {
+  //   setScrollOffset(Math.max(0, TOTAL - visibleCount));
+  // }, [timeFrame]);
 
   return (
     <div
-      dir={isRtl ? "ltr" : "rtl"}
+      dir={isRtl ? "rtl" : "ltr"}
       className="w-full max-w-325 mx-auto
         bg-white 
          border-[#e0d9f5] 
