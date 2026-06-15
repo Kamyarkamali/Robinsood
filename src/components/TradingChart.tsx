@@ -217,7 +217,6 @@ const SERIES_CONFIG: { key: SeriesKey; tKey: string; color: string }[] = [
   { key: "equity", tKey: "chart.equity", color: "#6d28d9" },
 ];
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
 export default function TradingChart() {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
@@ -572,7 +571,7 @@ export default function TradingChart() {
         </div>
       </div>
 
-      <div
+      {/* <div
         className="px-1"
         style={{ paddingRight: isRtl ? 4 : 40, paddingLeft: isRtl ? 40 : 4 }}
       >
@@ -592,7 +591,7 @@ export default function TradingChart() {
             }}
           />
         </div>
-      </div>
+      </div> */}
 
       <p className="text-center text-[9px] dark:text-white text-[#c0b8d8] -mt-1">
         {isRtl
