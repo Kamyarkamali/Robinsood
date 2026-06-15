@@ -32,4 +32,4 @@ RUN npm ci
 COPY . .
 RUN rm .env
 
-RUN npm run dev -p 5000
+RUN npm run dev --port 5000
