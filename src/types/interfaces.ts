@@ -127,3 +127,32 @@ export interface Progres {
   targetPercent?: number;
   unit: "currency" | "day";
 }
+
+export interface TraderScoreData {
+  gauges: {
+    hopeOfSuccess: number;
+    greedIndex: number;
+    chartUnderstanding: number;
+    tradingSystem: number;
+  };
+  stats: {
+    bestSymbol: string;
+    bestTrade: number;
+    worstTrade: number;
+    totalLots: number;
+  };
+  radar: {
+    winPercent: number;
+    profitFactor: number;
+    avgWinLoss: number;
+  };
+  totalScore: number;
+}
+
+export interface RadarProps {
+  win: number; // 0–100
+  profitFactor: number;
+  avgWinLoss: number;
+  labels: { win: string; profit: string; avg: string };
+  isRtl: boolean;
+}

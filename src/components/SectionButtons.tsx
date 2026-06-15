@@ -11,6 +11,7 @@ import ChallengeGrid from "./ChallengeGrid";
 import TradingChartsGrid from "./TradingChartsGrid";
 import ProgressCardsSection from "./ProgressCardsSection";
 import TradingChart from "./TradingChart";
+import TraderScoreCard from "./TraderScoreCard";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -87,7 +88,7 @@ function SectionButtons() {
       <div className="w-full lg:w-auto flex justify-start mt-8">
         <ChallengeGrid />
       </div>
-      <div className="w-full lg:w-auto flex flex-col lg:flex-row mt-8">
+      <div className="w-full lg:w-auto flex flex-col lg:flex-row lg:mt-8">
         <ProgressCardsSection />
         <TradingChartsGrid />
       </div>
@@ -95,6 +96,9 @@ function SectionButtons() {
       <div className="w-full mx-auto mt-8">
         <TradingChart />
       </div>
+      {/* <div className="w-full lg:w-auto flex justify-start mt-8">
+        <TraderScoreCard />
+      </div> */}
     </div>
   );
 }

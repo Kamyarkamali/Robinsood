@@ -1,4 +1,9 @@
-import type { ChallengeCard, ChartData2, Progres } from "../types/interfaces";
+import type {
+  ChallengeCard,
+  ChartData2,
+  Progres,
+  TraderScoreData,
+} from "../types/interfaces";
 
 export const buttonSection = [
   { id: 1, en: "show all items", fa: "نمایش همه آیتم ها" },
@@ -400,3 +405,60 @@ export const progressCardsData: Progres[] = [
     unit: "day",
   },
 ];
+
+export const traderScoreData: TraderScoreData = {
+  gauges: {
+    hopeOfSuccess: 63,
+    greedIndex: 20,
+    chartUnderstanding: 63,
+    tradingSystem: 63,
+  },
+  stats: {
+    bestSymbol: "XAUUSD",
+    bestTrade: 342,
+    worstTrade: -241,
+    totalLots: 32,
+  },
+  radar: {
+    winPercent: 72,
+    profitFactor: 55,
+    avgWinLoss: 60,
+  },
+  totalScore: 47.1,
+};
+
+export const enTranslations = {
+  score: {
+    hopeOfSuccess: "Hope of Success",
+    greedIndex: "Greed Index",
+    chartUnderstanding: "Chart Understanding",
+    tradingSystem: "Trading System",
+    bestSymbol: "Best Trading Symbol",
+    bestTrade: "Best Trade",
+    worstTrade: "Worst Trade",
+    totalLots: "Total Lots",
+    radarTitle: "Trader Score",
+    winPercent: "Win %",
+    profitFactor: "profit factor",
+    avgWinLoss: "avg win/loss",
+    yourScore: "Your Score",
+  },
+};
+
+export const faTranslations = {
+  score: {
+    hopeOfSuccess: "امید به موفقیت",
+    greedIndex: "شاخص طمع",
+    chartUnderstanding: "توانایی درک چارت",
+    tradingSystem: "نظم معاملاتی",
+    bestSymbol: "بیشترین نماد معاملاتی",
+    bestTrade: "بهترین معامله",
+    worstTrade: "بدترین معامله",
+    totalLots: "جمع لات",
+    radarTitle: "امتیاز رابین",
+    winPercent: "Win %",
+    profitFactor: "profit factor",
+    avgWinLoss: "avg win/loss",
+    yourScore: "امتیاز شما",
+  },
+};

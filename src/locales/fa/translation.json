@@ -75,5 +75,20 @@
     "4h": "۴ ساعت",
     "12h": "۱۲ ساعت",
     "1day": "۱ روز"
+  },
+  "score": {
+    "hopeOfSuccess": "امید به موفقیت",
+    "greedIndex": "شاخص طمع",
+    "chartUnderstanding": "توانایی درک چارت",
+    "tradingSystem": "نظم معاملاتی",
+    "bestSymbol": "بیشترین نماد معاملاتی",
+    "bestTrade": "بهترین معامله",
+    "worstTrade": "بدترین معامله",
+    "totalLots": "جمع لات",
+    "radarTitle": "امتیاز رابین",
+    "winPercent": "Win %",
+    "profitFactor": "profit factor",
+    "avgWinLoss": "avg win/loss",
+    "yourScore": "امتیاز شما"
   }
 }

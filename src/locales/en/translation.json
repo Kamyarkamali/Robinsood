@@ -75,5 +75,20 @@
     "4h": "4 H",
     "12h": "12 H",
     "1day": "1 Day"
+  },
+  "score": {
+    "hopeOfSuccess": "Hope of Success",
+    "greedIndex": "Greed Index",
+    "chartUnderstanding": "Chart Understanding",
+    "tradingSystem": "Trading System",
+    "bestSymbol": "Best Trading Symbol",
+    "bestTrade": "Best Trade",
+    "worstTrade": "Worst Trade",
+    "totalLots": "Total Lots",
+    "radarTitle": "Trader Score",
+    "winPercent": "Win %",
+    "profitFactor": "profit factor",
+    "avgWinLoss": "avg win/loss",
+    "yourScore": "Your Score"
   }
 }
