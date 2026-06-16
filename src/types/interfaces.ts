@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { ChallengeStatus, IconColor } from "./type";
+import type { ChallengeStatus, ChartUnit, IconColor } from "./type";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -58,6 +58,8 @@ export interface Metric {
     fa: string;
     en: string;
   };
+  price?: string;
+  color?: string;
 
   value?: string;
   type?: "orange" | "blue";
@@ -72,6 +74,7 @@ export interface ChallengeCard {
     fa: string;
     en: string;
   };
+  price?: string;
   status: ChallengeStatus;
   iconColor: IconColor;
   chart: ChartData;
@@ -93,13 +96,24 @@ export interface DayData {
   color: string;
 }
 
+export interface ChartDay {
+  label: string;
+  value: number;
+  belowAverage?: boolean;
+  isCurrent?: boolean;
+}
+
 export interface ChartData2 {
   id: number;
   title: string;
-  days: DayData[];
+  unit: ChartUnit;
+  days: ChartDay[];
   averageLine: number;
-  plusPercent: number;
-  minusPercent: number;
+  maxAllowedLine: number;
+  averageValue: number;
+  maxAllowedValue: number;
+  requiredDays: number;
+  acceptedDays: number;
 }
 
 export interface Progres {
@@ -111,6 +125,11 @@ export interface Progres {
   badgeText: {
     fa: string;
     en: string;
+  };
+  bestegor?: {
+    fa: string;
+    en: string;
+    value: string;
   };
   badgeType: "success" | "danger";
   currentValue: number;
@@ -150,9 +169,51 @@ export interface TraderScoreData {
 }
 
 export interface RadarProps {
-  win: number; // 0–100
+  win: number;
   profitFactor: number;
   avgWinLoss: number;
   labels: { win: string; profit: string; avg: string };
   isRtl: boolean;
 }
+
+export interface ChartSettings {
+  averageLineColor: string;
+  maxAllowedLineColor: string;
+  barColors: {
+    belowAverage: string;
+    aboveAverage: string;
+    aboveMax: string;
+  };
+  averageLineWidth: number;
+  maxAllowedLineWidth: number;
+  barOpacity: number;
+  gridLineWidth: number;
+  showGridLines: boolean;
+  showAverageLine: boolean;
+  showMaxAllowedLine: boolean;
+  showLabels: boolean;
+  barBorderRadius: number;
+  chartHeight: number;
+  fontFamily: string;
+}
+
+export const defaultSettings: ChartSettings = {
+  averageLineColor: "#43A047",
+  maxAllowedLineColor: "#FDD835",
+  barColors: {
+    belowAverage: "#1E88E5",
+    aboveAverage: "#E53935",
+    aboveMax: "#FB923C",
+  },
+  averageLineWidth: 2,
+  maxAllowedLineWidth: 2,
+  barOpacity: 0.85,
+  gridLineWidth: 1,
+  showGridLines: true,
+  showAverageLine: true,
+  showMaxAllowedLine: true,
+  showLabels: true,
+  barBorderRadius: 6,
+  chartHeight: 200,
+  fontFamily: "system-ui",
+};

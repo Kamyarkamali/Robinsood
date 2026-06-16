@@ -36,33 +36,24 @@ export const challengeCards: ChallengeCard[] = [
     metrics: [
       {
         label: {
-          fa: "درادون مجاز امروز",
-          en: "Today's Maximum Drawdown",
+          fa: "بالانس 12 شب معیار",
+          en: "Midnight Reference Balance",
         },
-        value: "$9500 (5%)",
+        value: "$1061.24",
       },
       {
         label: {
-          fa: "فاصله تا درادون روزانه",
-          en: "Remaining Daily Drawdown",
+          fa: "درادون مجاز روزانه",
+          en: "Maximum Daily Drawdown",
         },
-        value: "",
+        value: "$1,008.18 (5%)",
       },
       {
-        type: "orange",
-        // @ts-ignore
-        text: {
-          fa: "مصرف شده",
-          en: "Used",
+        label: {
+          fa: "فاصله=اکوییتی درادون",
+          en: "Distance = Equity - Drawdown",
         },
-      },
-      {
-        type: "blue",
-        // @ts-ignore
-        text: {
-          fa: "مانده",
-          en: "Remaining",
-        },
+        value: "$1008.18 - $1070.18 = $62",
       },
     ],
   },
@@ -84,33 +75,23 @@ export const challengeCards: ChallengeCard[] = [
     metrics: [
       {
         label: {
-          fa: "درادون مجاز امروز",
-          en: "Maximum Daily Drawdown",
+          fa: "بالانس اولیه",
+          en: "Initial Balance",
         },
-        value: "$9500 (5%)",
+        value: "$1000",
       },
       {
         label: {
-          fa: "فاصله تا درادون روزانه",
-          en: "Remaining Daily Drawdown",
+          fa: "درادون مجاز کل",
+          en: "Maximum Overall Drawdown",
         },
-        value: "",
+        value: "$880 (12%)",
       },
       {
-        type: "orange",
-        // @ts-ignore
-        text: {
-          fa: "مصرف شده",
-          en: "Used",
+        label: {
+          fa: "فاصله = اکوییتی - درادون",
         },
-      },
-      {
-        type: "blue",
-        // @ts-ignore
-        text: {
-          fa: "مانده",
-          en: "Remaining",
-        },
+        value: "$190.18 = $1070.18 - $880",
       },
     ],
   },
@@ -133,16 +114,23 @@ export const challengeCards: ChallengeCard[] = [
       {
         label: {
           fa: "تعداد روزهای معاملاتی",
-          en: "Number of Trading Days",
+          en: "Trading Days",
         },
-        value: "3 / 5",
+        value: "8 از 5",
       },
       {
         label: {
           fa: "روزهای مجاز چالش",
           en: "Required Trading Days",
         },
-        value: "4 Days to Unlimited",
+        value: "∞ روز",
+      },
+      {
+        label: {
+          fa: "باقی‌مانده تا انفعال",
+          en: "Remaining Until Inactive",
+        },
+        value: "∞",
       },
     ],
   },
@@ -167,21 +155,21 @@ export const challengeCards: ChallengeCard[] = [
           fa: "لات مجاز امروز",
           en: "Maximum Lot Size Today",
         },
-        value: "1.5 / 2",
+        value: "0.03 از ∞",
       },
       {
         label: {
           fa: "تعداد معاملات امروز",
           en: "Number of Trades Today",
         },
-        value: "5",
+        value: "3",
       },
       {
         label: {
           fa: "میانگین لات امروز",
           en: "Average Lot Size Today",
         },
-        value: "0.3",
+        value: "0.01",
       },
     ],
   },
@@ -203,155 +191,181 @@ export const challengeCards: ChallengeCard[] = [
     metrics: [
       {
         label: {
-          fa: "MDL",
-          en: "MDL",
+          fa: "ریسک کل",
+          en: "Total Risk",
         },
-        value: "300000",
+        value: "$6.82",
       },
       {
         label: {
-          fa: "",
-          en: "",
+          fa: "ریسک مارجین",
+          en: "Margin Risk | SL Risk",
         },
-        value: "3900$ (5%)",
+        value: "$1.67 | $5.15",
       },
       {
         label: {
-          fa: "FL",
-          en: "FL",
+          fa: "MDL | FL",
+          en: "MDL | FL",
         },
-        value: "",
-      },
-      {
-        label: {
-          fa: "",
-          en: "",
-        },
-        value: "3900$ (5%)",
+        value: "(0%) | (0%)",
       },
     ],
   },
 
   {
-    id: "2",
+    id: "7",
     title: {
-      fa: "درگیری حساب",
-      en: "Account Exposure",
+      fa: "ترید در خبر",
+      en: "News Trading",
     },
     status: "inactive",
-    iconColor: "yellow",
+    iconColor: "green",
     chart: {
-      current: 1500,
-      max: 5000,
-      color: "#eab308",
-      bgColor: "#2a2200",
+      current: 0,
+      max: 7,
+      color: "#22c55e",
+      bgColor: "#0a2a0a",
     },
     metrics: [
       {
         label: {
-          fa: "ریسک کل",
-          en: "Total Risk",
+          fa: "پر اهمیت",
+          en: "High Importance",
         },
-        value: "$35 (0.55%)",
+        value: "0 از 1",
       },
       {
         label: {
-          fa: "SL",
-          en: "SL",
+          fa: "اهمیت متوسط",
+          en: "Medium Importance",
         },
-        value: "0.3",
+        value: "0 از 2",
       },
       {
         label: {
-          fa: "ریسک مارجین",
-          en: "Margin Risk",
+          fa: "کم اهمیت",
+          en: "Low Importance",
         },
-        value: "$35 (0.55%)",
+        value: "0 از 7",
       },
     ],
   },
 ];
-
 // دیتاهای چارت دوم
 
 export const chartsData: ChartData2[] = [
   {
     id: 1,
-    title: "میانگین معاملات",
+    title: "میانگین لات",
+    unit: "lot",
     days: [
-      { label: "روز اول", value: 0.18, color: "#E53935" },
-      { label: "روز دوم", value: 0.52, color: "#FDD835" },
-      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
-      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+      { label: "روز ۲", value: 0.01 },
+      { label: "روز ۴", value: 0.01 },
+      { label: "روز ۶", value: 0.01 },
+      { label: "روز ۸", value: 0.01 },
     ],
-    averageLine: 0.68,
-    plusPercent: 20,
-    minusPercent: -20,
+    averageLine: 0.01,
+    maxAllowedLine: 0.008,
+    averageValue: 0.01,
+    maxAllowedValue: 0.008,
+    requiredDays: 8,
+    acceptedDays: 5,
   },
   {
     id: 2,
-    title: "میانگین معاملات",
+    title: "مجموع لات",
+    unit: "lot",
     days: [
-      { label: "روز اول", value: 0.18, color: "#E53935" },
-      { label: "روز دوم", value: 0.52, color: "#FDD835" },
-      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
-      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+      { label: "روز ۲", value: 0.04, belowAverage: true },
+      { label: "روز ۴", value: 0.1 },
+      { label: "روز ۶", value: 0.14 },
+      { label: "روز ۸", value: 0.09 },
+      { label: "روز ۲", value: 0.08 },
+      { label: "روز ۴", value: 0.03, belowAverage: true },
+      { label: "روز ۶", value: 0.02, belowAverage: true },
+      { label: "روز ۸", value: 0.16, isCurrent: true },
     ],
-    averageLine: 0.68,
-    plusPercent: 20,
-    minusPercent: -20,
+    averageLine: 0.077,
+    maxAllowedLine: 0.062,
+    averageValue: 0.077,
+    maxAllowedValue: 0.062,
+    requiredDays: 5,
+    acceptedDays: 5,
   },
   {
     id: 3,
-    title: "میانگین معاملات",
+    title: "میانگین زمان",
+    unit: "time",
     days: [
-      { label: "روز اول", value: 0.18, color: "#E53935" },
-      { label: "روز دوم", value: 0.52, color: "#FDD835" },
-      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
-      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+      { label: "روز ۲", value: 56 * 60 + 0 },
+      { label: "روز ۴", value: 28 * 60 + 0, belowAverage: true },
+      { label: "روز ۶", value: 31 * 60 + 0, belowAverage: true },
+      { label: "روز ۸", value: 1 * 60 + 0, belowAverage: true },
     ],
-    averageLine: 0.68,
-    plusPercent: 20,
-    minusPercent: -20,
+    averageLine: 21 * 60,
+    maxAllowedLine: 26 * 60 + 35,
+    averageValue: 21 * 60 + 16,
+    maxAllowedValue: 26 * 60 + 35,
+    requiredDays: 6,
+    acceptedDays: 5,
   },
   {
     id: 4,
-    title: "میانگین معاملات",
+    title: "مجموع زمان",
+    unit: "time",
     days: [
-      { label: "روز اول", value: 0.18, color: "#E53935" },
-      { label: "روز دوم", value: 0.52, color: "#FDD835" },
-      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
-      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+      { label: "روز ۲", value: 3 * 3600 + 12 * 60 },
+      { label: "روز ۴", value: 4 * 3600 + 35 * 60 },
+      { label: "روز ۶", value: 3 * 3600 + 18 * 60 },
+      { label: "روز ۶", value: 3 * 3600 + 22 * 60 },
+      { label: "روز ۸", value: 4 * 3600 + 6 * 60 },
+      { label: "روز ۸", value: 0, belowAverage: true },
     ],
-    averageLine: 0.68,
-    plusPercent: 20,
-    minusPercent: -20,
+    averageLine: 3 * 3600 + 36 * 60,
+    maxAllowedLine: 2 * 3600 + 53 * 60 + 20,
+    averageValue: 3 * 3600 + 36 * 60 + 40,
+    maxAllowedValue: 2 * 3600 + 53 * 60 + 20,
+    requiredDays: 6,
+    acceptedDays: 5,
   },
   {
     id: 5,
-    title: "میانگین معاملات",
+    title: "میانگین قدرمطلق برایند",
+    unit: "currency",
     days: [
-      { label: "روز اول", value: 0.18, color: "#E53935" },
-      { label: "روز دوم", value: 0.52, color: "#FDD835" },
-      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
-      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+      { label: "روز ۲", value: 0.6, belowAverage: true },
+      { label: "روز ۴", value: 2.2 },
+      { label: "روز ۶", value: 1.3, belowAverage: true },
+      { label: "روز ۶", value: 1.8 },
+      { label: "روز ۸", value: 1.4, belowAverage: true },
+      { label: "روز ۸", value: 3.5, isCurrent: true },
     ],
-    averageLine: 0.68,
-    plusPercent: 20,
-    minusPercent: -20,
+    averageLine: 2.45,
+    maxAllowedLine: 1.96,
+    averageValue: 2.45,
+    maxAllowedValue: 1.96,
+    requiredDays: 6,
+    acceptedDays: 5,
   },
   {
     id: 6,
-    title: "میانگین معاملات",
+    title: "مجموع قدرمطلق برایند",
+    unit: "currency",
     days: [
-      { label: "روز اول", value: 0.18, color: "#E53935" },
-      { label: "روز دوم", value: 0.52, color: "#FDD835" },
-      { label: "روز سوم", value: 0.72, color: "#1E88E5" },
-      { label: "روز چهارم", value: 1.0, color: "#43A047" },
+      { label: "روز ۲", value: 4, belowAverage: true },
+      { label: "روز ۴", value: 32 },
+      { label: "روز ۶", value: 29 },
+      { label: "روز ۶", value: 18 },
+      { label: "روز ۸", value: 18 },
+      { label: "روز ۸", value: 8, belowAverage: true },
     ],
-    averageLine: 0.68,
-    plusPercent: 20,
-    minusPercent: -20,
+    averageLine: 18.06,
+    maxAllowedLine: 14.45,
+    averageValue: 18.06,
+    maxAllowedValue: 14.45,
+    requiredDays: 6,
+    acceptedDays: 5,
   },
 ];
 
@@ -362,8 +376,13 @@ export const progressCardsData: Progres[] = [
       fa: "سود",
       en: "Profit",
     },
+    bestegor: {
+      fa: "تراکم سوددهی",
+      en: "Profit Density",
+      value: "25.55%",
+    },
     badgeText: {
-      fa: "عالی داری پیش میری . چند تا تارگت باقی مونده .",
+      fa: "عالی داری پیش میری 👌 چند تا تارگت باقی مونده",
       en: "Great job! You're making excellent progress. Only a few targets remain.",
     },
     badgeType: "success",
@@ -373,6 +392,7 @@ export const progressCardsData: Progres[] = [
       fa: "پیشرفت شما",
       en: "Your Progress",
     },
+
     targetLabel: {
       fa: "تارگت",
       en: "Target",
@@ -387,8 +407,14 @@ export const progressCardsData: Progres[] = [
       fa: "روز معاملاتی",
       en: "Trading Days",
     },
+
+    bestegor: {
+      fa: "پارامترهای تایید شده",
+      en: "Verified Parameters",
+      value: "25.55%",
+    },
     badgeText: {
-      fa: "نیاز داری که تایم بیشتری صرف کنی .",
+      fa: "نیاز داری که تایم بیشتری صرف کنی",
       en: "You need to spend more time trading.",
     },
     badgeType: "danger",
@@ -398,6 +424,7 @@ export const progressCardsData: Progres[] = [
       fa: "تعداد روز معاملاتی شما",
       en: "Your Trading Days",
     },
+
     targetLabel: {
       fa: "تعداد روز مورد نیاز",
       en: "Required Trading Days",

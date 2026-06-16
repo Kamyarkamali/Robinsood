@@ -11,7 +11,6 @@ import ChallengeGrid from "./ChallengeGrid";
 import TradingChartsGrid from "./TradingChartsGrid";
 import ProgressCardsSection from "./ProgressCardsSection";
 import TradingChart from "./TradingChart";
-import TraderScoreCard from "./TraderScoreCard";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);

@@ -14,6 +14,21 @@ const formatValue = (value: number, unit: Progres["unit"]) => {
 const ProgressCard: React.FC<Props> = ({ data }) => {
   const { i18n } = useTranslation();
 
+  const getBadgeGradient = (faText?: string, enText?: string) => {
+    const fa = faText || "";
+    const en = enText || "";
+
+    if (fa.includes("عالی داری پیش میری") || en.includes("Great job")) {
+      return "from-sky-500 to-indigo-500";
+    }
+
+    if (fa.includes("نیاز داری که تایم") || en.includes("You need to spend ")) {
+      return "from-orange-500 to-orange-600";
+    }
+
+    return "from-gray-500 to-gray-400";
+  };
+
   const fillPercent = Math.round((data.currentValue / data.targetValue) * 100);
 
   const isSuccess = data.badgeType === "success";
@@ -31,7 +46,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
     <div
       className="
         w-full
-        min-h-[220px]
+        min-h-55
         p-3 sm:p-4 lg:p-5
         flex flex-col
         gap-4
@@ -42,9 +57,10 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         dark:border-[#3C3C3C]
         border-gray-300
         shadow-sm
+        transition-all
+        duration-300
       "
     >
-      {/* Header */}
       <div className="flex flex-wrap items-center gap-2 sm:gap-3">
         <h3
           className="
@@ -60,24 +76,22 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         </h3>
 
         <span
-          className="
+          className={`
+          bg-linear-0
+           ${getBadgeGradient(data.badgeText?.fa, data.badgeText?.en)}
             px-2 py-1
             sm:px-3
             rounded-full
             text-[10px]
             sm:text-xs
-            dark:text-white
-            text-gray-600
-            bg-gray-100
-            dark:bg-[#3A3A3A]
-          "
+            text-white
+          `}
         >
           {i18n.language === "fa" ? data.badgeText.fa : data.badgeText.en}
         </span>
       </div>
 
-      {/* Progress */}
-      <div className="flex items-center rounded-full p-1 bg-[#A8A8A81A] h-[48px] sm:h-[52px] overflow-hidden">
+      <div className="flex items-center rounded-full p-1 bg-[#A8A8A81A] h-12 sm:h-13 overflow-hidden">
         <div
           className="
             flex-1
@@ -116,53 +130,108 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         </div>
       </div>
 
-      {/* Stats */}
-      <div className="grid grid-cols-2 gap-3 text-center mt-auto">
-        <div className="flex flex-col items-center gap-1">
+      <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center mt-auto">
+        <div
+          className="
+            flex flex-col items-center justify-center gap-0.5 sm:gap-1
+            p-1.5 sm:p-2 lg:p-3
+            rounded-xl
+            bg-linear-to-br from-green-50/80 to-emerald-50/80
+            dark:from-green-900/20 dark:to-emerald-900/20
+            border border-green-200/50
+            dark:border-green-800/30
+            hover:shadow-md
+            hover:scale-[1.02]
+            transition-all
+            duration-300
+            min-h-15 sm:min-h-17.5
+          "
+        >
+          <span className="text-[#98E400] font-bold text-xs sm:text-sm lg:text-base">
+            {data?.bestegor?.value}
+          </span>
+          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] sm:text-xs lg:text-sm">
+            {i18n.language === "fa" ? data.bestegor?.fa : data.bestegor?.en}
+          </span>
+        </div>
+
+        <div
+          className="
+            flex flex-col items-center justify-center gap-0.5 sm:gap-1
+            p-1.5 sm:p-2 lg:p-3
+            rounded-xl
+            bg-linear-to-br from-blue-50/80 to-indigo-50/80
+            dark:from-blue-900/20 dark:to-indigo-900/20
+            border border-blue-200/50
+            dark:border-blue-800/30
+            hover:shadow-md
+            hover:scale-[1.02]
+            transition-all
+            duration-300
+            min-h-15 sm:min-h-17.5
+          "
+        >
           <span
             className="
               dark:text-white
               text-gray-700
               font-bold
-              text-lg
-              sm:text-xl
+              text-sm
+              sm:text-base
+              lg:text-lg
             "
           >
             {statValue(data.targetValue)}
           </span>
 
-          <span className="dark:text-gray-300 text-gray-500 text-xs sm:text-sm">
+          <span className="dark:text-gray-300 text-gray-500 text-[10px] sm:text-xs lg:text-sm">
             {i18n.language === "fa" ? data.targetLabel.fa : data.targetLabel.en}
           </span>
 
           {data.targetPercent !== undefined && (
-            <span className="dark:text-gray-400 text-gray-500 text-xs">
+            <span className="dark:text-[#99A1AF] text-gray-400 text-[8px] sm:text-[10px]">
               ({data.targetPercent}٪)
             </span>
           )}
         </div>
 
-        <div className="flex flex-col items-center gap-1">
+        <div
+          className="
+            flex flex-col items-center justify-center gap-0.5 sm:gap-1
+            p-1.5 sm:p-2 lg:p-3
+            rounded-xl
+            bg-linear-to-br from-purple-50/80 to-pink-50/80
+            dark:from-purple-900/20 dark:to-pink-900/20
+            border border-purple-200/50
+            dark:border-purple-800/30
+            hover:shadow-md
+            hover:scale-[1.02]
+            transition-all
+            duration-300
+            min-h-15 sm:min-h-17.5
+          "
+        >
           <span
             className="
               dark:text-white
               text-gray-700
               font-bold
-              text-lg
-              sm:text-xl
+              text-sm
+              sm:text-base
+              lg:text-lg
             "
           >
             {statValue(data.currentValue)}
           </span>
 
-          <span className="dark:text-gray-300 text-gray-500 text-xs sm:text-sm">
+          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] sm:text-xs lg:text-sm">
             {i18n.language === "fa"
               ? data.currentLabel.fa
               : data.currentLabel.en}
           </span>
 
           {data.currentPercent !== undefined && (
-            <span className="dark:text-gray-400 text-gray-500 text-xs">
+            <span className="dark:text-[#99A1AF] text-gray-400 text-[8px] sm:text-[10px]">
               ({data.currentPercent}٪)
             </span>
           )}

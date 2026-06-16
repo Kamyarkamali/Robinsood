@@ -48,7 +48,7 @@
   },
   "chart1": {
     "Daily": "Daily Drawdown",
-    "Today": "Today's Maximum Drawdown",
+    "Today": "Midnight Reference Balance",
     "Remaining": "Remaining Daily Drawdown",
     "Used": "Used",
     "Remaining2": "Remaining",

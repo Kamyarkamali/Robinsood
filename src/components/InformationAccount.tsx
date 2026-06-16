@@ -53,7 +53,6 @@ function InformationAccount() {
               </div>
             </div>
 
-            {/* FOOTER */}
             <div className="flex justify-start">
               <p className="text-[13px] sm:text-[15px] font-normal text-gray-500 dark:text-white whitespace-nowrap">
                 آخرین آپدیت ۱۴۰۴/۱۰/۲۲ , 18:13:25

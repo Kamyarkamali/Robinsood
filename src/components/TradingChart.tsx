@@ -13,6 +13,10 @@ import {
   Area,
 } from "recharts";
 import ChartIcon from "../icons/ChartIcon";
+import { Settings } from "lucide-react";
+import ChartSettingsPanel, {
+  useChartSettings,
+} from "./common/ChartCustomSettings";
 
 type TimeFrame =
   | "1min"
@@ -117,7 +121,14 @@ function niceTicks([dMin, dMax]: [number, number], count = 4): number[] {
   return ticks;
 }
 
-const CandleBar = ({ x = 0, width = 0, payload, yDomain, chartH }: any) => {
+const CandleBar = ({
+  x = 0,
+  width = 0,
+  payload,
+  yDomain,
+  chartH,
+  settings,
+}: any) => {
   if (!payload) return null;
   const {
     equityOpen: eo,
@@ -125,7 +136,10 @@ const CandleBar = ({ x = 0, width = 0, payload, yDomain, chartH }: any) => {
     equityLow: el,
     equityClose: ec,
   } = payload;
-  const color = ec >= eo ? "#a855f7" : "#5b21b6";
+  const color =
+    ec >= eo
+      ? settings?.colors?.candleUp || "#a855f7"
+      : settings?.colors?.candleDown || "#5b21b6";
   const cx = x + width / 2;
   const [dMin, dMax] = yDomain;
   const toY = (v: number) => chartH - ((v - dMin) / (dMax - dMin)) * chartH;
@@ -149,19 +163,30 @@ const CandleBar = ({ x = 0, width = 0, payload, yDomain, chartH }: any) => {
   );
 };
 
-const ChartTooltip = ({ active, payload, label, isRtl }: any) => {
+const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div
       className={`bg-[#1a1230] dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-3 py-2 text-[11px] shadow-2xl ${isRtl ? "text-right" : "text-left"}`}
+      style={{
+        backgroundColor: settings?.colors?.background || "#1a1230",
+        borderColor: settings?.colors?.primary || "#3b1f7a",
+      }}
     >
-      <p className="text-[#a78bfa] font-bold mb-1">{label}</p>
+      <p
+        className="text-[#a78bfa] font-bold mb-1"
+        style={{ color: settings?.colors?.secondary || "#a78bfa" }}
+      >
+        {label}
+      </p>
       {payload
         .filter((p: any) => p.dataKey !== "equity")
         .map((p: any) => (
           <p
             key={p.dataKey}
-            style={{ color: p.stroke || p.color }}
+            style={{
+              color: p.stroke || p.color || settings?.colors?.text || "#a0a0c0",
+            }}
             className="leading-relaxed"
           >
             {p.name}: <strong>{Number(p.value).toFixed(2)}</strong>
@@ -221,6 +246,16 @@ export default function TradingChart() {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
+  // استفاده از هوک تنظیمات
+  const {
+    settings,
+    setSettings,
+    isOpen: settingsOpen,
+    openSettings: openSettingsPanel,
+    closeSettings: closeSettingsPanel,
+    resetSettings,
+  } = useChartSettings("tradingChartSettings");
+
   const [mode, setMode] = useState<Mode>("balance");
   const [timeFrame, setTimeFrame] = useState<TimeFrame>("1min");
   const [activeSeries, setActiveSeries] = useState<Record<SeriesKey, boolean>>({
@@ -230,7 +265,8 @@ export default function TradingChart() {
     balance: true,
     equity: true,
   });
-  const [showGrid, setShowGrid] = useState(true);
+
+  const showGrid = settings.display.showGrid;
 
   const allData = useMemo(() => generateData(timeFrame), [timeFrame]);
   const TOTAL = allData.length;
@@ -245,18 +281,25 @@ export default function TradingChart() {
     () => computeDomain(visibleData, activeSeries),
     [visibleData, activeSeries],
   );
-  const yTicks = useMemo(() => niceTicks(yDomain, 4), [yDomain]);
+  const yTicks = useMemo(
+    () => niceTicks(yDomain, settings.axis.tickCount),
+    [yDomain, settings.axis.tickCount],
+  );
 
-  const [chartH, setChartH] = useState(320);
+  const [chartH, setChartH] = useState(settings.sizes.chartHeight);
   useEffect(() => {
     const upd = () =>
       setChartH(
-        window.innerWidth < 640 ? 200 : window.innerWidth < 1024 ? 260 : 320,
+        window.innerWidth < 640
+          ? Math.min(settings.sizes.chartHeight, 200)
+          : window.innerWidth < 1024
+            ? Math.min(settings.sizes.chartHeight, 260)
+            : settings.sizes.chartHeight,
       );
     upd();
     window.addEventListener("resize", upd);
     return () => window.removeEventListener("resize", upd);
-  }, []);
+  }, [settings.sizes.chartHeight]);
 
   const toggle = (key: SeriesKey) =>
     setActiveSeries((p) => ({ ...p, [key]: !p[key] }));
@@ -282,7 +325,6 @@ export default function TradingChart() {
     return () => el.removeEventListener("wheel", handleWheel);
   }, [handleWheel]);
 
-  // Mouse pan
   const dragging = useRef(false),
     dragX = useRef(0),
     dragOff = useRef(0);
@@ -317,25 +359,6 @@ export default function TradingChart() {
     );
   };
 
-  // const sbRef = useRef<HTMLDivElement>(null);
-
-  // const onSBClick = (e: React.MouseEvent<HTMLDivElement>) => {
-  //   const rect = sbRef.current!.getBoundingClientRect();
-  //   const pct = (e.clientX - rect.left) / rect.width;
-  //   setScrollOffset(
-  //     Math.max(
-  //       0,
-  //       Math.min(
-  //         TOTAL - visibleCount,
-  //         Math.round(pct * TOTAL - visibleCount / 2),
-  //       ),
-  //     ),
-  //   );
-  // };
-  // useEffect(() => {
-  //   setScrollOffset(Math.max(0, TOTAL - visibleCount));
-  // }, [timeFrame]);
-
   return (
     <div
       dir={isRtl ? "rtl" : "ltr"}
@@ -369,7 +392,15 @@ export default function TradingChart() {
           </div>
 
           <IconBtn
-            onClick={() => setShowGrid((v) => !v)}
+            onClick={() =>
+              setSettings({
+                ...settings,
+                display: {
+                  ...settings.display,
+                  showGrid: !settings.display.showGrid,
+                },
+              })
+            }
             active={showGrid}
             title={t("chart.toggleGrid")}
           >
@@ -416,6 +447,15 @@ export default function TradingChart() {
               <line x1="8" y1="11" x2="14" y2="11" />
             </svg>
           </IconBtn>
+
+          {/* دکمه تنظیمات */}
+          <button
+            onClick={openSettingsPanel}
+            className="w-8 h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
+            title="تنظیمات چارت"
+          >
+            <Settings className="w-4 h-4" />
+          </button>
         </div>
 
         <div
@@ -454,112 +494,161 @@ export default function TradingChart() {
           <ResponsiveContainer width="100%" height="140%">
             <ComposedChart
               data={visibleData}
-              margin={{ top: 8, right: 8, bottom: 0, left: 0 }}
+              margin={{
+                top: settings.sizes.padding,
+                right: settings.sizes.padding,
+                bottom: 0,
+                left: 0,
+              }}
             >
               <defs>
                 <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="#8b5cf6" stopOpacity={0.4} />
-                  <stop offset="70%" stopColor="#6d28d9" stopOpacity={0.1} />
-                  <stop offset="100%" stopColor="#4c1d95" stopOpacity={0} />
+                  <stop
+                    offset="0%"
+                    stopColor={settings.colors.primary}
+                    stopOpacity={0.4}
+                  />
+                  <stop
+                    offset="70%"
+                    stopColor={settings.colors.primary}
+                    stopOpacity={0.1}
+                  />
+                  <stop
+                    offset="100%"
+                    stopColor={settings.colors.primary}
+                    stopOpacity={0}
+                  />
                 </linearGradient>
                 <linearGradient id="balanceStroke" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#7c3aed" />
-                  <stop offset="50%" stopColor="#a855f7" />
-                  <stop offset="100%" stopColor="#c084fc" />
+                  <stop offset="0%" stopColor={settings.colors.primary} />
+                  <stop offset="50%" stopColor={settings.colors.secondary} />
+                  <stop offset="100%" stopColor={settings.colors.accent} />
                 </linearGradient>
               </defs>
 
-              {showGrid && (
+              {settings.display.showGrid && (
                 <CartesianGrid
                   strokeDasharray="5 4"
-                  stroke="#e8e2f8"
+                  stroke={settings.colors.grid}
                   className="dark:[stroke:#666D80]"
-                  strokeWidth={0.6}
+                  strokeWidth={settings.lineWidths.grid}
                 />
               )}
 
-              <XAxis
-                dataKey="time"
-                tick={{ fill: "#a0a0c0", fontSize: 9 }}
-                axisLine={{ stroke: "#e0d9f5" }}
-                tickLine={false}
-                interval={Math.ceil(visibleCount / 6)}
-              />
-              <YAxis
-                domain={yDomain}
-                ticks={yTicks}
-                tick={{ fill: "#a0a0c0", fontSize: 9 }}
-                axisLine={false}
-                tickLine={false}
-                width={38}
-                tickFormatter={(v) => v.toLocaleString()}
-                orientation={isRtl ? "right" : "left"}
-              />
-              <Tooltip content={<ChartTooltip isRtl={isRtl} />} />
+              {settings.axis.showXAxis && (
+                <XAxis
+                  dataKey="time"
+                  tick={{
+                    fill: settings.colors.text,
+                    fontSize: settings.sizes.fontSize,
+                  }}
+                  axisLine={{ stroke: settings.colors.grid }}
+                  tickLine={false}
+                  interval={Math.ceil(visibleCount / settings.axis.tickCount)}
+                />
+              )}
 
-              {activeSeries.balance && (
+              {settings.axis.showYAxis && (
+                <YAxis
+                  domain={yDomain}
+                  ticks={yTicks}
+                  tick={{
+                    fill: settings.colors.text,
+                    fontSize: settings.sizes.fontSize,
+                  }}
+                  axisLine={false}
+                  tickLine={false}
+                  width={38}
+                  tickFormatter={(v) => v.toLocaleString()}
+                  orientation={isRtl ? "right" : "left"}
+                />
+              )}
+
+              {settings.display.showTooltip && (
+                <Tooltip
+                  content={<ChartTooltip isRtl={isRtl} settings={settings} />}
+                />
+              )}
+
+              {settings.display.showAreas && activeSeries.balance && (
                 <Area
                   dataKey="balance"
                   name={t("chart.balance")}
                   stroke="url(#balanceStroke)"
-                  strokeWidth={2.2}
+                  strokeWidth={settings.lineWidths.main}
                   fill="url(#balanceGrad)"
                   dot={false}
                   activeDot={{
                     r: 4,
-                    fill: "#a855f7",
-                    stroke: "#e9d5ff",
+                    fill: settings.colors.secondary,
+                    stroke: settings.colors.accent,
                     strokeWidth: 2,
                   }}
-                  style={{ filter: "drop-shadow(0 0 5px #a855f766)" }}
+                  style={
+                    settings.effects.glow
+                      ? { filter: "drop-shadow(0 0 5px #a855f766)" }
+                      : {}
+                  }
                 />
               )}
+
               {activeSeries.target && (
                 <Line
                   dataKey="target"
                   name={t("chart.target")}
-                  stroke="#b06aff"
+                  stroke={settings.colors.accent}
                   dot={false}
-                  strokeWidth={1.6}
+                  strokeWidth={settings.lineWidths.secondary}
                   strokeDasharray="5 3"
-                  style={{ filter: "drop-shadow(0 0 3px #b06aff55)" }}
+                  style={
+                    settings.effects.glow
+                      ? { filter: "drop-shadow(0 0 3px #b06aff55)" }
+                      : {}
+                  }
                 />
               )}
+
               {activeSeries.dailyDrawdown && (
                 <Line
                   dataKey="dailyDrawdown"
                   name={t("chart.dailyDrawdown")}
-                  stroke="#7c3aed"
+                  stroke={settings.colors.primary}
                   dot={false}
-                  strokeWidth={1.6}
+                  strokeWidth={settings.lineWidths.secondary}
                   strokeDasharray="5 3"
                 />
               )}
+
               {activeSeries.totalDrawdown && (
                 <Line
                   dataKey="totalDrawdown"
                   name={t("chart.totalDrawdown")}
-                  stroke="#9d4edd"
+                  stroke={settings.colors.secondary}
                   dot={false}
-                  strokeWidth={1.6}
+                  strokeWidth={settings.lineWidths.secondary}
                   strokeDasharray="5 3"
                 />
               )}
-              {activeSeries.equity && (
+
+              {settings.display.showCandles && activeSeries.equity && (
                 <Bar
                   dataKey="equity"
                   name={t("chart.equity")}
-                  barSize={Math.max(2, Math.round(800 / visibleCount))}
+                  barSize={Math.max(
+                    settings.sizes.barSize,
+                    Math.round(800 / visibleCount),
+                  )}
                   shape={(props: any) => (
                     <CandleBar
                       {...props}
                       yDomain={yDomain}
                       chartH={chartH - 28}
+                      settings={settings}
                     />
                   )}
                 >
                   {visibleData.map((_, i) => (
-                    <Cell key={i} fill="#6d28d9" />
+                    <Cell key={i} fill={settings.colors.primary} />
                   ))}
                 </Bar>
               )}
@@ -568,60 +657,49 @@ export default function TradingChart() {
         </div>
       </div>
 
-      {/* <div
-        className="px-1"
-        style={{ paddingRight: isRtl ? 4 : 40, paddingLeft: isRtl ? 40 : 4 }}
-      >
-        <div
-          ref={sbRef}
-          onClick={onSBClick}
-          className="h-1 bg-[#ede9fe] dark:bg-[#1a1a38] rounded-full cursor-pointer relative overflow-hidden"
-        >
-          <div
-            className="absolute top-0 h-full rounded-full"
-            style={{
-              left: `${thumbLeft}%`,
-              width: `${Math.max(4, thumbWidth)}%`,
-              background: "linear-gradient(90deg,#7c3aed,#a855f7)",
-              boxShadow: "0 0 6px #a855f770",
-              transition: "width .1s",
-            }}
-          />
-        </div>
-      </div> */}
-
       <p className="text-center text-[9px] dark:text-white text-[#c0b8d8] -mt-1">
         {isRtl
           ? `اسکرول برای زوم · درگ برای حرکت · ${visibleCount}/${TOTAL} کندل`
           : `scroll to zoom · drag to pan · ${visibleCount}/${TOTAL} bars`}
       </p>
 
-      <div
-        className={`flex flex-wrap justify-center gap-x-3 gap-y-2 sm:gap-x-5 ${isRtl ? "flex-row-reverse" : ""}`}
-      >
-        {SERIES_CONFIG.map(({ key, tKey, color }) => (
-          <button
-            key={key}
-            onClick={() => toggle(key)}
-            className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-1.5 py-1 transition-opacity duration-200"
-            style={{ opacity: activeSeries[key] ? 1 : 0.3 }}
-          >
-            <span
-              className="w-2.5 h-2.5 rounded-full shrink-0 transition-shadow duration-200"
-              style={{
-                background: color,
-                boxShadow: activeSeries[key] ? `0 0 7px ${color}` : "none",
-              }}
-            />
-            <span
-              className="text-[11px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
-              style={{ color: activeSeries[key] ? color : "#b0a8cc" }}
+      {settings.display.showLegend && (
+        <div
+          className={`flex flex-wrap justify-center gap-x-3 gap-y-2 sm:gap-x-5 ${isRtl ? "flex-row-reverse" : ""}`}
+        >
+          {SERIES_CONFIG.map(({ key, tKey, color }) => (
+            <button
+              key={key}
+              onClick={() => toggle(key)}
+              className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-1.5 py-1 transition-opacity duration-200"
+              style={{ opacity: activeSeries[key] ? 1 : 0.3 }}
             >
-              {t(tKey)}
-            </span>
-          </button>
-        ))}
-      </div>
+              <span
+                className="w-2.5 h-2.5 rounded-full shrink-0 transition-shadow duration-200"
+                style={{
+                  background: color,
+                  boxShadow: activeSeries[key] ? `0 0 7px ${color}` : "none",
+                }}
+              />
+              <span
+                className="text-[11px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
+                style={{ color: activeSeries[key] ? color : "#b0a8cc" }}
+              >
+                {t(tKey)}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {/* پنل تنظیمات */}
+      <ChartSettingsPanel
+        settings={settings}
+        onSettingsChange={setSettings}
+        isOpen={settingsOpen}
+        onClose={closeSettingsPanel}
+        onReset={resetSettings}
+      />
     </div>
   );
 }
