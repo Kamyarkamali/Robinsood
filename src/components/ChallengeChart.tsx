@@ -29,7 +29,6 @@ export default function ChallengeChart({
 
     ctx.clearRect(0, 0, W, H);
 
-    // دایره پس‌زمینه آیکون
     ctx.beginPath();
     ctx.arc(cx, cy, 22, 0, Math.PI * 2);
     ctx.fillStyle = bgColor;
