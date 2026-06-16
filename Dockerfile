@@ -28,6 +28,8 @@ RUN npm config set registry https://repo.hmirror.ir/npm
 
 WORKDIR /app
 COPY package*.json ./
+
+RUN npm install
 RUN npm ci
 COPY . .
 RUN rm .env
