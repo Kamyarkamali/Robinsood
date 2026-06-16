@@ -1,5 +1,10 @@
 import { useTranslation } from "react-i18next";
 import type { ShowSectionItemsProps } from "../types/interfaces";
+import ShowAllItems from "../pages/ShowAllItems";
+import ChallengeGrid from "./ChallengeGrid";
+import WellcomeComponent from "./WellcomeComponent";
+import DetailseComponent from "./DetailseComponent";
+import InformationAccount from "./InformationAccount";
 
 function ShowSectionItems({ activeId }: ShowSectionItemsProps) {
   const { t } = useTranslation();
@@ -9,21 +14,32 @@ function ShowSectionItems({ activeId }: ShowSectionItemsProps) {
     case 1:
       return (
         <div className="md:text-[32px] dark:text-white text-gray-500 text-[20px] font-lahzeh font-bold">
-          {t("items.item1")}
+          <ShowAllItems />
         </div>
       );
 
     case 2:
       return (
-        <div className="md:text-[32px] text-[20px] dark:text-white text-gray-500 font-lahzeh font-bold">
-          {t("items.item2")}
+        <div>
+          <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+            بخش اطلاعات چالش
+          </h1>
+          <div className="w-full lg:w-auto flex justify-start lg:justify-end">
+            <WellcomeComponent />
+          </div>
+          <div className="w-full lg:w-auto flex justify-start mt-8">
+            <DetailseComponent />
+          </div>
+          <div className="w-full lg:w-auto flex justify-start mt-8">
+            <InformationAccount />
+          </div>
         </div>
       );
 
     case 3:
       return (
-        <div className="md:text-[32px] text-[20px] dark:text-white text-gray-500 font-lahzeh font-bold">
-          {t("items.item3")}
+        <div className="w-full lg:w-auto flex justify-start mt-8">
+          <ChallengeGrid />
         </div>
       );
 

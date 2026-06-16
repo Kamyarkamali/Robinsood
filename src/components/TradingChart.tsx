@@ -286,20 +286,21 @@ export default function TradingChart() {
     [yDomain, settings.axis.tickCount],
   );
 
-  const [chartH, setChartH] = useState(settings.sizes.chartHeight);
-  useEffect(() => {
-    const upd = () =>
-      setChartH(
-        window.innerWidth < 640
-          ? Math.min(settings.sizes.chartHeight, 200)
-          : window.innerWidth < 1024
-            ? Math.min(settings.sizes.chartHeight, 260)
-            : settings.sizes.chartHeight,
-      );
-    upd();
-    window.addEventListener("resize", upd);
-    return () => window.removeEventListener("resize", upd);
-  }, [settings.sizes.chartHeight]);
+  // const [chartH, setChartH] = useState(settings.sizes.chartHeight);
+  const chartH = settings.sizes.chartHeight;
+  // useEffect(() => {
+  //   const upd = () =>
+  //     setChartH(
+  //       window.innerWidth < 640
+  //         ? Math.min(settings.sizes.chartHeight, 200)
+  //         : window.innerWidth < 1024
+  //           ? Math.min(settings.sizes.chartHeight, 260)
+  //           : settings.sizes.chartHeight,
+  //     );
+  //   upd();
+  //   window.addEventListener("resize", upd);
+  //   return () => window.removeEventListener("resize", upd);
+  // }, [settings.sizes.chartHeight]);
 
   const toggle = (key: SeriesKey) =>
     setActiveSeries((p) => ({ ...p, [key]: !p[key] }));
@@ -362,12 +363,21 @@ export default function TradingChart() {
   return (
     <div
       dir={isRtl ? "rtl" : "ltr"}
-      className="w-full max-w-325 mx-auto
-        bg-white 
-         border-[#e0d9f5] 
-        rounded-4xl border-5 dark:border-[#353535] dark:bg-[#242424]
-        p-3 sm:p-4 lg:p-5
-        flex flex-col gap-3"
+      className="
+    w-full
+    max-w-full
+    xl:max-w-325
+    mx-auto
+    bg-white
+    border-[#e0d9f5]
+    rounded-4xl
+    border-5
+    dark:border-[#353535]
+    dark:bg-[#242424]
+    p-3 sm:p-4 lg:p-5
+    flex flex-col gap-3
+    overflow-hidden
+  "
       style={{ minHeight: 597 }}
     >
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
@@ -488,17 +498,24 @@ export default function TradingChart() {
           onMouseLeave={onMU}
           onTouchStart={onTS}
           onTouchMove={onTM}
-          className="w-full select-none cursor-grab active:cursor-grabbing"
-          style={{ height: chartH }}
+          className="
+    w-full
+    h-80
+    sm:h-105
+    lg:h-137.5
+    select-none
+    cursor-grab
+    active:cursor-grabbing
+  "
         >
-          <ResponsiveContainer width="100%" height="140%">
+          <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={visibleData}
               margin={{
-                top: settings.sizes.padding,
-                right: settings.sizes.padding,
-                bottom: 0,
-                left: 0,
+                top: 20,
+                right: 20,
+                left: 20,
+                bottom: 20,
               }}
             >
               <defs>
@@ -558,7 +575,7 @@ export default function TradingChart() {
                   }}
                   axisLine={false}
                   tickLine={false}
-                  width={38}
+                  width={60}
                   tickFormatter={(v) => v.toLocaleString()}
                   orientation={isRtl ? "right" : "left"}
                 />

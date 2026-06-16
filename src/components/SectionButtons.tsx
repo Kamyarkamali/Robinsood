@@ -71,42 +71,42 @@ function SectionButtons() {
         </div>
 
         {/* کامپوننت خوش امدگویی */}
-        <div className="w-full lg:w-auto flex justify-start lg:justify-end">
+        {/* <div className="w-full lg:w-auto flex justify-start lg:justify-end">
           <WellcomeComponent />
-        </div>
+        </div> */}
       </div>
-      <div className="w-full lg:w-auto flex justify-start mt-8">
+      {/* <div className="w-full lg:w-auto flex justify-start mt-8">
         <DetailseComponent />
-      </div>
+      </div> */}
 
       {/* اطلاعات حساب */}
-      <div className="w-full lg:w-auto flex justify-start mt-8">
+      {/* <div className="w-full lg:w-auto flex justify-start mt-8">
         <InformationAccount />
       </div>
 
       <div className="w-full lg:w-auto flex justify-start mt-8">
         <ChallengeGrid />
-      </div>
+      </div> */}
 
-      <div className="w-full mt-8">
+      {/* <div className="w-full mt-8">
         <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           پارامترهای ارزیابی
-        </h1>
+        </h1> */}
 
-        <div className="flex flex-col lg:flex-row lg:mt-8">
+      {/* <div className="flex flex-col lg:flex-row lg:mt-8">
           <ProgressCardsSection />
           <TradingChartsGrid />
         </div>
-      </div>
+      </div> */}
 
-      <div className="w-full max-w-350 mx-auto mt-8 px-2 sm:px-3 lg:px-4">
+      {/* <div className="w-full max-w-350 mx-auto mt-8 px-2 sm:px-3 lg:px-4">
         <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:px-8 md:px-3 sm:px-5 px-5 lg:text-[32px] font-bold mb-4">
           چارت
         </h1>
         <div className="w-full">
           <TradingChart />
         </div>
-      </div>
+      </div> */}
       {/* <div className="w-full lg:w-auto flex justify-start mt-8">
         <TraderScoreCard />
       </div> */}
