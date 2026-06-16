@@ -14,6 +14,9 @@ function ShowSectionItems({ activeId }: ShowSectionItemsProps) {
     case 1:
       return (
         <div className="md:text-[32px] dark:text-white text-gray-500 text-[20px] font-lahzeh font-bold">
+          <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+            نمایش تمام آیتم ها
+          </h1>
           <ShowAllItems />
         </div>
       );
