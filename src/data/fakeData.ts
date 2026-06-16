@@ -87,9 +87,11 @@ export const challengeCards: ChallengeCard[] = [
         },
         value: "$880 (12%)",
       },
+
       {
         label: {
           fa: "فاصله = اکوییتی - درادون",
+          en: "Distance = Equity - Drawdown",
         },
         value: "$190.18 = $1070.18 - $880",
       },

@@ -94,6 +94,7 @@ export default function ChallengeCardComponent({ card }: Props) {
           ) : (
             <div key={i} className="flex flex-col items-center gap-1 w-full">
               <span className="text-[#99A1AF] text-center break-words leading-5">
+                {/* @ts-ignore */}
                 {i18n.language === "fa" ? m.label.fa : m.label.en}
               </span>
 

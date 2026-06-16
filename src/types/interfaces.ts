@@ -54,7 +54,7 @@ export interface ChartData {
 }
 
 export interface Metric {
-  label: {
+  label?: {
     fa: string;
     en: string;
   };
