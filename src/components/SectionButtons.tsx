@@ -89,7 +89,7 @@ function SectionButtons() {
       </div>
 
       <div className="w-full mt-8">
-        <h1 className="px-2 dark:text-white text-gray-700 sm:px-3 lg:px-8 mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+        <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           پارامترهای ارزیابی
         </h1>
 
@@ -100,7 +100,7 @@ function SectionButtons() {
       </div>
 
       <div className="w-full max-w-350 mx-auto mt-8 px-2 sm:px-3 lg:px-4">
-        <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold mb-4">
+        <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:px-8 md:px-3 sm:px-5 px-5 lg:text-[32px] font-bold mb-4">
           چارت
         </h1>
         <div className="w-full">
