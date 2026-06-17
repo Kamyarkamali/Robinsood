@@ -3,14 +3,7 @@ import { buttonSection } from "../data/fakeData";
 import Button from "./ui/Button";
 import { useTranslation } from "react-i18next";
 import ShowSectionItems from "./ShowSectionItems";
-import WellcomeComponent from "./WellcomeComponent";
 import { buttonStyles } from "../styles/buttonStyles";
-import DetailseComponent from "./DetailseComponent";
-import InformationAccount from "./InformationAccount";
-import ChallengeGrid from "./ChallengeGrid";
-import TradingChartsGrid from "./TradingChartsGrid";
-import ProgressCardsSection from "./ProgressCardsSection";
-import TradingChart from "./TradingChart";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -38,7 +31,7 @@ function SectionButtons() {
               fontBold="font-bold"
               bgColor={isActive ? active : lightInactive + " " + darkInactive}
               width="w-full"
-              height="lg:h-[80px] h-[60px]"
+              height="lg:h-[65px] h-[50px]"
             >
               <div className="flex flex-col items-center text-center">
                 <span

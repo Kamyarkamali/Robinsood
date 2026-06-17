@@ -97,7 +97,10 @@ export interface DayData {
 }
 
 export interface ChartDay {
-  label: string;
+  label: {
+    fa: string;
+    en: string;
+  };
   value: number;
   belowAverage?: boolean;
   isCurrent?: boolean;
@@ -105,7 +108,10 @@ export interface ChartDay {
 
 export interface ChartData2 {
   id: number;
-  title: string;
+  title: {
+    fa: string;
+    en: string;
+  };
   unit: ChartUnit;
   days: ChartDay[];
   averageLine: number;

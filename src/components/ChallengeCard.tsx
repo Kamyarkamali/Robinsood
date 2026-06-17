@@ -29,14 +29,16 @@ export default function ChallengeCardComponent({ card }: Props) {
   const { i18n } = useTranslation();
 
   return (
-    <div
-      className="
-        flex flex-col
+    <>
+      <div
+        className={`
+          
+      flex flex-col
         w-full
-        max-w-[220px]
-        sm:max-w-[240px]
-        md:max-w-[260px]
-        lg:max-w-[280px]
+        max-w-55
+        sm:max-w-60
+        md:max-w-65
+        lg:max-w-70
         h-90
         rounded-[23px]
         overflow-hidden
@@ -52,32 +54,31 @@ export default function ChallengeCardComponent({ card }: Props) {
         duration-300
         hover:shadow-lg
         hover:scale-[1.02]
-      "
-    >
-      <div className="w-4/5 mx-auto h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
+        `}
+      >
+        <div className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
 
-      <div className="shrink-0 pt-3 px-2">
-        <p className="text-center text-[15px] font-semibold text-gray-600 dark:text-white leading-5 break-words">
-          {i18n.language === "fa" ? card.title.fa : card.title.en}
-        </p>
-      </div>
+        <div className="shrink-0 pt-3 px-2">
+          <p className="text-center text-[15px] font-semibold text-gray-600 dark:text-white leading-5 wrap-break-word">
+            {i18n.language === "fa" ? card.title.fa : card.title.en}
+          </p>
+        </div>
 
-      <div className="shrink-0 flex justify-center items-center border-2 border-b-0 border-gray-200 dark:border-[#3B3B3B] rounded-t-[23px] mt-2 pt-3 dark:bg-gradient-to-t dark:from-[#222] dark:to-[#303030]">
-        <ChallengeChart
-          current={card.chart.current}
-          max={card.chart.max}
-          color={card.chart.color}
-          glowColor={card.chart.glowColor}
-          bgColor={card.chart.bgColor}
-          icon={getIcon(card)}
-        />
-      </div>
+        <div className="shrink-0 flex justify-center items-center border-2 border-b-0 border-gray-200 dark:border-[#3B3B3B] rounded-t-[23px] mt-2 pt-3 dark:bg-linear-to-t dark:from-[#222] dark:to-[#303030]">
+          <ChallengeChart
+            current={card.chart.current}
+            max={card.chart.max}
+            color={card.chart.color}
+            glowColor={card.chart.glowColor}
+            bgColor={card.chart.bgColor}
+            icon={getIcon(card)}
+          />
+        </div>
 
-      <div className="w-4/5 mx-auto h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
+        <div className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
 
-      {/* METRICS */}
-      <div
-        className="
+        <div
+          className="
           flex-1
           overflow-hidden
           px-3
@@ -88,68 +89,66 @@ export default function ChallengeCardComponent({ card }: Props) {
           gap-1.5
           text-[13px]
         "
-      >
-        {card.metrics.map((m, i) => {
-          const separator = i > 0 && (
-            <div className="w-3/4 mx-auto h-px bg-gradient-to-r from-transparent via-gray-300/50 dark:via-gray-600/50 to-transparent" />
-          );
+        >
+          {card.metrics.map((m, i) => {
+            const separator = i > 0 && (
+              <div className="w-3/4 mx-auto h-px bg-linear-to-r from-transparent via-gray-300/50 dark:via-gray-600/50 to-transparent" />
+            );
 
-          if (m.type === "orange") {
+            if (m.type === "orange") {
+              return (
+                <React.Fragment key={i}>
+                  {separator}
+                  <p className="text-orange-400 font-bold text-center text-sm">
+                    {i18n.language === "fa" ? m.textfa : m.texten}
+                  </p>
+                </React.Fragment>
+              );
+            }
+
+            if (m.type === "blue") {
+              return (
+                <React.Fragment key={i}>
+                  {separator}
+                  <p className="text-blue-400 font-bold text-center text-sm">
+                    {i18n.language === "fa" ? m.textfa : m.texten}
+                  </p>
+                </React.Fragment>
+              );
+            }
+
+            if (m.type === "center") {
+              return (
+                <React.Fragment key={i}>
+                  {separator}
+                  <p className="text-white font-bold text-center text-base">
+                    {m.val}
+                  </p>
+                </React.Fragment>
+              );
+            }
+
             return (
               <React.Fragment key={i}>
                 {separator}
-                <p className="text-orange-400 font-bold text-center text-sm">
-                  {i18n.language === "fa" ? m.textfa : m.texten}
-                </p>
+                <div className="flex flex-col items-center gap-0.5 w-full">
+                  <span className="text-[#99A1AF] text-center wrap-break-word leading-5 text-xs">
+                    {/* @ts-ignore */}
+                    {i18n.language === "fa" ? m.label.fa : m.label.en}
+                  </span>
+                  <span className="text-[#00D3F3] text-[13px] font-bold text-center break-all">
+                    {m.value}
+                  </span>
+                </div>
               </React.Fragment>
             );
-          }
+          })}
+        </div>
 
-          if (m.type === "blue") {
-            return (
-              <React.Fragment key={i}>
-                {separator}
-                <p className="text-blue-400 font-bold text-center text-sm">
-                  {i18n.language === "fa" ? m.textfa : m.texten}
-                </p>
-              </React.Fragment>
-            );
-          }
+        <div className="w-full h-px bg-linear-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
 
-          if (m.type === "center") {
-            return (
-              <React.Fragment key={i}>
-                {separator}
-                <p className="text-white font-bold text-center text-base">
-                  {m.val}
-                </p>
-              </React.Fragment>
-            );
-          }
-
-          return (
-            <React.Fragment key={i}>
-              {separator}
-              <div className="flex flex-col items-center gap-0.5 w-full">
-                <span className="text-[#99A1AF] text-center break-words leading-5 text-xs">
-                  {/* @ts-ignore */}
-                  {i18n.language === "fa" ? m.label.fa : m.label.en}
-                </span>
-                <span className="text-[#00D3F3] text-[13px] font-bold text-center break-all">
-                  {m.value}
-                </span>
-              </div>
-            </React.Fragment>
-          );
-        })}
-      </div>
-
-      {/* جداکننده قبل از دکمه */}
-      <div className="w-full h-px bg-gradient-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
-
-      {/* BUTTON */}
-      <button
-        className={`
+        <button
+          className={`
           shrink-0
           w-full
           h-12
@@ -167,14 +166,15 @@ export default function ChallengeCardComponent({ card }: Props) {
               : "text-[#FF383C] border-t-[#3a1010] dark:border-t-red-900/50 dark:bg-linear-to-r dark:from-red-900/30 dark:to-[#282828] hover:from-red-900/50"
           }
         `}
-      >
-        {card.status === "active" ? (
-          <TiTick size={20} className="text-[#34C759]" />
-        ) : (
-          <RxCross2 size={20} className="text-[#FF383C]" />
-        )}
-        <span>{getStatusText(card.status, i18n.language)}</span>
-      </button>
-    </div>
+        >
+          {card.status === "active" ? (
+            <TiTick size={20} className="text-[#34C759]" />
+          ) : (
+            <RxCross2 size={20} className="text-[#FF383C]" />
+          )}
+          <span>{getStatusText(card.status, i18n.language)}</span>
+        </button>
+      </div>
+    </>
   );
 }

@@ -4,6 +4,8 @@ import type { ChartUnit } from "../types/type";
 import { Settings, X } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Slider from "@radix-ui/react-slider";
+import { useTranslation } from "react-i18next";
+import { t } from "i18next";
 
 interface Props {
   data: ChartData2;
@@ -54,7 +56,6 @@ const ChartSettingsPanel: React.FC<{
           </div>
 
           <div className="space-y-6">
-            {/* رنگ خط میانگین */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 رنگ خط میانگین
@@ -72,7 +73,6 @@ const ChartSettingsPanel: React.FC<{
               />
             </div>
 
-            {/* ضخامت خط میانگین */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 ضخامت خط میانگین: {settings.averageLineWidth}px
@@ -97,7 +97,6 @@ const ChartSettingsPanel: React.FC<{
               </Slider.Root>
             </div>
 
-            {/* رنگ خط حد مجاز */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 رنگ خط حد مجاز
@@ -115,7 +114,6 @@ const ChartSettingsPanel: React.FC<{
               />
             </div>
 
-            {/* ضخامت خط حد مجاز */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 ضخامت خط حد مجاز: {settings.maxAllowedLineWidth}px
@@ -140,7 +138,6 @@ const ChartSettingsPanel: React.FC<{
               </Slider.Root>
             </div>
 
-            {/* رنگ‌های ستون‌ها */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 رنگ‌های ستون‌ها
@@ -206,7 +203,6 @@ const ChartSettingsPanel: React.FC<{
               </div>
             </div>
 
-            {/* شفافیت ستون‌ها */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 شفافیت ستون‌ها: {Math.round(settings.barOpacity * 100)}%
@@ -231,7 +227,6 @@ const ChartSettingsPanel: React.FC<{
               </Slider.Root>
             </div>
 
-            {/* گردی گوشه‌های ستون‌ها */}
             <div>
               <label className="block text-sm font-medium dark:text-gray-300 mb-2">
                 گردی گوشه‌های ستون‌ها: {settings.barBorderRadius}px
@@ -256,7 +251,6 @@ const ChartSettingsPanel: React.FC<{
               </Slider.Root>
             </div>
 
-            {/* Toggle‌ها */}
             <div className="space-y-2">
               <label className="flex items-center gap-3 dark:text-gray-300 cursor-pointer">
                 <input
@@ -319,7 +313,6 @@ const ChartSettingsPanel: React.FC<{
               </label>
             </div>
 
-            {/* دکمه Reset */}
             <button
               onClick={() => onSettingsChange(defaultSettings)}
               className="w-full py-2 bg-gray-200 dark:bg-[#2a2a4a] hover:bg-gray-300 dark:hover:bg-[#3a3a5a] rounded-lg font-medium dark:text-white transition-colors"
@@ -333,13 +326,13 @@ const ChartSettingsPanel: React.FC<{
   );
 };
 
-// کامپوننت اصلی
 const TradingChartCard: React.FC<Props> = ({ data }) => {
   const [hovered, setHovered] = useState<number | null>(null);
   const [settings, setSettings] = useState<ChartSettings>(defaultSettings);
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
 
-  // بارگذاری تنظیمات از localStorage
+  const { i18n } = useTranslation();
+
   useEffect(() => {
     const saved = localStorage.getItem("chartSettings");
     if (saved) {
@@ -351,7 +344,6 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
     }
   }, []);
 
-  // ذخیره تنظیمات در localStorage
   useEffect(() => {
     localStorage.setItem("chartSettings", JSON.stringify(settings));
   }, [settings]);
@@ -481,11 +473,10 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
 
   return (
     <div className="flex flex-col items-center gap-3 w-full">
-      <div className="w-full p-4 bg-gray-50 dark:bg-[#1a1a2e] bg-white dark:bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] h-full border-4 rounded-[21px] border-gray-300 dark:border-[#2a2a4a] flex flex-col items-center shadow-xl">
-        {/* Header با دکمه تنظیمات */}
+      <div className="w-full p-4 bg-gray-50 dark:bg-[#1a1a2e]  dark:bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] h-full border-4 rounded-[21px] border-gray-300 dark:border-[#2a2a4a] flex flex-col items-center shadow-xl">
         <div className="w-full flex items-center justify-between mb-3">
           <h3 className="flex-1 text-center text-gray-700 dark:text-white text-base sm:text-lg font-normal">
-            {data.title}
+            {i18n.language === "fa" ? data?.title?.fa : data?.title?.en}
           </h3>
           <button
             onClick={() => setIsSettingsOpen(true)}
@@ -531,7 +522,6 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
             </filter>
           </defs>
 
-          {/* Grid Lines */}
           {settings.showGridLines &&
             yPositions.map((y, i) => (
               <line
@@ -549,7 +539,6 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
               />
             ))}
 
-          {/* Axis Labels */}
           {settings.showLabels &&
             yTickValues.map((val, i) => (
               <text
@@ -640,7 +629,7 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                     fontSize="14"
                     fontWeight="500"
                   >
-                    {day.label}
+                    {i18n.language === "fa" ? day?.label?.fa : day?.label?.en}
                   </text>
                 )}
 
@@ -701,7 +690,9 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                             marginTop: "8px",
                           }}
                         >
-                          {day.label}
+                          {i18n.language === "fa"
+                            ? day?.label?.fa
+                            : day?.label?.en}
                         </div>
 
                         <div
@@ -783,7 +774,6 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
             );
           })}
 
-          {/* Average Line */}
           {settings.showAverageLine && (
             <>
               <line
@@ -804,7 +794,7 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                 fill={settings.averageLineColor}
                 opacity={0.15}
               />
-              <text
+              {/* <text
                 x={fixedWidth - paddingRight - 37}
                 y={avgY + 1}
                 textAnchor="middle"
@@ -813,11 +803,10 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                 fontWeight="600"
               >
                 📊 میانگین
-              </text>
+              </text> */}
             </>
           )}
 
-          {/* Max Allowed Line */}
           {settings.showMaxAllowedLine && (
             <>
               <line
@@ -838,7 +827,7 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                 fill={settings.maxAllowedLineColor}
                 opacity={0.15}
               />
-              <text
+              {/* <text
                 x={fixedWidth - paddingRight - 37}
                 y={maxAllowedY + 1}
                 textAnchor="middle"
@@ -847,7 +836,7 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                 fontWeight="600"
               >
                 ⚠️ حد مجاز
-              </text>
+              </text> */}
             </>
           )}
         </svg>
@@ -856,41 +845,41 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
           className="w-full mt-4 flex flex-col gap-2"
           style={{ direction: "rtl" }}
         >
-          <div className="grid grid-cols-2 gap-2">
-            <div className="bg-green-500/10 dark:bg-green-500/5 p-2 rounded-lg text-center">
-              <span className="text-green-500 text-[11px] font-normal block">
-                📊 میانگین
+          <div className="flex flex-col gap-1.5">
+            <div className="flex items-center justify-between px-2 py-1.5 rounded-md bg-green-500/10 dark:bg-green-500/5">
+              <span className="text-green-500 text-[11px] leading-none flex items-center gap-1">
+                📊 {t("cart1.Average")}
               </span>
-              <span className="text-green-400 text-[13px] font-normal">
+              <span className="text-green-400 text-[12px] leading-none font-medium">
                 {formatValue(data.averageValue, data.unit)}
               </span>
             </div>
-            <div className="bg-orange-500/10 dark:bg-orange-500/5 p-2 rounded-lg text-center">
-              <span className="text-orange-400 text-[11px] font-normal block">
-                ⚠️ حد مجاز
+
+            <div className="flex items-center justify-between px-2 py-1.5 rounded-md bg-orange-500/10 dark:bg-orange-500/5">
+              <span className="text-orange-400 text-[11px] leading-none flex items-center gap-1">
+                ⚠️ {t("cart1.Limit")}
               </span>
-              <span className="text-orange-400 text-[13px] font-normal">
+              <span className="text-orange-400 text-[12px] leading-none font-medium">
                 {formatValue(data.maxAllowedValue, data.unit)}
               </span>
             </div>
           </div>
 
-          <div className="bg-gray-100 dark:bg-[#2a2a4a] py-2 px-4 rounded-lg text-center">
-            <span className="text-gray-600 dark:text-[#aaa] text-[12px]">
-              ✅ روز معاملاتی مورد قبول:
-              <span className="font-bold text-green-500 mx-1">
+          <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-100 dark:bg-[#2a2a4a]">
+            <span className="text-[11px] text-gray-600 dark:text-[#aaa] flex items-center gap-1">
+              ✅ {t("cart1.Trading")}
+            </span>
+
+            <span className="text-[12px] text-gray-500 dark:text-[#bbb] flex items-center gap-1">
+              <span className="text-green-500 font-semibold">
                 {data.acceptedDays}
               </span>
-              از
-              <span className="font-bold mx-1">{data.requiredDays}</span>
-              روز
-              <span
-                className={`mr-2 font-bold ${
-                  data.acceptedDays / data.requiredDays >= 0.7
-                    ? "text-green-500"
-                    : "text-red-500"
-                }`}
-              ></span>
+
+              <span className="text-gray-400">/</span>
+
+              <span className="font-medium">{data.requiredDays}</span>
+
+              <span className="text-gray-400">{t("cart1.day")}</span>
             </span>
           </div>
         </div>

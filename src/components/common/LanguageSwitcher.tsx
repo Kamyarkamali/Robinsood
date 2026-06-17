@@ -1,12 +1,11 @@
 import { useState, useRef, useEffect } from "react";
 import i18n from "../../i18n";
 
-// پرچم ها برای زبان
 import fa from "../../assets/images/fa.png";
 import en from "../../assets/images/en.jpg";
 
 function LanguageSwitcher() {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const currentLang = i18n.language;
@@ -32,32 +31,38 @@ function LanguageSwitcher() {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative inline-block z-10">
+    <div ref={dropdownRef} className="relative inline-block z-50">
+      {/* TRIGGER */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2 px-3 py-2 rounded-xl
-        cursor-pointer
-                   bg-white dark:bg-gray-900
-                   border border-gray-200 dark:border-gray-700
-                   shadow-sm hover:shadow-md
-                   transition-all duration-300
-                   min-w-35 justify-between"
+        className="
+          flex items-center justify-between gap-3
+          px-3 py-2 rounded-xl
+          min-w-32.5
+          bg-white/80 dark:bg-[#1b1b1b]/80
+          backdrop-blur-md
+          border border-gray-200 dark:border-gray-700
+          shadow-sm hover:shadow-lg
+          transition-all duration-300
+          hover:scale-[1.02]
+        "
       >
         <div className="flex items-center gap-2">
           <img
             src={currentLang === "fa" ? fa : en}
-            alt="current language"
-            className="w-5 h-5 rounded-full object-cover
-                       border border-gray-300 dark:border-gray-600"
+            className="
+              w-5 h-5 rounded-full object-cover
+              border border-gray-300 dark:border-gray-600
+            "
           />
 
-          <span className="text-sm font-medium">
-            {currentLang === "fa" ? "فارسی" : "English"}
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            {currentLang === "fa" ? "FA" : "EN"}
           </span>
         </div>
 
         <svg
-          className={`w-4 h-4 transition-transform duration-300 ${
+          className={`w-4 h-4 text-gray-500 transition-transform duration-300 ${
             open ? "rotate-180" : ""
           }`}
           fill="none"
@@ -73,54 +78,67 @@ function LanguageSwitcher() {
         </svg>
       </button>
 
-      {/* Dropdown */}
+      {/* DROPDOWN */}
       <div
-        className={`absolute right-0 mt-2 w-44
-        rounded-xl overflow-hidden
-        bg-white dark:bg-gray-900
-        border border-gray-200 dark:border-gray-700
-        shadow-xl
-        transition-all duration-200 origin-top-right
-        ${
-          open
-            ? "opacity-100 scale-100"
-            : "opacity-0 scale-95 pointer-events-none"
-        }`}
+        className={`
+          absolute right-0 mt-2 w-40
+          rounded-2xl overflow-hidden
+          bg-white/90 dark:bg-[#111]/90
+          backdrop-blur-xl
+          border border-gray-200 dark:border-gray-700
+          shadow-2xl
+          transition-all duration-200 origin-top-right
+          ${
+            open
+              ? "opacity-100 scale-100 translate-y-0"
+              : "opacity-0 scale-95 -translate-y-2 pointer-events-none"
+          }
+        `}
       >
-        {/* فارسی */}
+        {/* FA */}
         <button
           onClick={() => changeLang("fa")}
-          className={`w-full flex items-center gap-3 px-4 py-3
-          transition-all duration-200
-          cursor-pointer
-          hover:bg-gray-100 dark:hover:bg-gray-800
-          ${currentLang === "fa" ? "bg-gray-100 dark:bg-gray-800" : ""}`}
+          className={`
+            w-full flex items-center gap-3 px-3 py-3
+            transition-all duration-200
+            hover:bg-gray-100 dark:hover:bg-white/5
+          `}
         >
           <img
             src={fa}
-            alt="Persian"
-            className="w-7 h-6 rounded-full object-fill
-                       border border-gray-300 dark:border-gray-600"
+            className="w-6 h-6 rounded-full border border-gray-300 dark:border-gray-600"
           />
-          <span className="text-sm font-medium">فارسی</span>
+
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            فارسی
+          </span>
+
+          {currentLang === "fa" && (
+            <div className="ml-auto w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_10px_#10b981]" />
+          )}
         </button>
 
-        {/* انگلیسی */}
+        {/* EN */}
         <button
           onClick={() => changeLang("en")}
-          className={`w-full flex items-center gap-3 px-4 py-3
-          transition-all duration-200
-          cursor-pointer
-          hover:bg-gray-100 dark:hover:bg-gray-800
-          ${currentLang === "en" ? "bg-gray-100 dark:bg-gray-800" : ""}`}
+          className={`
+            w-full flex items-center gap-3 px-3 py-3
+            transition-all duration-200
+            hover:bg-gray-100 dark:hover:bg-white/5
+          `}
         >
           <img
             src={en}
-            alt="English"
-            className="w-7 h-6 rounded-full object-fill
-                       border border-gray-300 dark:border-gray-600"
+            className="w-6 h-6 rounded-full border border-gray-300 dark:border-gray-600"
           />
-          <span className="text-sm font-medium">English</span>
+
+          <span className="text-sm font-medium text-gray-700 dark:text-gray-200">
+            English
+          </span>
+
+          {currentLang === "en" && (
+            <div className="ml-auto w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_10px_#3b82f6]" />
+          )}
         </button>
       </div>
     </div>

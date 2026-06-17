@@ -90,5 +90,22 @@
     "profitFactor": "profit factor",
     "avgWinLoss": "avg win/loss",
     "yourScore": "امتیاز شما"
+  },
+  "btn": {
+    "active": "فعال ها",
+    "inactive": "غیرفعال ها"
+  },
+  "labels": {
+    "parametr1": "نمایش تمام آیتم ها",
+    "parametr2": "پارامترهای کنترلی امروز ",
+    "parametr3": " پارامترهای ارزیابی",
+    "parametr4": "چارت",
+    "parametr5": "بخش اطلاعات چالش"
+  },
+  "cart1": {
+    "Average": "میانگین",
+    "Limit": "حدمجاز",
+    "Trading": "روز معاملاتی",
+    "day": "day"
   }
 }

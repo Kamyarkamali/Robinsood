@@ -90,5 +90,22 @@
     "profitFactor": "profit factor",
     "avgWinLoss": "avg win/loss",
     "yourScore": "Your Score"
+  },
+  "btn": {
+    "active": "Actives",
+    "inactive": "Inactives"
+  },
+  "labels": {
+    "parametr1": "Show all items",
+    "parametr2": "Today’s Control Parameters",
+    "parametr3": "Evaluation Parameters",
+    "parametr4": "Chart",
+    "parametr5": "Challenge Information"
+  },
+  "cart1": {
+    "Average": "Average",
+    "Limit": "Limit",
+    "Trading": "Trading day",
+    "day": "day"
   }
 }
