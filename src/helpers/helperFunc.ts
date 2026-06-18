@@ -12,3 +12,8 @@ export function getStatusText(status: "active" | "inactive", lang: string) {
 
   return dict[lang === "fa" ? "fa" : "en"][status];
 }
+
+export function toPersianDigits(input: string | number): string {
+  const fa = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+  return String(input).replace(/[0-9]/g, (d) => fa[Number(d)]);
+}

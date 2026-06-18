@@ -1,8 +1,15 @@
 import type {
+  AccountTrendData,
+  AvgWinLossData,
   ChallengeCard,
   ChartData2,
+  DisciplineScoreData,
+  ProfitFactorData,
   Progres,
   TraderScoreData,
+  TradeWinData,
+  WeeklyData,
+  WeeklyReportRow,
 } from "../types/interfaces";
 
 export const buttonSection = [
@@ -518,3 +525,168 @@ export const faTranslations = {
     yourScore: "امتیاز شما",
   },
 };
+
+// -------------------------------------------------------------------
+export const accountStatsData: AccountStatsProps = {
+  weeklyProfit: 345,
+  weeklyLoss: 120,
+  weeklyRisk: 2.5,
+  accountBalance: 3275,
+  accountChange: 1.5,
+  totalTrades: 12,
+  winRate: 65,
+  profitFactor: 1.8,
+  avgWinLoss: 2.3,
+  tradeWin: 58,
+  stabilityScore: 75,
+  lastDeposit: 1500,
+  initialDeposit: 2500,
+};
+
+export const weeklyData: WeeklyData[] = [
+  { day: "شنبه", profit: 45, loss: -20 },
+  { day: "یکشنبه", profit: 30, loss: -15 },
+  { day: "دوشنبه", profit: 60, loss: -25 },
+  { day: "سه شنبه", profit: 20, loss: -10 },
+  { day: "چهارشنبه", profit: 80, loss: -30 },
+  { day: "پنجشنبه", profit: 40, loss: -18 },
+  { day: "جمعه", profit: 70, loss: -22 },
+];
+
+export const getTranslatedData = (lang: "fa" | "en") => {
+  const translations = {
+    fa: {
+      title: "آمار و جزئیات حساب",
+      weeklyReport: "گزارش هفتگی",
+      profit: "سود",
+      loss: "ضرر",
+      risk: "ریسک",
+      selectDate: "انتخاب تاریخ",
+      days: [
+        "شنبه",
+        "یکشنبه",
+        "دوشنبه",
+        "سه شنبه",
+        "چهارشنبه",
+        "پنجشنبه",
+        "جمعه",
+      ],
+      accountSummary: "برآیند حساب",
+      totalBalance: "۱۲ شش معیار",
+      vsInitial: "نسبت به دیزوز",
+      vsLastDeposit: "نسبت به آخرین تزریق",
+      stabilityTitle: "امتیاز ثبات معامله گری",
+      stabilityRanges: ["۰ - ۳۰%", "۳۰ - ۵۰%", "۵۰ - ۱۰۰%", "۱۰۰ - ۱۵۰%"],
+      profitFactor: "Profit Factor",
+      avgWinLoss: "Avg win-loss",
+      tradeWin: "Trade Win",
+      stabilityNote:
+        "در نظر گرفتن امتیاز ثبات معامله گری به بهبود عملکرد شما کمک می‌کند.",
+    },
+    en: {
+      title: "Account Statistics & Details",
+      weeklyReport: "Weekly Report",
+      profit: "Profit",
+      loss: "Loss",
+      risk: "Risk",
+      selectDate: "Select Date",
+      days: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
+      accountSummary: "Account Summary",
+      totalBalance: "12 Trades",
+      vsInitial: "vs Initial",
+      vsLastDeposit: "vs Last Deposit",
+      stabilityTitle: "Trading Stability Score",
+      stabilityRanges: ["0 - 30%", "30 - 50%", "50 - 100%", "100 - 150%"],
+      profitFactor: "Profit Factor",
+      avgWinLoss: "Avg Win-Loss",
+      tradeWin: "Trade Win",
+      stabilityNote:
+        "Considering the trading stability score helps improve your performance.",
+    },
+  };
+  return translations[lang];
+};
+
+export const profitFactor: ProfitFactorData = {
+  value: 1.08,
+  winPercent: 58,
+  lossPercent: 42,
+  winLabel: "$911",
+  lossLabel: "-$583",
+};
+
+export const avgWinLoss: AvgWinLossData = {
+  value: 1.06,
+  winPercent: 55,
+  lossPercent: 45,
+  winLabel: "$911",
+  lossLabel: "-$583",
+};
+
+export const tradeWin: TradeWinData = {
+  percent: 50,
+  winLabel: "$911",
+  lossLabel: "-$583",
+};
+
+export const accountTrend: AccountTrendData = {
+  amount: 384,
+  percentLabel: "۷.۱٪",
+  balanceStandard: 10273,
+  vsYesterdayPercent: 1.5,
+  vsLastTradePercent: -4.3,
+};
+
+export const disciplineScore: DisciplineScoreData = {
+  score: 0,
+  ranges: [
+    { label: "۰ - ۳۰٪", color: "red" },
+    { label: "۳۰ - ۸۰٪", color: "orange" },
+    { label: "۸۰ - ۱۰۰٪", color: "green" },
+  ],
+};
+
+export const weeklyReport: WeeklyReportRow[] = [
+  {
+    day: { fa: "شنبه", en: "Saturday" },
+    amount: 0,
+    winPercent: 0,
+    losePercent: 0,
+  },
+  {
+    day: { fa: "یکشنبه", en: "Sunday" },
+    amount: 220,
+    winPercent: 70,
+    losePercent: 30,
+  },
+  {
+    day: { fa: "", en: "Monday" },
+    amount: 220,
+    winPercent: 70,
+    losePercent: 30,
+  },
+  {
+    day: { fa: "سه‌شنبه", en: "Tuesday" },
+    amount: 220,
+    winPercent: 70,
+    losePercent: 30,
+  },
+  {
+    day: { fa: "چهارشنبه", en: "Wednesday" },
+    amount: 220,
+    winPercent: 70,
+    losePercent: 30,
+  },
+  {
+    day: { fa: "پنجشنبه", en: "Thursday" },
+    amount: 220,
+    winPercent: 70,
+    losePercent: 30,
+  },
+  {
+    day: { fa: "جمعه", en: "Friday" },
+    amount: 220,
+    winPercent: 70,
+    losePercent: 30,
+  },
+];

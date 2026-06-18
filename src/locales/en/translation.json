@@ -107,5 +107,17 @@
     "Limit": "Limit",
     "Trading": "Trading day",
     "day": "day"
+  },
+  "chart3": {
+    "socer": "TotalScore"
+  },
+  "cart4": {
+    "AccountResult": "Account Result",
+    "Yesterday": "Compared to Yesterday",
+    "LastTrade": "Compared to Last Trade"
+  },
+  "cart5": {
+    "profit": "Profit Factor",
+    "wind": "Win Rate"
   }
 }

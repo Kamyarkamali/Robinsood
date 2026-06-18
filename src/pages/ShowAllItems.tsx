@@ -6,6 +6,8 @@ import ProgressCardsSection from "../components/ProgressCardsSection";
 import TradingChart from "../components/TradingChart";
 import TradingChartsGrid from "../components/TradingChartsGrid";
 import WellcomeComponent from "../components/WellcomeComponent";
+import TraderScoreCard from "../components/TraderScoreCard";
+import AccountStats from "../components/AccountStats";
 
 function ShowAllItems() {
   const { t } = useTranslation();
@@ -40,6 +42,10 @@ function ShowAllItems() {
         </h1>
         <div className="w-full">
           <TradingChart />
+        </div>
+        <div className="w-full flex flex-col lg:w-auto justify-start mt-8">
+          <AccountStats />
+          <TraderScoreCard />
         </div>
       </div>
     </div>

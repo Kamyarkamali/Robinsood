@@ -8,7 +8,6 @@ function InformationAccount() {
         <div className={cardInner}>
           <div className="flex flex-col w-full gap-3 font-normal">
             <div className="grid grid-cols-3 w-full text-center items-start gap-4">
-              {/* نوع اکانت */}
               <div className="flex flex-col items-center gap-2">
                 <p className="text-[12px] sm:text-base md:text-[18px] font-normal text-black dark:text-white">
                   نوع اکانت
@@ -37,9 +36,7 @@ function InformationAccount() {
                 </p>
               </div>
 
-              {/* اکوییتی */}
               <div className="flex flex-col items-center gap-2">
-                {/* title */}
                 <p className="text-[12px] sm:text-base md:text-[18px] font-normal text-black dark:text-white">
                   اکوییتی
                 </p>
@@ -62,13 +59,10 @@ function InformationAccount() {
         </div>
       </div>
 
-      {/* CARD 2 - STATUS */}
       <div className={cardOuter}>
         <div className={cardInner}>
           <div className="flex flex-col w-full gap-3 font-normal">
-            {/* TOP ROW */}
             <div className="flex items-start justify-between w-full px-3 gap-4">
-              {/* چالش */}
               <div className="flex flex-col items-start gap-1 min-w-0">
                 <p className="text-[12px] sm:text-base md:text-[18px] text-black font-normal dark:text-white">
                   نام چالش
@@ -112,12 +106,10 @@ function InformationAccount() {
         </div>
       </div>
 
-      {/* CARD 3 */}
       <div className={cardOuter}>
         <div className={cardInner}>
           <div className="flex flex-col w-full gap-6 font-normal">
             <div className="flex items-start justify-between w-full px-5">
-              {/* چالش */}
               <div className="flex flex-col items-start gap-2">
                 <p className="text-[12px] sm:text-base font-normal md:text-[18px] text-black dark:text-white">
                   شماره اکانت
@@ -128,7 +120,6 @@ function InformationAccount() {
                 </p>
               </div>
 
-              {/* وضعیت */}
               <div className="flex flex-col items-center gap-1">
                 <div className="flex items-center justify-end gap-2 sm:gap-3">
                   <CircleIcon color="#00C0E8" />

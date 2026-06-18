@@ -223,3 +223,83 @@ export const defaultSettings: ChartSettings = {
   chartHeight: 200,
   fontFamily: "system-ui",
 };
+
+export interface AccountStatsProps {
+  weeklyProfit: number;
+  weeklyLoss: number;
+  weeklyRisk: number;
+  accountBalance: number;
+  accountChange: number;
+  totalTrades: number;
+  winRate: number;
+  profitFactor: number;
+  avgWinLoss: number;
+  tradeWin: number;
+  stabilityScore: number;
+  lastDeposit: number;
+  initialDeposit: number;
+}
+
+export interface WeeklyData {
+  day: string;
+  profit: number;
+  loss: number;
+}
+
+export interface ChartModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  chartData: ChartData2;
+  title?: string;
+}
+
+export interface ProfitFactorData {
+  value: number;
+  winPercent: number;
+  lossPercent: number;
+  winLabel: string;
+  lossLabel: string;
+}
+
+export interface AvgWinLossData {
+  value: number;
+  winPercent: number;
+  lossPercent: number;
+  winLabel: string;
+  lossLabel: string;
+}
+
+export interface TradeWinData {
+  percent: number;
+  winLabel: string;
+  lossLabel: string;
+}
+
+export interface AccountTrendData {
+  amount: number;
+  percentLabel: string;
+  balanceStandard: number;
+  vsYesterdayPercent: number;
+  vsLastTradePercent: number;
+}
+
+export interface DisciplineScoreData {
+  score: number;
+  ranges: { label: string; color: "red" | "orange" | "green" }[];
+}
+
+export interface WeeklyReportRow {
+  day: {
+    fa: string;
+    en: string;
+  };
+  amount: number;
+  winPercent: number;
+  losePercent: number;
+}
+
+export interface TrendUpIconProps {
+  size?: number;
+  color?: string;
+  className?: string;
+}

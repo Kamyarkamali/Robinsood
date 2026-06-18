@@ -28,16 +28,13 @@ function DetailseComponent() {
 
   return (
     <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 w-full font-lahzeh">
-      {/* کارت */}
       <div className="flex flex-col items-center justify-center text-center min-w-0 bg-linear-to-t dark:from-[#4340404d] dark:to-purple-[#FDFDFD] w-full lg:w-fit p-2 font-semibold min-h-16 rounded-2xl border-2 dark:border-[#4340404d] border-gray-300">
         <span className="whitespace-normal font-normal wrap-break-word leading-snug dark:text-gray-300 text-[13px] lg:text-[17px] text-gray-800">
           {t("detailes.messege")}
         </span>
       </div>
 
-      {/* دکمه‌ها */}
       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5 w-full lg:w-auto">
-        {/* دکمه سبز */}
         <button
           className="
             gap-2 w-full sm:flex-1 lg:w-68.5
@@ -59,7 +56,6 @@ function DetailseComponent() {
           {t("support.request")}
         </button>
 
-        {/* دکمه بنفش */}
         <button
           className="
             gap-2 w-full sm:flex-1 lg:w-68.5
