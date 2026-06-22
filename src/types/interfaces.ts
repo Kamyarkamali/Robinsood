@@ -1,5 +1,12 @@
 import type { ReactNode } from "react";
-import type { ChallengeStatus, ChartUnit, IconColor } from "./type";
+import type {
+  ChallengeStatus,
+  ChartType,
+  ChartUnit,
+  IconColor,
+  Impact,
+  Lang,
+} from "./type";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -302,4 +309,140 @@ export interface TrendUpIconProps {
   size?: number;
   color?: string;
   className?: string;
+}
+
+export interface FullDonutProps {
+  winPercent: number;
+  size?: number;
+  strokeWidth?: number;
+}
+
+export interface StatsRow {
+  labelFa: string;
+  labelEn: string;
+  value: string | number;
+  valueColor?: "green" | "red";
+}
+
+export interface MiddleRow {
+  valueFa: string;
+  valueEn: string;
+  labelFa: string;
+  labelEn: string;
+  valueColor?: "green" | "red";
+}
+
+export interface CapitalRow {
+  value: string;
+  labelFa: string;
+  labelEn: string;
+  valueColor?: "green" | "red";
+}
+
+export interface TriangleIconProps {
+  width?: number;
+  height?: number;
+  color?: string;
+  className?: string;
+}
+
+export interface CardConfig {
+  id: string;
+  value: string | number;
+  valueColor: string;
+  title?: {
+    fa: string;
+    en: string;
+  };
+  chartType: ChartType;
+  data: {
+    t: string;
+    v?: number;
+    open?: number;
+    close?: number;
+    high?: number;
+    low?: number;
+  }[];
+  gradientFrom: string;
+  gradientTo: string;
+  strokeColor: string;
+}
+
+export interface DayDatas {
+  d: number;
+  m: number;
+  p?: number;
+  t?: number;
+}
+
+export interface CalendarMeta {
+  mostProfitableDay: {
+    date: string;
+    pnl: number;
+  };
+  longestStreak: {
+    startDate: string;
+    endDate: string;
+    days: number;
+    trades: number;
+    wins: number;
+    losses: number;
+  };
+}
+
+export interface DataPoint {
+  date: { fa: string; en: string };
+  param1: number;
+  param2: number;
+}
+
+export interface Parameter {
+  id: string;
+  label: { fa: string; en: string };
+}
+
+// --------------------------------fainal tabale
+export interface BilingualText {
+  fa: string;
+  en: string;
+}
+
+export interface NewsItem {
+  symbol: string;
+  flag: string;
+  day: BilingualText;
+  time: string;
+  news: BilingualText;
+  impact: Impact;
+  tradeable: boolean;
+  status: BilingualText;
+}
+
+export interface FilterButtonsProps {
+  impactFilter: Impact | null;
+  onFilterChange: (impact: Impact | null) => void;
+  lang: Lang;
+}
+
+export interface BiLabels {
+  fa: string;
+  en: string;
+}
+
+export interface MetricRow {
+  id: string;
+  label: BiLabels;
+  leftValue: number;
+  rightValue: number;
+  leftBar: number;
+  rightBar: number;
+}
+
+export interface SummaryCard {
+  id: string | number;
+  title: BiLabels;
+  value: BiLabels;
+  buy: BiLabels;
+  sell: BiLabels;
+  unit: BiLabels;
 }

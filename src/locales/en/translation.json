@@ -100,7 +100,10 @@
     "parametr2": "Today’s Control Parameters",
     "parametr3": "Evaluation Parameters",
     "parametr4": "Chart",
-    "parametr5": "Challenge Information"
+    "parametr5": "Challenge Information",
+    "parametr6": "Account statistics and details",
+    "parametr7": "AI section",
+    "paramer8": "Comparison with other Robinhood users"
   },
   "cart1": {
     "Average": "Average",
@@ -119,5 +122,34 @@
   "cart5": {
     "profit": "Profit Factor",
     "wind": "Win Rate"
+  },
+  "cart6": {
+    "win": "Avg win loss"
+  },
+  "labaleTabale": {
+    "labale1": "Statistics & Details",
+    "labale2": "Capital Management Parameters"
+  },
+  "changeTabale": {
+    "tabale1": "Numeric",
+    "tabale2": "Chart"
+  },
+  "card7": {
+    "title": "Trading Consistency Score",
+    "title2": "Score",
+    "title3": "Consistency Score can help improve your trading performance."
+  },
+  "card8": {
+    "title1": "Trade Win"
+  },
+  "tabale2": {
+    "calander": "Calendar analysis"
+  },
+  "card9": {
+    "title": "Important Trading News"
+  },
+  "loader": {
+    "title": "Connecting to WebSite...",
+    "title2": "syncing live data..."
   }
 }

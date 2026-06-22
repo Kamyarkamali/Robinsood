@@ -1,0 +1,301 @@
+import { useState, useEffect, useRef } from "react";
+import type { DateKey, ParamKey, Lang } from "../types/type";
+import { toFa } from "../helpers/helperFunc";
+import { i18n, CDLocalized } from "../data/fakeData";
+import type { DayDatas } from "../types/interfaces";
+import { MdKeyboardArrowDown } from "react-icons/md";
+import FlashIcon from "../icons/FlashIcon";
+
+function Dropdown<T extends string>({
+  label,
+  items,
+  active,
+  section,
+  onSelect,
+}: {
+  label: string;
+  items: { v: T; l: string }[];
+  active: T;
+  section: string;
+  onSelect: (v: T) => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node))
+        setOpen(false);
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        onClick={() => setOpen((o) => !o)}
+        className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border text-xs sm:text-sm font-normal transition-all
+          border-gray-300 dark:border-neutral-700 
+          bg-white dark:bg-[#3A3A3A] 
+          text-gray-700 dark:text-white
+          hover:border-gray-400 dark:hover:border-neutral-500 
+          cursor-pointer whitespace-nowrap
+          ${open ? "border-gray-400 dark:border-neutral-500" : ""}`}
+      >
+        <span
+          className={`text-xs text-gray-400 dark:text-neutral-400 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        >
+          <MdKeyboardArrowDown />
+        </span>
+        <span className="whitespace-nowrap">{label}</span>
+      </button>
+
+      {open && (
+        <div
+          className="absolute top-[calc(100%+6px)] z-50 min-w-40 sm:min-w-45 rounded-xl border p-1.5
+            bg-white dark:bg-[#2B2B2B]
+            border-gray-200 dark:border-neutral-700
+            shadow-lg dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
+          style={{ right: 0 }}
+        >
+          <p className="text-[10px] text-gray-400 dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide">
+            {section}
+          </p>
+          {items.map((item) => (
+            <div
+              key={item.v}
+              onClick={() => {
+                onSelect(item.v);
+                setOpen(false);
+              }}
+              className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer text-xs font-medium transition-colors
+                hover:bg-gray-50 dark:hover:bg-[#3A3A3A]
+                ${active === item.v ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-700 dark:text-white"}`}
+            >
+              <span
+                className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === item.v ? "bg-indigo-600 dark:bg-indigo-400" : "bg-current opacity-30"}`}
+              />
+              <span className="whitespace-nowrap">{item.l}</span>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
+  const r = 33,
+    circ = 2 * Math.PI * r,
+    gap = 3;
+  const total = wins + losses;
+  const winArc = total > 0 ? (circ * wins) / total : 0;
+  const lossArc = circ - winArc;
+  return (
+    <svg
+      width="84"
+      height="84"
+      viewBox="0 0 84 84"
+      className="shrink-0 w-14 h-14 sm:w-21 sm:h-21"
+    >
+      <circle
+        cx="42"
+        cy="42"
+        r={r}
+        fill="none"
+        stroke="#e5e7eb dark:#2e2e2e"
+        strokeWidth="7"
+        className="stroke-gray-200 dark:stroke-[#2e2e2e]"
+      />
+      {lossArc > gap && (
+        <circle
+          cx="42"
+          cy="42"
+          r={r}
+          fill="none"
+          stroke="#b91c1c"
+          strokeWidth="7"
+          strokeDasharray={`${lossArc - gap} ${circ}`}
+          strokeDashoffset={-(winArc + gap / 2)}
+          strokeLinecap="round"
+          transform="rotate(-90 42 42)"
+        />
+      )}
+      {winArc > gap && (
+        <circle
+          cx="42"
+          cy="42"
+          r={r}
+          fill="none"
+          stroke="#4f46e5"
+          strokeWidth="7"
+          strokeDasharray={`${winArc - gap} ${circ}`}
+          strokeDashoffset={gap / 2}
+          strokeLinecap="round"
+          transform="rotate(-90 42 42)"
+        />
+      )}
+    </svg>
+  );
+}
+
+function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
+  const has = day.p !== undefined;
+  const isProfit = has && day.p! > 0;
+  const isLoss = has && day.p! < 0;
+
+  const bg = isProfit
+    ? "bg-green-600 dark:bg-green-700"
+    : isLoss
+      ? "bg-red-600 dark:bg-red-700"
+      : isCur
+        ? "bg-gray-100 dark:bg-[#3A3A3A]"
+        : "bg-gray-50 dark:bg-[#2B2B2B] opacity-40";
+
+  const textColor =
+    isProfit || isLoss ? "text-white" : "text-gray-400 dark:text-neutral-500";
+
+  return (
+    <div
+      className={`rounded-[14px] px-1.5 sm:px-3 py-1.5 sm:py-2.5 flex flex-col justify-between overflow-hidden transition-all
+        w-full min-h-15 sm:min-h-16.25 lg:h-16.25
+        ${bg}
+      `}
+    >
+      <span
+        className={`text-[10px] sm:text-[11px] font-bold leading-none ${textColor}`}
+        style={{ direction: "ltr" }}
+      >
+        {toFa(day.d)}
+      </span>
+      {has && (
+        <div className="flex flex-col gap-0.5">
+          <span className="text-white font-black leading-tight whitespace-nowrap text-[10px] sm:text-[11px] lg:text-[14px]">
+            {isProfit ? "+" : "-"}
+            {day.p!}$
+          </span>
+          <span className="text-[7px] sm:text-[9px] leading-none text-white/65">
+            {day.t!} {day.t! > 1 ? "trades" : "trade"}
+          </span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default function CalendarAnalysis() {
+  const [lang] = useState<Lang>("en");
+  const [sp, setSp] = useState<ParamKey>("pnl");
+  const [sd, setSd] = useState<DateKey>("dec24");
+
+  const T = i18n[lang];
+  const cd = CDLocalized[lang][sd];
+
+  const ap = T.params.find((p) => p.v === sp);
+  const ad = T.dates.find((d) => d.v === sd);
+
+  const weeks: DayDatas[][] = [];
+  for (let i = 0; i < cd.days.length; i += 7)
+    weeks.push(cd.days.slice(i, i + 7));
+
+  return (
+    <div className="p-2 sm:p-4 lg:p-8 transition-colors" dir="ltr">
+      <div className="bg-gray-50 dark:bg-[#2B2B2B] rounded-2xl border-4 border-gray-200 dark:border-[#2B2B2B] p-2 sm:p-4 lg:p-6">
+        <div className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5">
+          <div className="flex flex-wrap gap-2 sm:gap-2.5">
+            <Dropdown
+              label={ap?.l ?? T.pp}
+              items={T.params}
+              active={sp}
+              section={T.psec}
+              onSelect={setSp}
+            />
+            <Dropdown
+              label={ad?.l ?? T.dp}
+              items={T.dates}
+              active={sd}
+              section={T.dsec}
+              onSelect={setSd}
+            />
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-16 ml-auto w-full sm:w-auto">
+            <div className="flex flex-col gap-1 sm:gap-2 min-w-0 w-full sm:w-auto">
+              <span className="text-xs sm:text-[15px] font-bold text-gray-500 dark:text-neutral-400">
+                {T.mpdl}
+              </span>
+              <span className="text-[11px] sm:text-[13px] text-gray-500 dark:text-neutral-400">
+                {cd?.mpd?.date}
+              </span>
+              <span className="text-[18px] sm:text-[22px] text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
+                ${cd?.mpd?.pnl ?? 0}
+              </span>
+            </div>
+
+            <div className="hidden sm:block w-px self-stretch min-h-12.5 bg-gray-300 dark:bg-neutral-700" />
+
+            <div className="flex items-center justify-start sm:justify-end gap-3 w-full sm:w-auto">
+              <StreakDonut wins={cd.str.w} losses={cd.str.l} />
+              <div className="flex flex-col gap-0.5 min-w-0">
+                <span className="text-[11px] sm:text-[13px] font-bold text-gray-900 dark:text-white">
+                  {T.stitle}
+                </span>
+                <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-neutral-500 truncate">
+                  {cd.str.s} – {cd.str.e}
+                </span>
+                <div className="flex items-center gap-1 sm:gap-1.5 mt-1 flex-wrap">
+                  <span className="text-[9px] sm:text-[11px] font-semibold text-gray-700 dark:text-neutral-300 whitespace-nowrap">
+                    {cd.str.d} {T.du} – {cd.str.t} {T.tu}
+                  </span>
+                  <span className="text-yellow-400 text-[10px] sm:text-xs">
+                    <FlashIcon />
+                  </span>
+                  <div className="flex flex-col gap-2">
+                    <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 py-0.5 rounded bg-indigo-600 text-white">
+                      {cd.str.w}
+                    </span>
+                    <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 py-0.5 rounded bg-red-600 text-white">
+                      {cd.str.l}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <hr className="border-gray-300 dark:border-neutral-700 mb-3 sm:mb-4" />
+
+        <div className="overflow-x-auto -mx-2 sm:mx-0">
+          <div className="min-w-0 sm:min-w-85 px-2 sm:px-0">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2.5 mb-1.5">
+              {T.wds.map((w) => (
+                <div
+                  key={w}
+                  className="text-center text-[9px] sm:text-[11px] font-bold text-gray-500 dark:text-neutral-500 py-1"
+                >
+                  {w}
+                </div>
+              ))}
+            </div>
+            {weeks.map((week, wi) => (
+              <div
+                key={wi}
+                className="grid grid-cols-7 gap-1 sm:gap-5 mb-1.5 sm:mb-2.5"
+              >
+                {week.map((day, di) => (
+                  <DayCell
+                    key={`${wi}-${di}`}
+                    day={day}
+                    isCur={day.m === cd.cur}
+                  />
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

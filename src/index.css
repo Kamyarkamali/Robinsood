@@ -74,3 +74,74 @@ body {
 .custom-scrollbar::-webkit-scrollbar-corner {
   background: transparent;
 }
+
+html,
+body {
+  scrollbar-width: thin;
+  scrollbar-color: #2a2a2a transparent;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2f2f2f;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #7c3aed;
+}
+
+/* انیمیشن برای چارت */
+
+@keyframes radarPulse {
+  0% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+
+  50% {
+    opacity: 1;
+    transform: scale(1.02);
+  }
+
+  100% {
+    opacity: 0.3;
+    transform: scale(0.98);
+  }
+}
+
+.radar-shape {
+  transform-origin: center;
+  animation: radarPulse 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 8px rgba(0, 200, 255, 0.35));
+}
+
+.radar-grid {
+  stroke: rgba(0, 0, 0, 0.08);
+}
+
+.dark .radar-grid {
+  stroke: rgba(255, 255, 255, 0.12);
+}
+.radar-shape {
+  animation: radarScan 3s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  transform-origin: center;
+}
+.radar-shape {
+  transform-origin: center;
+  animation: radarPulse 2.5s ease-in-out infinite;
+}
+
+.radar-shape {
+  transform-origin: center;
+  animation: radarPulse 2.5s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(0, 255, 200, 0.4));
+}

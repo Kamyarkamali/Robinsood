@@ -1,0 +1,75 @@
+import {
+  areaDataRiskReward,
+  areaDataTodayTrend,
+  areaDataTodayTrades,
+  areaDataMaxWin,
+  areaDataMaxLoss,
+  candlestickData,
+  donutAssets,
+} from "../../data/fakeData";
+import type { CardConfig, DonutAsset } from "./typesChart";
+
+export const cardConfigs: CardConfig[] = [
+  {
+    id: "riskReward",
+    value: "متعادل",
+    valueColor: "#4ade80",
+    chartType: "area-green",
+    data: areaDataRiskReward,
+    gradientFrom: "rgba(74,222,128,0.25)",
+    gradientTo: "rgba(74,222,128,0.0)",
+    strokeColor: "#4ade80",
+  },
+  {
+    id: "todayTrend",
+    value: "+۳۰",
+    valueColor: "#4ade80",
+    chartType: "area-green",
+    data: areaDataTodayTrend,
+    gradientFrom: "rgba(74,222,128,0.25)",
+    gradientTo: "rgba(74,222,128,0.0)",
+    strokeColor: "#4ade80",
+  },
+  {
+    id: "todayTrades",
+    value: "+۳۰",
+    valueColor: "#F5A623",
+    chartType: "area-orange",
+    data: areaDataTodayTrades,
+    gradientFrom: "rgba(245,166,35,0.28)",
+    gradientTo: "rgba(245,166,35,0.0)",
+    strokeColor: "#F5A623",
+  },
+  {
+    id: "tradeCount",
+    value: "۷۳",
+    valueColor: "#ffffff",
+    chartType: "candlestick",
+    data: candlestickData,
+    gradientFrom: "",
+    gradientTo: "",
+    strokeColor: "",
+  },
+  {
+    id: "maxWinStreak",
+    value: "-۳۰",
+    valueColor: "#f87171",
+    chartType: "area-red",
+    data: areaDataMaxWin,
+    gradientFrom: "rgba(248,113,113,0.28)",
+    gradientTo: "rgba(248,113,113,0.0)",
+    strokeColor: "#f87171",
+  },
+  {
+    id: "maxLossStreak",
+    value: "+۳۰",
+    valueColor: "#4ade80",
+    chartType: "area-green",
+    data: areaDataMaxLoss,
+    gradientFrom: "rgba(74,222,128,0.25)",
+    gradientTo: "rgba(74,222,128,0.0)",
+    strokeColor: "#4ade80",
+  },
+];
+
+export const DEFAULT_DONUT_DATA: DonutAsset[] = donutAssets;

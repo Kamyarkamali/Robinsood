@@ -18,9 +18,7 @@ function InformationAccount() {
                 </p>
               </div>
 
-              {/* بالانس */}
               <div className="flex flex-col items-center gap-2">
-                {/* title */}
                 <div className="flex items-center justify-center gap-2 sm:gap-3">
                   <CircleIcon color="#00A656" />
                   <p className="text-[12px] sm:text-base md:text-[18px] font-normal text-black dark:text-white">

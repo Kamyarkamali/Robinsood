@@ -54,7 +54,7 @@ function generateData(tf: TimeFrame): DataPoint[] {
   const seed = tf.length * 7 + tf.charCodeAt(0);
   const count = 200;
   const pts: DataPoint[] = [];
-  let balance = 400;
+  let balance: number = 400;
   for (let i = 0; i < count; i++) {
     const drift = (i / count) * 620 + 380;
     balance = Math.max(
@@ -147,10 +147,10 @@ const CandleBar = ({
     cy2 = toY(ec),
     hy = toY(eh),
     ly = toY(el);
-  const bw = Math.max(3, width * 0.55);
+  const bw = Math.max(2, Math.min(width * 0.55, 12));
   return (
     <g>
-      <line x1={cx} y1={hy} x2={cx} y2={ly} stroke={color} strokeWidth={1.2} />
+      <line x1={cx} y1={hy} x2={cx} y2={ly} stroke={color} strokeWidth={1} />
       <rect
         x={cx - bw / 2}
         y={Math.min(oy, cy2)}
@@ -167,14 +167,14 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div
-      className={`bg-[#1a1230] dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-3 py-2 text-[11px] shadow-2xl ${isRtl ? "text-right" : "text-left"}`}
+      className={`bg-[#1a1230] dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[10px] sm:text-[11px] shadow-2xl max-w-[200px] sm:max-w-none ${isRtl ? "text-right" : "text-left"}`}
       style={{
         backgroundColor: settings?.colors?.background || "#1a1230",
         borderColor: settings?.colors?.primary || "#3b1f7a",
       }}
     >
       <p
-        className="text-[#a78bfa] font-bold mb-1"
+        className="text-[#a78bfa] font-bold mb-0.5 text-[10px] sm:text-[11px]"
         style={{ color: settings?.colors?.secondary || "#a78bfa" }}
       >
         {label}
@@ -187,7 +187,7 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
             style={{
               color: p.stroke || p.color || settings?.colors?.text || "#a0a0c0",
             }}
-            className="leading-relaxed"
+            className="leading-tight text-[9px] sm:text-[10px]"
           >
             {p.name}: <strong>{Number(p.value).toFixed(2)}</strong>
           </p>
@@ -210,7 +210,7 @@ const IconBtn = ({
   <button
     onClick={onClick}
     title={title}
-    className={`w-8 h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150
+    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150
       bg-[#e8e4f5] bg-transparent
       ${
         active
@@ -246,7 +246,6 @@ export default function TradingChart() {
   const { t, i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
-  // استفاده از هوک تنظیمات
   const {
     settings,
     setSettings,
@@ -272,8 +271,10 @@ export default function TradingChart() {
   const TOTAL = allData.length;
   const MIN_VIS = 20;
 
-  const [visibleCount, setVisibleCount] = useState(80);
-  const [scrollOffset, setScrollOffset] = useState(0);
+  const [visibleCount, setVisibleCount] = useState(
+    window.innerWidth < 640 ? 50 : 80,
+  );
+  const [scrollOffset, setScrollOffset] = useState<number>(0);
   const clampedOff = Math.max(0, Math.min(scrollOffset, TOTAL - visibleCount));
   const visibleData = allData.slice(clampedOff, clampedOff + visibleCount);
 
@@ -286,21 +287,35 @@ export default function TradingChart() {
     [yDomain, settings.axis.tickCount],
   );
 
-  // const [chartH, setChartH] = useState(settings.sizes.chartHeight);
-  const chartH = settings.sizes.chartHeight;
-  // useEffect(() => {
-  //   const upd = () =>
-  //     setChartH(
-  //       window.innerWidth < 640
-  //         ? Math.min(settings.sizes.chartHeight, 200)
-  //         : window.innerWidth < 1024
-  //           ? Math.min(settings.sizes.chartHeight, 260)
-  //           : settings.sizes.chartHeight,
-  //     );
-  //   upd();
-  //   window.addEventListener("resize", upd);
-  //   return () => window.removeEventListener("resize", upd);
-  // }, [settings.sizes.chartHeight]);
+  const [chartHeight, setChartHeight] = useState<number>(320);
+
+  useEffect(() => {
+    const updateHeight = () => {
+      const w = window.innerWidth;
+      if (w < 480) setChartHeight(250);
+      else if (w < 640) setChartHeight(280);
+      else if (w < 768) setChartHeight(320);
+      else if (w < 1024) setChartHeight(380);
+      else setChartHeight(420);
+    };
+    updateHeight();
+    window.addEventListener("resize", updateHeight);
+    return () => window.removeEventListener("resize", updateHeight);
+  }, []);
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      const w = window.innerWidth;
+      if (w < 480) setVisibleCount(30);
+      else if (w < 640) setVisibleCount(40);
+      else if (w < 768) setVisibleCount(50);
+      else if (w < 1024) setVisibleCount(60);
+      else setVisibleCount(80);
+    };
+    updateVisibleCount();
+    window.addEventListener("resize", updateVisibleCount);
+    return () => window.removeEventListener("resize", updateVisibleCount);
+  }, []);
 
   const toggle = (key: SeriesKey) =>
     setActiveSeries((p) => ({ ...p, [key]: !p[key] }));
@@ -370,29 +385,30 @@ export default function TradingChart() {
     mx-auto
     bg-white
     border-[#e0d9f5]
-    rounded-4xl
-    border-5
+    rounded-2xl sm:rounded-3xl lg:rounded-4xl
+    border-2 sm:border-3 lg:border-5
+    bg-linear-to-t
+    dark:from-[#282828] dark:to-[#2a2929]
     dark:border-[#353535]
     dark:bg-[#242424]
-    p-3 sm:p-4 lg:p-5
-    flex flex-col gap-3
+    p-2 sm:p-3 lg:p-5
+    flex flex-col gap-2 sm:gap-3
     overflow-hidden
   "
-      style={{ minHeight: 597 }}
     >
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
         <div
-          className={`flex items-center gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center gap-1.5 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
         >
-          <div className="flex bg-[#f0ecfc] dark:bg-transparent rounded-xl p-1 gap-1">
+          <div className="flex bg-[#f0ecfc] dark:bg-transparent rounded-xl p-0.5 sm:p-1 gap-0.5 sm:gap-1">
             {(["balance", "profit"] as Mode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`px-3 sm:px-4 py-1.5  dark:text-[#F1F1F1] text-gray-500 rounded-[1755.43px] cursor-pointer font-medium text-xs sm:text-[14px] transition-all duration-200
+                className={`px-2 sm:px-4 py-1 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-[1755.43px] cursor-pointer font-medium text-[10px] sm:text-[14px] transition-all duration-200
                   ${
                     mode === m
-                      ? " bg-linear-to-b border-3 border-[#5f5151e2] from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
+                      ? "bg-linear-to-b border-2 sm:border-3 border-[#5f5151e2] from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
                       : "bg-transparent"
                   }`}
               >
@@ -401,85 +417,89 @@ export default function TradingChart() {
             ))}
           </div>
 
-          <IconBtn
-            onClick={() =>
-              setSettings({
-                ...settings,
-                display: {
-                  ...settings.display,
-                  showGrid: !settings.display.showGrid,
-                },
-              })
-            }
-            active={showGrid}
-            title={t("chart.toggleGrid")}
-          >
-            <ChartIcon />
-          </IconBtn>
-
-          <IconBtn
-            onClick={() =>
-              setVisibleCount((v) => Math.min(TOTAL, Math.round(v * 1.4)))
-            }
-            title={t("chart.zoomOut")}
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
+          <div className="flex items-center gap-0.5 sm:gap-1">
+            <IconBtn
+              onClick={() =>
+                setSettings({
+                  ...settings,
+                  display: {
+                    ...settings.display,
+                    showGrid: !settings.display.showGrid,
+                  },
+                })
+              }
+              active={showGrid}
+              title={t("chart.toggleGrid")}
             >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              <line x1="8" y1="11" x2="14" y2="11" />
-            </svg>
-          </IconBtn>
+              <ChartIcon />
+            </IconBtn>
 
-          <IconBtn
-            onClick={() =>
-              setVisibleCount((v) => Math.max(MIN_VIS, Math.round(v * 0.7)))
-            }
-            title={t("chart.zoomIn")}
-          >
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.2"
+            <IconBtn
+              onClick={() =>
+                setVisibleCount((v) => Math.min(TOTAL, Math.round(v * 1.4)))
+              }
+              title={t("chart.zoomOut")}
             >
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-              <line x1="11" y1="8" x2="11" y2="14" />
-              <line x1="8" y1="11" x2="14" y2="11" />
-            </svg>
-          </IconBtn>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                className="sm:w-3.5"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+            </IconBtn>
 
-          {/* دکمه تنظیمات */}
-          <button
-            onClick={openSettingsPanel}
-            className="w-8 h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
-            title="تنظیمات چارت"
-          >
-            <Settings className="w-4 h-4" />
-          </button>
+            <IconBtn
+              onClick={() =>
+                setVisibleCount((v) => Math.max(MIN_VIS, Math.round(v * 0.7)))
+              }
+              title={t("chart.zoomIn")}
+            >
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                className="sm:w-3.5 sm:h-3.5"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="11" y1="8" x2="11" y2="14" />
+                <line x1="8" y1="11" x2="14" y2="11" />
+              </svg>
+            </IconBtn>
+
+            <button
+              onClick={openSettingsPanel}
+              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
+              title="تنظیمات چارت"
+            >
+              <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            </button>
+          </div>
         </div>
 
         <div
-          className={`flex items-center gap-1 overflow-x-auto pb-0.5 sm:pb-0 sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center gap-0.5 sm:gap-1 overflow-x-auto pb-0.5 sm:pb-0 sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
           style={{ scrollbarWidth: "none" }}
         >
           {TIME_FRAMES.map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeFrame(tf)}
-              className={`shrink-0 px-2 sm:px-3 py-1 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[10px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
+              className={`shrink-0 px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[8px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
                 ${
                   timeFrame === tf
-                    ? "bg-linear-to-b dark:from-[#C4C4C426] dark:to-[#EBEBEB1A]  text-[#7c3aed] dark:text-[#c4b5fd]"
+                    ? "bg-linear-to-b dark:from-[#C4C4C426] dark:to-[#EBEBEB1A] text-[#7c3aed] dark:text-[#c4b5fd]"
                     : "bg-transparent dark:text-[#ffffff] text-gray-500"
                 }`}
             >
@@ -500,22 +520,24 @@ export default function TradingChart() {
           onTouchMove={onTM}
           className="
     w-full
-    h-80
-    sm:h-105
-    lg:h-137.5
     select-none
     cursor-grab
     active:cursor-grabbing
+    relative
+    min-h-50
+    sm:min-h-70
+    lg:min-h-95
   "
+          style={{ height: chartHeight }}
         >
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer width="95%" height="100%">
             <ComposedChart
               data={visibleData}
               margin={{
-                top: 20,
-                right: 20,
-                left: 20,
-                bottom: 20,
+                top: 10,
+                right: 10,
+                left: 10,
+                bottom: 10,
               }}
             >
               <defs>
@@ -557,11 +579,28 @@ export default function TradingChart() {
                   dataKey="time"
                   tick={{
                     fill: settings.colors.text,
-                    fontSize: settings.sizes.fontSize,
+                    fontSize: Math.min(
+                      settings.sizes.fontSize,
+                      window.innerWidth < 480
+                        ? 8
+                        : window.innerWidth < 640
+                          ? 9
+                          : settings.sizes.fontSize,
+                    ),
                   }}
                   axisLine={{ stroke: settings.colors.grid }}
                   tickLine={false}
-                  interval={Math.ceil(visibleCount / settings.axis.tickCount)}
+                  interval={Math.ceil(
+                    visibleCount /
+                      Math.min(
+                        settings.axis.tickCount,
+                        window.innerWidth < 480
+                          ? 3
+                          : window.innerWidth < 640
+                            ? 4
+                            : settings.axis.tickCount,
+                      ),
+                  )}
                 />
               )}
 
@@ -571,12 +610,28 @@ export default function TradingChart() {
                   ticks={yTicks}
                   tick={{
                     fill: settings.colors.text,
-                    fontSize: settings.sizes.fontSize,
+                    fontSize: Math.min(
+                      settings.sizes.fontSize,
+                      window.innerWidth < 480
+                        ? 8
+                        : window.innerWidth < 640
+                          ? 9
+                          : settings.sizes.fontSize,
+                    ),
                   }}
                   axisLine={false}
                   tickLine={false}
-                  width={60}
-                  tickFormatter={(v) => v.toLocaleString()}
+                  width={
+                    window.innerWidth < 480
+                      ? 35
+                      : window.innerWidth < 640
+                        ? 45
+                        : 60
+                  }
+                  tickFormatter={(v) => {
+                    if (v >= 1000) return (v / 1000).toFixed(0) + "k";
+                    return v.toLocaleString();
+                  }}
                   orientation={isRtl ? "right" : "left"}
                 />
               )}
@@ -592,11 +647,18 @@ export default function TradingChart() {
                   dataKey="balance"
                   name={t("chart.balance")}
                   stroke="url(#balanceStroke)"
-                  strokeWidth={settings.lineWidths.main}
+                  strokeWidth={Math.min(
+                    settings.lineWidths.main,
+                    window.innerWidth < 480
+                      ? 1.5
+                      : window.innerWidth < 640
+                        ? 2
+                        : settings.lineWidths.main,
+                  )}
                   fill="url(#balanceGrad)"
                   dot={false}
                   activeDot={{
-                    r: 4,
+                    r: window.innerWidth < 480 ? 2 : 4,
                     fill: settings.colors.secondary,
                     stroke: settings.colors.accent,
                     strokeWidth: 2,
@@ -615,7 +677,14 @@ export default function TradingChart() {
                   name={t("chart.target")}
                   stroke={settings.colors.accent}
                   dot={false}
-                  strokeWidth={settings.lineWidths.secondary}
+                  strokeWidth={Math.min(
+                    settings.lineWidths.secondary,
+                    window.innerWidth < 480
+                      ? 1
+                      : window.innerWidth < 640
+                        ? 1.2
+                        : settings.lineWidths.secondary,
+                  )}
                   strokeDasharray="5 3"
                   style={
                     settings.effects.glow
@@ -631,7 +700,14 @@ export default function TradingChart() {
                   name={t("chart.dailyDrawdown")}
                   stroke={settings.colors.primary}
                   dot={false}
-                  strokeWidth={settings.lineWidths.secondary}
+                  strokeWidth={Math.min(
+                    settings.lineWidths.secondary,
+                    window.innerWidth < 480
+                      ? 1
+                      : window.innerWidth < 640
+                        ? 1.2
+                        : settings.lineWidths.secondary,
+                  )}
                   strokeDasharray="5 3"
                 />
               )}
@@ -642,7 +718,14 @@ export default function TradingChart() {
                   name={t("chart.totalDrawdown")}
                   stroke={settings.colors.secondary}
                   dot={false}
-                  strokeWidth={settings.lineWidths.secondary}
+                  strokeWidth={Math.min(
+                    settings.lineWidths.secondary,
+                    window.innerWidth < 480
+                      ? 1
+                      : window.innerWidth < 640
+                        ? 1.2
+                        : settings.lineWidths.secondary,
+                  )}
                   strokeDasharray="5 3"
                 />
               )}
@@ -652,14 +735,18 @@ export default function TradingChart() {
                   dataKey="equity"
                   name={t("chart.equity")}
                   barSize={Math.max(
-                    settings.sizes.barSize,
+                    window.innerWidth < 480
+                      ? 2
+                      : window.innerWidth < 640
+                        ? 3
+                        : settings.sizes.barSize,
                     Math.round(800 / visibleCount),
                   )}
                   shape={(props: any) => (
                     <CandleBar
                       {...props}
                       yDomain={yDomain}
-                      chartH={chartH - 28}
+                      chartH={chartHeight - 20}
                       settings={settings}
                     />
                   )}
@@ -674,7 +761,8 @@ export default function TradingChart() {
         </div>
       </div>
 
-      <p className="text-center text-[9px] dark:text-white text-[#c0b8d8] -mt-1">
+      {/* راهنما */}
+      <p className="text-center text-[8px] sm:text-[9px] dark:text-white text-[#c0b8d8] -mt-0.5">
         {isRtl
           ? `اسکرول برای زوم · درگ برای حرکت · ${visibleCount}/${TOTAL} کندل`
           : `scroll to zoom · drag to pan · ${visibleCount}/${TOTAL} bars`}
@@ -682,24 +770,24 @@ export default function TradingChart() {
 
       {settings.display.showLegend && (
         <div
-          className={`flex flex-wrap justify-center gap-x-3 gap-y-2 sm:gap-x-5 ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex flex-wrap justify-center gap-x-2 sm:gap-x-5 gap-y-1 sm:gap-y-2 ${isRtl ? "flex-row-reverse" : ""}`}
         >
           {SERIES_CONFIG.map(({ key, tKey, color }) => (
             <button
               key={key}
               onClick={() => toggle(key)}
-              className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-1.5 py-1 transition-opacity duration-200"
+              className="flex items-center gap-1 sm:gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-1 sm:px-1.5 py-0.5 sm:py-1 transition-opacity duration-200"
               style={{ opacity: activeSeries[key] ? 1 : 0.3 }}
             >
               <span
-                className="w-2.5 h-2.5 rounded-full shrink-0 transition-shadow duration-200"
+                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 transition-shadow duration-200"
                 style={{
                   background: color,
                   boxShadow: activeSeries[key] ? `0 0 7px ${color}` : "none",
                 }}
               />
               <span
-                className="text-[11px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
+                className="text-[9px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
                 style={{ color: activeSeries[key] ? color : "#b0a8cc" }}
               >
                 {t(tKey)}
@@ -709,7 +797,6 @@ export default function TradingChart() {
         </div>
       )}
 
-      {/* پنل تنظیمات */}
       <ChartSettingsPanel
         settings={settings}
         onSettingsChange={setSettings}

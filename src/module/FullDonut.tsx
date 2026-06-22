@@ -1,10 +1,5 @@
 import { t } from "i18next";
-
-interface FullDonutProps {
-  winPercent: number;
-  size?: number;
-  strokeWidth?: number;
-}
+import type { FullDonutProps } from "../types/interfaces";
 
 function FullDonut({
   winPercent,
@@ -25,6 +20,7 @@ function FullDonut({
 
   const getLabelPosition = (angleDeg: number) => {
     const angleRad = (angleDeg * Math.PI) / 180;
+
     return {
       x: center + labelRadius * Math.cos(angleRad),
       y: center + labelRadius * Math.sin(angleRad),
@@ -35,8 +31,13 @@ function FullDonut({
   const losePos = getLabelPosition(loseMidAngle);
 
   return (
-    <div className="relative" style={{ width: size, height: size }}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+    <div className="relative w-full max-w-[180px] aspect-square">
+      <svg
+        viewBox={`0 0 ${size} ${size}`}
+        className="w-full h-full overflow-visible"
+        preserveAspectRatio="xMidYMid meet"
+      >
+        {/* Background */}
         <circle
           cx={center}
           cy={center}
@@ -47,6 +48,7 @@ function FullDonut({
           opacity={0.3}
         />
 
+        {/* Win */}
         <circle
           cx={center}
           cy={center}
@@ -55,11 +57,11 @@ function FullDonut({
           stroke="#10b981"
           strokeWidth={strokeWidth}
           strokeDasharray={`${winLength} ${circumference}`}
-          strokeDashoffset={0}
           strokeLinecap="round"
           transform={`rotate(-90 ${center} ${center})`}
         />
 
+        {/* Loss */}
         <circle
           cx={center}
           cy={center}
@@ -73,44 +75,55 @@ function FullDonut({
           transform={`rotate(-90 ${center} ${center})`}
         />
 
+        {/* Win Label */}
         <text
           x={winPos.x}
           y={winPos.y}
           textAnchor="middle"
           dominantBaseline="central"
-          className="fill-emerald-400 text-xs font-bold"
-          style={{ fontSize: "11px" }}
+          fill="#34d399"
+          fontSize={size * 0.08}
+          fontWeight="700"
         >
           {Math.round(winPercent)}%
         </text>
 
+        {/* Loss Label */}
         <text
           x={losePos.x}
           y={losePos.y}
           textAnchor="middle"
           dominantBaseline="central"
-          className="fill-red-400 text-xs font-bold"
-          style={{ fontSize: "11px" }}
+          fill="#f87171"
+          fontSize={size * 0.08}
+          fontWeight="700"
         >
           {Math.round(100 - winPercent)}%
         </text>
 
+        {/* Center Number */}
         <text
           x={center}
-          y={center - 4}
+          y={center - size * 0.03}
           textAnchor="middle"
           dominantBaseline="central"
-          className="fill-white text-xl font-bold"
+          fill="currentColor"
+          fontSize={size * 0.18}
+          fontWeight="700"
+          className="dark:fill-white fill-slate-900"
         >
           {winPercent}%
         </text>
 
+        {/* Center Label */}
         <text
           x={center}
-          y={center + 18}
+          y={center + size * 0.13}
           textAnchor="middle"
           dominantBaseline="central"
-          className="dark:fill-[#ffffff] fill-gray-500 text-[13px] font-medium dark:text-white "
+          fontSize={size * 0.09}
+          fontWeight="500"
+          className="dark:fill-white fill-gray-500"
         >
           {t("cart5.wind")}
         </text>

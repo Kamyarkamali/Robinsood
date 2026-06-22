@@ -1,6 +1,6 @@
 import React from "react";
 import * as Dialog from "@radix-ui/react-dialog";
-import { X, Maximize2, Download, Maximize, Minimize } from "lucide-react";
+import { X, Maximize, Minimize } from "lucide-react";
 import type { ChartData2 } from "../types/interfaces";
 import TradingChartCard from "./TradingChartCard";
 
@@ -15,7 +15,6 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   isOpen,
   onClose,
   chartData,
-  title,
 }) => {
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
@@ -29,20 +28,20 @@ export const ChartModal: React.FC<ChartModalProps> = ({
     }
   };
 
-  const downloadChart = () => {
-    const svgElement = document.querySelector("#chart-modal svg");
-    if (svgElement) {
-      const serializer = new XMLSerializer();
-      const svgString = serializer.serializeToString(svgElement);
-      const blob = new Blob([svgString], { type: "image/svg+xml" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = "chart.svg";
-      link.click();
-      URL.revokeObjectURL(url);
-    }
-  };
+  // const downloadChart = () => {
+  //   const svgElement = document.querySelector("#chart-modal svg");
+  //   if (svgElement) {
+  //     const serializer = new XMLSerializer();
+  //     const svgString = serializer.serializeToString(svgElement);
+  //     const blob = new Blob([svgString], { type: "image/svg+xml" });
+  //     const url = URL.createObjectURL(blob);
+  //     const link = document.createElement("a");
+  //     link.href = url;
+  //     link.download = "chart.svg";
+  //     link.click();
+  //     URL.revokeObjectURL(url);
+  //   }
+  // };
 
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {

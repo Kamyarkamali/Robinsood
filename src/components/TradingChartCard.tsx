@@ -910,6 +910,7 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         chartData={data}
+        // @ts-ignore
         title={
           <div className="flex items-center gap-2">
             <img className="w-4.5" src={chart} alt="chart" />
