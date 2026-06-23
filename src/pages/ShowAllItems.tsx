@@ -17,6 +17,7 @@ import TradingDualChart from "../components/TradingDualChart";
 import TradingNewsTable from "../components/Tradingnewstable ";
 import TradingAnalysisPanel from "../components/Tradinganalysispanel ";
 import VSComparison from "../components/Vscomparison";
+import TradingTable from "../components/trading/TradingTable";
 
 function ShowAllItems() {
   const { t } = useTranslation();
@@ -104,6 +105,12 @@ function ShowAllItems() {
           {t("labels.paramer8")}
         </h1>
         <VSComparison />
+      </div>
+      <div className="mt-8">
+        <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+          {t("labels.parametr9")}
+        </h1>
+        <TradingTable />
       </div>
     </div>
   );

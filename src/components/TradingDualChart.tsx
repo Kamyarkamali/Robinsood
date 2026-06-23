@@ -135,7 +135,7 @@ function ParamDropdown({
                 setOpen(false);
               }}
               className={`
-            block w-full px-4 py-2.5 text-sm text-right transition
+            block w-full px-4 py-2.5 text-sm ${i18next.language === "fa" ? "text-right" : "text-left"} transition
             hover:bg-gray-100 dark:hover:bg-white/10
             ${
               opt.id === selected.id
@@ -178,7 +178,7 @@ export default function TradingDualChart() {
     <div dir={i18next.language === "fa" ? "ltr" : "rtl"} className="p-4 sm:p-8">
       <div className="mx-auto rounded-[25px] border-4 dark:border-white/10 border-gray-400 bg-white dark:bg-[#2B2B2B] p-4 sm:p-6">
         <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-2">
+          <div className="flex w-full md:w-fit flex-wrap gap-2">
             <ParamDropdown
               options={PARAMETERS}
               selected={param1}

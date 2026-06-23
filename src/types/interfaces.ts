@@ -6,6 +6,8 @@ import type {
   IconColor,
   Impact,
   Lang,
+  TradeDirection,
+  TradeStatus,
 } from "./type";
 
 export interface ButtonProps {
@@ -445,4 +447,36 @@ export interface SummaryCard {
   buy: BiLabels;
   sell: BiLabels;
   unit: BiLabels;
+}
+
+export interface BilingualTexts {
+  fa: string;
+  en: string;
+}
+
+export interface Trade {
+  id: number;
+  symbol: BilingualText;
+  symbolIcon: string;
+  direction: TradeDirection;
+  status: TradeStatus;
+  volume: number;
+  sl: number;
+  tp: number;
+  commission: number;
+  profitLoss: number;
+  points: number;
+  pointBadgeLabel: BilingualText;
+}
+
+export interface DonutChartProps {
+  active: number;
+  closed: number;
+  planned: number;
+}
+
+export interface SortIconProps {
+  col: string;
+  sortCol: string;
+  sortDir: "asc" | "desc";
 }

@@ -36,3 +36,6 @@ export type ChartType =
 export type Impact = "red" | "yellow" | "blue";
 export type Week = "week1" | "week2" | "week3" | "week4";
 export type NewsFilter = "all" | "banned" | "allowed";
+
+export type TradeStatus = "active" | "closed" | "planned";
+export type TradeDirection = "buy" | "sell";
