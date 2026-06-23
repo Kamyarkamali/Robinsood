@@ -39,3 +39,13 @@ export type NewsFilter = "all" | "banned" | "allowed";
 
 export type TradeStatus = "active" | "closed" | "planned";
 export type TradeDirection = "buy" | "sell";
+
+export type ThemeMode = "dark" | "light";
+
+export type AvatarItem = {
+  id: number;
+  fa: string;
+  en: string;
+  dark: string;
+  light: string;
+};

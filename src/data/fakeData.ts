@@ -1,3 +1,82 @@
+import img1_dark from "../assets/avatars/02_boy-dark_02.png";
+import img1_light from "../assets/avatars/46_boy-light_01.png";
+
+import img2_dark from "../assets/avatars/03_boy-dark_03.png";
+import img2_light from "../assets/avatars/47_boy-light_02.png";
+
+import img3_dark from "../assets/avatars/04_boy-dark_04.png";
+import img3_light from "../assets/avatars/48_boy-light_03.png";
+
+import img4_dark from "../assets/avatars/05_boy-dark_05.png";
+import img4_light from "../assets/avatars/49_boy-light_04.png";
+
+import img5_dark from "../assets/avatars/06_boy-dark_06.png";
+import img5_light from "../assets/avatars/50_boy-light_05.png";
+
+import img6_dark from "../assets/avatars/07_boy-dark_07.png";
+import img6_light from "../assets/avatars/51_boy-light_06.png";
+
+import img7_dark from "../assets/avatars/08_boy-dark_08.png";
+import img7_light from "../assets/avatars/52_boy-light_07.png";
+
+import img8_dark from "../assets/avatars/09_boy-dark_09.png";
+import img8_light from "../assets/avatars/53_boy-light_08.png";
+
+import img9_dark from "../assets/avatars/10_boy-dark_10.png";
+import img9_light from "../assets/avatars/54_boy-light_09.png";
+
+import img10_dark from "../assets/avatars/11_boy-dark_11.png";
+import img10_light from "../assets/avatars/55_boy-light_10.png";
+
+import img11_dark from "../assets/avatars/12_boy-dark_12.png";
+import img11_light from "../assets/avatars/56_boy-light_11.png";
+
+/* girls */
+import img12_dark from "../assets/avatars/31_girl-dark_01.png";
+import img12_light from "../assets/avatars/16_girl-light_01.png";
+
+import img13_dark from "../assets/avatars/32_girl-dark_02.png";
+import img13_light from "../assets/avatars/17_girl-light_02.png";
+
+import img14_dark from "../assets/avatars/33_girl-dark_03.png";
+import img14_light from "../assets/avatars/18_girl-light_03.png";
+
+import img15_dark from "../assets/avatars/34_girl-dark_04.png";
+import img15_light from "../assets/avatars/19_girl-light_04.png";
+
+import img16_dark from "../assets/avatars/35_girl-dark_05.png";
+import img16_light from "../assets/avatars/20_girl-light_05.png";
+
+import img17_dark from "../assets/avatars/36_girl-dark_06.png";
+import img17_light from "../assets/avatars/21_girl-light_06.png";
+
+import img18_dark from "../assets/avatars/37_girl-dark_07.png";
+import img18_light from "../assets/avatars/22_girl-light_07.png";
+
+import img19_dark from "../assets/avatars/38_girl-dark_08.png";
+import img19_light from "../assets/avatars/23_girl-light_08.png";
+
+import img20_dark from "../assets/avatars/39_girl-dark_09.png";
+import img20_light from "../assets/avatars/24_girl-light_09.png";
+
+import img21_dark from "../assets/avatars/40_girl-dark_10.png";
+import img21_light from "../assets/avatars/25_girl-light_10.png";
+
+import img22_dark from "../assets/avatars/41_girl-dark_11.png";
+import img22_light from "../assets/avatars/26_girl-light_11.png";
+
+import img23_dark from "../assets/avatars/42_girl-dark_12.png";
+import img23_light from "../assets/avatars/27_girl-light_12.png";
+
+import img24_dark from "../assets/avatars/43_girl-dark_13.png";
+import img24_light from "../assets/avatars/28_girl-light_13.png";
+
+import img25_dark from "../assets/avatars/44_girl-dark_14.png";
+import img25_light from "../assets/avatars/29_girl-light_14.png";
+
+import img26_dark from "../assets/avatars/45_girl-dark_15.png";
+import img26_light from "../assets/avatars/30_girl-light_15.png";
+
 import type { ChartCustomSettings } from "../components/common/ChartCustomSettings";
 import type {
   AccountStatsProps,
@@ -26,6 +105,7 @@ import type {
   WeeklyReportRow,
 } from "../types/interfaces";
 import type {
+  AvatarItem,
   DateKey,
   Lang,
   NewsFilter,
@@ -2143,4 +2223,191 @@ export const columns: {
   { key: "commission", label: { fa: "کمیسیون", en: "Commission" } },
   { key: "profitLoss", label: { fa: "سود / ضرر", en: "P&L" } },
   { key: "points", label: { fa: "پوینت", en: "Points" } },
+];
+
+// avatarts
+export const avatarData: AvatarItem[] = [
+  {
+    id: 1,
+    dark: img1_dark,
+    light: img1_light,
+    fa: "رابین‌سود",
+    en: "Robin Trader",
+  },
+  {
+    id: 2,
+    dark: img2_dark,
+    light: img2_light,
+    fa: "دیده‌بان بازار",
+    en: "Market Watcher",
+  },
+  {
+    id: 3,
+    dark: img3_dark,
+    light: img3_light,
+    fa: "طوفان‌سوار",
+    en: "Storm Rider",
+  },
+  {
+    id: 4,
+    dark: img4_dark,
+    light: img4_light,
+    fa: "موج‌سوار",
+    en: "Wave Surfer",
+  },
+  {
+    id: 5,
+    dark: img5_dark,
+    light: img5_light,
+    fa: "شکارچی فرصت",
+    en: "Opportunity Hunter",
+  },
+  {
+    id: 6,
+    dark: img6_dark,
+    light: img6_light,
+    fa: "نگهبان سرمایه",
+    en: "Capital Guardian",
+  },
+  {
+    id: 7,
+    dark: img7_dark,
+    light: img7_light,
+    fa: "گرگ بازار",
+    en: "Market Wolf",
+  },
+  {
+    id: 8,
+    dark: img8_dark,
+    light: img8_light,
+    fa: "شکارچی روند",
+    en: "Trend Hunter",
+  },
+  {
+    id: 9,
+    dark: img9_dark,
+    light: img9_light,
+    fa: "فضانورد بازار",
+    en: "Market Astronaut",
+  },
+  {
+    id: 10,
+    dark: img10_dark,
+    light: img10_light,
+    fa: "فاتح بازار",
+    en: "Market Conqueror",
+  },
+  {
+    id: 11,
+    dark: img11_dark,
+    light: img11_light,
+    fa: "ردیاب روند",
+    en: "Trend Tracker",
+  },
+
+  {
+    id: 12,
+    dark: img12_dark,
+    light: img12_light,
+    fa: "ملکه بازار",
+    en: "Market Queen",
+  },
+  {
+    id: 13,
+    dark: img13_dark,
+    light: img13_light,
+    fa: "شکارچی سود",
+    en: "Profit Hunter",
+  },
+  {
+    id: 14,
+    dark: img14_dark,
+    light: img14_light,
+    fa: "بانوی نوسان",
+    en: "Volatility Lady",
+  },
+  {
+    id: 15,
+    dark: img15_dark,
+    light: img15_light,
+    fa: "استراتژیست بازار",
+    en: "Market Strategist",
+  },
+  {
+    id: 16,
+    dark: img16_dark,
+    light: img16_light,
+    fa: "سایه‌بان سود",
+    en: "Profit Shadow",
+  },
+  {
+    id: 17,
+    dark: img17_dark,
+    light: img17_light,
+    fa: "شکارچی کندل",
+    en: "Candle Hunter",
+  },
+  {
+    id: 18,
+    dark: img18_dark,
+    light: img18_light,
+    fa: "نابغه بازار",
+    en: "Market Genius",
+  },
+  {
+    id: 19,
+    dark: img19_dark,
+    light: img19_light,
+    fa: "نوسان‌گیر",
+    en: "Scalper",
+  },
+  {
+    id: 20,
+    dark: img20_dark,
+    light: img20_light,
+    fa: "پیشرو بازار",
+    en: "Market Pioneer",
+  },
+  {
+    id: 21,
+    dark: img21_dark,
+    light: img21_light,
+    fa: "کماندار روند",
+    en: "Trend Archer",
+  },
+  {
+    id: 22,
+    dark: img22_dark,
+    light: img22_light,
+    fa: "هکر بازار",
+    en: "Market Hacker",
+  },
+  {
+    id: 23,
+    dark: img23_dark,
+    light: img23_light,
+    fa: "رهبر موج",
+    en: "Wave Leader",
+  },
+  {
+    id: 24,
+    dark: img24_dark,
+    light: img24_light,
+    fa: "شکارچی فرصت",
+    en: "Opportunity Seeker",
+  },
+  {
+    id: 25,
+    dark: img25_dark,
+    light: img25_light,
+    fa: "فاتح نوسان",
+    en: "Volatility Conqueror",
+  },
+  {
+    id: 26,
+    dark: img26_dark,
+    light: img26_light,
+    fa: "نگهبان روند",
+    en: "Trend Guardian",
+  },
 ];
