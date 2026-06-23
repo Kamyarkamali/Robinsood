@@ -39,7 +39,7 @@ function DetailseComponent() {
           className="
             gap-2 w-full sm:flex-1 lg:w-68.5
             rounded-3xl cursor-pointer
-            lg:text-[17px] text-[15px] font-bold h-[64.4px]
+            lg:text-[15px] text-[15px] font-bold h-[64.4px]
             flex items-center justify-center
             bg-linear-to-b from-[#E8FFF0] to-[#D7FBE3]
             text-[#15803D]
@@ -60,7 +60,7 @@ function DetailseComponent() {
           className="
             gap-2 w-full sm:flex-1 lg:w-68.5
             rounded-3xl cursor-pointer
-            lg:text-[17px] text-[15px] font-bold h-[64.4px]
+            lg:text-[15px] text-[15px] font-bold h-[64.4px]
             flex items-center justify-center
 
             bg-linear-to-b from-[#F3F0FF] to-[#E9E4FF]
