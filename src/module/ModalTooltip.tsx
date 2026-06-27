@@ -1,19 +1,7 @@
 import i18next from "i18next";
 import React, { useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-
-interface ModalTooltipProps {
-  data: any;
-  index: number;
-  position: { x: number; y: number };
-  formatValue: (value: number, unit: string) => string;
-  unit: string;
-  averageLine: number;
-  isDark: boolean;
-  onClose: () => void;
-  modalRef?: React.RefObject<HTMLDivElement>;
-  isMobile?: boolean;
-}
+import type { ModalTooltipProps } from "../types/interfaces";
 
 const ModalTooltip: React.FC<ModalTooltipProps> = ({
   data,
@@ -118,18 +106,6 @@ const ModalTooltip: React.FC<ModalTooltipProps> = ({
   const getChangeIcon = () => {
     if (data.prevValue === null) return "•";
     return data.day.value > data.prevValue ? "▲" : "▼";
-  };
-
-  const getStatusColor = () => {
-    if (data.day.value > data.maxAllowed) return "text-red-500";
-    if (data.day.value > averageLine) return "text-yellow-500";
-    return "text-green-500";
-  };
-
-  const getStatusText = () => {
-    if (data.day.value > data.maxAllowed) return "بالای حد مجاز";
-    if (data.day.value > averageLine) return "بالای میانگین";
-    return "زیر میانگین";
   };
 
   return createPortal(

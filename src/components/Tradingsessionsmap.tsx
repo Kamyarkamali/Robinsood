@@ -4,7 +4,6 @@ import { CiCircleAlert } from "react-icons/ci";
 import { IoMdTime } from "react-icons/io";
 import { CiCalendar } from "react-icons/ci";
 import type { NewsEvent, Session } from "../types/interfaces";
-import type { Lang } from "../types/type";
 import { NEWS, SESSIONS } from "../data/fakeData";
 
 const IMPACT_COLOR = { High: "#ef4444", Medium: "#f59e0b", Low: "#22c55e" };
@@ -55,7 +54,7 @@ interface TooltipState {
   elementId: string;
 }
 
-export default function TradingSessionsMap({ lang = "fa" }: Lang) {
+export default function TradingSessionsMap({ lang = "fa" }) {
   const [cur, setCur] = useState(getIranHour());
   const [active] = useState<Set<string>>(new Set(SESSIONS.map((s) => s.id)));
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);

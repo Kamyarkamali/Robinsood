@@ -506,3 +506,16 @@ export interface NewsEvent {
   impact: "High" | "Medium" | "Low";
   pairs: string;
 }
+
+export interface ModalTooltipProps {
+  data: any;
+  index: number;
+  position: { x: number; y: number };
+  formatValue: (value: number, unit: string) => string;
+  unit: string;
+  averageLine: number;
+  isDark: boolean;
+  onClose: () => void;
+  modalRef?: React.RefObject<HTMLDivElement>;
+  isMobile?: boolean;
+}
