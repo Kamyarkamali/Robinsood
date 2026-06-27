@@ -201,7 +201,7 @@ export default function CalendarAnalysis() {
 
   return (
     <div className="p-2 sm:p-4 lg:p-8 transition-colors" dir="ltr">
-      <div className="bg-gray-50 dark:bg-[#2B2B2B] rounded-2xl border-4 border-gray-200 dark:border-[#2B2B2B] p-2 sm:p-4 lg:p-6">
+      <div className="bg-gray-50 dark:bg-[#2B2B2B] rounded-[25px] border-4 dark:border-white/10 border-gray-400 p-2 sm:p-4 lg:p-6">
         <div className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5">
           <div className="flex flex-wrap gap-2 sm:gap-2.5">
             <Dropdown

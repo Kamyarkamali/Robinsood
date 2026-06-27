@@ -2458,7 +2458,7 @@ export const SESSIONS: Session[] = [
     start: 3.5,
     end: 12.5,
     color: "#3b82f6",
-    bg: "rgba(23,45,115,.72)",
+    bg: "rgba(2372,45,115,.)",
     border: "#2563eb",
     dot: "#60a5fa",
     icon: "",

@@ -164,7 +164,7 @@ export default function VSComparison() {
   const isRtl = i18n.language === "fa";
 
   return (
-    <div className=" dark:bg-[#2B2B2B] w-full max-w-388.5 rounded-[25px] mx-auto text-white font-sans flex justify-center px-2 sm:px-4 py-4 sm:py-6">
+    <div className=" dark:bg-[#2B2B2B] w-full max-w-388.5 rounded-[25px] border-4 dark:border-white/10 border-gray-400 mx-auto text-white font-normal flex justify-center px-2 sm:px-4 py-4 sm:py-6">
       <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-4xl xl:max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-3 sm:gap-4">
         <div className="flex items-center justify-between px-1 sm:px-2">
           <div

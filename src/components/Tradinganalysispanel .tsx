@@ -116,7 +116,7 @@ export default function TradingAnalysisPanel() {
   const mx = numStr(100, lang);
 
   return (
-    <div className="w-full mx-auto p-2 sm:p-3 md:p-4">
+    <div className="w-full mx-auto p-2 sm:p-3 md:p-4 ">
       <div
         dir={lang === "fa" ? "ltr" : "rtl"}
         className="

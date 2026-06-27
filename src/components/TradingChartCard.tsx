@@ -604,7 +604,7 @@ const TradingChartCard: React.FC<Props> = ({
           className={`
           w-full p-3 sm:p-4 
           bg-gray-50 dark:bg-[#1a1a2e] dark:bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] 
-          h-full border-4 rounded-[21px] border-gray-300 dark:border-[#2a2a4a] 
+          h-full rounded-[25px] border-4 dark:border-white/10 border-gray-400 
           flex flex-col items-center shadow-xl
           ${isMobile ? "border-2 rounded-[14px]" : ""}
         `}

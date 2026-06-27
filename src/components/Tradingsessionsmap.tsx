@@ -5,6 +5,7 @@ import { IoMdTime } from "react-icons/io";
 import { CiCalendar } from "react-icons/ci";
 import type { NewsEvent, Session } from "../types/interfaces";
 import { NEWS, SESSIONS } from "../data/fakeData";
+import i18next from "i18next";
 
 const IMPACT_COLOR = { High: "#ef4444", Medium: "#f59e0b", Low: "#22c55e" };
 const IMPACT_BG = {
@@ -140,7 +141,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
   return (
     <div
       ref={rootRef}
-      className="bg-[#2B2B2B] text-slate-200 w-full min-h-0 pb-3 rounded-xl overflow-hidden select-none"
+      className="bg-[#2B2B2B] rounded-[25px] border-4 md:pr-2 md:pl-2  dark:border-white/10 border-gray-400 text-slate-200 w-full min-h-0 pb-3  overflow-hidden select-none"
       onClick={(e) => {
         if (!(e.target as HTMLElement).closest(".tooltip-trigger")) {
           clearTooltip();
@@ -149,21 +150,21 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     >
       <div className="flex justify-between items-start flex-wrap gap-2 px-3 sm:px-5 pt-4 pb-2">
         <div>
-          <div className="flex items-center gap-2 text-sm sm:text-lg font-medium">
+          <div className="flex items-center gap-2 text-sm sm:text-lg font-normal">
             <GrLanguage size={isMobile ? 18 : 25} />
-            {lang === "fa"
+            {i18next.language === "fa"
               ? "سشن های معاملاتی روی نقشه جهان"
               : "Sessions on World Map"}
           </div>
-          <div className="text-[10px] sm:text-xs text-slate-500 font-normal mt-1 sm:mt-2 leading-relaxed">
-            {lang === "fa"
+          <div className="text-[10px] sm:text-xs text-slate-200 font-normal mt-1 sm:mt-2 leading-relaxed">
+            {i18next.language === "fa"
               ? "نمایش ساده زمان سشن‌ها و مهم‌وشانی با ساعت فعلی و زمان خبرها"
               : "Simple view of trading session times with current time and news events"}
           </div>
         </div>
       </div>
 
-      <div className="mx-2 sm:mx-auto border border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#0d1628]">
+      <div className="mx-2 sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
         <div
           className="relative border-b border-[#1e2d3d]"
           style={{ height: isMobile ? 52 : 68, overflow: "visible" }}
@@ -188,7 +189,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 className="font-medium text-indigo-300/80"
                 style={{ fontSize: isMobile ? 8 : 10 }}
               >
-                {lang === "fa" ? "الان" : "Now"}
+                {i18next.language === "fa" ? "الان" : "Now"}
               </span>
               <span
                 className="font-bold text-indigo-100 tracking-wide"
@@ -224,7 +225,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     "news",
                     n,
                     n.time,
-                    lang === "fa" ? n.fa : n.en,
+                    i18next.language === "fa" ? n.fa : n.en,
                     `news-${n.id}`,
                   )
                 }
@@ -236,7 +237,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     "news",
                     n,
                     n.time,
-                    lang === "fa" ? n.fa : n.en,
+                    i18next.language === "fa" ? n.fa : n.en,
                     `news-${n.id}`,
                   );
                 }}
@@ -273,7 +274,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                         style={{ fontSize: 9 }}
                         className="font-medium opacity-80"
                       >
-                        {lang === "fa" ? "خبر" : "News"}
+                        {i18next.language === "fa" ? "خبر" : "News"}
                       </span>
                       <span
                         style={{ fontSize: 11 }}
@@ -309,7 +310,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           {hourLabels.map((h) => (
             <div
               key={h}
-              className="absolute text-[8px] sm:text-[10px] text-slate-400"
+              className="absolute text-[8px] sm:text-[10px] text-slate-200"
               style={{
                 top: "50%",
                 transform: `translateY(-50%) ${isRtl ? "translateX(50%)" : "translateX(-50%)"}`,
@@ -328,6 +329,14 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             preserveAspectRatio="xMidYMid slice"
           >
             <defs>
+              <linearGradient
+                id="bgGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="100%"
+              ></linearGradient>
+
               <pattern
                 id="dp2"
                 x="0"
@@ -336,10 +345,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 height="11"
                 patternUnits="userSpaceOnUse"
               >
-                <circle cx="5.5" cy="5.5" r="1.1" fill="#182535" />
+                <circle cx="5.5" cy="5.5" r="1.1" fill="#3a3a3a" />
               </pattern>
             </defs>
-            <rect width="1000" height="420" fill="#0d1628" />
+
+            <rect width="1000" height="420" fill="url(#bgGradient)" />
             <rect width="1000" height="420" fill="url(#dp2)" />
 
             {SESSIONS.map((s) => {
@@ -372,21 +382,21 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       />
                     </>
                   )}
-                  {!on && <circle cx={cx} cy={cy} r="3.5" fill="#2d3748" />}
+                  {!on && <circle cx={cx} cy={cy} r="3.5" fill="#4a4a4a" />}
 
                   <text
                     x={s.id === "tok" || s.id === "syd" ? cx - 8 : cx + 10}
                     y={cy - 18}
                     fontSize="9"
                     fontWeight="normal"
-                    fill={on ? "#ffffff" : "#374151"}
+                    fill={on ? "#ffffff" : "#6a6a6a"}
                     textAnchor={
                       s.id === "tok" || s.id === "syd" ? "end" : "start"
                     }
                     dominantBaseline="middle"
                   >
                     <tspan>
-                      {lang === "fa"
+                      {i18next.language === "fa"
                         ? s.fa.replace("سشن ", "")
                         : s.en.replace(" Session", "")}
                     </tspan>
@@ -411,6 +421,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   : "none",
             }}
           />
+
           <div
             className="absolute top-0 bottom-0 z-20 tooltip-trigger"
             style={{
@@ -424,7 +435,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 "current",
                 null,
                 cur,
-                lang === "fa"
+                i18next.language === "fa"
                   ? `زمان فعلی ${fmt(cur)}`
                   : `Current Time ${fmt(cur)}`,
                 "current",
@@ -438,7 +449,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 "current",
                 null,
                 cur,
-                lang === "fa"
+                i18next.language === "fa"
                   ? `زمان فعلی ${fmt(cur)}`
                   : `Current Time ${fmt(cur)}`,
                 "current",
@@ -455,9 +466,10 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 className="absolute top-0 bottom-0 w-px z-10 transition-all duration-300"
                 style={{
                   [isRtl ? "right" : "left"]: pct(n.time),
-                  backgroundImage:
-                    "repeating-linear-gradient(to bottom,#7c3aed 0,#7c3aed 5px,transparent 5px,transparent 10px)",
-                  opacity: isPast ? 0.44 : 0.75,
+                  backgroundImage: isPast
+                    ? "repeating-linear-gradient(to bottom,#5a5a5a 0,#5a5a5a 5px,transparent 5px,transparent 10px)"
+                    : "repeating-linear-gradient(to bottom,#7c3aed 0,#7c3aed 5px,transparent 5px,transparent 10px)",
+                  opacity: isPast ? 0.3 : 0.75,
                   boxShadow:
                     isHovered && !isPast
                       ? "0 0 20px rgba(124,58,237,.8), 0 0 60px rgba(124,58,237,.4)"
@@ -467,6 +479,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               />
             );
           })}
+
           {sorted.map((n) => (
             <div
               key={`hit-${n.id}`}
@@ -482,7 +495,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   "news",
                   n,
                   n.time,
-                  lang === "fa" ? n.fa : n.en,
+                  i18next.language === "fa" ? n.fa : n.en,
                   `news-${n.id}`,
                 )
               }
@@ -494,7 +507,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   "news",
                   n,
                   n.time,
-                  lang === "fa" ? n.fa : n.en,
+                  i18next.language === "fa" ? n.fa : n.en,
                   `news-${n.id}`,
                 );
               }}
@@ -518,7 +531,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   borderColor: s.border,
                   opacity: live ? 1 : 0.75,
                   zIndex: 10,
-                  // Responsive padding
                   padding: isMobile ? "0 4px" : "0 10px",
                   gap: isMobile ? 4 : 8,
                   justifyContent: "center",
@@ -552,7 +564,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                           textOverflow: "ellipsis",
                         }}
                       >
-                        {lang === "fa" ? s.fa : s.en}
+                        {i18next.language === "fa" ? s.fa : s.en}
                       </div>
                       {!isMobile && (
                         <div
@@ -601,7 +613,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 "current",
                 null,
                 cur,
-                lang === "fa"
+                i18next.language === "fa"
                   ? `زمان فعلی ${fmt(cur)}`
                   : `Current Time ${fmt(cur)}`,
                 "current",
@@ -615,7 +627,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 "current",
                 null,
                 cur,
-                lang === "fa"
+                i18next.language === "fa"
                   ? `زمان فعلی ${fmt(cur)}`
                   : `Current Time ${fmt(cur)}`,
                 "current",
@@ -646,7 +658,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     "tick",
                     n,
                     n.time,
-                    lang === "fa" ? n.fa : n.en,
+                    i18next.language === "fa" ? n.fa : n.en,
                     `news-${n.id}`,
                   )
                 }
@@ -658,7 +670,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     "tick",
                     n,
                     n.time,
-                    lang === "fa" ? n.fa : n.en,
+                    i18next.language === "fa" ? n.fa : n.en,
                     `news-${n.id}`,
                   );
                 }}
@@ -670,7 +682,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
       <div className="flex items-center justify-end w-full font-normal gap-1.5 px-3 sm:px-4 pt-2 text-[9px] sm:text-[10px] text-[#ffffff]">
         <p className="flex items-center gap-2">
-          {lang === "fa"
+          {i18next.language === "fa"
             ? "زمان‌ها بر اساس ساعت ایران نمایش شده اند"
             : "Times displayed based on Iran Standard Time"}
         </p>
@@ -708,7 +720,9 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   {tooltip.data.flag}
                 </span>
                 <span className="text-xs sm:text-sm font-bold text-slate-100 leading-tight">
-                  {lang === "fa" ? tooltip.data.fa : tooltip.data.en}
+                  {i18next.language === "fa"
+                    ? tooltip.data.fa
+                    : tooltip.data.en}
                 </span>
               </div>
               <div className="mb-1.5 sm:mb-2">
@@ -753,7 +767,9 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shrink-0" />
                 <span className="text-xs sm:text-sm font-bold text-purple-400 truncate">
-                  {lang === "fa" ? tooltip.data.fa : tooltip.data.en}
+                  {i18next.language === "fa"
+                    ? tooltip.data.fa
+                    : tooltip.data.en}
                 </span>
               </div>
               <div className="text-[10px] sm:text-xs text-slate-400 mt-1">

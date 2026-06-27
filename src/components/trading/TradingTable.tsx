@@ -34,7 +34,10 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
   } = useTradingTable(lang);
 
   return (
-    <div dir="rtl" className="w-full max-w-full mx-auto font-lahzeh">
+    <div
+      dir="rtl"
+      className="w-full max-w-full mx-auto font-lahzeh rounded-[25px] border-4 dark:border-white/10 border-gray-400"
+    >
       <div className="mx-auto rounded-2xl bg-white dark:bg-[#2B2B2B] shadow-xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
         <div className="flex flex-col sm:flex-row items-center gap-4 px-4 sm:px-6  dark:border-[#3a3a3a]">
           <div className="flex flex-wrap bg-linear-to-b from-[#313030] to-[#232323] p-4 rounded-2xl justify-end shadow-lg">

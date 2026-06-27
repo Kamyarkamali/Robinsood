@@ -30,7 +30,7 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
   return (
     <div
       dir={i18next.language === "fa" ? "rtl" : "ltr"}
-      className="bg-gray-50 dark:bg-[#2B2B2B] w-full max-w-full mx-auto rounded-2xl p-5 transition-colors"
+      className="bg-gray-50 rounded-[25px] border-4 dark:border-white/10 border-gray-400 dark:bg-[#2B2B2B] w-full max-w-full mx-auto rounded-2xl p-5 transition-colors"
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <div className="flex items-center gap-3 flex-wrap w-full md:w-auto">

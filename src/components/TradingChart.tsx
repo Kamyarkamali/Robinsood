@@ -1,5 +1,6 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { MdOutlineZoomIn, MdOutlineZoomOut } from "react-icons/md";
 import {
   ComposedChart,
   Line,
@@ -400,7 +401,7 @@ export default function TradingChart() {
         <div
           className={`flex items-center gap-1.5 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
         >
-          <div className="flex bg-[#f0ecfc] dark:bg-transparent rounded-xl p-0.5 sm:p-1 gap-0.5 sm:gap-1">
+          <div className="flex bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1">
             {(["balance", "profit"] as Mode[]).map((m) => (
               <button
                 key={m}
@@ -408,7 +409,7 @@ export default function TradingChart() {
                 className={`px-2 sm:px-4 py-1 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-[1755.43px] cursor-pointer font-medium text-[10px] sm:text-[14px] transition-all duration-200
                   ${
                     mode === m
-                      ? "bg-linear-to-b border-2 sm:border-3 border-[#5f5151e2] from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
+                      ? "bg-linear-to-b from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
                       : "bg-transparent"
                   }`}
               >
@@ -440,19 +441,7 @@ export default function TradingChart() {
               }
               title={t("chart.zoomOut")}
             >
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                className="sm:w-3.5"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                <line x1="8" y1="11" x2="14" y2="11" />
-              </svg>
+              <MdOutlineZoomOut size={23} />
             </IconBtn>
 
             <IconBtn
@@ -461,21 +450,7 @@ export default function TradingChart() {
               }
               title={t("chart.zoomIn")}
             >
-              <svg
-                width="12"
-                height="12"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.2"
-                className="sm:w-3.5 sm:h-3.5"
-              >
-                <circle cx="11" cy="11" r="8" />
-                <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                <line x1="11" y1="8" x2="11" y2="14" />
-                <line x1="11" y1="8" x2="11" y2="14" />
-                <line x1="8" y1="11" x2="14" y2="11" />
-              </svg>
+              <MdOutlineZoomIn size={23} />
             </IconBtn>
 
             <button
@@ -489,14 +464,14 @@ export default function TradingChart() {
         </div>
 
         <div
-          className={`flex items-center gap-0.5 sm:gap-1 overflow-x-auto pb-0.5 sm:pb-0 sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center  gap-0.5 sm:gap-1 dark:dark:bg-[#454242] p-3 rounded-2xl overflow-x-auto sm:pb- sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
           style={{ scrollbarWidth: "none" }}
         >
           {TIME_FRAMES.map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeFrame(tf)}
-              className={`shrink-0 px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[8px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
+              className={`shrink-0 px-1.5 sm:px-3  py-0.5 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[8px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
                 ${
                   timeFrame === tf
                     ? "bg-linear-to-b dark:from-[#C4C4C426] dark:to-[#EBEBEB1A] text-[#7c3aed] dark:text-[#c4b5fd]"
