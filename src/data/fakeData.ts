@@ -92,10 +92,12 @@ import type {
   DisciplineScoreData,
   MetricRow,
   MiddleRow,
+  NewsEvent,
   NewsItem,
   Parameter,
   ProfitFactorData,
   Progres,
+  Session,
   StatsRow,
   SummaryCard,
   Trade,
@@ -401,9 +403,9 @@ export const chartsData: ChartData2[] = [
       { label: { fa: "6 روز", en: "6 days" }, value: 0.02, belowAverage: true },
       { label: { fa: "11 روز", en: "11 days" }, value: 0.16, isCurrent: true },
     ],
-    averageLine: 0.077,
-    maxAllowedLine: 0.062,
-    averageValue: 0.077,
+    averageLine: 0.0711,
+    maxAllowedLine: 0.06,
+    averageValue: 0.0771,
     maxAllowedValue: 0.062,
     requiredDays: 5,
     acceptedDays: 5,
@@ -1019,7 +1021,8 @@ export const translations = {
       {
         id: "maxWinStreak",
         title: {
-          fa: "رکورد بیشترین\nسود متوالی",
+          fa: "رکورد بیشترین\nضرر متوالی",
+
           en: "Max Consecutive\nWin Streak",
         },
         valueLabelSuffix: "",
@@ -1027,7 +1030,8 @@ export const translations = {
       {
         id: "maxLossStreak",
         title: {
-          fa: "رکورد بیشترین\nضرر متوالی",
+          fa: "رکورد بیشترین\nسود متوالی",
+
           en: "Max Consecutive\nLoss Streak",
         },
         valueLabelSuffix: "",
@@ -2197,8 +2201,6 @@ export const trades: Trade[] = [
   },
 ];
 
-// ─── Tab Config ───────────────────────────────────────────────────────────────
-
 export const tabs: {
   key: TradeStatus | "all";
   label: BilingualText;
@@ -2225,7 +2227,6 @@ export const columns: {
   { key: "points", label: { fa: "پوینت", en: "Points" } },
 ];
 
-// avatarts
 export const avatarData: AvatarItem[] = [
   {
     id: 1,
@@ -2409,5 +2410,190 @@ export const avatarData: AvatarItem[] = [
     light: img26_light,
     fa: "نگهبان روند",
     en: "Trend Guardian",
+  },
+];
+
+export const sessions: Session[] = [
+  {
+    id: "newyork",
+    name: { fa: "سشن نیویورک", en: "New York Session" },
+    startHour: 16.5,
+    endHour: 25.5, // wraps past midnight: 01:30
+    color: "#ef4444",
+    bgColor: "rgba(127,29,29,0.7)",
+    borderColor: "#dc2626",
+    dotColor: "#f87171",
+    mapX: 22,
+    mapY: 38,
+    icon: "🗽",
+  },
+  {
+    id: "london",
+    name: { fa: "سشن لندن", en: "London Session" },
+    startHour: 11.5,
+    endHour: 20.5,
+    color: "#f59e0b",
+    bgColor: "rgba(120,53,15,0.7)",
+    borderColor: "#d97706",
+    dotColor: "#fbbf24",
+    mapX: 47.5,
+    mapY: 28,
+    icon: "🏰",
+  },
+  {
+    id: "tokyo",
+    name: { fa: "سشن توکیو", en: "Tokyo Session" },
+    startHour: 3.5,
+    endHour: 12.5,
+    color: "#3b82f6",
+    bgColor: "rgba(30,58,138,0.7)",
+    borderColor: "#2563eb",
+    dotColor: "#60a5fa",
+    mapX: 78,
+    mapY: 34,
+    icon: "🗼",
+  },
+  {
+    id: "sydney",
+    name: { fa: "سشن سیدنی", en: "Sydney Session" },
+    startHour: 0.5,
+    endHour: 9.5,
+    color: "#22c55e",
+    bgColor: "rgba(20,83,45,0.7)",
+    borderColor: "#16a34a",
+    dotColor: "#4ade80",
+    mapX: 82,
+    mapY: 72,
+    icon: "🏗️",
+  },
+];
+
+export const cityPositions: Record<string, [number, number]> = {
+  newyork: [22, 38],
+  london: [47.5, 28],
+  tokyo: [78, 34],
+  sydney: [82, 72],
+};
+
+export const newsEvents: NewsEvent[] = [
+  {
+    id: "news1",
+    title: { fa: "شاخص CPI آمریکا", en: "US CPI Index" },
+    time: 14,
+    impact: "High",
+    country: { fa: "آمریکا", en: "United States" },
+    countryFlag: "🇺🇸",
+    relatedPairs: ["EURUSD", "XAUUSD"],
+  },
+  {
+    id: "news2",
+    title: { fa: "نشست فدرال رزرو", en: "Federal Reserve Meeting" },
+    time: 17.5,
+    impact: "High",
+    country: { fa: "آمریکا", en: "United States" },
+    countryFlag: "🇺🇸",
+    relatedPairs: ["USDJPY", "GBPUSD"],
+  },
+  {
+    id: "news3",
+    title: { fa: "شاخص NFP", en: "Non-Farm Payrolls" },
+    time: 16.5,
+    impact: "Medium",
+    country: { fa: "آمریکا", en: "United States" },
+    countryFlag: "🇺🇸",
+    relatedPairs: ["USDCAD", "AUDUSD"],
+  },
+];
+
+const SESSIONS: Session[] = [
+  {
+    id: "ny",
+    fa: "سشن نیویورک",
+    en: "New York Session",
+    start: 16.5,
+    end: 25.5,
+    color: "#ef4444",
+    bg: "rgba(110,20,20,.72)",
+    border: "#c53030",
+    dot: "#fc8181",
+    icon: "🗽",
+    mapX: 20,
+    mapY: 46,
+    barTop: 6,
+  },
+  {
+    id: "lon",
+    fa: "سشن لندن",
+    en: "London Session",
+    start: 11.5,
+    end: 20.5,
+    color: "#d97706",
+    bg: "rgba(100,48,10,.72)",
+    border: "#b45309",
+    dot: "#fbbf24",
+    icon: "🏰",
+    mapX: 44,
+    mapY: 30,
+    barTop: 38,
+  },
+  {
+    id: "tok",
+    fa: "سشن توکیو",
+    en: "Tokyo Session",
+    start: 3.5,
+    end: 12.5,
+    color: "#3b82f6",
+    bg: "rgba(23,45,115,.72)",
+    border: "#2563eb",
+    dot: "#60a5fa",
+    icon: "🗼",
+    mapX: 86,
+    mapY: 30,
+    barTop: 62,
+  },
+  {
+    id: "syd",
+    fa: "سشن سیدنی",
+    en: "Sydney Session",
+    start: 0.5,
+    end: 9.5,
+    color: "#22c55e",
+    bg: "rgba(14,68,36,.72)",
+    border: "#15803d",
+    dot: "#4ade80",
+    icon: "🦘",
+    mapX: 88,
+    mapY: 74,
+    barTop: 80,
+  },
+];
+
+const NEWS: NewsEvent[] = [
+  {
+    id: "n1",
+    fa: "شاخص CPI آمریکا",
+    en: "US CPI Index",
+    flag: "🇺🇸",
+    time: 14.0,
+    impact: "High",
+    pairs: "EURUSD, XAUUSD",
+  },
+  {
+    id: "n2",
+    fa: "نشست فدرال رزرو",
+    en: "Federal Reserve Meeting",
+    flag: "🇺🇸",
+    time: 17.5,
+    impact: "High",
+    pairs: "USDJPY, GBPUSD",
+  },
+  {
+    id: "n3",
+    fa: "تولید ناخالص ملی",
+    en: "UK GDP",
+    flag: "🇬🇧",
+    time: 11.0,
+    impact: "Medium",
+    pairs: "GBPUSD, EURGBP",
   },
 ];

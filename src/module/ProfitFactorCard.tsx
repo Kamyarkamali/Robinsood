@@ -21,7 +21,6 @@ function ProfitFactorCard() {
             font-bold
             text-[32px]
             lg:text-[44px]
-            lg:text-[40px]
             bg-linear-to-b
             from-[#34C759]
             to-[#3ADE63]
@@ -41,11 +40,11 @@ function ProfitFactorCard() {
             strokeWidth={14}
           />
 
-          <div className="absolute -top-8 -left-10">
+          <div className="absolute top-13 -left-14">
             <Pill tone="red">{profitFactor.lossLabel}</Pill>
           </div>
 
-          <div className="absolute -bottom-8 -right-10">
+          <div className="absolute top-10 -right-9">
             <Pill tone="green">{profitFactor.winLabel}</Pill>
           </div>
         </div>

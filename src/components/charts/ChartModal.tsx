@@ -145,8 +145,8 @@ export const ChartModal: React.FC<ChartModalProps> = ({
             </linearGradient>
           </defs>
 
-          <XAxis dataKey="t" stroke={isDark ? "#888" : "#666"} />
-          <YAxis stroke={isDark ? "#888" : "#666"} />
+          <XAxis dataKey="t" stroke={isDark ? "#fff" : "#666"} />
+          <YAxis stroke={isDark ? "#fff" : "#666"} />
 
           <Tooltip
             content={(props) => (

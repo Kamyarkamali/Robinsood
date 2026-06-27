@@ -9,7 +9,6 @@ function ThemeToggle() {
 
   const { t } = useTranslation();
 
-  // بستن بیرون کلیک
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (ref.current && !ref.current.contains(event.target as Node)) {
@@ -45,8 +44,7 @@ function ThemeToggle() {
   const current = options.find((o) => o.value === theme);
 
   return (
-    <div ref={ref} className="relative inline-block text-left z-10">
-      {/* دکمه اصلی */}
+    <div ref={ref} className="relative inline-block text-left z-100">
       <button
         onClick={() => setOpen(!open)}
         className="flex items-center justify-between gap-2

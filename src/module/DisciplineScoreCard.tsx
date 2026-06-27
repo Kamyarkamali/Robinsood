@@ -26,7 +26,7 @@ function DisciplineScoreCard() {
       </h3>
 
       <div className="w-full flex justify-center mt-4 sm:mt-6 mb-6">
-        <div className="relative flex items-center gap-2 justify-center w-full max-w-162.5">
+        <div className="relative flex items-center justify-center w-full max-w-162.5">
           {disciplineScore.ranges.map((r) => (
             <div className="relative flex-1 flex justify-center" key={r.label}>
               <span
@@ -42,7 +42,7 @@ function DisciplineScoreCard() {
                     r.label === "۸۰ - ۱۰۰٪"
                       ? `
                         rounded-l-none
-                        rounded-r-full
+                        rounded-r-2xl
                         bg-linear-to-l
                         from-[#34C759]
                         to-[#3ADE63]
@@ -56,7 +56,7 @@ function DisciplineScoreCard() {
                         `
                         : `
                           rounded-r-none
-                          rounded-l-full
+                          rounded-l-2xl
                           bg-linear-to-l
                           from-[#FF383C]
                           to-[#CD3538]

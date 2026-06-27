@@ -4,6 +4,7 @@ import Button from "./ui/Button";
 import { useTranslation } from "react-i18next";
 import ShowSectionItems from "./ShowSectionItems";
 import { buttonStyles } from "../styles/buttonStyles";
+import TradingCover from "../module/Tradingcover ";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -14,6 +15,7 @@ function SectionButtons() {
 
   return (
     <div className="flex flex-col">
+      <TradingCover />
       <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-5 font-lahzeh font-extrabold">
         {buttonSection.map((items) => {
           const isActive = activeId === items.id;

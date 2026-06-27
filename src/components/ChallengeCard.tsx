@@ -132,11 +132,11 @@ export default function ChallengeCardComponent({ card }: Props) {
               <React.Fragment key={i}>
                 {separator}
                 <div className="flex flex-col items-center gap-0.5 w-full">
-                  <span className="text-[#99A1AF] text-center wrap-break-word leading-5 text-xs">
+                  <span className="dark:text-[#ffffff] text-gray-700 text-center wrap-break-word leading-5 text-xs">
                     {/* @ts-ignore */}
                     {i18n.language === "fa" ? m.label.fa : m.label.en}
                   </span>
-                  <span className="text-[#00D3F3] text-[13px] font-bold text-center break-all">
+                  <span className="text-[#e7e1e1] text-[13px] font-bold text-center break-all">
                     {m.value}
                   </span>
                 </div>

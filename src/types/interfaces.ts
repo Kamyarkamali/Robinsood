@@ -480,3 +480,29 @@ export interface SortIconProps {
   sortCol: string;
   sortDir: "asc" | "desc";
 }
+
+export interface Session {
+  id: string;
+  name: { fa: string; en: string };
+  startHour: number;
+  endHour: number;
+  color: string;
+  bgColor: string;
+  borderColor: string;
+  dotColor: string;
+  mapX: number;
+  mapY: number;
+  icon: string;
+}
+
+export interface NewsEvent {
+  id: string;
+  fa: string;
+  en: string;
+  flag: any;
+  time: number;
+  impact: "High" | "Medium" | "Low";
+  country: { fa: string; en: string };
+  countryFlag: string;
+  relatedPairs: string[];
+}

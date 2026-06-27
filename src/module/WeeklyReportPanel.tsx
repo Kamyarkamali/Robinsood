@@ -174,7 +174,7 @@ function WeeklyReportPanel() {
         onDateChange={setSelectedDate}
       />
 
-      <div className="flex flex-col mt-10 gap-4 sm:gap-5 flex-1 justify-between max-h-100 pr-1">
+      <div className="flex flex-col mt-10 gap-4 sm:gap-5 flex-1 justify-between pr-1">
         {filteredData.length > 0 ? (
           filteredData.map((row, index) => (
             <div key={index} className="flex flex-col gap-1.5">

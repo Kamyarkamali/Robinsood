@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import type { ChartData2, ChartSettings } from "../types/interfaces";
 import type { ChartUnit } from "../types/type";
 import { Settings, X, Maximize2 } from "lucide-react";
@@ -8,13 +8,21 @@ import { useTranslation } from "react-i18next";
 import { t } from "i18next";
 import { ChartModal } from "./ChartModal";
 
-// icons
 import iconAlert from "../assets/images/alert.svg";
 import chart from "../assets/images/chart.svg";
 import tick from "../assets/images/tick.svg";
+import TradingTooltip from "./common/TradingTooltip";
 
 interface Props {
   data: ChartData2;
+  hideMaximize?: boolean;
+  isInModal?: boolean;
+  onTooltipShow?: (
+    data: any,
+    index: number,
+    position: { x: number; y: number },
+  ) => void;
+  onTooltipHide?: () => void;
 }
 
 const defaultSettings: ChartSettings = {
@@ -44,6 +52,7 @@ const ChartSettingsPanel: React.FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = ({ settings, onSettingsChange, isOpen, onClose }) => {
+  const isDark = document.documentElement.classList.contains("dark");
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
@@ -332,13 +341,147 @@ const ChartSettingsPanel: React.FC<{
   );
 };
 
-const TradingChartCard: React.FC<Props> = ({ data }) => {
+const TradingChartCard: React.FC<Props> = ({
+  data,
+  hideMaximize,
+  isInModal = false,
+  onTooltipShow,
+  onTooltipHide,
+}) => {
   const [hovered, setHovered] = useState<number | null>(null);
   const [settings, setSettings] = useState<ChartSettings>(defaultSettings);
   const [isSettingsOpen, setIsSettingsOpen] = useState<boolean>(false);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [tooltipPosition, setTooltipPosition] = useState<{
+    x: number;
+    y: number;
+  }>({ x: 0, y: 0 });
+  const [tooltipData, setTooltipData] = useState<any>(null);
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   const { i18n } = useTranslation();
+
+  // تشخیص موبایل
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains("dark"));
+    };
+
+    checkDarkMode();
+
+    const observer = new MutationObserver(() => {
+      checkDarkMode();
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleBarHover = (e: React.MouseEvent, index: number, day: any) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+
+    // تنظیمات متفاوت برای موبایل و دسکتاپ
+    const tooltipWidth = isMobile ? 200 : 220;
+    const tooltipHeight = isMobile ? 210 : 230;
+
+    let x = rect.left + rect.width / 2 - tooltipWidth / 2;
+    let y = rect.top - tooltipHeight - 12;
+
+    // جلوگیری از خروج از صفحه
+    const padding = isMobile ? 10 : 16;
+    if (x < padding) x = padding;
+    if (x + tooltipWidth > window.innerWidth - padding) {
+      x = window.innerWidth - tooltipWidth - padding;
+    }
+    if (y < padding) {
+      y = rect.bottom + 12;
+    }
+
+    const prevValue = index > 0 ? data.days[index - 1].value : null;
+
+    const tooltipDataObj = {
+      day,
+      index,
+      prevValue,
+      maxAllowed: data.maxAllowedLine,
+    };
+
+    // اگر در مودال هستیم از props مودال استفاده کن
+    if (isInModal && onTooltipShow) {
+      onTooltipShow(tooltipDataObj, index, { x, y });
+    } else {
+      // در غیر این صورت از state معمولی استفاده کن
+      setTooltipPosition({ x, y });
+      setTooltipData(tooltipDataObj);
+    }
+
+    setHovered(index);
+  };
+
+  const handleBarLeave = () => {
+    setHovered(null);
+    if (isInModal && onTooltipHide) {
+      onTooltipHide();
+    } else {
+      setTooltipData(null);
+    }
+  };
+
+  const handleTouchStart = (e: React.TouchEvent, index: number, day: any) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+
+    const tooltipWidth = isMobile ? 200 : 220;
+    const tooltipHeight = isMobile ? 210 : 230;
+
+    let x = rect.left + rect.width / 2 - tooltipWidth / 2;
+    let y = rect.top - tooltipHeight - 12;
+
+    const padding = isMobile ? 10 : 16;
+    if (x < padding) x = padding;
+    if (x + tooltipWidth > window.innerWidth - padding) {
+      x = window.innerWidth - tooltipWidth - padding;
+    }
+    if (y < padding) {
+      y = rect.bottom + 12;
+    }
+
+    const prevValue = index > 0 ? data.days[index - 1].value : null;
+
+    const tooltipDataObj = {
+      day,
+      index,
+      prevValue,
+      maxAllowed: data.maxAllowedLine,
+    };
+
+    if (isInModal && onTooltipShow) {
+      onTooltipShow(tooltipDataObj, index, { x, y });
+    } else {
+      setTooltipPosition({ x, y });
+      setTooltipData(tooltipDataObj);
+    }
+
+    setHovered(index);
+  };
 
   useEffect(() => {
     const saved = localStorage.getItem("chartSettings");
@@ -355,25 +498,31 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
     localStorage.setItem("chartSettings", JSON.stringify(settings));
   }, [settings]);
 
-  const chartHeight = settings.chartHeight;
-  const paddingLeft = 75;
-  const paddingRight = 75;
-  const paddingTop = 35;
-  const paddingBottom = 40;
+  // تنظیمات SVG بر اساس موبایل یا دسکتاپ
+  const chartHeight = isMobile
+    ? settings.chartHeight * 0.8
+    : settings.chartHeight;
+  const paddingLeft = isMobile ? 50 : 75;
+  const paddingRight = isMobile ? 50 : 75;
+  const paddingTop = isMobile ? 25 : 35;
+  const paddingBottom = isMobile ? 30 : 40;
 
-  const fixedWidth = 650;
+  const fixedWidth = isMobile ? 400 : 650;
   const svgHeight = chartHeight + paddingTop + paddingBottom;
 
   const totalBars = data.days.length;
   const availableWidth = fixedWidth - paddingLeft - paddingRight;
 
   const barWidth = Math.min(
-    28,
-    (availableWidth - (totalBars - 1) * 10) / totalBars,
+    isMobile ? 20 : 28,
+    (availableWidth - (totalBars - 1) * (isMobile ? 6 : 10)) / totalBars,
   );
   const gap =
     totalBars > 1
-      ? Math.max(10, (availableWidth - totalBars * barWidth) / (totalBars - 1))
+      ? Math.max(
+          isMobile ? 6 : 10,
+          (availableWidth - totalBars * barWidth) / (totalBars - 1),
+        )
       : 0;
 
   const maxValue = Math.max(
@@ -411,56 +560,31 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
       : settings.barColors.aboveMax;
   };
 
-  const getDayStatus = (day: ChartData2["days"][number]) => {
-    if (day.value < data.averageLine) {
-      return {
-        text: "پایین‌تر از میانگین",
-        color: settings.barColors.aboveAverage,
-        icon: "🔻",
-        bg: "rgba(229, 57, 53, 0.15)",
-      };
-    } else if (
-      day.value >= data.averageLine &&
-      day.value < data.maxAllowedLine
-    ) {
-      return {
-        text: "در محدوده مجاز",
-        color: settings.barColors.belowAverage,
-        icon: "✅",
-        bg: "rgba(30, 136, 229, 0.15)",
-      };
-    } else if (day.value >= data.maxAllowedLine) {
-      return {
-        text: "بالاتر از حد مجاز",
-        color: settings.barColors.aboveMax,
-        icon: "⚠️",
-        bg: "rgba(251, 146, 60, 0.15)",
-      };
-    }
-    return {
-      text: "در محدوده مجاز",
-      color: settings.barColors.belowAverage,
-      icon: "✅",
-      bg: "rgba(30, 136, 229, 0.15)",
-    };
-  };
-
   function formatValue(value: number, unit: ChartUnit): string {
+    const formatDecimal = (num: number) => Number(num.toFixed(3)).toString();
+
     if (unit === "time") {
       const h = Math.floor(value / 3600);
       const m = Math.floor((value % 3600) / 60);
       const s = Math.floor(value % 60);
-      return `${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}:${String(
-        s,
-      ).padStart(2, "0")}`;
+
+      return `${String(h).padStart(2, "0")}:${String(m).padStart(
+        2,
+        "0",
+      )}:${String(s).padStart(2, "0")}`;
     }
-    if (unit === "currency") return `$${value.toFixed(2)}`;
+
+    if (unit === "currency") {
+      return `$${formatDecimal(value)}`;
+    }
+
     if (unit === "lot") {
-      if (value >= 1) return `${value.toFixed(2)} لات`;
-      if (value >= 0.01) return `${(value * 1000).toFixed(0)} میلی‌لات`;
-      return `${(value * 1000000).toFixed(0)} میکرو‌لات`;
+      if (value >= 1) return formatDecimal(value);
+      if (value >= 0.01) return formatDecimal(value * 1000);
+      return formatDecimal(value * 1000000);
     }
-    return `${value}`;
+
+    return formatDecimal(value);
   }
 
   function formatAxisTick(value: number, unit: ChartUnit): string {
@@ -480,35 +604,53 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
 
   return (
     <>
-      <div className="flex flex-col items-center gap-3 w-full">
-        <div className="w-full p-4 bg-gray-50 dark:bg-[#1a1a2e] dark:bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] h-full border-4 rounded-[21px] border-gray-300 dark:border-[#2a2a4a] flex flex-col items-center shadow-xl">
-          <div className="w-full flex items-center justify-between mb-3">
-            <h3 className="flex-1 text-center text-gray-700 dark:text-white text-base sm:text-lg font-normal">
+      <div
+        className={`flex flex-col items-center gap-3 w-full ${isMobile ? "px-1" : ""}`}
+      >
+        <div
+          className={`
+          w-full p-3 sm:p-4 
+          bg-gray-50 dark:bg-[#1a1a2e] dark:bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] 
+          h-full border-4 rounded-[21px] border-gray-300 dark:border-[#2a2a4a] 
+          flex flex-col items-center shadow-xl
+          ${isMobile ? "border-2 rounded-[14px]" : ""}
+        `}
+        >
+          <div className="w-full flex items-center justify-between mb-2 sm:mb-3">
+            <h3
+              className={`
+              flex-1 text-center text-gray-700 dark:text-white 
+              ${isMobile ? "text-xs font-medium" : "text-base sm:text-lg font-normal"}
+            `}
+            >
               {i18n.language === "fa" ? data?.title?.fa : data?.title?.en}
             </h3>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setIsModalOpen(true)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
-                title="مشاهده بزرگ‌تر"
-              >
-                <Maximize2 className="w-5 h-5 text-gray-600 dark:text-gray-400" />
-              </button>
+            <div className="flex items-center gap-1 sm:gap-2">
+              {!hideMaximize && !isMobile && (
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
+                  title="مشاهده بزرگ‌تر"
+                >
+                  <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
+                </button>
+              )}
+
               <button
                 onClick={() => setIsSettingsOpen(true)}
-                className="p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
-                title="تنظیمات چارت"
+                className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
               >
-                <Settings className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
               </button>
             </div>
           </div>
 
           <div
             className="w-full cursor-pointer"
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => !isInModal && setIsModalOpen(true)}
           >
             <svg
+              ref={svgRef}
               className="w-full h-auto"
               viewBox={`0 0 ${fixedWidth} ${svgHeight}`}
               preserveAspectRatio="xMidYMid meet"
@@ -561,7 +703,11 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                     strokeOpacity={
                       i === 0 || i === yPositions.length - 1 ? 0.2 : 0.1
                     }
-                    strokeWidth={settings.gridLineWidth}
+                    strokeWidth={
+                      isMobile
+                        ? settings.gridLineWidth * 0.8
+                        : settings.gridLineWidth
+                    }
                     strokeDasharray="6 4"
                   />
                 ))}
@@ -570,13 +716,12 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                 yTickValues.map((val, i) => (
                   <text
                     key={i}
-                    x={paddingLeft - 12}
-                    y={yPositions[i] + 5}
+                    x={paddingLeft - (isMobile ? 8 : 12)}
+                    y={yPositions[i] + (isMobile ? 3 : 5)}
                     textAnchor="end"
-                    fill="#8a8aaa"
-                    fontSize="14"
-                    fontWeight="500"
-                    fontFamily="monospace"
+                    fill={isDarkMode ? "#ffff" : "#2B2B2B"}
+                    fontSize={isMobile ? 11 : 15}
+                    fontWeight="600"
                   >
                     {formatAxisTick(val, data.unit)}
                   </text>
@@ -587,29 +732,10 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                 const y = valueToY(day.value);
                 const barH = chartHeight - (y - paddingTop);
                 const color = getBarColor(day);
-                const status = getDayStatus(day);
                 const isHovered = hovered === i;
-
-                const change =
-                  i > 0
-                    ? ((day.value - data.days[i - 1].value) /
-                        data.days[i - 1].value) *
-                      100
-                    : 0;
 
                 return (
                   <g key={i}>
-                    <rect
-                      x={x - 15}
-                      y={paddingTop - 5}
-                      width={barWidth + 30}
-                      height={chartHeight + 10}
-                      fill="transparent"
-                      cursor="pointer"
-                      onMouseEnter={() => setHovered(i)}
-                      onMouseLeave={() => setHovered(null)}
-                    />
-
                     {isHovered && (
                       <>
                         <line
@@ -618,17 +744,17 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                           x2={x + barWidth / 2}
                           y2={svgHeight - paddingBottom + 5}
                           stroke="#fff"
-                          strokeWidth="1.5"
+                          strokeWidth={isMobile ? 1 : 1.5}
                           strokeDasharray="4 4"
                           opacity={0.2}
                         />
                         <circle
                           cx={x + barWidth / 2}
                           cy={y}
-                          r="6"
+                          r={isMobile ? 4 : 6}
                           fill="#fff"
                           stroke={color}
-                          strokeWidth="2.5"
+                          strokeWidth={isMobile ? 2 : 2.5}
                           opacity={0.9}
                           filter="url(#glow)"
                         />
@@ -640,164 +766,34 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                       y={y}
                       width={barWidth}
                       height={barH}
-                      rx={settings.barBorderRadius}
+                      rx={
+                        isMobile
+                          ? Math.min(settings.barBorderRadius * 0.7, 4)
+                          : settings.barBorderRadius
+                      }
                       fill={color}
                       opacity={settings.barOpacity}
                       stroke={isHovered ? "#fff" : "none"}
-                      strokeWidth={isHovered ? 2 : 0}
+                      strokeWidth={isHovered ? (isMobile ? 1.5 : 2) : 0}
+                      cursor="pointer"
+                      onMouseEnter={(e) => handleBarHover(e, i, day)}
+                      onMouseLeave={handleBarLeave}
+                      onTouchStart={(e) => handleTouchStart(e, i, day)}
                     />
 
                     {settings.showLabels && (
                       <text
                         x={x + barWidth / 2}
-                        y={svgHeight - 8}
+                        y={svgHeight - (isMobile ? 6 : 8)}
                         textAnchor="middle"
-                        fill="#8a8aaa"
-                        fontSize="14"
-                        fontWeight="500"
+                        fontSize={isMobile ? 10 : 15}
+                        fontWeight={isMobile ? "400" : "500"}
+                        fill={isDarkMode ? "#ffff" : "#2B2B2B"}
                       >
                         {i18n.language === "fa"
                           ? day?.label?.fa
                           : day?.label?.en}
                       </text>
-                    )}
-
-                    {isHovered && (
-                      <foreignObject
-                        x={x - 95}
-                        y={y - 170}
-                        width={190}
-                        height={160}
-                        style={{ zIndex: 9999, pointerEvents: "none" }}
-                      >
-                        <div
-                          style={{
-                            width: "100%",
-                            height: "100%",
-                            position: "relative",
-                            zIndex: 9999,
-                          }}
-                        >
-                          <div
-                            style={{
-                              position: "absolute",
-                              top: 0,
-                              left: 0,
-                              right: 0,
-                              bottom: 0,
-                              background:
-                                "linear-gradient(135deg, #1a1a2e, #16213e)",
-                              borderRadius: "16px",
-                              border: "1.5px solid #4a4a6a",
-                              boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
-                              padding: "16px",
-                              display: "flex",
-                              flexDirection: "column",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              color: "white",
-                              fontFamily:
-                                "system-ui, -apple-system, sans-serif",
-                            }}
-                          >
-                            <div
-                              style={{
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                right: 0,
-                                height: "6px",
-                                background: color,
-                                borderRadius: "16px 16px 0 0",
-                              }}
-                            />
-
-                            <div
-                              style={{
-                                fontSize: "14px",
-                                color: "#aaa",
-                                marginTop: "8px",
-                              }}
-                            >
-                              {i18n.language === "fa"
-                                ? day?.label?.fa
-                                : day?.label?.en}
-                            </div>
-
-                            <div
-                              style={{
-                                fontSize:
-                                  formatValue(day.value, data.unit).length > 10
-                                    ? "26px"
-                                    : "34px",
-                                fontWeight: 900,
-                                fontFamily: "monospace",
-                                color: "white",
-                                margin: "4px 0",
-                              }}
-                            >
-                              {formatValue(day.value, data.unit)}
-                            </div>
-
-                            {i > 0 && (
-                              <div
-                                style={{
-                                  fontSize: "16px",
-                                  fontWeight: 700,
-                                  color: change >= 0 ? "#43A047" : "#E53935",
-                                  marginBottom: "4px",
-                                }}
-                              >
-                                {change >= 0 ? "📈" : "📉"} {change.toFixed(2)}%
-                              </div>
-                            )}
-
-                            <div
-                              style={{
-                                width: "80%",
-                                height: "1px",
-                                background: "#3a3a5a",
-                                margin: "4px 0",
-                                opacity: 0.5,
-                              }}
-                            />
-
-                            <div
-                              style={{
-                                background: status.bg,
-                                padding: "2px 16px",
-                                borderRadius: "12px",
-                                margin: "2px 0",
-                              }}
-                            >
-                              <span
-                                style={{
-                                  color: status.color,
-                                  fontSize: "15px",
-                                  fontWeight: 600,
-                                }}
-                              >
-                                {status.icon} {status.text}
-                              </span>
-                            </div>
-
-                            <div
-                              style={{
-                                fontSize: "13px",
-                                fontWeight: 500,
-                                color: "#8a8aaa",
-                                marginTop: "2px",
-                              }}
-                            >
-                              {day.value > data.averageLine ? "▲" : "▼"}
-                              {Math.abs(day.value - data.averageLine).toFixed(
-                                2,
-                              )}{" "}
-                              نسبت به میانگین
-                            </div>
-                          </div>
-                        </div>
-                      </foreignObject>
                     )}
                   </g>
                 );
@@ -811,15 +807,19 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                     x2={fixedWidth - paddingRight}
                     y2={avgY}
                     stroke={settings.averageLineColor}
-                    strokeWidth={settings.averageLineWidth}
+                    strokeWidth={
+                      isMobile
+                        ? settings.averageLineWidth * 0.8
+                        : settings.averageLineWidth
+                    }
                     strokeDasharray="8 4"
                   />
                   <rect
-                    x={fixedWidth - paddingRight - 70}
-                    y={avgY - 14}
-                    width={65}
-                    height={20}
-                    rx={6}
+                    x={fixedWidth - paddingRight - (isMobile ? 50 : 70)}
+                    y={avgY - (isMobile ? 10 : 14)}
+                    width={isMobile ? 45 : 65}
+                    height={isMobile ? 14 : 20}
+                    rx={isMobile ? 4 : 6}
                     fill={settings.averageLineColor}
                     opacity={0.15}
                   />
@@ -834,15 +834,19 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
                     x2={fixedWidth - paddingRight}
                     y2={maxAllowedY}
                     stroke={settings.maxAllowedLineColor}
-                    strokeWidth={settings.maxAllowedLineWidth}
+                    strokeWidth={
+                      isMobile
+                        ? settings.maxAllowedLineWidth * 0.8
+                        : settings.maxAllowedLineWidth
+                    }
                     strokeDasharray="8 4"
                   />
                   <rect
-                    x={fixedWidth - paddingRight - 70}
-                    y={maxAllowedY - 14}
-                    width={65}
-                    height={20}
-                    rx={6}
+                    x={fixedWidth - paddingRight - (isMobile ? 50 : 70)}
+                    y={maxAllowedY - (isMobile ? 10 : 14)}
+                    width={isMobile ? 45 : 65}
+                    height={isMobile ? 14 : 20}
+                    rx={isMobile ? 4 : 6}
                     fill={settings.maxAllowedLineColor}
                     opacity={0.15}
                   />
@@ -852,38 +856,38 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
           </div>
 
           <div
-            className="w-full mt-4 flex flex-col gap-2"
+            className="w-full mt-3 sm:mt-4 flex flex-col gap-1.5 sm:gap-2"
             style={{ direction: "rtl" }}
           >
-            <div className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between px-2 py-1.5 rounded-md bg-green-500/10 dark:bg-green-500/5">
-                <span className="text-green-500 text-[11px] leading-none flex items-center gap-1">
-                  <img className="w-4.5" src={chart} alt="chart" />
+            <div className="flex flex-col gap-1 sm:gap-1.5">
+              <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-green-500/10 dark:bg-green-500/5">
+                <span className="text-green-500 text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
+                  <img className="w-3.5 sm:w-4.5" src={chart} alt="chart" />
                   {t("cart1.Average")}
                 </span>
-                <span className="text-green-400 text-[12px] leading-none font-medium">
+                <span className="text-green-400 text-[10px] sm:text-[12px] leading-none font-medium">
                   {formatValue(data.averageValue, data.unit)}
                 </span>
               </div>
 
-              <div className="flex items-center justify-between px-2 py-1.5 rounded-md bg-orange-500/10 dark:bg-orange-500/5">
-                <span className="text-orange-400 text-[11px] leading-none flex items-center gap-1">
-                  <img className="w-4.5" src={iconAlert} alt="alert" />{" "}
+              <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-orange-500/10 dark:bg-orange-500/5">
+                <span className="text-orange-400 text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
+                  <img className="w-3.5 sm:w-4.5" src={iconAlert} alt="alert" />{" "}
                   {t("cart1.Limit")}
                 </span>
-                <span className="text-orange-400 text-[12px] leading-none font-medium">
+                <span className="text-orange-400 text-[10px] sm:text-[12px] leading-none font-medium">
                   {formatValue(data.maxAllowedValue, data.unit)}
                 </span>
               </div>
             </div>
 
-            <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-gray-100 dark:bg-[#2a2a4a]">
-              <span className="text-[11px] text-gray-600 dark:text-[#aaa] flex items-center gap-1">
-                <img className="w-4.5" src={tick} alt="Success" />
+            <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 dark:bg-[#2a2a4a]">
+              <span className="text-[10px] sm:text-[11px] text-gray-600 dark:text-[#aaa] flex items-center gap-0.5 sm:gap-1">
+                <img className="w-3.5 sm:w-4.5" src={tick} alt="Success" />
                 {t("cart1.Trading")}
               </span>
 
-              <span className="text-[12px] text-gray-500 dark:text-[#bbb] flex items-center gap-1">
+              <span className="text-[10px] sm:text-[12px] text-gray-500 dark:text-[#bbb] flex items-center gap-0.5 sm:gap-1">
                 <span className="text-green-500 font-semibold">
                   {data.acceptedDays}
                 </span>
@@ -906,20 +910,41 @@ const TradingChartCard: React.FC<Props> = ({ data }) => {
         />
       </div>
 
-      <ChartModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        chartData={data}
-        // @ts-ignore
-        title={
-          <div className="flex items-center gap-2">
-            <img className="w-4.5" src={chart} alt="chart" />
-            <span>
-              {i18n.language === "fa" ? "نمایش دقیق چارت" : "Chart Details"}
-            </span>
-          </div>
-        }
-      />
+      {/* تولتیپ معمولی - فقط در حالت غیر مودال نمایش داده می‌شود */}
+      {!isInModal && hovered !== null && tooltipData && (
+        <TradingTooltip
+          data={tooltipData}
+          index={tooltipData.index}
+          position={tooltipPosition}
+          formatValue={formatValue}
+          unit={data.unit}
+          averageLine={data.averageLine}
+          isDark={isDarkMode}
+          isMobile={isMobile}
+          onClose={() => {
+            setHovered(null);
+            setTooltipData(null);
+          }}
+        />
+      )}
+
+      {/* مودال - فقط در حالت غیر مودال نمایش داده می‌شود */}
+      {!isInModal && (
+        <ChartModal
+          hideMaximize={true}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          chartData={data}
+          title={
+            <div className="flex items-center gap-2">
+              <img className="w-4.5" src={chart} alt="chart" />
+              <span>
+                {i18n.language === "fa" ? "نمایش دقیق چارت" : "Chart Details"}
+              </span>
+            </div>
+          }
+        />
+      )}
     </>
   );
 };

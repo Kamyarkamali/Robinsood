@@ -40,6 +40,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
               paddingAngle={3}
               startAngle={90}
               endAngle={-270}
+              cornerRadius={7}
             >
               {data.map((entry, index) => (
                 <Cell key={index} fill={entry.color} stroke="none" />
@@ -51,7 +52,6 @@ export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
         </ResponsiveContainer>
       </div>
 
-      {/* LEGEND */}
       <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-3 w-full">
         {data.map((item, index) => (
           <div key={index} className="flex items-center gap-2 min-w-0">

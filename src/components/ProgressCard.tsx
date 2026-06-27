@@ -47,7 +47,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
       className="
         w-full
         min-h-55
-        p-3 sm:p-4 lg:p-5
+        p-3 sm:p-4 lg:p-6
         flex flex-col
         gap-4
         rounded-2xl
@@ -72,12 +72,11 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             lg:text-lg
           "
         >
-          {i18n.language === "fa" ? data.title.fa : data.title.en}
+          {i18n.language === "fa" ? data?.title?.fa : data?.title?.en}
         </h3>
 
         <span
           className={`
-          bg-linear-0
            ${getBadgeGradient(data.badgeText?.fa, data.badgeText?.en)}
             px-2 py-1
             sm:px-3
@@ -85,6 +84,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             text-[10px]
             sm:text-xs
             text-white
+            bg-[#383737]
           `}
         >
           {i18n.language === "fa" ? data.badgeText.fa : data.badgeText.en}
@@ -136,12 +136,6 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             flex flex-col items-center justify-center gap-0.5 sm:gap-1
             p-1.5 sm:p-2 lg:p-3
             rounded-xl
-            bg-linear-to-br from-green-50/80 to-emerald-50/80
-            dark:from-green-900/20 dark:to-emerald-900/20
-            border border-green-200/50
-            dark:border-green-800/30
-            hover:shadow-md
-            hover:scale-[1.02]
             transition-all
             duration-300
             min-h-15 sm:min-h-17.5
@@ -160,12 +154,6 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             flex flex-col items-center justify-center gap-0.5 sm:gap-1
             p-1.5 sm:p-2 lg:p-3
             rounded-xl
-            bg-linear-to-br from-blue-50/80 to-indigo-50/80
-            dark:from-blue-900/20 dark:to-indigo-900/20
-            border border-blue-200/50
-            dark:border-blue-800/30
-            hover:shadow-md
-            hover:scale-[1.02]
             transition-all
             duration-300
             min-h-15 sm:min-h-17.5
@@ -200,12 +188,6 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             flex flex-col items-center justify-center gap-0.5 sm:gap-1
             p-1.5 sm:p-2 lg:p-3
             rounded-xl
-            bg-linear-to-br from-purple-50/80 to-pink-50/80
-            dark:from-purple-900/20 dark:to-pink-900/20
-            border border-purple-200/50
-            dark:border-purple-800/30
-            hover:shadow-md
-            hover:scale-[1.02]
             transition-all
             duration-300
             min-h-15 sm:min-h-17.5

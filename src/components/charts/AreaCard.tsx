@@ -49,10 +49,10 @@ export const AreaCard: React.FC<AreaCardProps> = ({
         >
           {i18next.language === "fa"
             ? value === "متعادل"
-              ? "متعادل"
+              ? "+33"
               : value
             : value === "متعادل"
-              ? "Balanced"
+              ? "+33"
               : value}
         </span>
       </div>

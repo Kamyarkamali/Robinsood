@@ -18,6 +18,7 @@ import TradingNewsTable from "../components/Tradingnewstable ";
 import TradingAnalysisPanel from "../components/Tradinganalysispanel ";
 import VSComparison from "../components/Vscomparison";
 import TradingTable from "../components/trading/TradingTable";
+import TradingSessionsMap from "../components/Tradingsessionsmap";
 
 function ShowAllItems() {
   const { t } = useTranslation();
@@ -43,7 +44,7 @@ function ShowAllItems() {
           {t("labels.parametr3")}
         </h1>
 
-        <div className="flex flex-col items-center lg:flex-row lg:mt-8">
+        <div className="flex flex-col items-center lg:mt-8 w-full mx-auto">
           <ProgressCardsSection />
           <TradingChartsGrid />
         </div>
@@ -87,10 +88,13 @@ function ShowAllItems() {
         <CalendarAnalysis />
         <TradingDualChart />
       </div>
-      <div className="flex flex-col pr-4 pl-4">
+      <div className="flex flex-col gap-6 pr-4 pl-4">
         <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           {t("card9.title")}
         </h1>
+
+        <TradingSessionsMap />
+
         <TradingNewsTable />
       </div>
 

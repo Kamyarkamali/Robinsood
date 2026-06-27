@@ -42,7 +42,7 @@
     "balance": "Balance",
     "equity": "Equity",
     "prop": "Prop Opportunities",
-    "compared": "+1.5% compared to yesterday",
+    "compared": "Balance 12 nights standard",
     "risk": "Risk: 2%",
     "Last": "Last updated: 1404/10/22, 18:13:25"
   },
@@ -132,7 +132,7 @@
     "labale2": "Capital Management Parameters"
   },
   "changeTabale": {
-    "tabale1": "Numeric",
+    "tabale1": "Diagram",
     "tabale2": "Chart"
   },
   "card7": {

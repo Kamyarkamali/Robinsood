@@ -24,7 +24,6 @@ function Navbar() {
           <ThemeToggle />
         </section>
 
-        {/* desktop button */}
         <section className="hidden lg:block">
           <Button
             href="#"

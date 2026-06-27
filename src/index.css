@@ -160,3 +160,56 @@ body {
 .animate-slideUp {
   animation: slideUp 0.25s ease-out;
 }
+
+@media (max-width: 768px) {
+  .touch-manipulation {
+    touch-action: manipulation;
+  }
+
+  input,
+  textarea,
+  button,
+  select {
+    font-size: 16px !important;
+  }
+
+  .custom-scrollbar {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+
+  .modal-tooltip-mobile {
+    max-width: 90vw !important;
+    min-width: unset !important;
+    width: auto !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+}
+
+@keyframes pulse-soft {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

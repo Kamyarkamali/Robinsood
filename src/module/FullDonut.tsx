@@ -8,126 +8,102 @@ function FullDonut({
 }: FullDonutProps) {
   const radius = (size - strokeWidth) / 2;
   const circumference = 2 * Math.PI * radius;
+
   const winLength = (winPercent / 100) * circumference;
   const loseLength = circumference - winLength;
 
   const center = size / 2;
-  const labelRadius = radius + strokeWidth / 2 + 18;
-
-  const winAngle = (winPercent / 100) * 360;
-  const winMidAngle = -90 + winAngle / 2;
-  const loseMidAngle = -90 + winAngle + (360 - winAngle) / 2;
-
-  const getLabelPosition = (angleDeg: number) => {
-    const angleRad = (angleDeg * Math.PI) / 180;
-
-    return {
-      x: center + labelRadius * Math.cos(angleRad),
-      y: center + labelRadius * Math.sin(angleRad),
-    };
-  };
-
-  const winPos = getLabelPosition(winMidAngle);
-  const losePos = getLabelPosition(loseMidAngle);
 
   return (
-    <div className="relative w-full max-w-[180px] aspect-square">
-      <svg
-        viewBox={`0 0 ${size} ${size}`}
-        className="w-full h-full overflow-visible"
-        preserveAspectRatio="xMidYMid meet"
-      >
-        {/* Background */}
-        <circle
-          cx={center}
-          cy={center}
-          r={radius}
-          fill="none"
-          stroke="#1e293b"
-          strokeWidth={strokeWidth}
-          opacity={0.3}
-        />
-
-        {/* Win */}
-        <circle
-          cx={center}
-          cy={center}
-          r={radius}
-          fill="none"
-          stroke="#10b981"
-          strokeWidth={strokeWidth}
-          strokeDasharray={`${winLength} ${circumference}`}
-          strokeLinecap="round"
-          transform={`rotate(-90 ${center} ${center})`}
-        />
-
-        {/* Loss */}
-        <circle
-          cx={center}
-          cy={center}
-          r={radius}
-          fill="none"
-          stroke="#ef4444"
-          strokeWidth={strokeWidth}
-          strokeDasharray={`${loseLength} ${circumference}`}
-          strokeDashoffset={-winLength}
-          strokeLinecap="round"
-          transform={`rotate(-90 ${center} ${center})`}
-        />
-
-        {/* Win Label */}
-        <text
-          x={winPos.x}
-          y={winPos.y}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="#34d399"
-          fontSize={size * 0.08}
-          fontWeight="700"
+    <div className="flex flex-col items-center gap-3 w-full">
+      <div className="relative w-full max-w-[140px] sm:max-w-[170px] md:max-w-[190px] aspect-square">
+        <svg
+          viewBox={`0 0 ${size} ${size}`}
+          className="w-full h-full"
+          preserveAspectRatio="xMidYMid meet"
         >
-          {Math.round(winPercent)}%
-        </text>
+          {/* Track */}
+          <circle
+            cx={center}
+            cy={center}
+            r={radius}
+            fill="none"
+            stroke="#1e293b"
+            strokeWidth={strokeWidth}
+            opacity={0.25}
+          />
 
-        {/* Loss Label */}
-        <text
-          x={losePos.x}
-          y={losePos.y}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="#f87171"
-          fontSize={size * 0.08}
-          fontWeight="700"
-        >
-          {Math.round(100 - winPercent)}%
-        </text>
+          {/* Win */}
+          <circle
+            cx={center}
+            cy={center}
+            r={radius}
+            fill="none"
+            stroke="#22c55e"
+            strokeWidth={strokeWidth}
+            strokeDasharray={`${winLength} ${circumference}`}
+            strokeLinecap="round"
+            transform={`rotate(-90 ${center} ${center})`}
+          />
 
-        {/* Center Number */}
-        <text
-          x={center}
-          y={center - size * 0.03}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fill="currentColor"
-          fontSize={size * 0.18}
-          fontWeight="700"
-          className="dark:fill-white fill-slate-900"
-        >
-          {winPercent}%
-        </text>
+          {/* Loss */}
+          <circle
+            cx={center}
+            cy={center}
+            r={radius}
+            fill="none"
+            stroke="#ef4444"
+            strokeWidth={strokeWidth}
+            strokeDasharray={`${loseLength} ${circumference}`}
+            strokeDashoffset={-winLength}
+            strokeLinecap="round"
+            transform={`rotate(-90 ${center} ${center})`}
+          />
 
-        {/* Center Label */}
-        <text
-          x={center}
-          y={center + size * 0.13}
-          textAnchor="middle"
-          dominantBaseline="central"
-          fontSize={size * 0.09}
-          fontWeight="500"
-          className="dark:fill-white fill-gray-500"
-        >
-          {t("cart5.wind")}
-        </text>
-      </svg>
+          {/* Center Number */}
+          <text
+            x={center}
+            y={center - size * 0.03}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={size * 0.18}
+            fontWeight="700"
+            className="dark:fill-white fill-slate-900"
+          >
+            {winPercent}%
+          </text>
+
+          {/* Label */}
+          <text
+            x={center}
+            y={center + size * 0.13}
+            textAnchor="middle"
+            dominantBaseline="central"
+            fontSize={size * 0.08}
+            fontWeight="500"
+            className="dark:fill-gray-300 fill-gray-500"
+          >
+            {t("cart5.wind")}
+          </text>
+        </svg>
+      </div>
+
+      {/* Responsive Legend */}
+      <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+          <span className="text-xs sm:text-sm font-medium text-green-500">
+            {Math.round(winPercent)}%
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5">
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+          <span className="text-xs sm:text-sm font-medium text-red-500">
+            {Math.round(100 - winPercent)}%
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

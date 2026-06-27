@@ -31,8 +31,7 @@ function LanguageSwitcher() {
   }, []);
 
   return (
-    <div ref={dropdownRef} className="relative inline-block z-50">
-      {/* TRIGGER */}
+    <div ref={dropdownRef} className="relative inline-block z-2000">
       <button
         onClick={() => setOpen(!open)}
         className="

@@ -110,14 +110,14 @@
     "Average": "میانگین",
     "Limit": "حدمجاز",
     "Trading": "روز معاملاتی",
-    "day": "day"
+    "day": "روز"
   },
   "chart3": {
     "socer": "امتیاز شما"
   },
   "cart4": {
     "AccountResult": "برآیند حساب",
-    "Yesterday": "نسبت به دیروز",
+    "Yesterday": "بالانس 12 شب معیار",
     "LastTrade": "نسبت به آخرین ترید"
   },
   "cart5": {
@@ -132,7 +132,7 @@
     "labale2": "پارامترهای مدیریت سرمایه"
   },
   "changeTabale": {
-    "tabale1": "عددی",
+    "tabale1": "نموداری",
     "tabale2": "جدولی"
   },
   "card7": {

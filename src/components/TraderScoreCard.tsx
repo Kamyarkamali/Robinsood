@@ -126,39 +126,45 @@ function Gauge({ value, color, size = 120 }: GaugeProps) {
   );
 }
 
-function RadarChart({ win, profitFactor, avgWinLoss, labels }: RadarProps) {
+function RadarChart({ win, profitFactor, avgWinLoss }: RadarProps) {
+  const { i18n } = useTranslation();
+
   const [hovered, setHovered] = useState<{
     x: number;
     y: number;
     label: string;
     value: number;
   } | null>(null);
-  const cx = 100,
-    cy = 100,
-    maxR = 75;
+
+  const isFa = i18n.language === "fa";
+
+  const cx = 100;
+  const cy = 100;
+  const maxR = 75;
 
   const toRad = (deg: number) => (deg * Math.PI) / 180;
 
   const axes = [
     {
-      label: labels.win,
+      label: isFa ? ["پیروزی"] : ["Win"],
       angle: -90,
       value: win / 100,
       rawValue: win,
     },
     {
-      label: labels.profit,
+      label: isFa ? ["سود"] : ["Profit"],
       angle: 30,
       value: profitFactor / 100,
       rawValue: profitFactor,
     },
     {
-      label: labels.avg,
+      label: isFa ? ["میانگین", "برد و باخت"] : ["Avg", "Win / Loss"],
       angle: 150,
       value: avgWinLoss / 100,
       rawValue: avgWinLoss,
     },
   ];
+
   const point = (angle: number, r: number) => ({
     x: cx + r * Math.cos(toRad(angle)),
     y: cy + r * Math.sin(toRad(angle)),
@@ -172,12 +178,13 @@ function RadarChart({ win, profitFactor, avgWinLoss, labels }: RadarProps) {
   const axisEnds = axes.map((a) => point(a.angle, maxR));
 
   return (
-    <div className="w-full max-w-50 sm:max-w-55 mx-auto flex items-center justify-center">
+    <div className="relative w-full max-w-[260px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[430px] xl:max-w-[460px] mx-auto flex items-center justify-center">
       <svg
-        viewBox="0 0 200 200"
+        viewBox="-40 -40 280 280"
         width="100%"
         height="100%"
         className="aspect-square"
+        onMouseLeave={() => setHovered(null)}
       >
         <defs>
           <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
@@ -188,13 +195,15 @@ function RadarChart({ win, profitFactor, avgWinLoss, labels }: RadarProps) {
 
         {rings.map((r, i) => {
           const gpts = axes.map((a) => point(a.angle, r * maxR));
+
           return (
             <polygon
               key={i}
               points={gpts.map((p) => `${p.x},${p.y}`).join(" ")}
               fill="none"
               className="dark:stroke-[#474444] stroke-[#e2d9f5]"
-              strokeWidth="3"
+              strokeWidth="2.5"
+              strokeLinejoin="round"
             />
           );
         })}
@@ -215,8 +224,11 @@ function RadarChart({ win, profitFactor, avgWinLoss, labels }: RadarProps) {
           points={polygon}
           fill="url(#radarGrad)"
           stroke="#a855f7"
-          strokeWidth="1.5"
-          style={{ filter: "drop-shadow(0 0 6px #a855f766)" }}
+          strokeWidth="2"
+          strokeLinejoin="round"
+          style={{
+            filter: "drop-shadow(0 0 8px #a855f766)",
+          }}
         />
 
         {pts.map((p, i) => (
@@ -224,7 +236,7 @@ function RadarChart({ win, profitFactor, avgWinLoss, labels }: RadarProps) {
             key={i}
             cx={p.x}
             cy={p.y}
-            r={hovered?.label === axes[i].label ? 8 : 5}
+            r={hovered?.label === axes[i].label.join(" ") ? 8 : 5}
             fill="#a855f7"
             stroke="#e9d5ff"
             strokeWidth="2.5"
@@ -233,79 +245,84 @@ function RadarChart({ win, profitFactor, avgWinLoss, labels }: RadarProps) {
               setHovered({
                 x: p.x,
                 y: p.y,
-                label: axes[i].label,
+                label: axes[i].label.join(" "),
                 value: axes[i].rawValue,
               })
             }
-            onMouseLeave={() => setHovered(null)}
+            onClick={() =>
+              setHovered({
+                x: p.x,
+                y: p.y,
+                label: axes[i].label.join(" "),
+                value: axes[i].rawValue,
+              })
+            }
             style={{
               filter:
-                hovered?.label === axes[i].label
+                hovered?.label === axes[i].label.join(" ")
                   ? "drop-shadow(0 0 14px #a855f7)"
                   : "drop-shadow(0 0 4px #a855f7)",
-              transition: "all 0.2s ease-in-out",
             }}
           />
         ))}
 
-        {hovered && (
-          <foreignObject
-            x={hovered.x - 50}
-            y={hovered.y - 60}
-            width="100"
-            height="50"
-            style={{ overflow: "visible" }}
-          >
-            <div
-              className="
-                rounded-xl
-                border-2
-                border-purple-500/40
-                bg-linear-to-br
-                from-[#1a1a2e]
-                to-[#2d1b4e]
-                backdrop-blur-xl
-                px-3
-                py-2
-                text-center
-                shadow-2xl
-                shadow-purple-500/20
-                transition-all
-                duration-200
-                scale-100
-              "
-            >
-              <div className="text-[11px] font-bold text-purple-300 uppercase tracking-wider">
-                {hovered.label}
-              </div>
-              <div className="text-base font-extrabold text-white mt-0.5">
-                {hovered.value}
-                <span className="text-xs font-normal text-purple-300 ml-1">
-                  %
-                </span>
-              </div>
-            </div>
-          </foreignObject>
-        )}
-
         {axes.map((a, i) => {
-          const lp = point(a.angle, maxR + 11);
+          const lp = point(a.angle, maxR + 24);
+
           return (
             <text
               key={i}
               x={lp.x}
               y={lp.y}
               textAnchor="middle"
-              dominantBaseline="middle"
-              fontSize="10"
-              fontFamily="Lahze"
-              className="dark:fill-[#ffffff] fill-[#6b7280]"
+              className="dark:fill-white fill-gray-500"
+              fontSize="12"
+              fontWeight="500"
             >
-              {a.label}
+              {a.label.map((line, idx) => (
+                <tspan key={idx} x={lp.x} dy={idx === 0 ? 0 : 11}>
+                  {line}
+                </tspan>
+              ))}
             </text>
           );
         })}
       </svg>
+
+      {hovered && (
+        <div
+          className="
+            absolute
+            z-30
+            min-w-[90px]
+            sm:min-w-[110px]
+            rounded-xl
+            border
+            border-purple-500/40
+            bg-[#1b132c]/95
+            backdrop-blur-xl
+            shadow-xl
+            px-3
+            py-2
+            text-center
+            pointer-events-none
+          "
+          style={{
+            left: `${(hovered.x / 200) * 100}%`,
+            top: `${(hovered.y / 200) * 100}%`,
+            transform: "translate(-50%, -130%)",
+          }}
+        >
+          <div className="text-[10px] sm:text-xs font-bold text-purple-300">
+            {hovered.label}
+          </div>
+
+          <div className="text-sm sm:text-base font-extrabold text-white">
+            {hovered.value}
+            <span className="text-xs text-purple-300 ml-1">%</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -320,14 +337,14 @@ function StatItem({
   color?: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
+    <div className="flex flex-col items-center justify-center gap-4 p-4 md:p-0 sm:gap-2">
       <span
-        className="text-xl bg-[#303030] rounded-xl shadow-2xl p-3 sm:text-2xl md:text-3xl font-extrabold tracking-tight leading-none"
+        className="text-[13px] sm:text-sm md:text-2xl lg:text-lg bg-[#303030] rounded-xl shadow-2xl px-2 py-1.5 sm:p-3 font-extrabold tracking-tight leading-none w-full text-center min-w-[50px] sm:min-w-[60px]"
         style={{ color: color ?? "inherit" }}
       >
         {value}
       </span>
-      <span className="text-[10px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
+      <span className="text-[10px] sm:text-[10px] md:text-2xl lg:text-sm font-normal dark:text-[#ffffff] text-gray-500 text-center px-1">
         {label}
       </span>
     </div>
@@ -344,11 +361,29 @@ function GaugeItem({
   color: "green" | "red";
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-2">
-      <span className="text-[10px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
+    <div className="flex flex-col items-center justify-center gap-1 sm:gap-2 md:gap-3 p-5 lg:p-0 ">
+      <span className="text-[8px] xs:text-[10px] sm:text-[12px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
         {label}
       </span>
-      <Gauge value={value} color={color} size={130} />
+      <Gauge
+        value={value}
+        color={color}
+        size={
+          typeof window !== "undefined"
+            ? window.innerWidth < 480
+              ? 80
+              : window.innerWidth < 640
+                ? 93
+                : window.innerWidth < 768
+                  ? 100
+                  : window.innerWidth < 1024
+                    ? 110
+                    : window.innerWidth < 1280
+                      ? 120
+                      : 140
+            : 120
+        }
+      />
     </div>
   );
 }
@@ -384,71 +419,91 @@ export default function TraderScoreCard() {
         w-full
         max-w-7xl
         mx-auto
-        px-2
+        px-1
+        xs:px-2
         sm:px-4
         grid
         grid-cols-1
+        lg:grid-cols-[1fr_300px]
         xl:grid-cols-[1fr_320px]
         2xl:grid-cols-[1fr_380px]
-        gap-3
+        gap-2
+        xs:gap-3
         sm:gap-4
         md:gap-6
         items-stretch
       "
     >
-      <div
-        className="
-          bg-white
-          dark:bg-linear-to-b
-          dark:from-[#282828]
-          dark:to-[#282727]
-          rounded-2xl
-          sm:rounded-3xl
-          border-2
-          sm:border-4
-          border-gray-200
-          dark:border-[#303030]
-          p-3
-          sm:p-4
-          md:p-6
-          shadow-lg
-          hover:shadow-xl
-          transition-shadow
-          duration-300
-          flex
-          flex-col
-          justify-center
-        "
-      >
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 md:gap-6">
-          {gauges.map((g) => (
-            <GaugeItem
-              key={g.key}
-              label={t(`score.${g.key}`)}
-              value={g.value}
-              color={g.color}
-            />
-          ))}
-        </div>
+      <div className="flex flex-col gap-2 xs:gap-3 sm:gap-4">
+        <div
+          className="
+            bg-white
+            dark:bg-linear-to-b
+            dark:from-[#282828]
+            dark:to-[#282727]
+            rounded-2xl
+            xs:rounded-2xl
+            sm:rounded-3xl
+            border
+            sm:border-2
+            lg:border-4
+            border-gray-200
+            dark:border-[#303030]
+            p-2
+            xs:p-3
+            sm:p-4
+            md:p-6
+            shadow-lg
+            hover:shadow-xl
+            transition-shadow
+            duration-300
+          "
+        >
+          <div className="flex flex-col gap-4 h-full justify-between">
+            <div
+              className="bg-white dark:bg-linear-to-b dark:from-[#282828] dark:to-[#282727]
+    rounded-3xl border-4 border-gray-200 dark:border-[#303030]
+    p-4 md:p-6 shadow-lg"
+            >
+              <div className="grid grid-cols-2 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                {gauges.map((g) => (
+                  <GaugeItem
+                    key={g.key}
+                    label={t(`score.${g.key}`)}
+                    value={g.value}
+                    color={g.color}
+                  />
+                ))}
+              </div>
+            </div>
 
-        <div className="h-px dark:bg-[#1e1e42] bg-[#ede9fe] my-4 sm:my-7" />
-
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
-          <StatItem label={t("score.bestSymbol")} value={d.stats.bestSymbol} />
-
-          <StatItem
-            label={t("score.bestTrade")}
-            value={`+${d.stats.bestTrade}`}
-            color="#22c55e"
-          />
-
-          <StatItem
-            label={t("score.worstTrade")}
-            value={`-${Math.abs(d.stats.worstTrade)}`}
-            color="#ef4444"
-          />
-
-          <StatItem label={t("score.totalLots")} value={d.stats.totalLots} />
+            <div
+              className="bg-white dark:bg-linear-to-b dark:from-[#282828] dark:to-[#282727]
+    rounded-3xl border-4 border-gray-200 dark:border-[#303030]
+    p-4 md:p-6 shadow-lg"
+            >
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                <StatItem
+                  label={t("score.bestSymbol")}
+                  value={d.stats.bestSymbol}
+                />
+                <StatItem
+                  label={t("score.bestTrade")}
+                  value={`+${d.stats.bestTrade} $`}
+                  color="#22c55e"
+                />
+                <StatItem
+                  label={t("score.worstTrade")}
+                  value={`-${Math.abs(d.stats.worstTrade)} $`}
+                  color="#ef4444"
+                />
+                <StatItem
+                  label={t("score.totalLots")}
+                  value={`${d.stats.totalLots}`}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -458,13 +513,16 @@ export default function TraderScoreCard() {
           dark:bg-linear-to-b
           dark:from-[#282828]
           dark:to-[#282727]
-          rounded-2xl
+          rounded-xl
+          xs:rounded-2xl
           sm:rounded-3xl
-          border-2
-          sm:border-4
+          border
+          sm:border-2
+          lg:border-4
           border-gray-200
           dark:border-[#303030]
-          p-3
+          p-2
+          xs:p-3
           sm:p-4
           md:p-5
           flex
@@ -475,11 +533,12 @@ export default function TraderScoreCard() {
           hover:shadow-xl
           transition-shadow
           duration-300
-          gap-1
+          gap-0.5
+          xs:gap-1
           sm:gap-2
         "
       >
-        <span className="text-sm sm:text-base text-right w-full font-bold dark:text-[#ffffff] text-[#7c3aed]">
+        <span className="text-xs xs:text-sm sm:text-base text-right w-full font-bold dark:text-[#ffffff] text-[#7c3aed]">
           {t("score.radarTitle")}
         </span>
 
@@ -497,12 +556,13 @@ export default function TraderScoreCard() {
           />
         </div>
 
-        <div className="text-center mt-1">
-          <span className="text-xs sm:text-[18px] font-bold dark:text-[#ffffff] text-gray-500">
+        <div className="text-center mt-0.5 xs:mt-1">
+          <span className="text-[10px] xs:text-xs sm:text-sm lg:text-[18px] font-bold dark:text-[#ffffff] text-gray-500">
             {t("chart3.socer")} =
           </span>
+
           <span
-            className="text-xl sm:text-2xl md:text-2xl font-extrabold text-[#22c55e] ml-1"
+            className="text-base xs:text-lg sm:text-xl md:text-2xl font-extrabold text-[#22c55e] ml-1"
             style={{ direction: "ltr" }}
           >
             {d.totalScore}

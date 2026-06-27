@@ -19,14 +19,14 @@ function SplitBar({
     <div
       className="
         flex w-full
-        h-2 sm:h-2.5 md:h-3 lg:h-5 xl:h-8
+        h-2 sm:h-3 md:h-5
         rounded-full
         overflow-hidden
         bg-zinc-800
         shrink-0
+        max-w-70
       "
     >
-      {/* WIN */}
       <div
         className="
           h-full
@@ -39,7 +39,6 @@ function SplitBar({
         }}
       />
 
-      {/* LOSS */}
       <div
         className="
           h-full
