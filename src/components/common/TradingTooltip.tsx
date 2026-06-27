@@ -89,17 +89,17 @@ const TradingTooltip: React.FC<TradingTooltipProps> = ({
     return data.day.value > data.prevValue ? "▲" : "▼";
   };
 
-  const getStatusColor = () => {
-    if (data.day.value > data.maxAllowed) return "text-red-500";
-    if (data.day.value > averageLine) return "text-yellow-500";
-    return "text-green-500";
-  };
+  // const getStatusColor = () => {
+  //   if (data.day.value > data.maxAllowed) return "text-red-500";
+  //   if (data.day.value > averageLine) return "text-yellow-500";
+  //   return "text-green-500";
+  // };
 
-  const getStatusText = () => {
-    if (data.day.value > data.maxAllowed) return "بالای حد مجاز";
-    if (data.day.value > averageLine) return "بالای میانگین";
-    return "زیر میانگین";
-  };
+  // const getStatusText = () => {
+  //   if (data.day.value > data.maxAllowed) return "بالای حد مجاز";
+  //   if (data.day.value > averageLine) return "بالای میانگین";
+  //   return "زیر میانگین";
+  // };
 
   return (
     <div

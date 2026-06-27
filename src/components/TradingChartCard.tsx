@@ -52,7 +52,6 @@ const ChartSettingsPanel: React.FC<{
   isOpen: boolean;
   onClose: () => void;
 }> = ({ settings, onSettingsChange, isOpen, onClose }) => {
-  const isDark = document.documentElement.classList.contains("dark");
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
@@ -363,7 +362,6 @@ const TradingChartCard: React.FC<Props> = ({
 
   const { i18n } = useTranslation();
 
-  // تشخیص موبایل
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -397,14 +395,12 @@ const TradingChartCard: React.FC<Props> = ({
   const handleBarHover = (e: React.MouseEvent, index: number, day: any) => {
     const rect = e.currentTarget.getBoundingClientRect();
 
-    // تنظیمات متفاوت برای موبایل و دسکتاپ
     const tooltipWidth = isMobile ? 200 : 220;
     const tooltipHeight = isMobile ? 210 : 230;
 
     let x = rect.left + rect.width / 2 - tooltipWidth / 2;
     let y = rect.top - tooltipHeight - 12;
 
-    // جلوگیری از خروج از صفحه
     const padding = isMobile ? 10 : 16;
     if (x < padding) x = padding;
     if (x + tooltipWidth > window.innerWidth - padding) {
@@ -423,11 +419,9 @@ const TradingChartCard: React.FC<Props> = ({
       maxAllowed: data.maxAllowedLine,
     };
 
-    // اگر در مودال هستیم از props مودال استفاده کن
     if (isInModal && onTooltipShow) {
       onTooltipShow(tooltipDataObj, index, { x, y });
     } else {
-      // در غیر این صورت از state معمولی استفاده کن
       setTooltipPosition({ x, y });
       setTooltipData(tooltipDataObj);
     }
@@ -498,7 +492,6 @@ const TradingChartCard: React.FC<Props> = ({
     localStorage.setItem("chartSettings", JSON.stringify(settings));
   }, [settings]);
 
-  // تنظیمات SVG بر اساس موبایل یا دسکتاپ
   const chartHeight = isMobile
     ? settings.chartHeight * 0.8
     : settings.chartHeight;
@@ -910,12 +903,12 @@ const TradingChartCard: React.FC<Props> = ({
         />
       </div>
 
-      {/* تولتیپ معمولی - فقط در حالت غیر مودال نمایش داده می‌شود */}
       {!isInModal && hovered !== null && tooltipData && (
         <TradingTooltip
           data={tooltipData}
           index={tooltipData.index}
           position={tooltipPosition}
+          // @ts-ignore
           formatValue={formatValue}
           unit={data.unit}
           averageLine={data.averageLine}
@@ -928,7 +921,6 @@ const TradingChartCard: React.FC<Props> = ({
         />
       )}
 
-      {/* مودال - فقط در حالت غیر مودال نمایش داده می‌شود */}
       {!isInModal && (
         <ChartModal
           hideMaximize={true}

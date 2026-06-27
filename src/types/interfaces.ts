@@ -483,26 +483,26 @@ export interface SortIconProps {
 
 export interface Session {
   id: string;
-  name: { fa: string; en: string };
-  startHour: number;
-  endHour: number;
+  fa: string;
+  en: string;
+  start: number;
+  end: number;
   color: string;
-  bgColor: string;
-  borderColor: string;
-  dotColor: string;
+  bg: string;
+  border: string;
+  dot: string;
+  icon: string;
   mapX: number;
   mapY: number;
-  icon: string;
+  barTop: number;
 }
 
 export interface NewsEvent {
   id: string;
   fa: string;
   en: string;
-  flag: any;
+  flag: string;
   time: number;
   impact: "High" | "Medium" | "Low";
-  country: { fa: string; en: string };
-  countryFlag: string;
-  relatedPairs: string[];
+  pairs: string;
 }

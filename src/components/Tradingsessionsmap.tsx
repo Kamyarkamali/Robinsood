@@ -3,130 +3,9 @@ import { GrLanguage } from "react-icons/gr";
 import { CiCircleAlert } from "react-icons/ci";
 import { IoMdTime } from "react-icons/io";
 import { CiCalendar } from "react-icons/ci";
-export type Lang = "fa" | "en";
-
-interface Props {
-  lang?: Lang;
-}
-
-interface Session {
-  id: string;
-  fa: string;
-  en: string;
-  start: number;
-  end: number;
-  color: string;
-  bg: string;
-  border: string;
-  dot: string;
-  icon: string;
-  mapX: number;
-  mapY: number;
-  barTop: number;
-}
-
-interface NewsEvent {
-  id: string;
-  fa: string;
-  en: string;
-  flag: string;
-  time: number;
-  impact: "High" | "Medium" | "Low";
-  pairs: string;
-}
-
-const SESSIONS: Session[] = [
-  {
-    id: "ny",
-    fa: "سشن نیویورک",
-    en: "New York Session",
-    start: 16.5,
-    end: 25.5,
-    color: "#ef4444",
-    bg: "rgba(110,20,20,.72)",
-    border: "#c53030",
-    dot: "#fc8181",
-    icon: "🗽",
-    mapX: 20,
-    mapY: 46,
-    barTop: 6,
-  },
-  {
-    id: "lon",
-    fa: "سشن لندن",
-    en: "London Session",
-    start: 11.5,
-    end: 20.5,
-    color: "#d97706",
-    bg: "rgba(100,48,10,.72)",
-    border: "#b45309",
-    dot: "#fbbf24",
-    icon: "",
-    mapX: 44,
-    mapY: 30,
-    barTop: 38,
-  },
-  {
-    id: "tok",
-    fa: "سشن توکیو",
-    en: "Tokyo Session",
-    start: 3.5,
-    end: 12.5,
-    color: "#3b82f6",
-    bg: "rgba(23,45,115,.72)",
-    border: "#2563eb",
-    dot: "#60a5fa",
-    icon: "",
-    mapX: 86,
-    mapY: 40,
-    barTop: 62,
-  },
-  {
-    id: "syd",
-    fa: "سشن سیدنی",
-    en: "Sydney Session",
-    start: 0.5,
-    end: 9.5,
-    color: "#22c55e",
-    bg: "rgba(14,68,36,.72)",
-    border: "#15803d",
-    dot: "#4ade80",
-    icon: "",
-    mapX: 88,
-    mapY: 80,
-    barTop: 80,
-  },
-];
-
-const NEWS: NewsEvent[] = [
-  {
-    id: "n1",
-    fa: "شاخص CPI آمریکا",
-    en: "US CPI Index",
-    flag: "🇺🇸",
-    time: 14.0,
-    impact: "High",
-    pairs: "EURUSD, XAUUSD",
-  },
-  {
-    id: "n2",
-    fa: "نشست فدرال رزرو",
-    en: "Federal Reserve Meeting",
-    flag: "🇺🇸",
-    time: 17.5,
-    impact: "High",
-    pairs: "USDJPY, GBPUSD",
-  },
-  {
-    id: "n3",
-    fa: "تولید ناخالص ملی",
-    en: "UK GDP",
-    flag: "🇬🇧",
-    time: 11.0,
-    impact: "Medium",
-    pairs: "GBPUSD, EURGBP",
-  },
-];
+import type { NewsEvent, Session } from "../types/interfaces";
+import type { Lang } from "../types/type";
+import { NEWS, SESSIONS } from "../data/fakeData";
 
 const IMPACT_COLOR = { High: "#ef4444", Medium: "#f59e0b", Low: "#22c55e" };
 const IMPACT_BG = {
@@ -135,11 +14,9 @@ const IMPACT_BG = {
   Low: "rgba(34,197,94,.18)",
 };
 
-// Desktop bar height stays the same, mobile gets smaller
 const BAR_H_DESKTOP = 52;
 const BAR_H_MOBILE = 36;
 
-// =========== HELPERS ===========
 function getIranHour() {
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -178,15 +55,13 @@ interface TooltipState {
   elementId: string;
 }
 
-export default function TradingSessionsMap({ lang = "fa" }: Props) {
+export default function TradingSessionsMap({ lang = "fa" }: Lang) {
   const [cur, setCur] = useState(getIranHour());
-  const [active, setActive] = useState<Set<string>>(
-    new Set(SESSIONS.map((s) => s.id)),
-  );
+  const [active] = useState<Set<string>>(new Set(SESSIONS.map((s) => s.id)));
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredLine, setHoveredLine] = useState<string | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
+  const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [isTablet, setIsTablet] = useState<boolean>(false);
   const rootRef = useRef<HTMLDivElement>(null);
   const isRtl = lang === "fa";
 
@@ -216,7 +91,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
     return a.time - b.time;
   });
 
-  // Smart tooltip positioning — always stays inside viewport
   const handleTooltip = (
     e: React.MouseEvent | React.TouchEvent,
     type: TooltipType,
@@ -238,7 +112,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
     setHoveredLine(null);
   };
 
-  // Compute tooltip left/top clamped to viewport
   const getTooltipStyle = (tt: TooltipState) => {
     const tooltipW = isMobile ? 180 : 210;
     const tooltipH = 110;
@@ -247,10 +120,8 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
     const vh = window.innerHeight;
 
     let left = isRtl ? tt.x - tooltipW - 8 : tt.x + 15;
-    // Clamp horizontally
     left = Math.max(margin, Math.min(vw - tooltipW - margin, left));
 
-    // If tooltip goes off the right, flip to left
     if (!isRtl && left + tooltipW > vw - margin) {
       left = Math.max(margin, tt.x - tooltipW - 15);
     }
@@ -261,7 +132,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
     return { left, top, minWidth: tooltipW };
   };
 
-  // On mobile show fewer hour labels
   const hourLabels = isMobile
     ? [0, 4, 8, 12, 16, 20]
     : isTablet
@@ -278,7 +148,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
         }
       }}
     >
-      {/* Header */}
       <div className="flex justify-between items-start flex-wrap gap-2 px-3 sm:px-5 pt-4 pb-2">
         <div>
           <div className="flex items-center gap-2 text-sm sm:text-lg font-medium">
@@ -295,16 +164,11 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
         </div>
       </div>
 
-      {/* Main chart area */}
       <div className="mx-2 sm:mx-auto border border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#0d1628]">
-        {/* ─── Timeline header: two separate rows ─── */}
-
-        {/* ROW 1 — News badges only (no hour labels here) */}
         <div
           className="relative border-b border-[#1e2d3d]"
           style={{ height: isMobile ? 52 : 68, overflow: "visible" }}
         >
-          {/* Current time badge */}
           <div
             className="absolute z-30 flex flex-col items-center"
             style={{
@@ -341,7 +205,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
             />
           </div>
 
-          {/* News badges */}
           {sorted.map((n, i) => {
             const isPast = n.time < cur;
             const zIdx = isPast ? 15 - i : 25 + i;
@@ -390,7 +253,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
                     minWidth: isMobile ? 32 : 45,
                   }}
                 >
-                  {/* On mobile: compact — just icon + time */}
                   {isMobile ? (
                     <>
                       <CiCalendar
@@ -441,7 +303,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
           })}
         </div>
 
-        {/* ROW 2 — Hour labels only */}
         <div
           className="relative border-b border-[#1e2d3d]"
           style={{ height: isMobile ? 20 : 24 }}
@@ -461,9 +322,7 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
           ))}
         </div>
 
-        {/* ─── Map area ─── */}
         <div className="relative overflow-hidden" style={{ height: mapH }}>
-          {/* Dot grid SVG background + session dots */}
           <svg
             className="absolute inset-0 w-full h-full"
             viewBox="0 0 1000 420"
@@ -539,7 +398,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
             })}
           </svg>
 
-          {/* Current time vertical line */}
           <div
             className="absolute top-0 bottom-0 w-px z-10 transition-all duration-300"
             style={{
@@ -554,7 +412,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
                   : "none",
             }}
           />
-          {/* Current time hit area */}
           <div
             className="absolute top-0 bottom-0 z-20 tooltip-trigger"
             style={{
@@ -590,7 +447,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
             }}
           />
 
-          {/* News vertical lines */}
           {sorted.map((n) => {
             const isPast = n.time < cur;
             const isHovered = hoveredLine === `news-${n.id}`;
@@ -612,7 +468,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
               />
             );
           })}
-          {/* News hit areas */}
           {sorted.map((n) => (
             <div
               key={`hit-${n.id}`}
@@ -647,7 +502,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
             />
           ))}
 
-          {/* Session bars */}
           {SESSIONS.map((s) => {
             if (!active.has(s.id)) return null;
             const live = isLive(s, cur);
@@ -657,7 +511,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
                 key={`${s.id}-${sH}`}
                 className="absolute flex items-center overflow-hidden rounded-lg border"
                 style={{
-                  // On RTL, the bar starts from the right edge of the timeline
                   [isRtl ? "left" : "right"]: pct(sH),
                   width: pct(eH - sH),
                   top: `${s.barTop}%`,
@@ -683,7 +536,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
                     >
                       {s.icon}
                     </span>
-                    {/* Hide text on very small bars */}
                     <div
                       style={{
                         textAlign: isRtl ? "right" : "left",
@@ -726,12 +578,10 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
           })}
         </div>
 
-        {/* ─── Bottom tick strip ─── */}
         <div
           className="relative border-t border-[#1e2d3d] px-3"
           style={{ height: isMobile ? 16 : 20 }}
         >
-          {/* Current time dot */}
           <div
             className="absolute w-2 h-2 rounded-full border border-blue-400 bg-blue-400 tooltip-trigger transition-all duration-300"
             style={{
@@ -774,7 +624,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
             }}
           />
 
-          {/* News dots */}
           {sorted.map((n) => {
             const isHovered = hoveredLine === `news-${n.id}`;
             return (
@@ -820,7 +669,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
         </div>
       </div>
 
-      {/* ─── Footer note ─── */}
       <div className="flex items-center justify-end w-full font-normal gap-1.5 px-3 sm:px-4 pt-2 text-[9px] sm:text-[10px] text-[#ffffff]">
         <p className="flex items-center gap-2">
           {lang === "fa"
@@ -830,7 +678,6 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
         <CiCircleAlert size={isMobile ? 14 : 18} />
       </div>
 
-      {/* ─── Tooltip ─── */}
       {tooltip && (
         <div
           className="fixed z-50 pointer-events-none rounded-xl p-2.5 sm:p-3 shadow-xl"
@@ -844,7 +691,7 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
           {tooltip.type === "current" && (
             <>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse flex-shrink-0" />
+                <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shrink-0" />
                 <span className="text-xs sm:text-sm font-bold text-blue-400 truncate">
                   {tooltip.label}
                 </span>
@@ -875,7 +722,7 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
                   }}
                 >
                   <span
-                    className="w-1.5 h-1.5 rounded-full animate-pulse flex-shrink-0"
+                    className="w-1.5 h-1.5 rounded-full animate-pulse shrink-0"
                     style={{ background: IMPACT_COLOR[tooltip.data.impact] }}
                   />
                   {tooltip.data.impact} Impact
@@ -889,7 +736,7 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="2"
-                  className="flex-shrink-0"
+                  className="shrink-0"
                 >
                   <polyline points="22 7 13.5 15.5 8.5 10.5 2 17" />
                   <polyline points="16 7 22 7 22 13" />
@@ -905,7 +752,7 @@ export default function TradingSessionsMap({ lang = "fa" }: Props) {
           {tooltip.type === "tick" && tooltip.data && (
             <>
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse flex-shrink-0" />
+                <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shrink-0" />
                 <span className="text-xs sm:text-sm font-bold text-purple-400 truncate">
                   {lang === "fa" ? tooltip.data.fa : tooltip.data.en}
                 </span>

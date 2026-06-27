@@ -2413,61 +2413,6 @@ export const avatarData: AvatarItem[] = [
   },
 ];
 
-export const sessions: Session[] = [
-  {
-    id: "newyork",
-    name: { fa: "سشن نیویورک", en: "New York Session" },
-    startHour: 16.5,
-    endHour: 25.5, // wraps past midnight: 01:30
-    color: "#ef4444",
-    bgColor: "rgba(127,29,29,0.7)",
-    borderColor: "#dc2626",
-    dotColor: "#f87171",
-    mapX: 22,
-    mapY: 38,
-    icon: "🗽",
-  },
-  {
-    id: "london",
-    name: { fa: "سشن لندن", en: "London Session" },
-    startHour: 11.5,
-    endHour: 20.5,
-    color: "#f59e0b",
-    bgColor: "rgba(120,53,15,0.7)",
-    borderColor: "#d97706",
-    dotColor: "#fbbf24",
-    mapX: 47.5,
-    mapY: 28,
-    icon: "🏰",
-  },
-  {
-    id: "tokyo",
-    name: { fa: "سشن توکیو", en: "Tokyo Session" },
-    startHour: 3.5,
-    endHour: 12.5,
-    color: "#3b82f6",
-    bgColor: "rgba(30,58,138,0.7)",
-    borderColor: "#2563eb",
-    dotColor: "#60a5fa",
-    mapX: 78,
-    mapY: 34,
-    icon: "🗼",
-  },
-  {
-    id: "sydney",
-    name: { fa: "سشن سیدنی", en: "Sydney Session" },
-    startHour: 0.5,
-    endHour: 9.5,
-    color: "#22c55e",
-    bgColor: "rgba(20,83,45,0.7)",
-    borderColor: "#16a34a",
-    dotColor: "#4ade80",
-    mapX: 82,
-    mapY: 72,
-    icon: "🏗️",
-  },
-];
-
 export const cityPositions: Record<string, [number, number]> = {
   newyork: [22, 38],
   london: [47.5, 28],
@@ -2475,37 +2420,7 @@ export const cityPositions: Record<string, [number, number]> = {
   sydney: [82, 72],
 };
 
-export const newsEvents: NewsEvent[] = [
-  {
-    id: "news1",
-    title: { fa: "شاخص CPI آمریکا", en: "US CPI Index" },
-    time: 14,
-    impact: "High",
-    country: { fa: "آمریکا", en: "United States" },
-    countryFlag: "🇺🇸",
-    relatedPairs: ["EURUSD", "XAUUSD"],
-  },
-  {
-    id: "news2",
-    title: { fa: "نشست فدرال رزرو", en: "Federal Reserve Meeting" },
-    time: 17.5,
-    impact: "High",
-    country: { fa: "آمریکا", en: "United States" },
-    countryFlag: "🇺🇸",
-    relatedPairs: ["USDJPY", "GBPUSD"],
-  },
-  {
-    id: "news3",
-    title: { fa: "شاخص NFP", en: "Non-Farm Payrolls" },
-    time: 16.5,
-    impact: "Medium",
-    country: { fa: "آمریکا", en: "United States" },
-    countryFlag: "🇺🇸",
-    relatedPairs: ["USDCAD", "AUDUSD"],
-  },
-];
-
-const SESSIONS: Session[] = [
+export const SESSIONS: Session[] = [
   {
     id: "ny",
     fa: "سشن نیویورک",
@@ -2531,7 +2446,7 @@ const SESSIONS: Session[] = [
     bg: "rgba(100,48,10,.72)",
     border: "#b45309",
     dot: "#fbbf24",
-    icon: "🏰",
+    icon: "",
     mapX: 44,
     mapY: 30,
     barTop: 38,
@@ -2546,9 +2461,9 @@ const SESSIONS: Session[] = [
     bg: "rgba(23,45,115,.72)",
     border: "#2563eb",
     dot: "#60a5fa",
-    icon: "🗼",
+    icon: "",
     mapX: 86,
-    mapY: 30,
+    mapY: 40,
     barTop: 62,
   },
   {
@@ -2561,14 +2476,14 @@ const SESSIONS: Session[] = [
     bg: "rgba(14,68,36,.72)",
     border: "#15803d",
     dot: "#4ade80",
-    icon: "🦘",
+    icon: "",
     mapX: 88,
-    mapY: 74,
+    mapY: 80,
     barTop: 80,
   },
 ];
 
-const NEWS: NewsEvent[] = [
+export const NEWS: NewsEvent[] = [
   {
     id: "n1",
     fa: "شاخص CPI آمریکا",

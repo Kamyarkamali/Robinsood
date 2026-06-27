@@ -10,7 +10,6 @@ import chaleng from "../assets/images/chaleng.png";
 import wallet from "../assets/images/wallet.png";
 import { MdShowChart } from "react-icons/md";
 import { MdOutlineShowChart } from "react-icons/md";
-import { FaUser } from "react-icons/fa6";
 import { TbChartHistogram } from "react-icons/tb";
 import { FiXCircle } from "react-icons/fi";
 import { PiChartLineDown } from "react-icons/pi";
