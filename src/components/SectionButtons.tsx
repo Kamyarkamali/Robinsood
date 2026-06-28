@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import ShowSectionItems from "./ShowSectionItems";
 import { buttonStyles } from "../styles/buttonStyles";
 import TradingCover from "../module/Tradingcover ";
+import CardComponent from "../pages/CardComponent";
 
 function SectionButtons() {
   const [activeId, setActiveId] = useState<number>(1);
@@ -14,9 +15,11 @@ function SectionButtons() {
   const { active, darkInactive, lightInactive } = buttonStyles;
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col items-center">
       <TradingCover />
-      <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-5 font-lahzeh font-extrabold">
+      <CardComponent />
+
+      {/* <div className="grid grid-cols-2  sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 mt-5 font-lahzeh font-extrabold">
         {buttonSection.map((items) => {
           const isActive = activeId === items.id;
 
@@ -57,7 +60,7 @@ function SectionButtons() {
             </Button>
           );
         })}
-      </div>
+      </div> */}
 
       <div className="mt-6 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         {/* قسمت آیتم ها */}
