@@ -519,3 +519,12 @@ export interface ModalTooltipProps {
   modalRef?: React.RefObject<HTMLDivElement>;
   isMobile?: boolean;
 }
+
+export interface Card {
+  title: string;
+  desc: string;
+  icon: string;
+  border: string;
+  glow: string;
+  arrow: string;
+}

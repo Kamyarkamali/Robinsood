@@ -10,7 +10,6 @@ const hoverStyles: Record<HoverVariant, string> = {
     hover:-translate-y-0.5
     hover:shadow-[0_0_20px_rgba(59,130,246,0.35)]
     hover:border-blue-400/40
-
     before:content-['']
     before:absolute
     before:top-0

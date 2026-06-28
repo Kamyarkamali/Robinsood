@@ -7,7 +7,7 @@ function WellcomeComponent() {
   const { darkInactive, lightInactive } = buttonStyles;
 
   return (
-    <div className="w-full sm:w-auto p-2 rounded-3xl border dark:border-[#3a3246] border-gray-300">
+    <div className="w-full sm:w-auto p-2 rounded-3xl dark:border-[#3a3246] border-gray-300">
       <Button
         hoverVariant="trading"
         borderRadios="rounded-3xl"

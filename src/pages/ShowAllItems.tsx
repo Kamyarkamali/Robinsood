@@ -26,7 +26,7 @@ function ShowAllItems() {
   const [showTabale, setShowTabale] = useState<string>("عددی");
 
   return (
-    <div>
+    <>
       <div className="w-full lg:w-auto flex justify-start lg:justify-end">
         <WellcomeComponent />
       </div>
@@ -50,17 +50,17 @@ function ShowAllItems() {
         </div>
       </div>
       <div className="w-full max-w-350 mx-auto mt-8 px-2 sm:px-3 lg:px-4">
-        <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:px-8 md:px-3 sm:px-5 px-5 lg:text-[32px] font-bold mb-4">
+        {/* <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:px-8 md:px-3 sm:px-5 px-5 lg:text-[32px] font-bold mb-4">
           {t("labels.parametr4")}
-        </h1>
-        <div className="w-full">
+        </h1> */}
+        <div className="w-full ">
           <TradingChart />
         </div>
         <div className="w-full flex flex-col lg:w-auto justify-start mt-8">
           <div className="w-full flex flex-col md:flex-row items-center">
-            <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:px-8 md:px-3 sm:px-5 px-5 lg:text-[32px] font-bold mb-4">
+            {/* <h1 className="dark:text-white text-gray-700 text-[15px] sm:text-[17px] md:text-[25px] lg:px-8 md:px-3 sm:px-5 px-5 lg:text-[32px] font-bold mb-4">
               {t("items.item5")}
-            </h1>
+            </h1> */}
             <ChangeTabale
               showTabale={showTabale}
               setShowTabale={setShowTabale}
@@ -79,9 +79,9 @@ function ShowAllItems() {
         </div>
 
         <div className="w-full mt-8">
-          <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+          {/* <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
             {t("tabale2.calander")}
-          </h1>
+          </h1> */}
         </div>
       </div>
       <div className="w-full grid grid-cols-1">
@@ -89,9 +89,9 @@ function ShowAllItems() {
         <TradingDualChart />
       </div>
       <div className="flex flex-col gap-6 pr-4 pl-4">
-        <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+        {/* <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           {t("card9.title")}
-        </h1>
+        </h1> */}
 
         <TradingSessionsMap />
 
@@ -99,24 +99,24 @@ function ShowAllItems() {
       </div>
 
       <div className="mt-8">
-        <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+        {/* <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           {t("labels.parametr7")}
-        </h1>
+        </h1> */}
         <TradingAnalysisPanel />
       </div>
       <div className="mt-8">
-        <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+        {/* <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           {t("labels.paramer8")}
-        </h1>
+        </h1> */}
         <VSComparison />
       </div>
       <div className="mt-8">
-        <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
+        {/* <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
           {t("labels.parametr9")}
-        </h1>
+        </h1> */}
         <TradingTable />
       </div>
-    </div>
+    </>
   );
 }
 

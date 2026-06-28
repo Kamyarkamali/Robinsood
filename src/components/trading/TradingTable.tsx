@@ -85,7 +85,6 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
             <ChevronDown size={14} />
           </button>
         </div>
-
         <div className="px-4 sm:px-6 py-4">
           <h2
             className={`${i18next.language === "fa" ? "text-right" : "text-left"} text-sm font-bold text-gray-700 dark:text-gray-200`}
@@ -93,22 +92,20 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
             {i18next.language === "fa" ? "همه معاملات" : "All trades"}
           </h2>
         </div>
-
-        {/* Table */}
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-75">
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full min-w-[700px]">
             <thead>
               <tr className="border-b border-gray-200 dark:border-[#3a3a3a]">
                 {columns.map((col) => (
                   <th
                     key={col.key}
                     onClick={() => handleSort(col.key)}
-                    className={`px-3 sm:px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 select-none
-                        ${col.key !== "colorBar" ? "cursor-pointer hover:text-gray-800 dark:hover:text-gray-200" : ""}
-                        ${col.key === "colorBar" ? "w-16" : ""}
-                      `}
+                    className={`px-3 sm:px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 select-none whitespace-nowrap
+              ${col.key !== "colorBar" ? "cursor-pointer hover:text-gray-800 dark:hover:text-gray-200" : ""}
+              ${col.key === "colorBar" ? "w-16" : ""}
+            `}
                   >
-                    <div className="flex items-center justify-end gap-1 text-nowrap">
+                    <div className="flex items-center justify-end gap-1">
                       <SortIcon
                         col={col.key}
                         sortCol={sortCol}
@@ -132,12 +129,9 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
                   <tr
                     key={trade.id}
                     className={`border-b border-gray-100 dark:border-[#3a3a3a]/60 transition-colors
-                        ${
-                          idx % 2 === 0
-                            ? "bg-white dark:bg-[#2B2B2B]"
-                            : "bg-gray-50/50 dark:bg-[#333333]"
-                        }
-                        hover:bg-gray-100 dark:hover:bg-[#3a3a3a]`}
+              ${idx % 2 === 0 ? "bg-white dark:bg-[#2B2B2B]" : "bg-gray-50/50 dark:bg-[#333333]"}
+              hover:bg-gray-100 dark:hover:bg-[#3a3a3a]
+            `}
                   >
                     <td className="px-3 sm:px-4 py-3 text-right">
                       <div
@@ -145,13 +139,13 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
                       />
                     </td>
 
-                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-gray-700 dark:text-gray-300 font-medium">
+                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
                       {trade.id}
                     </td>
 
                     <td className="px-3 sm:px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <span className="text-sm font-normal text-gray-800 dark:text-gray-100">
+                        <span className="text-sm font-normal text-gray-800 dark:text-gray-100 whitespace-nowrap">
                           {i18next.language === "fa" ? "بیت کوین" : "BTC"}
                         </span>
                         <div className="w-7 h-7 rounded-full bg-gray-200 dark:bg-[#4a4a4a] flex items-center justify-center text-xs font-bold text-orange-500">
@@ -160,24 +154,23 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
                       </div>
                     </td>
 
-                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-gray-700 dark:text-gray-300">
+                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">
                       {trade.volume}
                     </td>
 
-                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-red-500 font-medium">
+                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-red-500 font-medium whitespace-nowrap">
                       {trade.sl}
                     </td>
 
-                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-emerald-500 font-medium">
+                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-emerald-500 font-medium whitespace-nowrap">
                       {trade.tp}
                     </td>
 
-                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-gray-500 dark:text-gray-400">
+                    <td className="px-3 sm:px-4 py-3 text-right text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
                       {trade.commission}
                     </td>
 
-                    {/* Profit/Loss */}
-                    <td className="px-3 sm:px-4 py-3 text-right text-sm font-semibold">
+                    <td className="px-3 sm:px-4 py-3 text-right text-sm font-semibold whitespace-nowrap">
                       <span
                         className={
                           isProfit ? "text-emerald-500" : "text-red-500"
@@ -190,11 +183,11 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
 
                     <td className="px-3 sm:px-4 py-3 text-right">
                       <div className="flex items-center justify-end gap-2">
-                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
+                        <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold whitespace-nowrap">
                           <TrendingUp size={11} />
                           <span>{t(trade.pointBadgeLabel)}</span>
                         </div>
-                        <span className="text-sm font-bold text-gray-800 dark:text-gray-100">
+                        <span className="text-sm font-bold text-gray-800 dark:text-gray-100 whitespace-nowrap">
                           {trade.points.toLocaleString()}
                         </span>
                       </div>
@@ -218,7 +211,113 @@ export default function TradingTable({ lang = "fa" }: TradingTableProps) {
             </tbody>
           </table>
         </div>
+        <div className="block md:hidden space-y-3 px-4 pb-4">
+          {paginated.map((trade, idx) => {
+            const isProfit = trade.profitLoss >= 0;
+            return (
+              <div
+                key={trade.id}
+                className={`rounded-xl border border-gray-200 dark:border-[#3a3a3a] p-4 transition-colors
+          ${idx % 2 === 0 ? "bg-white dark:bg-[#2B2B2B]" : "bg-gray-50/50 dark:bg-[#333333]"}
+        `}
+              >
+                {/* هدر کارت: ID و وضعیت سود/زیان */}
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className={`w-2.5 h-2.5 rounded-full ${isProfit ? "bg-emerald-500" : "bg-red-500"}`}
+                    />
+                    <span className="text-sm font-bold text-gray-700 dark:text-gray-200">
+                      #{trade.id}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {i18next.language === "fa" ? "بیت کوین" : "BTC"}
+                    </span>
+                    <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-[#4a4a4a] flex items-center justify-center text-[8px] font-bold text-orange-500">
+                      <CoinIcon />
+                    </div>
+                  </div>
+                </div>
 
+                {/* اطلاعات اصلی در گرید */}
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  <div>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      {i18next.language === "fa" ? "حجم" : "Volume"}
+                    </p>
+                    <p className="text-xs font-semibold text-gray-700 dark:text-gray-200">
+                      {trade.volume}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      SL
+                    </p>
+                    <p className="text-xs font-semibold text-red-500">
+                      {trade.sl}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      TP
+                    </p>
+                    <p className="text-xs font-semibold text-emerald-500">
+                      {trade.tp}
+                    </p>
+                  </div>
+                </div>
+
+                {/* سود/زیان و امتیاز */}
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100 dark:border-[#3a3a3a]/60">
+                  <div>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      {i18next.language === "fa" ? "سود/زیان" : "P/L"}
+                    </p>
+                    <p
+                      className={`text-sm font-bold ${isProfit ? "text-emerald-500" : "text-red-500"}`}
+                    >
+                      {trade.profitLoss > 0 ? "+" : ""}
+                      {trade.profitLoss}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500">
+                      {i18next.language === "fa" ? "امتیاز" : "Points"}
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-sm font-bold text-gray-800 dark:text-gray-100">
+                        {trade.points.toLocaleString()}
+                      </span>
+                      <div className="px-2 py-0.5 rounded-lg bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[8px] font-bold whitespace-nowrap">
+                        {t(trade.pointBadgeLabel)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* کارمزد (اختیاری) */}
+                {trade.commission && (
+                  <div className="mt-2 pt-2 border-t border-gray-100 dark:border-[#3a3a3a]/30 flex justify-between">
+                    <span className="text-[10px] text-gray-400 dark:text-gray-500">
+                      {i18next.language === "fa" ? "کارمزد" : "Commission"}
+                    </span>
+                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                      {trade.commission}
+                    </span>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          {paginated.length === 0 && (
+            <div className="py-16 text-center text-gray-400 dark:text-gray-600 text-sm">
+              {i18next.language === "fa" ? "داده‌ای یافت نشد" : "No data found"}
+            </div>
+          )}
+        </div>
         {totalPages > 1 && (
           <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-[#3a3a3a]">
             <span className="text-xs text-gray-400 dark:text-gray-500">

@@ -100,7 +100,7 @@ export default function TradingCover({
               {t.subtitle}
             </p>
 
-            <div className="mt-2 flex items-center max-w-full gap-2 rounded-xl bg-white/5 px-3 py-2 backdrop-blur-sm sm:max-w-[80%] md:max-w-[65%]">
+            {/* <div className="mt-2 flex items-center max-w-full gap-2 rounded-xl bg-white/5 px-3 py-2 backdrop-blur-sm sm:max-w-[80%] md:max-w-[65%]">
               <div className="text-xs leading-relaxed text-slate-300 sm:text-sm">
                 {badgeLines.map((line, i) => (
                   <div key={i}>{highlightNumbers(line)}</div>
@@ -110,7 +110,7 @@ export default function TradingCover({
                 size={30}
                 className="mt-0.5 h-4 w-4 shrink-0 text-purple-400"
               />
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

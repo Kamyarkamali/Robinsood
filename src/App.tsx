@@ -23,6 +23,18 @@ function App() {
     document.documentElement.dir = i18n.language === "fa" ? "rtl" : "ltr";
   }, [i18n.language]);
 
+  useEffect(() => {
+    const all = document.querySelectorAll("*");
+
+    all.forEach((el) => {
+      const rect = el.getBoundingClientRect();
+
+      if (rect.right > window.innerWidth) {
+        console.log("overflow:", el, rect.width);
+      }
+    });
+  }, []);
+
   if (loading) return <TradeLoader />;
 
   return (

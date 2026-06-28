@@ -168,14 +168,14 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div
-      className={`bg-[#1a1230] dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[10px] sm:text-[11px] shadow-2xl max-w-[200px] sm:max-w-none ${isRtl ? "text-right" : "text-left"}`}
+      className={`bg-[#1a1230] dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[10px] sm:text-[11px] shadow-2xl max-w-[160px] sm:max-w-[200px] ${isRtl ? "text-right" : "text-left"}`}
       style={{
         backgroundColor: settings?.colors?.background || "#1a1230",
         borderColor: settings?.colors?.primary || "#3b1f7a",
       }}
     >
       <p
-        className="text-[#a78bfa] font-bold mb-0.5 text-[10px] sm:text-[11px]"
+        className="text-[#a78bfa] font-bold mb-0.5 text-[9px] sm:text-[11px]"
         style={{ color: settings?.colors?.secondary || "#a78bfa" }}
       >
         {label}
@@ -188,7 +188,7 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
             style={{
               color: p.stroke || p.color || settings?.colors?.text || "#a0a0c0",
             }}
-            className="leading-tight text-[9px] sm:text-[10px]"
+            className="leading-tight text-[8px] sm:text-[10px]"
           >
             {p.name}: <strong>{Number(p.value).toFixed(2)}</strong>
           </p>
@@ -211,7 +211,7 @@ const IconBtn = ({
   <button
     onClick={onClick}
     title={title}
-    className={`w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150
+    className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150
       bg-[#e8e4f5] bg-transparent
       ${
         active
@@ -270,10 +270,10 @@ export default function TradingChart() {
 
   const allData = useMemo(() => generateData(timeFrame), [timeFrame]);
   const TOTAL = allData.length;
-  const MIN_VIS = 20;
+  const MIN_VIS = 10;
 
   const [visibleCount, setVisibleCount] = useState(
-    window.innerWidth < 640 ? 50 : 80,
+    window.innerWidth < 480 ? 25 : window.innerWidth < 640 ? 35 : 80,
   );
   const [scrollOffset, setScrollOffset] = useState<number>(0);
   const clampedOff = Math.max(0, Math.min(scrollOffset, TOTAL - visibleCount));
@@ -293,10 +293,10 @@ export default function TradingChart() {
   useEffect(() => {
     const updateHeight = () => {
       const w = window.innerWidth;
-      if (w < 480) setChartHeight(250);
-      else if (w < 640) setChartHeight(280);
-      else if (w < 768) setChartHeight(320);
-      else if (w < 1024) setChartHeight(380);
+      if (w < 480) setChartHeight(200);
+      else if (w < 640) setChartHeight(240);
+      else if (w < 768) setChartHeight(280);
+      else if (w < 1024) setChartHeight(340);
       else setChartHeight(420);
     };
     updateHeight();
@@ -307,10 +307,10 @@ export default function TradingChart() {
   useEffect(() => {
     const updateVisibleCount = () => {
       const w = window.innerWidth;
-      if (w < 480) setVisibleCount(30);
-      else if (w < 640) setVisibleCount(40);
-      else if (w < 768) setVisibleCount(50);
-      else if (w < 1024) setVisibleCount(60);
+      if (w < 480) setVisibleCount(20);
+      else if (w < 640) setVisibleCount(30);
+      else if (w < 768) setVisibleCount(40);
+      else if (w < 1024) setVisibleCount(50);
       else setVisibleCount(80);
     };
     updateVisibleCount();
@@ -380,33 +380,33 @@ export default function TradingChart() {
     <div
       dir={isRtl ? "rtl" : "ltr"}
       className="
-    w-full
-    max-w-full
-    xl:max-w-325
-    mx-auto
-    bg-white
-    border-[#e0d9f5]
-    rounded-2xl sm:rounded-3xl lg:rounded-4xl
-    border-2 sm:border-3 lg:border-5
-    bg-linear-to-t
-    dark:from-[#282828] dark:to-[#2a2929]
-    dark:border-[#353535]
-    dark:bg-[#242424]
-    p-2 sm:p-3 lg:p-5
-    flex flex-col gap-2 sm:gap-3
-    overflow-hidden
-  "
+        w-full
+        max-w-full
+        mx-auto
+        bg-white
+        border-[#e0d9f5]
+        rounded-2xl sm:rounded-3xl lg:rounded-4xl
+        border-2 sm:border-3 lg:border-5
+        bg-linear-to-t
+        dark:from-[#282828] dark:to-[#2a2929]
+        dark:border-[#353535]
+        dark:bg-[#242424]
+        p-1.5 sm:p-3 lg:p-5
+        flex flex-col gap-1.5 sm:gap-3
+        overflow-hidden
+      "
     >
+      {/* سطر اول: دکمه‌های mode و تنظیمات */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
         <div
-          className={`flex items-center gap-1.5 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex items-center gap-1 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
         >
           <div className="flex bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1">
             {(["balance", "profit"] as Mode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => setMode(m)}
-                className={`px-2 sm:px-4 py-1 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-[1755.43px] cursor-pointer font-medium text-[10px] sm:text-[14px] transition-all duration-200
+                className={`px-1.5 sm:px-4 py-0.5 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-[1755.43px] cursor-pointer font-medium text-[8px] sm:text-[14px] transition-all duration-200 whitespace-nowrap
                   ${
                     mode === m
                       ? "bg-linear-to-b from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
@@ -441,7 +441,7 @@ export default function TradingChart() {
               }
               title={t("chart.zoomOut")}
             >
-              <MdOutlineZoomOut size={23} />
+              <MdOutlineZoomOut size={window.innerWidth < 480 ? 18 : 23} />
             </IconBtn>
 
             <IconBtn
@@ -450,28 +450,29 @@ export default function TradingChart() {
               }
               title={t("chart.zoomIn")}
             >
-              <MdOutlineZoomIn size={23} />
+              <MdOutlineZoomIn size={window.innerWidth < 480 ? 18 : 23} />
             </IconBtn>
 
             <button
               onClick={openSettingsPanel}
-              className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
+              className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
               title="تنظیمات چارت"
             >
-              <Settings className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+              <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
             </button>
           </div>
         </div>
 
+        {/* تایم‌فریم‌ها - اسکرول افقی در موبایل */}
         <div
-          className={`flex items-center  gap-0.5 sm:gap-1 dark:dark:bg-[#454242] p-3 rounded-2xl overflow-x-auto sm:pb- sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
-          style={{ scrollbarWidth: "none" }}
+          className={`flex items-center gap-0.5 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {TIME_FRAMES.map((tf) => (
             <button
               key={tf}
               onClick={() => setTimeFrame(tf)}
-              className={`shrink-0 px-1.5 sm:px-3  py-0.5 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[8px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
+              className={`shrink-0 px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[7px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
                 ${
                   timeFrame === tf
                     ? "bg-linear-to-b dark:from-[#C4C4C426] dark:to-[#EBEBEB1A] text-[#7c3aed] dark:text-[#c4b5fd]"
@@ -484,6 +485,7 @@ export default function TradingChart() {
         </div>
       </div>
 
+      {/* چارت */}
       <div className="flex-1 min-h-0">
         <div
           ref={wrapRef}
@@ -494,25 +496,25 @@ export default function TradingChart() {
           onTouchStart={onTS}
           onTouchMove={onTM}
           className="
-    w-full
-    select-none
-    cursor-grab
-    active:cursor-grabbing
-    relative
-    min-h-50
-    sm:min-h-70
-    lg:min-h-95
-  "
+            w-full
+            select-none
+            cursor-grab
+            active:cursor-grabbing
+            relative
+            min-h-[150px]
+            sm:min-h-[200px]
+            lg:min-h-[300px]
+          "
           style={{ height: chartHeight }}
         >
-          <ResponsiveContainer width="95%" height="100%">
+          <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={visibleData}
               margin={{
-                top: 10,
-                right: 10,
-                left: 10,
-                bottom: 10,
+                top: 5,
+                right: window.innerWidth < 480 ? 5 : 10,
+                left: window.innerWidth < 480 ? 5 : 10,
+                bottom: 5,
               }}
             >
               <defs>
@@ -557,9 +559,9 @@ export default function TradingChart() {
                     fontSize: Math.min(
                       settings.sizes.fontSize,
                       window.innerWidth < 480
-                        ? 8
+                        ? 7
                         : window.innerWidth < 640
-                          ? 9
+                          ? 8
                           : settings.sizes.fontSize,
                     ),
                   }}
@@ -570,9 +572,9 @@ export default function TradingChart() {
                       Math.min(
                         settings.axis.tickCount,
                         window.innerWidth < 480
-                          ? 3
+                          ? 2
                           : window.innerWidth < 640
-                            ? 4
+                            ? 3
                             : settings.axis.tickCount,
                       ),
                   )}
@@ -588,9 +590,9 @@ export default function TradingChart() {
                     fontSize: Math.min(
                       settings.sizes.fontSize,
                       window.innerWidth < 480
-                        ? 8
+                        ? 7
                         : window.innerWidth < 640
-                          ? 9
+                          ? 8
                           : settings.sizes.fontSize,
                     ),
                   }}
@@ -598,9 +600,9 @@ export default function TradingChart() {
                   tickLine={false}
                   width={
                     window.innerWidth < 480
-                      ? 35
+                      ? 30
                       : window.innerWidth < 640
-                        ? 45
+                        ? 40
                         : 60
                   }
                   tickFormatter={(v) => {
@@ -625,9 +627,9 @@ export default function TradingChart() {
                   strokeWidth={Math.min(
                     settings.lineWidths.main,
                     window.innerWidth < 480
-                      ? 1.5
+                      ? 1.2
                       : window.innerWidth < 640
-                        ? 2
+                        ? 1.5
                         : settings.lineWidths.main,
                   )}
                   fill="url(#balanceGrad)"
@@ -711,11 +713,11 @@ export default function TradingChart() {
                   name={t("chart.equity")}
                   barSize={Math.max(
                     window.innerWidth < 480
-                      ? 2
+                      ? 1.5
                       : window.innerWidth < 640
-                        ? 3
+                        ? 2
                         : settings.sizes.barSize,
-                    Math.round(800 / visibleCount),
+                    Math.round(600 / visibleCount),
                   )}
                   shape={(props: any) => (
                     <CandleBar
@@ -736,8 +738,7 @@ export default function TradingChart() {
         </div>
       </div>
 
-      {/* راهنما */}
-      <p className="text-center text-[8px] sm:text-[9px] dark:text-white text-[#c0b8d8] -mt-0.5">
+      <p className="text-center text-[7px] sm:text-[9px] dark:text-white text-[#c0b8d8] -mt-0.5">
         {isRtl
           ? `اسکرول برای زوم · درگ برای حرکت · ${visibleCount}/${TOTAL} کندل`
           : `scroll to zoom · drag to pan · ${visibleCount}/${TOTAL} bars`}
@@ -745,24 +746,24 @@ export default function TradingChart() {
 
       {settings.display.showLegend && (
         <div
-          className={`flex flex-wrap justify-center gap-x-2 sm:gap-x-5 gap-y-1 sm:gap-y-2 ${isRtl ? "flex-row-reverse" : ""}`}
+          className={`flex flex-wrap justify-center gap-x-1.5 sm:gap-x-5 gap-y-0.5 sm:gap-y-2 ${isRtl ? "flex-row-reverse" : ""}`}
         >
           {SERIES_CONFIG.map(({ key, tKey, color }) => (
             <button
               key={key}
               onClick={() => toggle(key)}
-              className="flex items-center gap-1 sm:gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-1 sm:px-1.5 py-0.5 sm:py-1 transition-opacity duration-200"
+              className="flex items-center gap-0.5 sm:gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-0.5 sm:px-1.5 py-0.5 sm:py-1 transition-opacity duration-200"
               style={{ opacity: activeSeries[key] ? 1 : 0.3 }}
             >
               <span
-                className="w-2 h-2 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 transition-shadow duration-200"
+                className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 transition-shadow duration-200"
                 style={{
                   background: color,
                   boxShadow: activeSeries[key] ? `0 0 7px ${color}` : "none",
                 }}
               />
               <span
-                className="text-[9px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
+                className="text-[7px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
                 style={{ color: activeSeries[key] ? color : "#b0a8cc" }}
               >
                 {t(tKey)}
