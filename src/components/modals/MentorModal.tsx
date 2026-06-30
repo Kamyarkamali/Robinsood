@@ -47,13 +47,13 @@ function MentorModal() {
             className="
               relative
               w-full
-              max-w-[520px]
+              max-w-130
               overflow-hidden
               rounded-3xl
-              h-[150px]
-              sm:h-[180px]
-              lg:h-[190px]
-              bg-gradient-to-br
+              h-37.5
+              sm:h-45
+              lg:h-47.5
+              bg-linear-to-br
               from-emerald-500/20
               via-emerald-500/5
               to-transparent
@@ -105,7 +105,6 @@ function MentorModal() {
           </div>
         </div>
 
-        {/* Content */}
         <div className="mt-6 text-center">
           <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white">
             {t.title}
@@ -124,7 +123,6 @@ function MentorModal() {
           </p>
         </div>
 
-        {/* Button */}
         <button
           className="
             mt-8

@@ -6,7 +6,7 @@ import QuarterGauge from "./QuarterGauge";
 
 function TradeWinCard() {
   return (
-    <CardShell className="flex flex-col justify-center h-full">
+    <CardShell className="flex flex-col step-test31 justify-center h-full">
       <div className="flex items-start justify-between gap-3 sm:gap-6">
         {/* Left */}
         <div className="flex flex-col items-center gap-4 sm:gap-6 lg:gap-8">

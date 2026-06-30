@@ -32,11 +32,11 @@ function SupportModalContent() {
   return (
     <div
       dir={lang === "fa" ? "rtl" : "ltr"}
-      className="w-full max-w-2xl mx-auto"
+      className={` w-full max-w-2xl mx-auto`}
     >
       <div
         className="
-          rounded-3xl
+        rounded-3xl
           border border-zinc-200 dark:border-zinc-800
           bg-white dark:bg-[#0B1120]
           p-5 sm:p-6
@@ -47,11 +47,11 @@ function SupportModalContent() {
         <div className="flex justify-center">
           <div
             className="
-              relative
-              w-full
-              max-w-[520px]
-              overflow-hidden
-              rounded-3xl
+            relative
+            w-full
+            max-w-[520px]
+            overflow-hidden
+            rounded-3xl
               h-[150px]
               sm:h-[180px]
               lg:h-[190px]
@@ -60,7 +60,7 @@ function SupportModalContent() {
               via-emerald-500/5
               to-transparent
               border border-emerald-500/20
-            "
+              "
           >
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.12),transparent_70%)]" />
 
@@ -89,13 +89,13 @@ function SupportModalContent() {
             <div className="absolute bottom-3 right-3">
               <div
                 className="
-                  flex items-center gap-2
-                  rounded-xl
-                  bg-black/40
+                flex items-center gap-2
+                rounded-xl
+                bg-black/40
                   px-3 py-1.5
                   text-white
                   backdrop-blur-xl
-                "
+                  "
               >
                 <Headphones size={16} />
 
@@ -107,7 +107,6 @@ function SupportModalContent() {
           </div>
         </div>
 
-        {/* Content */}
         <div className="mt-6 text-center">
           <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white">
             {t.title}
@@ -115,33 +114,32 @@ function SupportModalContent() {
 
           <p
             className="
-              mt-4
+            mt-4
               text-sm sm:text-base
               leading-8
               text-zinc-500 dark:text-zinc-400
               whitespace-pre-line
-            "
+              "
           >
             {t.desc}
           </p>
         </div>
 
-        {/* Button */}
         <button
           className="
-            mt-8
-            w-full
-            rounded-2xl
-            bg-emerald-500
-            py-3.5
-            font-medium
-            text-white
-            shadow-lg shadow-emerald-500/25
-            transition-all duration-300
+          mt-8
+          w-full
+          rounded-2xl
+          bg-emerald-500
+          py-3.5
+          font-medium
+          text-white
+          shadow-lg shadow-emerald-500/25
+          transition-all duration-300
             hover:-translate-y-1
             hover:bg-emerald-600
             hover:shadow-[0_15px_40px_rgba(16,185,129,0.35)]
-          "
+            "
         >
           {t.button}
         </button>

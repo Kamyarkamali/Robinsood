@@ -1,83 +1,129 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { TiArrowRight } from "react-icons/ti";
 
 import Icon1 from "../assets/3D-icon/3dicons-shield-front-color.png";
 import Icon2 from "../assets/3D-icon/3dicons-headphone-front-color.png";
 import Icon3 from "../assets/3D-icon/3dicons-chat-dynamic-gradient.png";
 import Icon4 from "../assets/3D-icon/3dicons-notebook-dynamic-color.png";
+
 import SupportModalContent from "../components/modals/SupportModal";
 import MentorModalContent from "../components/modals/MentorModal";
 import PassAccountModalContent from "../components/modals/PassModal";
 import EducationModalContent from "../components/modals/EducationModal";
 import Modal from "../components/modals/ModalComponent";
 
-type ModalType = "support" | "mentor" | "passAccount" | "education" | null;
+import type { ModalType } from "../types/type";
+import type { CardComponentProps } from "../types/interfaces";
+import { useTranslation } from "react-i18next";
 
-const cards = [
-  {
-    type: "passAccount",
-    title: "درخواست پاس حساب و رفتن به مرحله بعد",
-    desc: "بررسی شرایط و ارزیابی عملکرد حساب",
-    icon: Icon1,
-    border:
-      "bg-gradient-to-r from-amber-500/60 via-amber-500/20 to-transparent",
-    glow: "bg-amber-500/20",
-    arrow:
-      "bg-amber-500/15 text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]",
-  },
-  {
-    type: "support",
-    title: "درخواست پشتیبانی",
-    desc: "سامانه پشتیبانی، تیکت و تماس",
-    icon: Icon3,
-    border:
-      "bg-gradient-to-r from-emerald-500/60 via-emerald-500/20 to-transparent",
-    glow: "bg-emerald-500/20",
-    arrow:
-      "bg-emerald-500/15 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.25)]",
-  },
-  {
-    type: "mentor",
-    title: "درخواست منتور و تراپیست",
-    desc: "منتور اختصاصی و جلسات تراپیست",
-    icon: Icon2,
-    border: "bg-gradient-to-r from-blue-500/60 via-blue-500/20 to-transparent",
-    glow: "bg-blue-500/20",
-    arrow:
-      "bg-blue-500/15 text-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.25)]",
-  },
-  {
-    type: "education",
-    title: "آموزش و راهنما",
-    desc: "ویدیوهای آموزشی و مقالات",
-    icon: Icon4,
-    border:
-      "bg-gradient-to-r from-violet-500/60 via-violet-500/20 to-transparent",
-    glow: "bg-violet-500/20",
-    arrow:
-      "bg-violet-500/15 text-violet-400 shadow-[0_0_20px_rgba(168,85,247,0.25)]",
-  },
-] as const;
-
-function CardComponent() {
+function CardComponent({ onStartTour }: CardComponentProps) {
   const [modalType, setModalType] = useState<ModalType>(null);
 
-  const modalMap = {
-    support: <SupportModalContent />,
-    mentor: <MentorModalContent />,
-    passAccount: <PassAccountModalContent />,
-    education: <EducationModalContent />,
+  const handleStartTour = () => {
+    setModalType(null);
+
+    setTimeout(() => {
+      onStartTour();
+    }, 500);
   };
+
+  const cards = useMemo(
+    () => [
+      {
+        type: "passAccount" as const,
+        step: "step-pass-account",
+        component: <PassAccountModalContent />,
+        title: {
+          fa: "درخواست پاس حساب و رفتن به مرحله بعد",
+          en: "Pass Account Request & Proceed to the Next Stage",
+        },
+        desc: {
+          fa: "بررسی شرایط و ارزیابی عملکرد حساب",
+          en: "Review account conditions and performance evaluation",
+        },
+        icon: Icon1,
+        border:
+          "bg-gradient-to-r from-amber-500/60 via-amber-500/20 to-transparent",
+        glow: "bg-amber-500/20",
+        arrow:
+          "bg-amber-500/15 text-amber-400 shadow-[0_0_20px_rgba(245,158,11,0.25)]",
+      },
+      {
+        type: "support" as const,
+        step: "step-support",
+        component: <SupportModalContent />,
+        title: {
+          fa: "درخواست پشتیبانی",
+          en: "Support Request",
+        },
+        desc: {
+          fa: "سامانه پشتیبانی، تیکت و تماس",
+          en: "Support system, tickets and contact options",
+        },
+        icon: Icon3,
+        border:
+          "bg-gradient-to-r from-emerald-500/60 via-emerald-500/20 to-transparent",
+        glow: "bg-emerald-500/20",
+        arrow:
+          "bg-emerald-500/15 text-emerald-400 shadow-[0_0_20px_rgba(16,185,129,0.25)]",
+      },
+      {
+        type: "mentor" as const,
+        step: "step-mentor",
+        component: <MentorModalContent />,
+        title: {
+          fa: "درخواست منتور و تراپیست",
+          en: "Mentor & Therapist Request",
+        },
+        desc: {
+          fa: "منتور اختصاصی و جلسات تراپیست",
+          en: "Dedicated mentor and therapist sessions",
+        },
+        icon: Icon2,
+        border:
+          "bg-gradient-to-r from-blue-500/60 via-blue-500/20 to-transparent",
+        glow: "bg-blue-500/20",
+        arrow:
+          "bg-blue-500/15 text-blue-400 shadow-[0_0_20px_rgba(59,130,246,0.25)]",
+      },
+      {
+        type: "education" as const,
+        step: "step-education",
+        component: <EducationModalContent onStartTour={handleStartTour} />,
+        title: {
+          fa: "آموزش و راهنما",
+          en: "Education & Guide",
+        },
+        desc: {
+          fa: "ویدیوهای آموزشی و مقالات",
+          en: "Educational videos and articles",
+        },
+        icon: Icon4,
+        border:
+          "bg-gradient-to-r from-violet-500/60 via-violet-500/20 to-transparent",
+        glow: "bg-violet-500/20",
+        arrow:
+          "bg-violet-500/15 text-violet-400 shadow-[0_0_20px_rgba(168,85,247,0.25)]",
+      },
+    ],
+    [handleStartTour],
+  );
+  const currentCard = cards.find((card) => card.type === modalType);
+
+  const {
+    i18n: { language },
+  } = useTranslation();
 
   return (
     <>
-      <section dir="rtl" className="mt-8">
+      <section className="mt-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
-          {cards.map((card, index) => (
+          {cards.map((card) => (
             <div
-              key={index}
+              key={card.type}
               onClick={() => setModalType(card.type)}
               className={`
+                ${card.step}
                 group relative overflow-hidden
                 rounded-[30px]
                 p-px
@@ -85,8 +131,6 @@ function CardComponent() {
                 ${card.border}
                 transition-all duration-500
                 hover:-translate-y-1.5
-                hover:shadow-[0_20px_50px_rgba(0,0,0,0.18)]
-                dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.6)]
               `}
             >
               <div
@@ -124,18 +168,18 @@ function CardComponent() {
                 <div className="relative flex items-center justify-between w-full gap-4">
                   <div className="flex-1 min-w-0 text-right">
                     <h2 className="text-sm md:text-base font-normal text-zinc-900 dark:text-white leading-7 line-clamp-2">
-                      {card.title}
+                      {language === "fa" ? card?.title?.fa : card.title?.en}
                     </h2>
 
                     <p className="mt-3 text-xs md:text-sm leading-6 text-zinc-500 dark:text-zinc-400">
-                      {card.desc}
+                      {language === "fa" ? card?.desc?.fa : card.desc?.en}
                     </p>
                   </div>
 
                   <div className="relative shrink-0 w-20 sm:w-24 flex items-center justify-center">
                     <img
                       src={card.icon}
-                      alt={card.title}
+                      alt={card.title.fa}
                       className="
                         w-20 sm:w-24
                         object-contain
@@ -149,21 +193,25 @@ function CardComponent() {
                     <button
                       className={`
                         absolute
-                        left-16
-                        -bottom-5
+                        ${
+                          language === "fa"
+                            ? "left-16 -bottom-5"
+                            : "right-70 -bottom-9"
+                        }
+                       
                         flex
                         h-10 w-10
-                        sm:h-11 sm:w-11
+                        backdrop-blur-2xl
+                        sm:h-7 sm:w-7
                         items-center justify-center
                         rounded-full
-                        backdrop-blur-xl
                         transition-all duration-300
                         group-hover:scale-110
                         ${card.arrow}
                       `}
                     >
                       <TiArrowRight
-                        size={20}
+                        size={17}
                         className="transition-transform duration-300 group-hover:-translate-x-0.5"
                       />
                     </button>
@@ -187,7 +235,9 @@ function CardComponent() {
       </section>
 
       <Modal open={modalType !== null} onClose={() => setModalType(null)}>
-        {modalType && modalMap[modalType]}
+        {currentCard && (
+          <div className={currentCard.step}>{currentCard.component}</div>
+        )}
       </Modal>
     </>
   );

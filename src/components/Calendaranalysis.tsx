@@ -5,6 +5,7 @@ import { i18n, CDLocalized } from "../data/fakeData";
 import type { DayDatas } from "../types/interfaces";
 import { MdKeyboardArrowDown } from "react-icons/md";
 import FlashIcon from "../icons/FlashIcon";
+import i18next from "i18next";
 
 function Dropdown<T extends string>({
   label,
@@ -53,13 +54,16 @@ function Dropdown<T extends string>({
 
       {open && (
         <div
+          dir={i18next.language === "fa" ? "rtl" : "ltr"}
           className="absolute top-[calc(100%+6px)] z-50 min-w-40 sm:min-w-45 rounded-xl border p-1.5
             bg-white dark:bg-[#2B2B2B]
             border-gray-200 dark:border-neutral-700
             shadow-lg dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
-          style={{ right: 0 }}
+          style={{ left: 0 }}
         >
-          <p className="text-[10px] text-gray-400 dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide">
+          <p
+            className={`text-[10px] text-gray-400 dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide ${i18next.language === "fa" ? "text-right" : "text-left"}`}
+          >
             {section}
           </p>
           {items.map((item) => (
@@ -71,12 +75,13 @@ function Dropdown<T extends string>({
               }}
               className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer text-xs font-medium transition-colors
                 hover:bg-gray-50 dark:hover:bg-[#3A3A3A]
-                ${active === item.v ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-700 dark:text-white"}`}
+                ${active === item.v ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-700 dark:text-white"}
+                ${i18next.language === "fa" ? "flex-row-reverse" : ""}`}
             >
+              <span className="whitespace-nowrap">{item.l}</span>
               <span
                 className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === item.v ? "bg-indigo-600 dark:bg-indigo-400" : "bg-current opacity-30"}`}
               />
-              <span className="whitespace-nowrap">{item.l}</span>
             </div>
           ))}
         </div>
@@ -158,7 +163,7 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
 
   return (
     <div
-      className={`rounded-[14px] px-1.5 sm:px-3 py-1.5 sm:py-2.5 flex flex-col justify-between overflow-hidden transition-all
+      className={`md:rounded-[14px] rounded-sm px-1.5 sm:px-3 py-1.5 sm:py-2.5 flex flex-col justify-between overflow-hidden transition-all
         w-full min-h-15 sm:min-h-16.25 lg:h-16.25
         ${bg}
       `}
@@ -170,12 +175,12 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
         {toFa(day.d)}
       </span>
       {has && (
-        <div className="flex flex-col gap-0.5">
-          <span className="text-white font-black leading-tight whitespace-nowrap text-[10px] sm:text-[11px] lg:text-[14px]">
+        <div className="flex flex-col gap-0.5 text-center">
+          <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
             {isProfit ? "+" : "-"}
             {day.p!}$
           </span>
-          <span className="text-[7px] sm:text-[9px] leading-none text-white/65">
+          <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
             {day.t!} {day.t! > 1 ? "trades" : "trade"}
           </span>
         </div>
@@ -185,9 +190,34 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
 }
 
 export default function CalendarAnalysis() {
-  const [lang] = useState<Lang>("en");
+  // گرفتن زبان فعلی از i18next، اگر نبود فارسی پیش‌فرض
+  const [lang, setLang] = useState<Lang>(() => {
+    const currentLang = i18next.language;
+    return currentLang === "en" || currentLang === "fa"
+      ? (currentLang as Lang)
+      : "fa";
+  });
+
   const [sp, setSp] = useState<ParamKey>("pnl");
   const [sd, setSd] = useState<DateKey>("dec24");
+
+  // گوش دادن به تغییرات زبان از بیرون (دکمه‌های تغییر زبان در جای دیگر پروژه)
+  useEffect(() => {
+    const handleLanguageChange = () => {
+      const newLang = i18next.language as Lang;
+      if (newLang === "en" || newLang === "fa") {
+        setLang(newLang);
+      }
+    };
+
+    // اضافه کردن listener
+    i18next.on("languageChanged", handleLanguageChange);
+
+    // پاک کردن listener هنگام unmount
+    return () => {
+      i18next.off("languageChanged", handleLanguageChange);
+    };
+  }, []);
 
   const T = i18n[lang];
   const cd = CDLocalized[lang][sd];
@@ -200,10 +230,15 @@ export default function CalendarAnalysis() {
     weeks.push(cd.days.slice(i, i + 7));
 
   return (
-    <div className="p-2 sm:p-4 lg:p-8 transition-colors" dir="ltr">
-      <div className="bg-gray-50 dark:bg-[#2B2B2B] rounded-[25px] border-4 dark:border-white/10 border-gray-400 p-2 sm:p-4 lg:p-6">
+    <div
+      className="p-2 step-test39 transition-colors"
+      dir={lang === "fa" ? "rtl" : "ltr"}
+    >
+      <div className="bg-gray-50 dark:bg-[#2B2B2B] rounded-2xl border-4 dark:border-white/10 border-gray-400 p-2 sm:p-4 lg:p-6">
         <div className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5">
-          <div className="flex flex-wrap gap-2 sm:gap-2.5">
+          <div
+            className={`flex flex-wrap gap-2 justify-center sm:${i18next.language === "fa" ? "justify-end" : "justify-start"} w-full sm:gap-2.5`}
+          >
             <Dropdown
               label={ap?.l ?? T.pp}
               items={T.params}
@@ -221,7 +256,7 @@ export default function CalendarAnalysis() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-16 ml-auto w-full sm:w-auto">
-            <div className="flex flex-col gap-1 sm:gap-2 min-w-0 w-full sm:w-auto">
+            <div className="flex flex-col items-center sm:items-start gap-1 sm:gap-2 min-w-0 w-full sm:w-auto">
               <span className="text-xs sm:text-[15px] font-bold text-gray-500 dark:text-neutral-400">
                 {T.mpdl}
               </span>
@@ -235,7 +270,7 @@ export default function CalendarAnalysis() {
 
             <div className="hidden sm:block w-px self-stretch min-h-12.5 bg-gray-300 dark:bg-neutral-700" />
 
-            <div className="flex items-center justify-start sm:justify-end gap-3 w-full sm:w-auto">
+            <div className="flex items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
               <StreakDonut wins={cd.str.w} losses={cd.str.l} />
               <div className="flex flex-col gap-0.5 min-w-0">
                 <span className="text-[11px] sm:text-[13px] font-bold text-gray-900 dark:text-white">

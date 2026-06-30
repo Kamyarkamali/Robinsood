@@ -434,7 +434,7 @@ export default function TraderScoreCard() {
         items-stretch
       "
     >
-      <div className="flex flex-col gap-2 xs:gap-3 sm:gap-4">
+      <div className="flex step-test34 flex-col gap-2 xs:gap-3 sm:gap-4">
         <div
           className="
             bg-white
@@ -465,7 +465,7 @@ export default function TraderScoreCard() {
     rounded-3xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
             >
-              <div className="grid grid-cols-2 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+              <div className="grid grid-cols-2 step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
                 {gauges.map((g) => (
                   <GaugeItem
                     key={g.key}
@@ -482,7 +482,7 @@ export default function TraderScoreCard() {
     rounded-3xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
             >
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+              <div className="grid step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
                 <StatItem
                   label={t("score.bestSymbol")}
                   value={d.stats.bestSymbol}
@@ -519,6 +519,7 @@ export default function TraderScoreCard() {
           border
           sm:border-2
           lg:border-4
+          step-test37
           border-gray-200
           dark:border-[#303030]
           p-2

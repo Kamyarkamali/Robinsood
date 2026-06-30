@@ -9,7 +9,7 @@ interface ModalProps {
   title?: string;
 }
 
-function Modal({ open, onClose, children, title = "جزئیات" }: ModalProps) {
+function Modal({ open, onClose, children }: ModalProps) {
   useEffect(() => {
     if (!open) return;
 

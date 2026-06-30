@@ -6,11 +6,21 @@ interface Props {
   data: Progres;
 }
 
-const formatValue = (value: number, unit: Progres["unit"]) => {
-  if (unit === "currency") return `$${value.toLocaleString("fa-IR")}`;
-  return `${value.toLocaleString("fa-IR")} روز`;
-};
+const formatValue = (
+  value: number,
+  unit: Progres["unit"],
+  language: string,
+) => {
+  const locale = language === "fa" ? "fa-IR" : "en-US";
 
+  if (unit === "currency") {
+    return `$${value.toLocaleString(locale)}`;
+  }
+
+  return language === "fa"
+    ? `${value.toLocaleString(locale)} روز`
+    : `${value.toLocaleString(locale)} Days`;
+};
 const ProgressCard: React.FC<Props> = ({ data }) => {
   const { i18n } = useTranslation();
 
@@ -103,6 +113,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             px-2
           "
         >
+          {/* @ts-ignore */}
           {formatValue(data.targetValue, data.unit)}
         </div>
 
@@ -125,6 +136,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
               whitespace-nowrap
             "
           >
+            {/* @ts-ignore */}
             {formatValue(data.currentValue, data.unit)}
           </span>
         </div>

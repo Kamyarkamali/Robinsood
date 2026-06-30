@@ -32,31 +32,36 @@ export default function ChallengeCardComponent({ card }: Props) {
     <>
       <div
         className={`
-          
       flex flex-col
         w-full
         max-w-55
         sm:max-w-60
         md:max-w-65
         lg:max-w-70
-        h-90
-        rounded-[23px]
+        h-93
+        rounded-2xl
         overflow-hidden
         border-[3px]
         border-gray-200
         dark:border-[#373737]
         font-lahzeh
         bg-white
-        dark:bg-linear-to-t
-        dark:from-[#1e1e1e]
-        dark:to-[#2a2a2a]
+         dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark:via-[#2D2D2D]
+       dark:to-[#252525]
         transition-all
         duration-300
         hover:shadow-lg
         hover:scale-[1.02]
         `}
       >
-        <div className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
+        <div
+          className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]"
+        />
 
         <div className="shrink-0 pt-3 px-2">
           <p className="text-center text-[15px] font-semibold text-gray-600 dark:text-white leading-5 wrap-break-word">
@@ -64,7 +69,12 @@ export default function ChallengeCardComponent({ card }: Props) {
           </p>
         </div>
 
-        <div className="shrink-0 flex justify-center items-center border-2 border-b-0 border-gray-200 dark:border-[#3B3B3B] rounded-t-[23px] mt-2 pt-3 dark:bg-linear-to-t dark:from-[#222] dark:to-[#303030]">
+        <div
+          className="shrink-0 flex justify-center items-center border-2 border-b-0 border-gray-200 dark:border-[#3B3B3B] rounded-t-[23px] mt-2 pt-3  dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]"
+        >
           <ChallengeChart
             current={card.chart.current}
             max={card.chart.max}

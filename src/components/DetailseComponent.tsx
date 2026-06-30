@@ -34,9 +34,10 @@ function DetailseComponent() {
         </span>
       </div>
 
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5 w-full lg:w-auto">
+      <div className="flex  flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-5 w-full lg:w-auto">
         <button
           className="
+           step-test6
             gap-2 w-full sm:flex-1 lg:w-68.5
             rounded-3xl cursor-pointer
             lg:text-[15px] text-[15px] font-bold h-[64.4px]
@@ -58,6 +59,7 @@ function DetailseComponent() {
 
         <button
           className="
+          step-test7
             gap-2 w-full sm:flex-1 lg:w-68.5
             rounded-3xl cursor-pointer
             lg:text-[15px] text-[15px] font-bold h-[64.4px]

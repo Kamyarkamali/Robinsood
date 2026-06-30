@@ -1,8 +1,8 @@
 import { useTranslation } from "react-i18next";
-import HomePage from "./pages/HomePage";
 import { useEffect, useState } from "react";
 import { useTheme } from "./hooks/useTheme";
 import TradeLoader from "./module/TradeLoading";
+import Route from "./routers/Route";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -14,7 +14,7 @@ function App() {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 1000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -39,7 +39,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] text-black dark:bg-[#202020] dark:text-white transition-colors">
-      <HomePage />
+      <Route />
     </div>
   );
 }

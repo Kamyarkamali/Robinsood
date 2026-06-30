@@ -143,7 +143,7 @@ function WeeklyReportPanel() {
         <div className="flex items-center gap-2 order-2">
           <button
             onClick={() => setTab("pnl")}
-            className={`text-xs sm:text-sm font-medium px-3 py-1.5 rounded-full transition-colors ${
+            className={`text-xs step-test25 sm:text-sm font-medium px-3 py-1.5 rounded-full transition-colors ${
               tab === "pnl"
                 ? "bg-zinc-700 text-white"
                 : "text-zinc-400 hover:text-zinc-200"
@@ -154,7 +154,7 @@ function WeeklyReportPanel() {
 
           <button
             onClick={() => setTab("risk")}
-            className={`text-xs sm:text-sm font-medium px-3 py-1.5 rounded-full transition-colors ${
+            className={`text-xs sm:text-sm step-test24 font-medium px-3 py-1.5 rounded-full transition-colors ${
               tab === "risk"
                 ? "bg-zinc-700 text-white"
                 : "text-zinc-400 hover:text-zinc-200"

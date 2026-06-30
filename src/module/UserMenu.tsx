@@ -6,9 +6,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import type { AvatarItem, Lang } from "../types/type";
 import { avatarData } from "../data/fakeData";
 import i18next from "i18next";
+import { useTheme } from "../hooks/useTheme";
 
 export default function UserMenu() {
   const { i18n } = useTranslation();
+
+  const { resolvedTheme, isDark, setLight, setDark } = useTheme();
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -18,14 +21,6 @@ export default function UserMenu() {
 
   const [open, setOpen] = useState(false);
   const [avatarModal, setAvatarModal] = useState(false);
-
-  const [lang, setLang] = useState<Lang>(
-    () => (localStorage.getItem("lang") as Lang) || "en",
-  );
-
-  const [theme, setThemeState] = useState<"dark" | "light">(
-    () => (localStorage.getItem("theme") as "dark" | "light") || "dark",
-  );
 
   const [selectedAvatar, setSelectedAvatar] = useState<string>(
     () => localStorage.getItem("avatar") || DEFAULT.dark,
@@ -71,16 +66,19 @@ export default function UserMenu() {
     return () => document.removeEventListener("keydown", handleEscKey);
   }, [avatarModal, open]);
 
-  const changeTheme = useCallback((t: "dark" | "light") => {
-    setThemeState(t);
-    localStorage.setItem("theme", t);
-    document.documentElement.classList.remove("dark", "light");
-    document.documentElement.classList.add(t);
-  }, []);
+  const changeTheme = useCallback(
+    (t: "dark" | "light") => {
+      if (t === "dark") {
+        setDark();
+      } else if (t === "light") {
+        setLight();
+      }
+    },
+    [setDark, setLight],
+  );
 
   const changeLang = useCallback(
     (l: Lang) => {
-      setLang(l);
       i18n.changeLanguage(l);
       localStorage.setItem("lang", l);
     },
@@ -88,17 +86,21 @@ export default function UserMenu() {
   );
 
   const getSrc = useCallback(
-    (item: AvatarItem) => (theme === "dark" ? item.dark : item.light),
-    [theme],
+    (item: AvatarItem) => (resolvedTheme === "dark" ? item.dark : item.light),
+    [resolvedTheme],
   );
 
   const selectedName = useMemo(() => {
     const current = list.find(
       (a) => a.dark === selectedAvatar || a.light === selectedAvatar,
     );
-    if (!current) return lang === "fa" ? "انتخاب پروفایل" : "Select Profile";
-    return lang === "fa" ? current.fa : current.en;
-  }, [lang, selectedAvatar, list]);
+
+    if (!current) {
+      return i18n.language === "fa" ? "انتخاب پروفایل" : "Select Profile";
+    }
+
+    return i18n.language === "fa" ? current.fa : current.en;
+  }, [i18n.language, selectedAvatar, list]);
 
   const handleSelectAvatar = useCallback(
     (item: AvatarItem) => {
@@ -117,7 +119,7 @@ export default function UserMenu() {
   }, [open]);
 
   const styles = useMemo(() => {
-    const isDark = theme === "dark";
+    const isDark = resolvedTheme === "dark";
     return {
       background: isDark ? "rgba(43, 43, 43, 0.8)" : "rgba(255, 255, 255, 0.9)",
       border: isDark ? "border-white/10" : "border-black/10",
@@ -129,23 +131,22 @@ export default function UserMenu() {
       buttonBg: isDark ? "bg-[#2B2B2B2B]" : "bg-white/50",
       hoverBg: isDark ? "hover:bg-white/10" : "hover:bg-black/5",
     };
-  }, [theme]);
+  }, [resolvedTheme]);
 
-  // ================= THEME TOGGLE =================
   const ThemeToggle = useMemo(
     () => (
       <div className="flex items-center justify-between gap-2 flex-1">
         <span
           className={`text-[10px] ${styles.textSecondary} whitespace-nowrap`}
         >
-          {lang === "fa" ? "تم" : "Theme"}
+          {i18next.language === "fa" ? "تم" : "Theme"}
         </span>
 
         <div className="relative shrink-0">
           <input
             type="checkbox"
             id="theme-toggle"
-            checked={theme === "dark"}
+            checked={isDark}
             onChange={(e) => changeTheme(e.target.checked ? "dark" : "light")}
             className="opacity-0 absolute -top-full invisible"
           />
@@ -155,23 +156,22 @@ export default function UserMenu() {
             className={`
             block w-14 h-7 relative rounded-full cursor-pointer
             transition-colors duration-200 ease-in-out
-            ${theme === "dark" ? "bg-[#303C42]" : "bg-[#ddd]"}
+            ${isDark ? "bg-[#303C42]" : "bg-[#ddd]"}
           `}
           >
             <motion.div
               className="absolute top-[3px] w-[22px] h-[22px] rounded-full bg-white shadow-md"
-              animate={{ left: theme === "dark" ? "31px" : "3px" }}
+              animate={{ left: isDark ? "31px" : "3px" }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
             />
 
-            {/* Sun Icon */}
             <div className="absolute top-[5px] left-[5px] pointer-events-none">
               <svg width="18" height="18" viewBox="0 0 64 64">
                 <circle
                   cx="32"
                   cy="32"
                   r="17"
-                  fill={theme === "dark" ? "#212529" : "#ffc700"}
+                  fill={isDark ? "#212529" : "#ffc700"}
                 />
                 {[5, 11, 53, 59].map((y, i) => (
                   <line
@@ -180,7 +180,7 @@ export default function UserMenu() {
                     x2={i < 2 ? "32" : i === 2 ? "53" : "5"}
                     y1={i < 2 ? y : "32"}
                     y2={i < 2 ? (i === 0 ? 11 : 59) : "32"}
-                    stroke={theme === "dark" ? "#212529" : "#ffc700"}
+                    stroke={isDark ? "#212529" : "#ffc700"}
                     strokeWidth="3"
                     strokeLinecap="round"
                   />
@@ -197,7 +197,7 @@ export default function UserMenu() {
                     x2={coords[2]}
                     y1={coords[1]}
                     y2={coords[3]}
-                    stroke={theme === "dark" ? "#212529" : "#ffc700"}
+                    stroke={isDark ? "#212529" : "#ffc700"}
                     strokeWidth="3"
                     strokeLinecap="round"
                   />
@@ -210,7 +210,7 @@ export default function UserMenu() {
               <svg height="20" width="20" viewBox="0 0 512 512">
                 <path
                   d="M343.1,315c-1.8,0.1-3.5,0.1-5.3,0.1c-29.1,0-56.5-11.3-77.1-31.9c-20.6-20.6-31.9-48-31.9-77.1c0-16.6,3.7-32.6,10.6-47.1c3.1-6.4,6.8-12.5,11.1-18.2c-7.6,0.8-14.9,2.4-22,4.6c-46.8,14.8-80.7,58.5-80.7,110.2c0,63.8,51.7,115.5,115.5,115.5c35.3,0,66.8-15.8,88-40.7c4.8-5.7,9.2-11.9,12.8-18.5C357.3,313.6,350.3,314.7,343.1,315z"
-                  fill={theme === "dark" ? "#ffc700" : "#212529"}
+                  fill={isDark ? "#ffc700" : "#212529"}
                 />
               </svg>
             </div>
@@ -218,11 +218,11 @@ export default function UserMenu() {
         </div>
       </div>
     ),
-    [theme, lang, styles, changeTheme],
+    [isDark, styles, changeTheme],
   );
 
   return (
-    <div className="relative z-100">
+    <div className="relative z-9999">
       <motion.div
         ref={buttonRef}
         whileHover={{ scale: 1.02 }}
@@ -289,7 +289,7 @@ export default function UserMenu() {
             >
               <div className="flex items-center justify-between gap-2">
                 <p className={`text-[10px] ${styles.textSecondary}`}>
-                  {lang === "fa" ? "زبان" : "Language"}
+                  {i18next.language === "fa" ? "زبان" : "Language"}
                 </p>
 
                 <div className="flex gap-1 sm:gap-2">
@@ -303,8 +303,8 @@ export default function UserMenu() {
                         text-[10px] px-2 sm:px-3 cursor-pointer py-0.5 sm:py-1 rounded-lg
                         transition-colors duration-150
                         ${
-                          lang === l
-                            ? theme === "dark"
+                          i18next.language === l
+                            ? resolvedTheme === "dark"
                               ? "bg-green-500/20 text-green-400"
                               : "bg-green-500/10 text-green-600"
                             : styles.textSecondary
@@ -312,7 +312,7 @@ export default function UserMenu() {
                         relative overflow-hidden
                       `}
                     >
-                      {lang === l && (
+                      {i18next.language === l && (
                         <motion.div
                           layoutId="langActive"
                           className="absolute inset-0 bg-green-500/10 rounded-lg"
@@ -356,7 +356,7 @@ export default function UserMenu() {
                 `}
               >
                 <FiEdit2 className="text-[12px] sm:text-[14px] " />
-                {lang === "fa" ? "ویرایش آواتار" : "Edit Avatar"}
+                {i18next.language === "fa" ? "ویرایش آواتار" : "Edit Avatar"}
               </motion.button>
             </motion.div>
           </motion.div>
@@ -393,7 +393,9 @@ export default function UserMenu() {
             >
               <div className="flex justify-between items-center mb-3 sm:mb-4 sticky top-0 z-10 pb-2">
                 <p className={`text-xs sm:text-sm font-medium ${styles.text}`}>
-                  {lang === "fa" ? "انتخاب آواتار" : "Select Avatar"}
+                  {i18next.language === "fa"
+                    ? "انتخاب آواتار"
+                    : "Select Avatar"}
                 </p>
 
                 <motion.button
@@ -447,7 +449,7 @@ export default function UserMenu() {
                         transition-colors duration-150 group-hover:${styles.text}
                       `}
                       >
-                        {lang === "fa" ? item.fa : item.en}
+                        {i18next.language === "fa" ? item.fa : item.en}
                       </span>
 
                       {(selectedAvatar === item.dark ||

@@ -33,7 +33,7 @@ const TradingPanel: React.FC = () => {
   );
 
   return (
-    <div className="h-fit flex items-center justify-center p-2 sm:p-4 md:p-6 font-lahzeh transition-colors">
+    <div className="h-fit flex step-test38 items-center justify-center p-2 sm:p-4 md:p-6 font-lahzeh transition-colors">
       <div className="w-full max-w-310" dir={dir}>
         <div className="flex flex-col lg:flex-row gap-3 sm:gap-5 lg:gap-6">
           <div className="w-full lg:w-70 xl:w-[320px] shrink-0">

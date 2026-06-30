@@ -77,6 +77,12 @@ import img25_light from "../assets/avatars/29_girl-light_14.png";
 import img26_dark from "../assets/avatars/45_girl-dark_15.png";
 import img26_light from "../assets/avatars/30_girl-light_15.png";
 
+import usflag from "../assets/images/usa.png";
+import brit from "../assets/images/brit.webp";
+import jp from "../assets/images/japan.jpg";
+import ca from "../assets/images/ca.webp";
+import er from "../assets/images/er.webp";
+
 import type { ChartCustomSettings } from "../components/common/ChartCustomSettings";
 import type {
   AccountStatsProps,
@@ -116,6 +122,19 @@ import type {
   TradeStatus,
   Week,
 } from "../types/type";
+import {
+  Brain,
+  CalendarDays,
+  ClipboardCheck,
+  FileText,
+  Newspaper,
+  PieChart,
+  Plus,
+  ShieldCheck,
+  SlidersHorizontal,
+  TrendingDown,
+  Trophy,
+} from "lucide-react";
 
 export const buttonSection = [
   { id: 1, en: "show all items", fa: "نمایش همه آیتم ها" },
@@ -162,10 +181,10 @@ export const challengeCards: ChallengeCard[] = [
       },
       {
         label: {
-          fa: "فاصله=اکوییتی درادون",
+          fa: "فاصله = درادون  -  اکوییتی",
           en: "Distance = Equity - Drawdown",
         },
-        value: "$1008.18 - $1070.18 = $62",
+        value: "$1008.18 - $1070.18 = $6,22",
       },
     ],
   },
@@ -202,10 +221,10 @@ export const challengeCards: ChallengeCard[] = [
 
       {
         label: {
-          fa: "فاصله = اکوییتی - درادون",
+          fa: "فاصله  =  درادون  - اکوییتی",
           en: "Distance = Equity - Drawdown",
         },
-        value: "$190.18 = $1070.18 - $880",
+        value: "$190.18 = $1070.18 - $8,80",
       },
     ],
   },
@@ -523,7 +542,7 @@ export const progressCardsData: Progres[] = [
       value: "25.55%",
     },
     badgeText: {
-      fa: "عالی داری پیش میری 👌 چند تا تارگت باقی مونده",
+      fa: "عالی داری پیش میری چند تا تارگت باقی مونده",
       en: "Great job! You're making excellent progress. Only a few targets remain.",
     },
     badgeType: "success",
@@ -1559,7 +1578,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
   week1: [
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۱", en: "Tue 2025/09/23" },
       time: "۱۷:۲۵",
       news: { fa: "شاخص فروش اتومبیل آمریکا", en: "US Auto Sales Index" },
@@ -1569,7 +1588,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "EUR",
-      flag: "🇪🇺",
+      flag: er,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۱", en: "Tue 2025/09/23" },
       time: "۱۸:۰۰",
       news: { fa: "نرخ تورم منطقه یورو", en: "Eurozone Inflation Rate" },
@@ -1579,7 +1598,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "GBP",
-      flag: "🇬🇧",
+      flag: brit,
       day: { fa: "چهارشنبه ۱۴۰۴/۰۷/۰۳", en: "Wed 2025/09/24" },
       time: "۱۴:۳۰",
       news: { fa: "نرخ بهره بانک انگلستان", en: "Bank of England Rate" },
@@ -1589,7 +1608,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "JPY",
-      flag: "🇯🇵",
+      flag: jp,
       day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۰۴", en: "Thu 2025/09/25" },
       time: "۰۵:۳۰",
       news: { fa: "اشتغال‌زایی ژاپن", en: "Japan Employment" },
@@ -1599,7 +1618,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "جمعه ۱۴۰۴/۰۷/۰۵", en: "Fri 2025/09/26" },
       time: "۱۶:۳۰",
       news: { fa: "شاخص مسکن آمریکا", en: "US Housing Index" },
@@ -1609,7 +1628,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "CAD",
-      flag: "🇨🇦",
+      flag: ca,
       day: { fa: "جمعه ۱۴۰۴/۰۷/۰۵", en: "Fri 2025/09/26" },
       time: "۱۶:۳۰",
       news: { fa: "اشتغال کانادا", en: "Canada Employment" },
@@ -1621,7 +1640,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
   week2: [
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "دوشنبه ۱۴۰۴/۰۷/۰۸", en: "Mon 2025/09/29" },
       time: "۱۵:۴۵",
       news: { fa: "داده‌های تولیدی ISM آمریکا", en: "US ISM Manufacturing" },
@@ -1631,7 +1650,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "EUR",
-      flag: "🇪🇺",
+      flag: er,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۹", en: "Tue 2025/09/30" },
       time: "۱۲:۰۰",
       news: { fa: "نرخ بیکاری آلمان", en: "Germany Unemployment Rate" },
@@ -1641,7 +1660,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "GBP",
-      flag: "🇬🇧",
+      flag: brit,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۹", en: "Tue 2025/09/30" },
       time: "۱۱:۳۰",
       news: { fa: "تولید ناخالص داخلی انگلستان", en: "UK GDP" },
@@ -1661,7 +1680,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "JPY",
-      flag: "🇯🇵",
+      flag: jp,
       day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۱۱", en: "Thu 2025/10/02" },
       time: "۰۶:۰۰",
       news: { fa: "اعتماد مصرف‌کننده ژاپن", en: "Japan Consumer Confidence" },
@@ -1671,7 +1690,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "جمعه ۱۴۰۴/۰۷/۱۲", en: "Fri 2025/10/03" },
       time: "۱۶:۳۰",
       news: { fa: "نرخ اشتغال غیرکشاورزی", en: "US Non-Farm Payrolls" },
@@ -1693,7 +1712,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
   week3: [
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "دوشنبه ۱۴۰۴/۰۷/۱۵", en: "Mon 2025/10/06" },
       time: "۱۶:۰۰",
       news: { fa: "سخنرانی رئیس فدرال رزرو", en: "Fed Chair Speech" },
@@ -1703,7 +1722,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "EUR",
-      flag: "🇪🇺",
+      flag: er,
       day: { fa: "دوشنبه ۱۴۰۴/۰۷/۱۵", en: "Mon 2025/10/06" },
       time: "۱۰:۳۰",
       news: { fa: "تولید صنعتی اروپا", en: "EU Industrial Production" },
@@ -1713,7 +1732,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "GBP",
-      flag: "🇬🇧",
+      flag: brit,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۱۶", en: "Tue 2025/10/07" },
       time: "۰۸:۳۰",
       news: { fa: "شاخص قیمت مصرف‌کننده UK", en: "UK CPI" },
@@ -1723,7 +1742,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "CAD",
-      flag: "🇨🇦",
+      flag: ca,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۱۶", en: "Tue 2025/10/07" },
       time: "۱۶:۳۰",
       news: { fa: "تورم کانادا", en: "Canada CPI" },
@@ -1743,7 +1762,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۱۸", en: "Thu 2025/10/09" },
       time: "۱۶:۳۰",
       news: { fa: "درخواست بیکاری آمریکا", en: "US Jobless Claims" },
@@ -1755,7 +1774,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
   week4: [
     {
       symbol: "JPY",
-      flag: "🇯🇵",
+      flag: jp,
       day: { fa: "دوشنبه ۱۴۰۴/۰۷/۲۲", en: "Mon 2025/10/13" },
       time: "۰۳:۳۰",
       news: { fa: "صادرات ژاپن", en: "Japan Exports" },
@@ -1765,7 +1784,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "EUR",
-      flag: "🇪🇺",
+      flag: er,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۲۳", en: "Tue 2025/10/14" },
       time: "۱۱:۰۰",
       news: { fa: "احساسات اقتصادی ZEW آلمان", en: "Germany ZEW Sentiment" },
@@ -1775,7 +1794,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۲۳", en: "Tue 2025/10/14" },
       time: "۱۴:۳۰",
       news: { fa: "شاخص قیمت تولیدکننده آمریکا", en: "US PPI" },
@@ -1785,7 +1804,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "GBP",
-      flag: "🇬🇧",
+      flag: brit,
       day: { fa: "چهارشنبه ۱۴۰۴/۰۷/۲۴", en: "Wed 2025/10/15" },
       time: "۰۸:۳۰",
       news: { fa: "حساب جاری انگلستان", en: "UK Current Account" },
@@ -1795,7 +1814,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "USD",
-      flag: "🇺🇸",
+      flag: usflag,
       day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۲۵", en: "Thu 2025/10/16" },
       time: "۱۶:۳۰",
       news: { fa: "فروش خرده‌فروشی آمریکا", en: "US Retail Sales" },
@@ -1815,7 +1834,7 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     },
     {
       symbol: "CAD",
-      flag: "🇨🇦",
+      flag: ca,
       day: { fa: "جمعه ۱۴۰۴/۰۷/۲۶", en: "Fri 2025/10/17" },
       time: "۱۶:۳۰",
       news: { fa: "تولید ناخالص داخلی ماهانه", en: "Canada Monthly GDP" },
@@ -1987,12 +2006,12 @@ export const summaryCards: SummaryCard[] = [
   {
     id: "session_loss",
     title: {
-      fa: "درصد کاربران لحظه سود در سود لحظه ای",
-      en: "Users in Profit %",
+      fa: "معاملات باز",
+      en: "Open Trades Card",
     },
-    value: { fa: "۵۸٪", en: "58%" },
-    buy: { fa: "۵۸", en: "58" },
-    sell: { fa: "۵۸", en: "58" },
+    value: { fa: "18/420", en: "18/420" },
+    buy: { fa: "18/420", en: "18/420" },
+    sell: { fa: "18/420", en: "18/420" },
     unit: { fa: "درصد کاربران", en: "Users %" },
   },
   {
@@ -2488,7 +2507,7 @@ export const NEWS: NewsEvent[] = [
     id: "n1",
     fa: "شاخص CPI آمریکا",
     en: "US CPI Index",
-    flag: "🇺🇸",
+    flag: usflag,
     time: 14.0,
     impact: "High",
     pairs: "EURUSD, XAUUSD",
@@ -2497,7 +2516,7 @@ export const NEWS: NewsEvent[] = [
     id: "n2",
     fa: "نشست فدرال رزرو",
     en: "Federal Reserve Meeting",
-    flag: "🇺🇸",
+    flag: usflag,
     time: 17.5,
     impact: "High",
     pairs: "USDJPY, GBPUSD",
@@ -2506,9 +2525,133 @@ export const NEWS: NewsEvent[] = [
     id: "n3",
     fa: "تولید ناخالص ملی",
     en: "UK GDP",
-    flag: "🇬🇧",
+    flag: brit,
     time: 11.0,
     impact: "Medium",
     pairs: "GBPUSD, EURGBP",
+  },
+];
+
+export const cards = [
+  {
+    id: 11,
+    fa: "نمایش تمامی آیتم‌ها",
+    en: "Show All",
+    descFa: "مشاهده همه امکانات پنل",
+    descEn: "View all features",
+    icon: Plus,
+    color: "text-violet-500",
+    line: "bg-violet-500",
+    components: "ShowAllComponents",
+  },
+  {
+    id: 1,
+    fa: "اطلاعات چالش",
+    en: "Challenge Info",
+    descFa: "جزئیات و وضعیت چالش",
+    descEn: "Challenge details",
+    icon: ShieldCheck,
+    color: "text-emerald-500",
+    line: "bg-emerald-500",
+    components: "InformationAccount",
+  },
+  {
+    id: 2,
+    fa: "پارامترهای امروز",
+    en: "Today's Parameters",
+    descFa: "محدودیت‌ها و پارامترها",
+    descEn: "Limits & parameters",
+    icon: SlidersHorizontal,
+    color: "text-blue-500",
+    line: "bg-blue-500",
+    components: "ChallengeGrid",
+  },
+  {
+    id: 3,
+    fa: "پارامترهای ارزیابی",
+    en: "Evaluation",
+    descFa: "معیارها و قوانین ارزیابی",
+    descEn: "Rules & metrics",
+    icon: ClipboardCheck,
+    color: "text-violet-500",
+    line: "bg-violet-500",
+    components: "ProgressCardsSection",
+  },
+  {
+    id: 4,
+    fa: "چارت دراداون",
+    en: "Drawdown Chart",
+    descFa: "نمودار دراداون روزانه و کلی",
+    descEn: "Daily & total drawdown",
+    icon: TrendingDown,
+    color: "text-red-500",
+    line: "bg-red-500",
+    components: "chart",
+  },
+  {
+    id: 5,
+    fa: "آمار و جزئیات حساب",
+    en: "Statistics",
+    descFa: "عملکرد و آمار حساب",
+    descEn: "Account statistics",
+    icon: PieChart,
+    color: "text-blue-500",
+    line: "bg-blue-500",
+    components: "detailseAc",
+  },
+  {
+    id: 6,
+    fa: "تحلیل تقویمی",
+    en: "Calendar Analysis",
+    descFa: "تحلیل رویدادها و ساعات",
+    descEn: "Events & hours",
+    icon: CalendarDays,
+    color: "text-violet-500",
+    line: "bg-violet-500",
+    components: "detaileCalendre",
+  },
+  {
+    id: 7,
+    fa: "وضعیت اخبار",
+    en: "News",
+    descFa: "اخبار و رویدادهای مهم",
+    descEn: "Important events",
+    icon: Newspaper,
+    color: "text-orange-500",
+    line: "bg-orange-500",
+    components: "newsComponent",
+  },
+  {
+    id: 8,
+    fa: "هوش مصنوعی ترید",
+    en: "AI Trade",
+    descFa: "تحلیل رفتار معاملاتی",
+    descEn: "Trading behaviour",
+    icon: Brain,
+    color: "text-emerald-500",
+    line: "bg-emerald-500",
+    components: "AiComponent",
+  },
+  {
+    id: 9,
+    fa: "مقایسه با کاربران",
+    en: "Compare Users",
+    descFa: "مقایسه و رتبه‌بندی",
+    descEn: "Ranking & compare",
+    icon: Trophy,
+    color: "text-yellow-500",
+    line: "bg-yellow-500",
+    components: "Comparison",
+  },
+  {
+    id: 10,
+    fa: "لیست معاملات",
+    en: "Trade List",
+    descFa: "تاریخچه معاملات",
+    descEn: "Trade history",
+    icon: FileText,
+    color: "text-blue-500",
+    line: "bg-blue-500",
+    components: "TransactionList",
   },
 ];

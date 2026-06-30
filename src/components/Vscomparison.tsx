@@ -1,15 +1,11 @@
 import { useTranslation } from "react-i18next";
-import type { MetricRow, SummaryCard } from "../types/interfaces";
-import {
-  behaviorMetrics,
-  performanceMetrics,
-  summaryCards,
-} from "../data/fakeData";
+import type { MetricRow } from "../types/interfaces";
+import { behaviorMetrics, performanceMetrics } from "../data/fakeData";
 import UsersIcon from "../icons/UsersIcon";
 import ProfileIcon from "../icons/ProfileIcon";
 import VS from "../assets/images/V.S.png";
-import TrendUpIcon from "../icons/TrendUpIcon";
-import i18next from "i18next";
+import i18next, { t } from "i18next";
+import CartFacke from "../module/CartFacke";
 
 function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
   const { i18n } = useTranslation();
@@ -60,7 +56,7 @@ function MetricRow({ row }: { row: MetricRow }) {
               style={{ width: `${row.leftBar}%` }}
             />
           </div>
-          <div className="w-30 sm:w-35 md:w-40 p-3 sm:p-4 md:p-5 absolute -top-2 left-[50%] sm:left-42.5 transform -translate-x-1/2 sm:translate-x-0 rounded-lg h-4.5 sm:h-5 dark:bg-linear-to-l daek:from-[#494949] dark:to-[#C4C4C426] dark:backdrop-blur-md bg-[#a1a6ac] shrink-0 flex items-center justify-center">
+          <div className="w-30 sm:w-35 md:w-40 p-3 sm:p-4 md:p-5 absolute -top-2 left-[50%] sm:left-42.5 transform -translate-x-1/2 sm:translate-x-0 rounded-lg h-4.5 sm:h-5 dark:bg-linear-to-l dark:from-[#494949] dark:to-[#C4C4C426] dark:backdrop-blur-md bg-[#a1a6ac] shrink-0 flex items-center justify-center">
             <span className="text-[10px] sm:text-[11px] md:text-[12px] text-center font-normal whitespace-nowrap">
               {i18next.language === "fa" ? row?.label?.fa : row?.label?.en}
             </span>
@@ -80,151 +76,73 @@ function MetricRow({ row }: { row: MetricRow }) {
   );
 }
 
-function SummaryCardItem({ card }: { card: SummaryCard }) {
-  const { i18n } = useTranslation();
-  const isRtl = i18n.language === "fa";
-
-  return (
-    <div className="flex flex-col items-center gap-2">
-      <div
-        className="
-      bg-[#f8fafc] dark:bg-[#303030]
-      border-2 border-gray-300
-      dark:border-none
-      shadow-lg
-      rounded-xl
-      p-2 sm:p-3 md:p-4
-      flex items-center justify-between
-      w-full max-w-[220px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[300px]
-      aspect-square
-      overflow-hidden
-    "
-      >
-        <div className="flex flex-col gap-1.5 items-end">
-          {[1, 2].map((_, i) => (
-            <div
-              key={i}
-              className="
-            bg-[#314746]
-            w-11.5 sm:w-12.5 md:w-13.5
-            h-6 sm:h-7
-            rounded-lg
-            flex items-center justify-center gap-1
-          "
-            >
-              <TrendUpIcon />
-              <span className="text-[#34CB5A] text-[9px] sm:text-[10px]">
-                32%
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div className="flex items-center justify-center">
-          <span
-            className="
-          text-[#34CB5A]
-          text-xl sm:text-2xl md:text-3xl
-          font-bold
-          drop-shadow-[0_0_6px_#34CB5A]
-        "
-          >
-            {i18n.language === "fa" ? "۵۸٪" : "58%"}
-          </span>
-        </div>
-
-        <div className="flex flex-col items-start gap-0.5">
-          <span className="dark:text-white text-gray-500 text-sm sm:text-base md:text-lg font-bold leading-tight">
-            {i18next.language === "fa" ? "خرید" : "Buy"}
-          </span>
-          <span className="dark:text-white text-gray-500 text-sm sm:text-base md:text-lg font-bold leading-tight">
-            {i18next.language === "fa" ? "فروش" : "Sell"}
-          </span>
-        </div>
-      </div>
-
-      <div
-        className={`
-      text-[10px] sm:text-xs md:text-sm
-      text-gray-400 leading-snug
-      w-full max-w-[220px] sm:max-w-[240px] md:max-w-[280px] lg:max-w-[300px]
-      ${isRtl ? "text-right" : "text-left"}
-    `}
-      >
-        <span className="flex items-center justify-center dark:text-white text-gray-500 font-bold mt-2 text-xs sm:text-sm">
-          {i18next.language === "fa" ? card?.title?.fa : card?.title?.en}
-        </span>
-      </div>
-    </div>
-  );
-}
+// function SummaryCardItem({ card }: { card: any }) {
+//   return (
+//     <div className="w-full">
+//       <CartFacke />
+//     </div>
+//   );
+// }
 
 export default function VSComparison() {
   const { i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
   return (
-    <div className=" dark:bg-[#2B2B2B] w-full max-w-388.5 rounded-[25px] border-4 dark:border-white/10 border-gray-400 mx-auto text-white font-normal flex justify-center px-2 sm:px-4 py-4 sm:py-6">
-      <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-4xl xl:max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-3 sm:gap-4">
-        <div className="flex items-center justify-between px-1 sm:px-2">
-          <div
-            className={`flex flex-col items-center gap-1 ${isRtl ? "order-3" : "order-1"} flex-1`}
-          >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center flex-col text-base sm:text-lg">
-              <UsersIcon />
-            </div>
-            <span className="dark:text-[#ffffff] text-gray-500 text-base sm:text-lg md:text-xl font-bold whitespace-nowrap text-center">
-              {i18n.language === "fa" ? "کاربران رابین سود" : "Robin's Users"}
-            </span>
-          </div>
-
-          <div className="order-2 shrink-0 px-1 sm:px-2">
-            <img src={VS} alt="VS" className="w-8 sm:w-10 md:w-12" />
-          </div>
-
-          <div
-            className={`flex flex-col items-center gap-1 ${isRtl ? "order-1" : "order-3"} flex-1`}
-          >
-            <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-base sm:text-lg">
-              <ProfileIcon />
-            </div>
-            <span className="text-base sm:text-lg md:text-xl font-bold dark:text-white text-gray-500">
-              {i18n.language === "fa" ? "شما" : "You"}
-            </span>
-          </div>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-4">
-          <MetricSection
-            title={
-              i18n.language === "fa"
-                ? "عملکرد و بازدهی"
-                : "Performance & Returns"
-            }
-            rows={performanceMetrics}
-          />
-
-          <MetricSection
-            title={
-              i18n.language === "fa" ? "رفتار معاملاتی" : "Trading Behavior"
-            }
-            rows={behaviorMetrics}
-          />
-        </div>
-
-        <div className="grid grid-cols-2  sm:grid-cols-3 lg:grid-cols-5 gap-2">
-          {summaryCards.map((card) => (
+    <>
+      <h1 className="md:text-2xl text-md font-bold px-4 mt-3 mb-3">
+        {t("labels.parametr12")}
+      </h1>
+      <div className=" dark:bg-[#2B2B2B] step-test48 w-full max-w-388.5 rounded-2xl mt-3 border-4 dark:border-white/10 border-gray-400 mx-auto text-white font-normal flex justify-center px-2 sm:px-4 py-4 sm:py-6">
+        <div className="w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-4xl xl:max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-3 sm:gap-4">
+          <div className="flex items-center justify-between px-1 sm:px-2">
             <div
-              key={card.id}
-              className={
-                card.id === 5 ? "col-span-2 sm:col-span-3 lg:col-span-1" : ""
-              }
+              className={`flex flex-col items-center gap-1 ${isRtl ? "order-3" : "order-1"} flex-1`}
             >
-              <SummaryCardItem card={card} />
+              <div className="w-8  h-8 sm:w-10 sm:h-10 rounded-full flex items-center flex-col text-base sm:text-lg">
+                <UsersIcon />
+              </div>
+              <span className="dark:text-[#ffffff] text-gray-500 text-base sm:text-lg md:text-xl font-bold whitespace-nowrap text-center">
+                {i18n.language === "fa" ? "کاربران رابین سود" : "Robin's Users"}
+              </span>
             </div>
-          ))}
+
+            <div className="order-2 shrink-0 px-1 sm:px-2">
+              <img src={VS} alt="VS" className="w-8 sm:w-10 md:w-12" />
+            </div>
+
+            <div
+              className={`flex flex-col items-center gap-1 ${isRtl ? "order-1" : "order-3"} flex-1`}
+            >
+              <div className="w-8 h-8 sm:w-10 sm:h-10 flex items-center justify-center text-base sm:text-lg">
+                <ProfileIcon />
+              </div>
+              <span className="text-base sm:text-lg md:text-xl font-bold dark:text-white text-gray-500">
+                {i18n.language === "fa" ? "شما" : "You"}
+              </span>
+            </div>
+          </div>
+
+          <div className="flex step-test49 flex-col lg:flex-row gap-4">
+            <MetricSection
+              title={
+                i18n.language === "fa"
+                  ? "عملکرد و بازدهی"
+                  : "Performance & Returns"
+              }
+              rows={performanceMetrics}
+            />
+
+            <MetricSection
+              title={
+                i18n.language === "fa" ? "رفتار معاملاتی" : "Trading Behavior"
+              }
+              rows={behaviorMetrics}
+            />
+          </div>
+          <CartFacke />
         </div>
       </div>
-    </div>
+    </>
   );
 }

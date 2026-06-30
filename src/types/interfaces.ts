@@ -528,3 +528,35 @@ export interface Card {
   glow: string;
   arrow: string;
 }
+
+export interface EducationModalContentProps {
+  onStartTour: () => void;
+}
+
+export interface TourStep {
+  id: string;
+  element: string;
+  side?: "top" | "right" | "bottom" | "left";
+
+  title: {
+    fa: string;
+    en: string;
+  };
+
+  description: {
+    fa: string;
+    en: string;
+  };
+
+  enabled?: boolean;
+  order?: number;
+}
+
+export interface CardComponentProps {
+  onStartTour: () => void;
+}
+
+export interface ComponentState {
+  activeComponent: string;
+  setActiveComponent: (value: string) => void;
+}

@@ -5,7 +5,7 @@ import SplitBar from "./SplitBar";
 
 function AvgWinLossCard() {
   return (
-    <CardShell className="flex flex-col h-full">
+    <CardShell className="flex step-test30 flex-col h-full">
       <div className="flex flex-col h-full justify-center py-2 sm:py-3 gap-2">
         <h3 className="dark:text-white text-gray-500 text-sm sm:text-base font-normal">
           {t("cart6.win")}

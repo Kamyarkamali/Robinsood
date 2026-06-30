@@ -9,10 +9,12 @@ function DisciplineScoreCard() {
     <CardShell
       dir="ltr"
       className="
+      step-test33
         flex flex-col
         items-center
         justify-center
         h-auto
+        step-test28
         min-h-65
         sm:min-h-70
         lg:min-h-75

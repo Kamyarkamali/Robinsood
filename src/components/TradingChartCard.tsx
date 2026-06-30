@@ -625,7 +625,7 @@ const TradingChartCard: React.FC<Props> = ({
                   className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
                   title="مشاهده بزرگ‌تر"
                 >
-                  <Maximize2 className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
+                  <Maximize2 className="w-4 step-test16 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
                 </button>
               )}
 
@@ -633,7 +633,7 @@ const TradingChartCard: React.FC<Props> = ({
                 onClick={() => setIsSettingsOpen(true)}
                 className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
               >
-                <Settings className="w-4 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
+                <Settings className="w-4 step-test17 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
               </button>
             </div>
           </div>

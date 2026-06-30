@@ -49,3 +49,10 @@ export type AvatarItem = {
   dark: string;
   light: string;
 };
+
+export type ModalType =
+  | "support"
+  | "mentor"
+  | "passAccount"
+  | "education"
+  | null;

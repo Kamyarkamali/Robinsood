@@ -1,10 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { ShowSectionItemsProps } from "../types/interfaces";
-import ShowAllItems from "../pages/ShowAllItems";
 import ChallengeGrid from "./ChallengeGrid";
-import WellcomeComponent from "./WellcomeComponent";
-import DetailseComponent from "./DetailseComponent";
-import InformationAccount from "./InformationAccount";
 
 function ShowSectionItems({ activeId }: ShowSectionItemsProps) {
   const { t } = useTranslation();
@@ -17,7 +13,7 @@ function ShowSectionItems({ activeId }: ShowSectionItemsProps) {
           {/* <h1 className=" dark:text-white text-gray-700 lg:px-8 md:px-3 sm:px-5 px-8  mb-4 text-[15px] sm:text-[17px] md:text-[25px] lg:text-[32px] font-bold">
             {t("labels.parametr1")}
           </h1> */}
-          <ShowAllItems />
+          {/* <ShowAllItems /> */}
         </div>
       );
 

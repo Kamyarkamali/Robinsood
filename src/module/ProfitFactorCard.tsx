@@ -6,7 +6,7 @@ import Pill from "./Pill";
 
 function ProfitFactorCard() {
   return (
-    <CardShell className="relative flex items-center justify-center h-full rounded-[24.14px] border-4 dark:border-[#303030] border-gray-400">
+    <CardShell className="relative step-test29 flex items-center justify-center h-full rounded-[24.14px] border-4 dark:border-[#303030] border-gray-400">
       <div className="flex flex-col gap-3 items-start justify-between">
         <h3 className="font-normal text-center w-full dark:text-[#ffffff] text-gray-500 text-sm md:text-[24px]">
           {t("cart5.profit")}

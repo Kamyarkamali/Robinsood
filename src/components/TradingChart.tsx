@@ -13,11 +13,11 @@ import {
   Cell,
   Area,
 } from "recharts";
-import ChartIcon from "../icons/ChartIcon";
 import { Settings } from "lucide-react";
 import ChartSettingsPanel, {
   useChartSettings,
 } from "./common/ChartCustomSettings";
+import i18next from "i18next";
 
 type TimeFrame =
   | "1min"
@@ -168,7 +168,7 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
   return (
     <div
-      className={`bg-[#1a1230] dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[10px] sm:text-[11px] shadow-2xl max-w-[160px] sm:max-w-[200px] ${isRtl ? "text-right" : "text-left"}`}
+      className={`bg-[#1a1230] flex flex-col items-center gap-1 backdrop-blur-2xl dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[9px] sm:text-[13px] shadow-2xl max-w-40 sm:max-w-50 ${isRtl ? "text-right" : "text-left"}`}
       style={{
         backgroundColor: settings?.colors?.background || "#1a1230",
         borderColor: settings?.colors?.primary || "#3b1f7a",
@@ -212,7 +212,7 @@ const IconBtn = ({
     onClick={onClick}
     title={title}
     className={`w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150
-      bg-[#e8e4f5] bg-transparent
+       bg-transparent
       ${
         active
           ? "text-[#7c3aed] dark:text-[#a78bfa]"
@@ -265,8 +265,6 @@ export default function TradingChart() {
     balance: true,
     equity: true,
   });
-
-  const showGrid = settings.display.showGrid;
 
   const allData = useMemo(() => generateData(timeFrame), [timeFrame]);
   const TOTAL = allData.length;
@@ -377,10 +375,15 @@ export default function TradingChart() {
   };
 
   return (
-    <div
-      dir={isRtl ? "rtl" : "ltr"}
-      className="
+    <>
+      <h1 className="md:text-2xl text-lg font-bold px-2 mt-4 mb-4">
+        {t("labels.parametr4")}
+      </h1>
+      <div
+        dir={isRtl ? "rtl" : "ltr"}
+        className="
         w-full
+        mt-3
         max-w-full
         mx-auto
         bg-white
@@ -394,392 +397,372 @@ export default function TradingChart() {
         p-1.5 sm:p-3 lg:p-5
         flex flex-col gap-1.5 sm:gap-3
         overflow-hidden
+        step-test18
       "
-    >
-      {/* سطر اول: دکمه‌های mode و تنظیمات */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
-        <div
-          className={`flex items-center gap-1 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
-        >
-          <div className="flex bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1">
-            {(["balance", "profit"] as Mode[]).map((m) => (
-              <button
-                key={m}
-                onClick={() => setMode(m)}
-                className={`px-1.5 sm:px-4 py-0.5 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-[1755.43px] cursor-pointer font-medium text-[8px] sm:text-[14px] transition-all duration-200 whitespace-nowrap
+      >
+        <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
+          <div
+            className={`flex items-center gap-1 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+          >
+            <div className="flex step-test19 bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1">
+              {(["balance", "profit"] as Mode[]).map((m) => (
+                <p
+                  key={m}
+                  onClick={() => setMode(m)}
+                  className={`px-1.5 sm:px-4 py-0.5 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-2xl cursor-pointer font-normal text-[9px] sm:text-[13px] transition-all duration-200 whitespace-nowrap
                   ${
                     mode === m
                       ? "bg-linear-to-b from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
                       : "bg-transparent"
                   }`}
+                >
+                  {t(`chart.${m}`)}
+                </p>
+              ))}
+            </div>
+
+            <div className="flex step-test20 items-center gap-0.5 sm:gap-1">
+              <IconBtn
+                onClick={() =>
+                  setVisibleCount((v) => Math.min(TOTAL, Math.round(v * 1.4)))
+                }
+                title={t("chart.zoomOut")}
               >
-                {t(`chart.${m}`)}
+                <MdOutlineZoomOut size={window.innerWidth < 480 ? 18 : 23} />
+              </IconBtn>
+
+              <IconBtn
+                onClick={() =>
+                  setVisibleCount((v) => Math.max(MIN_VIS, Math.round(v * 0.7)))
+                }
+                title={t("chart.zoomIn")}
+              >
+                <MdOutlineZoomIn size={window.innerWidth < 480 ? 18 : 23} />
+              </IconBtn>
+
+              <button
+                onClick={openSettingsPanel}
+                className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
+                title="تنظیمات چارت"
+              >
+                <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
               </button>
-            ))}
+            </div>
           </div>
 
-          <div className="flex items-center gap-0.5 sm:gap-1">
-            <IconBtn
-              onClick={() =>
-                setSettings({
-                  ...settings,
-                  display: {
-                    ...settings.display,
-                    showGrid: !settings.display.showGrid,
-                  },
-                })
-              }
-              active={showGrid}
-              title={t("chart.toggleGrid")}
-            >
-              <ChartIcon />
-            </IconBtn>
-
-            <IconBtn
-              onClick={() =>
-                setVisibleCount((v) => Math.min(TOTAL, Math.round(v * 1.4)))
-              }
-              title={t("chart.zoomOut")}
-            >
-              <MdOutlineZoomOut size={window.innerWidth < 480 ? 18 : 23} />
-            </IconBtn>
-
-            <IconBtn
-              onClick={() =>
-                setVisibleCount((v) => Math.max(MIN_VIS, Math.round(v * 0.7)))
-              }
-              title={t("chart.zoomIn")}
-            >
-              <MdOutlineZoomIn size={window.innerWidth < 480 ? 18 : 23} />
-            </IconBtn>
-
-            <button
-              onClick={openSettingsPanel}
-              className="w-6 h-6 sm:w-8 sm:h-8 rounded-lg border-none cursor-pointer flex items-center justify-center transition-all duration-150 bg-[#e8e4f5] bg-transparent text-[#7c3aed] dark:text-[#a78bfa] hover:bg-purple-100 dark:hover:bg-purple-900/30"
-              title="تنظیمات چارت"
-            >
-              <Settings className="w-3 h-3 sm:w-4 sm:h-4" />
-            </button>
+          <div
+            dir={i18next.language === "fa" ? "ltr" : "rtl"}
+            className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+            style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          >
+            <div className="flex items-center gap-1 sm:gap-2 p-1 justify-center w-full  rounded-2xl">
+              {TIME_FRAMES.map((tf) => (
+                <p
+                  key={tf}
+                  onClick={() => setTimeFrame(tf)}
+                  className={`px-0.5 sm:px-4 py-1 rounded-2xl cursor-pointer text-[7px] sm:text-[13px] transition-all duration-150 whitespace-nowrap
+      ${
+        timeFrame === tf
+          ? "sm:bg-linear-to-b sm:from-purple-100 sm:to-purple-50 sm:dark:from-[#C4C4C426] sm:dark:to-[#EBEBEB1A] text-[#7c3aed] bg-none dark:text-[#c4b5fd] shadow-sm"
+          : "bg-transparent dark:text-[#ffffff] text-gray-500 hover:bg-gray-200 dark:hover:bg-[#3A3A3A]"
+      }`}
+                >
+                  {t(`timeframes.${tf}`)}
+                </p>
+              ))}
+            </div>
           </div>
         </div>
 
-        {/* تایم‌فریم‌ها - اسکرول افقی در موبایل */}
-        <div
-          className={`flex items-center gap-0.5 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-        >
-          {TIME_FRAMES.map((tf) => (
-            <button
-              key={tf}
-              onClick={() => setTimeFrame(tf)}
-              className={`shrink-0 px-1.5 sm:px-3 py-0.5 sm:py-1.5 rounded-[1024px] border-none cursor-pointer text-[7px] sm:text-[13px] font-medium transition-all duration-150 whitespace-nowrap
-                ${
-                  timeFrame === tf
-                    ? "bg-linear-to-b dark:from-[#C4C4C426] dark:to-[#EBEBEB1A] text-[#7c3aed] dark:text-[#c4b5fd]"
-                    : "bg-transparent dark:text-[#ffffff] text-gray-500"
-                }`}
-            >
-              {t(`timeframes.${tf}`)}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* چارت */}
-      <div className="flex-1 min-h-0">
-        <div
-          ref={wrapRef}
-          onMouseDown={onMD}
-          onMouseMove={onMM}
-          onMouseUp={onMU}
-          onMouseLeave={onMU}
-          onTouchStart={onTS}
-          onTouchMove={onTM}
-          className="
+        {/* چارت */}
+        <div className="flex-1 min-h-0">
+          <div
+            ref={wrapRef}
+            onMouseDown={onMD}
+            onMouseMove={onMM}
+            onMouseUp={onMU}
+            onMouseLeave={onMU}
+            onTouchStart={onTS}
+            onTouchMove={onTM}
+            className="
             w-full
             select-none
             cursor-grab
             active:cursor-grabbing
             relative
-            min-h-[150px]
-            sm:min-h-[200px]
-            lg:min-h-[300px]
+            min-h-37.5
+            sm:min-h-50
+            lg:min-h-75
           "
-          style={{ height: chartHeight }}
-        >
-          <ResponsiveContainer width="100%" height="100%">
-            <ComposedChart
-              data={visibleData}
-              margin={{
-                top: 5,
-                right: window.innerWidth < 480 ? 5 : 10,
-                left: window.innerWidth < 480 ? 5 : 10,
-                bottom: 5,
-              }}
-            >
-              <defs>
-                <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop
-                    offset="0%"
-                    stopColor={settings.colors.primary}
-                    stopOpacity={0.4}
-                  />
-                  <stop
-                    offset="70%"
-                    stopColor={settings.colors.primary}
-                    stopOpacity={0.1}
-                  />
-                  <stop
-                    offset="100%"
-                    stopColor={settings.colors.primary}
-                    stopOpacity={0}
-                  />
-                </linearGradient>
-                <linearGradient id="balanceStroke" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor={settings.colors.primary} />
-                  <stop offset="50%" stopColor={settings.colors.secondary} />
-                  <stop offset="100%" stopColor={settings.colors.accent} />
-                </linearGradient>
-              </defs>
+            style={{ height: chartHeight }}
+          >
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart
+                data={visibleData}
+                margin={{
+                  top: 5,
+                  right: window.innerWidth < 480 ? 5 : 10,
+                  left: window.innerWidth < 480 ? 5 : 10,
+                  bottom: 5,
+                }}
+              >
+                <defs>
+                  <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop
+                      offset="0%"
+                      stopColor={settings.colors.primary}
+                      stopOpacity={0.4}
+                    />
+                    <stop
+                      offset="70%"
+                      stopColor={settings.colors.primary}
+                      stopOpacity={0.1}
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor={settings.colors.primary}
+                      stopOpacity={0}
+                    />
+                  </linearGradient>
+                  <linearGradient
+                    id="balanceStroke"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="0"
+                  >
+                    <stop offset="0%" stopColor={settings.colors.primary} />
+                    <stop offset="50%" stopColor={settings.colors.secondary} />
+                    <stop offset="100%" stopColor={settings.colors.accent} />
+                  </linearGradient>
+                </defs>
 
-              {settings.display.showGrid && (
-                <CartesianGrid
-                  strokeDasharray="5 4"
-                  stroke={settings.colors.grid}
-                  className="dark:[stroke:#666D80]"
-                  strokeWidth={settings.lineWidths.grid}
-                />
-              )}
+                {settings.display.showGrid && (
+                  <CartesianGrid
+                    strokeDasharray="3 6"
+                    stroke={settings.colors.grid}
+                    strokeOpacity={0.25}
+                    strokeWidth={1}
+                    vertical={true}
+                    horizontal={true}
+                  />
+                )}
 
-              {settings.axis.showXAxis && (
-                <XAxis
-                  dataKey="time"
-                  tick={{
-                    fill: settings.colors.text,
-                    fontSize: Math.min(
-                      settings.sizes.fontSize,
-                      window.innerWidth < 480
-                        ? 7
-                        : window.innerWidth < 640
-                          ? 8
-                          : settings.sizes.fontSize,
-                    ),
-                  }}
-                  axisLine={{ stroke: settings.colors.grid }}
-                  tickLine={false}
-                  interval={Math.ceil(
-                    visibleCount /
-                      Math.min(
-                        settings.axis.tickCount,
+                {settings.axis.showXAxis && (
+                  <XAxis
+                    dataKey="time"
+                    tick={{
+                      fill: "#ffff",
+                      fontSize: Math.min(
+                        settings.sizes.fontSize,
                         window.innerWidth < 480
-                          ? 2
+                          ? 7
                           : window.innerWidth < 640
-                            ? 3
-                            : settings.axis.tickCount,
+                            ? 8
+                            : settings.sizes.fontSize,
                       ),
-                  )}
-                />
-              )}
+                    }}
+                    axisLine={{ stroke: settings.colors.grid }}
+                    tickLine={false}
+                    interval={Math.ceil(
+                      visibleCount /
+                        Math.min(
+                          settings.axis.tickCount,
+                          window.innerWidth < 480
+                            ? 2
+                            : window.innerWidth < 640
+                              ? 3
+                              : settings.axis.tickCount,
+                        ),
+                    )}
+                  />
+                )}
 
-              {settings.axis.showYAxis && (
                 <YAxis
                   domain={yDomain}
                   ticks={yTicks}
                   tick={{
-                    fill: settings.colors.text,
-                    fontSize: Math.min(
-                      settings.sizes.fontSize,
-                      window.innerWidth < 480
-                        ? 7
-                        : window.innerWidth < 640
-                          ? 8
-                          : settings.sizes.fontSize,
-                    ),
+                    fill: "#ffffff",
+                    fontSize: 11,
                   }}
                   axisLine={false}
                   tickLine={false}
-                  width={
-                    window.innerWidth < 480
-                      ? 30
-                      : window.innerWidth < 640
-                        ? 40
-                        : 60
-                  }
+                  width={4}
                   tickFormatter={(v) => {
                     if (v >= 1000) return (v / 1000).toFixed(0) + "k";
                     return v.toLocaleString();
                   }}
                   orientation={isRtl ? "right" : "left"}
                 />
-              )}
 
-              {settings.display.showTooltip && (
-                <Tooltip
-                  content={<ChartTooltip isRtl={isRtl} settings={settings} />}
-                />
-              )}
+                {settings.display.showTooltip && (
+                  <Tooltip
+                    content={<ChartTooltip isRtl={isRtl} settings={settings} />}
+                  />
+                )}
 
-              {settings.display.showAreas && activeSeries.balance && (
-                <Area
-                  dataKey="balance"
-                  name={t("chart.balance")}
-                  stroke="url(#balanceStroke)"
-                  strokeWidth={Math.min(
-                    settings.lineWidths.main,
-                    window.innerWidth < 480
-                      ? 1.2
-                      : window.innerWidth < 640
+                {settings.display.showAreas && activeSeries.balance && (
+                  <Area
+                    dataKey="balance"
+                    name={t("chart.balance")}
+                    stroke="url(#balanceStroke)"
+                    strokeWidth={Math.min(
+                      settings.lineWidths.main,
+                      window.innerWidth < 480
+                        ? 1.2
+                        : window.innerWidth < 640
+                          ? 1.5
+                          : settings.lineWidths.main,
+                    )}
+                    fill="url(#balanceGrad)"
+                    dot={false}
+                    activeDot={{
+                      r: window.innerWidth < 480 ? 2 : 4,
+                      fill: settings.colors.secondary,
+                      stroke: settings.colors.accent,
+                      strokeWidth: 2,
+                    }}
+                    style={
+                      settings.effects.glow
+                        ? { filter: "drop-shadow(0 0 5px #a855f766)" }
+                        : {}
+                    }
+                  />
+                )}
+
+                {activeSeries.target && (
+                  <Line
+                    dataKey="target"
+                    name={t("chart.target")}
+                    stroke={settings.colors.accent}
+                    dot={false}
+                    strokeWidth={Math.min(
+                      settings.lineWidths.secondary,
+                      window.innerWidth < 480
+                        ? 1
+                        : window.innerWidth < 640
+                          ? 1.2
+                          : settings.lineWidths.secondary,
+                    )}
+                    strokeDasharray="5 3"
+                    style={
+                      settings.effects.glow
+                        ? { filter: "drop-shadow(0 0 3px #b06aff55)" }
+                        : {}
+                    }
+                  />
+                )}
+
+                {activeSeries.dailyDrawdown && (
+                  <Line
+                    dataKey="dailyDrawdown"
+                    name={t("chart.dailyDrawdown")}
+                    stroke={settings.colors.primary}
+                    dot={false}
+                    strokeWidth={Math.min(
+                      settings.lineWidths.secondary,
+                      window.innerWidth < 480
+                        ? 1
+                        : window.innerWidth < 640
+                          ? 1.2
+                          : settings.lineWidths.secondary,
+                    )}
+                    strokeDasharray="5 3"
+                  />
+                )}
+
+                {activeSeries.totalDrawdown && (
+                  <Line
+                    dataKey="totalDrawdown"
+                    name={t("chart.totalDrawdown")}
+                    stroke={settings.colors.secondary}
+                    dot={false}
+                    strokeWidth={Math.min(
+                      settings.lineWidths.secondary,
+                      window.innerWidth < 480
+                        ? 1
+                        : window.innerWidth < 640
+                          ? 1.2
+                          : settings.lineWidths.secondary,
+                    )}
+                    strokeDasharray="5 3"
+                  />
+                )}
+
+                {settings.display.showCandles && activeSeries.equity && (
+                  <Bar
+                    dataKey="equity"
+                    name={t("chart.equity")}
+                    barSize={Math.max(
+                      window.innerWidth < 480
                         ? 1.5
-                        : settings.lineWidths.main,
-                  )}
-                  fill="url(#balanceGrad)"
-                  dot={false}
-                  activeDot={{
-                    r: window.innerWidth < 480 ? 2 : 4,
-                    fill: settings.colors.secondary,
-                    stroke: settings.colors.accent,
-                    strokeWidth: 2,
-                  }}
-                  style={
-                    settings.effects.glow
-                      ? { filter: "drop-shadow(0 0 5px #a855f766)" }
-                      : {}
-                  }
-                />
-              )}
-
-              {activeSeries.target && (
-                <Line
-                  dataKey="target"
-                  name={t("chart.target")}
-                  stroke={settings.colors.accent}
-                  dot={false}
-                  strokeWidth={Math.min(
-                    settings.lineWidths.secondary,
-                    window.innerWidth < 480
-                      ? 1
-                      : window.innerWidth < 640
-                        ? 1.2
-                        : settings.lineWidths.secondary,
-                  )}
-                  strokeDasharray="5 3"
-                  style={
-                    settings.effects.glow
-                      ? { filter: "drop-shadow(0 0 3px #b06aff55)" }
-                      : {}
-                  }
-                />
-              )}
-
-              {activeSeries.dailyDrawdown && (
-                <Line
-                  dataKey="dailyDrawdown"
-                  name={t("chart.dailyDrawdown")}
-                  stroke={settings.colors.primary}
-                  dot={false}
-                  strokeWidth={Math.min(
-                    settings.lineWidths.secondary,
-                    window.innerWidth < 480
-                      ? 1
-                      : window.innerWidth < 640
-                        ? 1.2
-                        : settings.lineWidths.secondary,
-                  )}
-                  strokeDasharray="5 3"
-                />
-              )}
-
-              {activeSeries.totalDrawdown && (
-                <Line
-                  dataKey="totalDrawdown"
-                  name={t("chart.totalDrawdown")}
-                  stroke={settings.colors.secondary}
-                  dot={false}
-                  strokeWidth={Math.min(
-                    settings.lineWidths.secondary,
-                    window.innerWidth < 480
-                      ? 1
-                      : window.innerWidth < 640
-                        ? 1.2
-                        : settings.lineWidths.secondary,
-                  )}
-                  strokeDasharray="5 3"
-                />
-              )}
-
-              {settings.display.showCandles && activeSeries.equity && (
-                <Bar
-                  dataKey="equity"
-                  name={t("chart.equity")}
-                  barSize={Math.max(
-                    window.innerWidth < 480
-                      ? 1.5
-                      : window.innerWidth < 640
-                        ? 2
-                        : settings.sizes.barSize,
-                    Math.round(600 / visibleCount),
-                  )}
-                  shape={(props: any) => (
-                    <CandleBar
-                      {...props}
-                      yDomain={yDomain}
-                      chartH={chartHeight - 20}
-                      settings={settings}
-                    />
-                  )}
-                >
-                  {visibleData.map((_, i) => (
-                    <Cell key={i} fill={settings.colors.primary} />
-                  ))}
-                </Bar>
-              )}
-            </ComposedChart>
-          </ResponsiveContainer>
+                        : window.innerWidth < 640
+                          ? 2
+                          : settings.sizes.barSize,
+                      Math.round(600 / visibleCount),
+                    )}
+                    shape={(props: any) => (
+                      <CandleBar
+                        {...props}
+                        yDomain={yDomain}
+                        chartH={chartHeight - 20}
+                        settings={settings}
+                      />
+                    )}
+                  >
+                    {visibleData.map((_, i) => (
+                      <Cell key={i} fill={settings.colors.primary} />
+                    ))}
+                  </Bar>
+                )}
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
         </div>
-      </div>
 
-      <p className="text-center text-[7px] sm:text-[9px] dark:text-white text-[#c0b8d8] -mt-0.5">
-        {isRtl
-          ? `اسکرول برای زوم · درگ برای حرکت · ${visibleCount}/${TOTAL} کندل`
-          : `scroll to zoom · drag to pan · ${visibleCount}/${TOTAL} bars`}
-      </p>
+        <p className="text-center text-[9px] sm:text-[13px] dark:text-white text-[#c0b8d8] -mt-0.5">
+          {isRtl
+            ? `اسکرول برای زوم · درگ برای حرکت · ${visibleCount}/${TOTAL} کندل`
+            : `scroll to zoom · drag to pan · ${visibleCount}/${TOTAL} bars`}
+        </p>
 
-      {settings.display.showLegend && (
-        <div
-          className={`flex flex-wrap justify-center gap-x-1.5 sm:gap-x-5 gap-y-0.5 sm:gap-y-2 ${isRtl ? "flex-row-reverse" : ""}`}
-        >
-          {SERIES_CONFIG.map(({ key, tKey, color }) => (
-            <button
-              key={key}
-              onClick={() => toggle(key)}
-              className="flex items-center gap-0.5 sm:gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-0.5 sm:px-1.5 py-0.5 sm:py-1 transition-opacity duration-200"
-              style={{ opacity: activeSeries[key] ? 1 : 0.3 }}
-            >
-              <span
-                className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 transition-shadow duration-200"
-                style={{
-                  background: color,
-                  boxShadow: activeSeries[key] ? `0 0 7px ${color}` : "none",
-                }}
-              />
-              <span
-                className="text-[7px] sm:text-xs font-semibold transition-colors duration-200 whitespace-nowrap"
-                style={{ color: activeSeries[key] ? color : "#b0a8cc" }}
+        {settings.display.showLegend && (
+          <div
+            className={`flex step-test22 flex-wrap justify-center gap-x-1.5 sm:gap-x-5 gap-y-0.5 sm:gap-y-2 ${isRtl ? "flex-row-reverse" : ""}`}
+          >
+            {SERIES_CONFIG.map(({ key, tKey, color }) => (
+              <button
+                key={key}
+                onClick={() => toggle(key)}
+                className="flex items-center gap-0.5 sm:gap-1.5 bg-transparent border-none cursor-pointer rounded-lg px-0.5 sm:px-1.5 py-0.5 sm:py-1 transition-opacity duration-200"
+                style={{ opacity: activeSeries[key] ? 1 : 0.3 }}
               >
-                {t(tKey)}
-              </span>
-            </button>
-          ))}
-        </div>
-      )}
+                <span
+                  className="w-1.5 h-1.5 sm:w-2.5 sm:h-2.5 rounded-full shrink-0 transition-shadow duration-200"
+                  style={{
+                    background: color,
+                    boxShadow: activeSeries[key] ? `0 0 7px ${color}` : "none",
+                  }}
+                />
+                <span
+                  className="text-[9px] sm:text-[13px] font-semibold transition-colors duration-200 whitespace-nowrap"
+                  style={{ color: activeSeries[key] ? color : "#b0a8cc" }}
+                >
+                  {t(tKey)}
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
 
-      <ChartSettingsPanel
-        settings={settings}
-        onSettingsChange={setSettings}
-        isOpen={settingsOpen}
-        onClose={closeSettingsPanel}
-        onReset={resetSettings}
-      />
-    </div>
+        <ChartSettingsPanel
+          settings={settings}
+          onSettingsChange={setSettings}
+          isOpen={settingsOpen}
+          onClose={closeSettingsPanel}
+          onReset={resetSettings}
+        />
+      </div>
+    </>
   );
 }

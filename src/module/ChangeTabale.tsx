@@ -4,8 +4,13 @@ import { t } from "i18next";
 
 const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
   return (
-    <div
-      className="
+    <div>
+      <div className="flex flex-col items-center pr-9 md:flex-row">
+        <h1 className="md:text-2xl text-[11px] text-nowrap font-bold lg:px-2 mt-4 md:mb-4">
+          {t("labels.parametr6")}
+        </h1>
+        <div
+          className="
         w-full max-w-55
         flex items-center
         gap-1
@@ -15,16 +20,17 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
         from-[#282828]
         to-[#323232]
         shadow-lg
+        mt-3
       "
-    >
-      <button
-        onClick={() => setShowTabale("عددی")}
-        className={`
+        >
+          <button
+            onClick={() => setShowTabale("عددی")}
+            className={`
           flex-1
           h-9 sm:h-10
           rounded-full
           text-xs sm:text-sm
-          font-medium
+          font-normal
           cursor-pointer
           transition-all
           duration-300
@@ -38,13 +44,13 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
               : "text-[#A8A8A8] hover:text-white"
           }
         `}
-      >
-        {t("changeTabale.tabale1")}
-      </button>
+          >
+            {t("changeTabale.tabale1")}
+          </button>
 
-      <button
-        onClick={() => setShowTabale("نمودار")}
-        className={`
+          <button
+            onClick={() => setShowTabale("نمودار")}
+            className={`
           flex-1
           h-9 sm:h-10
           rounded-full
@@ -63,9 +69,11 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
               : "text-[#A8A8A8] hover:text-white"
           }
         `}
-      >
-        {t("changeTabale.tabale2")}
-      </button>
+          >
+            {t("changeTabale.tabale2")}
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
