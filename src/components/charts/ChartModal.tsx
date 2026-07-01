@@ -32,9 +32,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
 
   const theme = {
     overlay: "bg-black/60 dark:bg-black/70",
-    panel: isDark
-      ? "bg-[#0b0b12]/90 border-white/10"
-      : "bg-white/90 border-gray-200",
+    panel: isDark ? "bg-[#2B2B2B]" : "bg-white/90 border-gray-200",
     text: isDark ? "text-white" : "text-gray-900",
     muted: isDark ? "text-white/60" : "text-gray-500",
     hover: isDark ? "hover:bg-white/10" : "hover:bg-black/5",
@@ -55,7 +53,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart data={bodyData} barCategoryGap="25%">
             <XAxis dataKey="t" stroke={isDark ? "#888" : "#666"} />
-            <YAxis stroke={isDark ? "#888" : "#666"} />
+            <YAxis tickMargin={13} stroke={isDark ? "#888" : "#666"} />
 
             <Tooltip
               content={(props) => (
@@ -146,7 +144,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
           </defs>
 
           <XAxis dataKey="t" stroke={isDark ? "#fff" : "#666"} />
-          <YAxis stroke={isDark ? "#fff" : "#666"} />
+          <YAxis tickMargin={24} stroke={isDark ? "#fff" : "#666"} />
 
           <Tooltip
             content={(props) => (

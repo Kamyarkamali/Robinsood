@@ -93,7 +93,6 @@ export default function TradingStatsTable() {
             ))}
           </div>
 
-          {/* ستون سوم با مارجین و گردی کامل */}
           <div className="md:mr-3 mt-5 md:mt-0">
             <div className="rounded-md overflow-hidden border border-gray-200 dark:border-gray-700">
               <div className={SECTION_HEADER}>
@@ -122,7 +121,7 @@ export default function TradingStatsTable() {
 
                   <div className="flex-1 px-3 py-2 text-center">
                     <span className={`text-xs ${TEXT_SECONDARY}`}>
-                      {i18n.language === "fa" ? row.labelFa : row.labelEn}
+                      {i18next.language === "fa" ? row.labelFa : row.labelEn}
                     </span>
                   </div>
                 </div>

@@ -82,6 +82,10 @@ import brit from "../assets/images/brit.webp";
 import jp from "../assets/images/japan.jpg";
 import ca from "../assets/images/ca.webp";
 import er from "../assets/images/er.webp";
+import tok from "../assets/images/tokyo.png";
+import lond from "../assets/images/london.png";
+import sid from "../assets/images/sid.png";
+import stas from "../assets/images/statue.png";
 
 import type { ChartCustomSettings } from "../components/common/ChartCustomSettings";
 import type {
@@ -815,6 +819,37 @@ export const weeklyReport: WeeklyReportRow[] = [
   },
 ];
 
+export const weeklyPnlReports = [
+  {
+    day: { fa: "شنبه", en: "Saturday" },
+    pnl: 220,
+  },
+  {
+    day: { fa: "یکشنبه", en: "Sunday" },
+    pnl: -120,
+  },
+  {
+    day: { fa: "دوشنبه", en: "Monday" },
+    pnl: 90,
+  },
+  {
+    day: { fa: "سه‌شنبه", en: "Tuesday" },
+    pnl: 350,
+  },
+  {
+    day: { fa: "چهارشنبه", en: "Wednesday" },
+    pnl: -70,
+  },
+  {
+    day: { fa: "پنجشنبه", en: "Thursday" },
+    pnl: 180,
+  },
+  {
+    day: { fa: "جمعه", en: "Friday" },
+    pnl: 0,
+  },
+];
+
 export const statsData: StatsRow[] = [
   { labelFa: "تعداد کل معاملات", labelEn: "Total Trades", value: "۲۱" },
   { labelFa: "معاملات موفق", labelEn: "Winning Trades", value: "۴" },
@@ -952,37 +987,37 @@ export const middleData: MiddleRow[] = [
 export const capitalData: CapitalRow[] = [
   {
     value: "۰.۱۷",
-    labelFa: "پرافیت فکتور (Profit Factor)",
+    labelFa: "پرافیت فکتور",
     labelEn: "Profit Factor",
   },
   {
     value: "۱۹",
-    labelFa: "درصد سوددهی (Profitability)",
+    labelFa: "درصد سوددهی",
     labelEn: "Profitability",
   },
   {
     value: "۰.۰۰",
-    labelFa: "انحراف معیار (Standard Deviation)",
+    labelFa: "انحراف معیار",
     labelEn: "Standard Deviation",
   },
   {
     value: "۰.۰۰",
-    labelFa: "نسبت شارپ (Sharpe Ratio)",
+    labelFa: "نسبت شارپ",
     labelEn: "Sharpe Ratio",
   },
   {
     value: "۳۳.۲۳",
-    labelFa: "انتظار سوددهی (Profit Expectancy)",
+    labelFa: "انتظار سوددهی",
     labelEn: "Profit Expectancy",
   },
   {
     value: "۳.۶۹",
-    labelFa: "شاخص سوددهی (Profit Index)",
+    labelFa: "شاخص سوددهی",
     labelEn: "Profit Index",
   },
   {
     value: "۵۵.۴۸",
-    labelFa: "شاخص ضرردهی (Loss Index)",
+    labelFa: "شاخص ضرردهی",
     labelEn: "Loss Index",
   },
   {
@@ -2450,7 +2485,7 @@ export const SESSIONS: Session[] = [
     bg: "rgba(110,20,20,.72)",
     border: "#c53030",
     dot: "#fc8181",
-    icon: "🗽",
+    icon: stas,
     mapX: 20,
     mapY: 46,
     barTop: 6,
@@ -2465,7 +2500,7 @@ export const SESSIONS: Session[] = [
     bg: "rgba(100,48,10,.72)",
     border: "#b45309",
     dot: "#fbbf24",
-    icon: "",
+    icon: lond,
     mapX: 44,
     mapY: 30,
     barTop: 38,
@@ -2474,13 +2509,14 @@ export const SESSIONS: Session[] = [
     id: "tok",
     fa: "سشن توکیو",
     en: "Tokyo Session",
+
     start: 3.5,
     end: 12.5,
     color: "#3b82f6",
-    bg: "rgba(2372,45,115,.)",
+    bg: "rgba(23,72,145,.72)",
     border: "#2563eb",
     dot: "#60a5fa",
-    icon: "",
+    icon: tok,
     mapX: 86,
     mapY: 40,
     barTop: 62,
@@ -2495,7 +2531,7 @@ export const SESSIONS: Session[] = [
     bg: "rgba(14,68,36,.72)",
     border: "#15803d",
     dot: "#4ade80",
-    icon: "",
+    icon: sid,
     mapX: 88,
     mapY: 80,
     barTop: 80,

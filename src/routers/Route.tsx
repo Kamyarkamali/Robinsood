@@ -31,33 +31,88 @@ function Route() {
 
     createAppTour(lang, theme).drive();
   };
+
   return (
     <div className="pr-4 pl-4">
-      <div className="w-full max-w-372.5 mx-auto px-4 md:pt-2 ">
-        <Navbar />
+      <div className="w-full max-w-372.5 mx-auto px-4 md:pt-2">
+        <Navbar activeComponent={activeComponent} />
       </div>
+
       <div className="flex flex-col items-center">
         <TradingCover />
         <CardComponent onStartTour={handleStartTour} />
       </div>
+
       <DashboardCards
         activeComponent={activeComponent}
         setActiveComponent={setActiveComponent}
       />
-      {/* نمایش صفحات بر اساس نیاز-تغیر داده نشود */}
 
-      {/* ---------------------------------------------------------------------- */}
-      {activeComponent === "ShowAllComponents" && <HomePage />}
-      {activeComponent === "InformationAccount" && <InformationAccount />}
-      {activeComponent === "ChallengeGrid" && <ChallengeGrid />}
-      {activeComponent === "ProgressCardsSection" && <TodayeInformation />}
-      {activeComponent === "chart" && <TradingChart />}
-      {activeComponent === "detailseAc" && <DetailseAccount />}
-      {activeComponent === "detaileCalendre" && <ChangeComponent />}
-      {activeComponent === "newsComponent" && <NewsComponent />}
-      {activeComponent === "AiComponent" && <TradingAnalysisPanel />}
-      {activeComponent === "Comparison" && <VSComparison />}
-      {activeComponent === "TransactionList" && <TradingTable />}
+      {activeComponent === "ShowAllComponents" && (
+        <div id="ShowAllComponents">
+          <HomePage />
+        </div>
+      )}
+
+      {activeComponent === "InformationAccount" && (
+        <div id="InformationAccount">
+          <InformationAccount />
+        </div>
+      )}
+
+      {activeComponent === "ChallengeGrid" && (
+        <div id="ChallengeGrid">
+          <ChallengeGrid />
+        </div>
+      )}
+
+      {activeComponent === "ProgressCardsSection" && (
+        <div id="ProgressCardsSection">
+          <TodayeInformation />
+        </div>
+      )}
+
+      {activeComponent === "chart" && (
+        <div id="chart">
+          <TradingChart />
+        </div>
+      )}
+
+      {activeComponent === "detailseAc" && (
+        <div id="detailseAc">
+          <DetailseAccount />
+        </div>
+      )}
+
+      {activeComponent === "detaileCalendre" && (
+        <div id="detaileCalendre">
+          <ChangeComponent />
+        </div>
+      )}
+
+      {activeComponent === "newsComponent" && (
+        <div id="newsComponent">
+          <NewsComponent />
+        </div>
+      )}
+
+      {activeComponent === "AiComponent" && (
+        <div id="AiComponent">
+          <TradingAnalysisPanel />
+        </div>
+      )}
+
+      {activeComponent === "Comparison" && (
+        <div id="Comparison">
+          <VSComparison />
+        </div>
+      )}
+
+      {activeComponent === "TransactionList" && (
+        <div id="TransactionList">
+          <TradingTable />
+        </div>
+      )}
     </div>
   );
 }

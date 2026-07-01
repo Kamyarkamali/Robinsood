@@ -50,7 +50,10 @@ function ThemeToggle() {
         className="flex items-center justify-between gap-2
                    px-3 py-2 rounded-xl
                    cursor-pointer
-                   bg-white dark:bg-gray-900
+                   bg-white  dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]
                    border border-gray-200 dark:border-gray-700
                    shadow-sm hover:shadow-md
                    transition-all duration-300
@@ -83,7 +86,10 @@ function ThemeToggle() {
       <div
         className={`absolute right-0 mt-2 w-40
         rounded-xl overflow-hidden
-        bg-white dark:bg-gray-900
+        bg-white  dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]
         border border-gray-200 dark:border-gray-700
         shadow-xl
         transition-all duration-200 origin-top-right
@@ -103,10 +109,10 @@ function ThemeToggle() {
             className={`w-full flex items-center gap-3 px-4 py-3
             text-sm transition-all duration-200
             cursor-pointer
-            hover:bg-gray-100 dark:hover:bg-gray-800
+            hover:bg-gray-100 dark:hover:bg-[#2e2d2d]
             ${
               theme === opt.value
-                ? "bg-gray-100 dark:bg-gray-800 font-medium"
+                ? "bg-gray-100 dark:bg-[#242323] font-medium"
                 : ""
             }`}
           >

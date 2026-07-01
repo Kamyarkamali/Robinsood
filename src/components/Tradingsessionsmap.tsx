@@ -18,6 +18,8 @@ const IMPACT_BG = {
 const BAR_H_DESKTOP = 52;
 const BAR_H_MOBILE = 36;
 
+const NEWS_STACK_THRESHOLD = 2.2;
+
 function getIranHour() {
   const now = new Date();
   const utc = now.getTime() + now.getTimezoneOffset() * 60000;
@@ -42,6 +44,23 @@ function isLive(s: Session, cur: number) {
   return s.end > 24
     ? cur >= s.start || cur < s.end - 24
     : cur >= s.start && cur < s.end;
+}
+
+function getDates(lang: string) {
+  const now = new Date();
+  const gregorian = new Intl.DateTimeFormat(lang === "fa" ? "fa-IR" : "en-GB", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+  }).format(now);
+
+  const shamsi = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  }).format(now);
+
+  return { gregorian, shamsi };
 }
 
 type TooltipType = "news" | "current" | "tick";
@@ -92,6 +111,28 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return a.time - b.time;
   });
 
+  const rowMap: Record<string, number> = {};
+  {
+    const ascending = [...NEWS].sort((a, b) => a.time - b.time);
+    const lastRowTime: [number, number] = [-Infinity, -Infinity];
+    ascending.forEach((n) => {
+      let row = 0;
+      if (n.time - lastRowTime[0] < NEWS_STACK_THRESHOLD) row = 1;
+      lastRowTime[row] = n.time;
+      rowMap[n.id] = row;
+    });
+  }
+
+  const upcoming = [...NEWS]
+    .filter((n) => n.time >= cur)
+    .sort((a, b) => a.time - b.time);
+  const nextUpId =
+    upcoming.length > 0
+      ? upcoming[0].id
+      : NEWS.length > 0
+        ? [...NEWS].sort((a, b) => a.time - b.time)[0].id
+        : null;
+
   const handleTooltip = (
     e: React.MouseEvent | React.TouchEvent,
     type: TooltipType,
@@ -135,17 +176,24 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
   const { t } = useTranslation();
 
+  const { gregorian, shamsi } = getDates(i18next.language);
+
   const hourLabels = isMobile
     ? [0, 4, 8, 12, 16, 20]
     : isTablet
       ? [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
       : Array.from({ length: 13 }, (_, i) => i * 2);
 
+  const newsAreaBaseTop = isMobile ? 4 : 6;
+  const newsAreaRowGap = isMobile ? 34 : 46;
+  const newsAreaHeight = isMobile ? 100 : 138;
+
   return (
     <>
       <h1 className="md:text-2xl text-sm font-bold px-2 mt-4 mb-4">
         {t("labels.parametr10")}
       </h1>
+
       <div
         ref={rootRef}
         className="bg-[#2B2B2B] step-test43 rounded-2xl border-4 md:pr-2 md:pl-2 mt-3 dark:border-white/10 border-gray-400 text-slate-200 w-full min-h-0 pb-3  overflow-hidden select-none"
@@ -155,26 +203,72 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           }
         }}
       >
-        <div className="flex justify-between items-start flex-wrap gap-2 px-3 sm:px-5 pt-4 pb-2">
-          <div>
+        <div className="relative flex items-start px-3 mt-4 sm:px-5 pt-4 pb-2">
+          <div className="flex-col">
             <div className="flex items-center gap-2 text-sm sm:text-lg font-normal">
               <GrLanguage size={isMobile ? 18 : 25} />
               {i18next.language === "fa"
                 ? "سشن های معاملاتی روی نقشه جهان"
                 : "Sessions on World Map"}
             </div>
+
             <div className="text-[10px] sm:text-xs text-slate-200 font-normal mt-1 sm:mt-2 leading-relaxed">
               {i18next.language === "fa"
                 ? "نمایش ساده زمان سشن‌ها و مهم‌وشانی با ساعت فعلی و زمان خبرها"
                 : "Simple view of trading session times with current time and news events"}
             </div>
           </div>
-        </div>
 
+          <div className="absolute z-10 left-1/2 lg:-translate-x-1/2 -translate-x-50 bottom-3">
+            <div
+              className="
+      flex flex-col items-center gap-1
+    "
+            >
+              <div className="flex items-center gap-1.5">
+                <IoMdTime
+                  className="text-indigo-300 shrink-0"
+                  size={isMobile ? 16 : 18}
+                />
+
+                <span
+                  className="
+          text-lg sm:text-2xl
+          font-bold
+          text-slate-100
+          tracking-wider
+          tabular-nums
+        "
+                >
+                  {fmt(cur)}
+                </span>
+              </div>
+
+              <div
+                className="
+        flex items-center gap-1.5
+        text-[9px] sm:text-[10px]
+        text-slate-400
+        whitespace-nowrap
+      "
+              >
+                <span>{gregorian}</span>
+
+                <span className="h-1 w-1 rounded-full bg-slate-500" />
+
+                <span>{shamsi}</span>
+              </div>
+
+              <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] text-indigo-300/80">
+                {i18next.language === "fa" ? "زمان بازار" : "Market Time"}
+              </span>
+            </div>
+          </div>
+        </div>
         <div className="mx-2 sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
           <div
             className="relative border-b border-[#1e2d3d]"
-            style={{ height: isMobile ? 52 : 68, overflow: "visible" }}
+            style={{ height: newsAreaHeight, overflow: "visible" }}
           >
             <div
               className="absolute z-30 flex flex-col items-center"
@@ -217,13 +311,16 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
             {sorted.map((n, i) => {
               const isPast = n.time < cur;
-              const zIdx = isPast ? 15 - i : 25 + i;
+              const isNext = n.id === nextUpId && !isPast;
+              const row = rowMap[n.id] ?? 0;
+              const topOffset = newsAreaBaseTop + row * newsAreaRowGap;
+              const zIdx = isNext ? 50 : isPast ? 15 - i : 25 + i;
               return (
                 <div
                   key={n.id}
                   className="news-marker absolute flex flex-col items-center cursor-pointer tooltip-trigger"
                   style={{
-                    top: isMobile ? 4 : 6,
+                    top: topOffset,
                     [isRtl ? "right" : "left"]: pct(n.time),
                     transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
                     zIndex: zIdx,
@@ -252,62 +349,95 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     );
                   }}
                 >
-                  <div
-                    className="rounded-md flex flex-col items-center gap-0.5 border whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
-                    style={{
-                      padding: isMobile ? "2px 5px" : "5px 8px",
-                      background: isPast ? "#1e293b" : "#4c1d95",
-                      borderColor: isPast ? "#334155" : "#7c3aed",
-                      color: isPast ? "#64748b" : "#e9d5ff",
-                      boxShadow: isPast
-                        ? "none"
-                        : "0 0 8px rgba(124,58,237,.45)",
-                      minWidth: isMobile ? 32 : 45,
-                    }}
-                  >
-                    {isMobile ? (
-                      <>
-                        <CiCalendar
-                          size={11}
-                          className={
-                            isPast ? "text-slate-500" : "text-purple-300"
-                          }
-                        />
-                        <span
-                          style={{ fontSize: 9 }}
-                          className="font-bold tracking-wide"
-                        >
-                          {fmt(n.time)}
-                        </span>
-                      </>
-                    ) : (
-                      <>
-                        <span
-                          style={{ fontSize: 9 }}
-                          className="font-medium opacity-80"
-                        >
-                          {i18next.language === "fa" ? "خبر" : "News"}
-                        </span>
-                        <span
-                          style={{ fontSize: 11 }}
-                          className="font-bold tracking-wide"
-                        >
-                          {fmt(n.time)}
-                        </span>
-                        <CiCalendar
-                          size={16}
-                          className={
-                            isPast ? "text-slate-500" : "text-purple-300"
-                          }
-                        />
-                      </>
+                  <div className="relative">
+                    {isNext && (
+                      <span className="absolute -top-1.5 -right-1.5 flex h-2.5 w-2.5 z-10">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-pink-400 opacity-75" />
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-pink-500" />
+                      </span>
                     )}
+                    <div
+                      className="rounded-md flex flex-col items-center gap-0.5 border whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
+                      style={{
+                        padding: isMobile ? "2px 5px" : "5px 8px",
+                        background: isPast
+                          ? "#1e293b"
+                          : isNext
+                            ? "#5b21b6"
+                            : "#4c1d95",
+                        borderColor: isPast
+                          ? "#334155"
+                          : isNext
+                            ? "#c084fc"
+                            : "#7c3aed",
+                        color: isPast
+                          ? "#64748b"
+                          : isNext
+                            ? "#f3e8ff"
+                            : "#e9d5ff",
+                        boxShadow: isPast
+                          ? "none"
+                          : isNext
+                            ? "0 0 14px rgba(192,132,252,.75)"
+                            : "0 0 8px rgba(124,58,237,.45)",
+                        filter: isPast ? "grayscale(0.5)" : "none",
+                        minWidth: isMobile ? 32 : 45,
+                      }}
+                    >
+                      {isMobile ? (
+                        <>
+                          <CiCalendar
+                            size={11}
+                            className={
+                              isPast ? "text-slate-500" : "text-purple-300"
+                            }
+                          />
+                          <span
+                            style={{ fontSize: 9 }}
+                            className="font-bold tracking-wide"
+                          >
+                            {fmt(n.time)}
+                          </span>
+                        </>
+                      ) : (
+                        <>
+                          <span
+                            style={{ fontSize: 9 }}
+                            className="font-medium opacity-80"
+                          >
+                            {isNext
+                              ? i18next.language === "fa"
+                                ? "بعدی"
+                                : "Next"
+                              : i18next.language === "fa"
+                                ? "خبر"
+                                : "News"}
+                          </span>
+                          <span
+                            style={{ fontSize: 11 }}
+                            className="font-bold tracking-wide"
+                          >
+                            {fmt(n.time)}
+                          </span>
+                          <CiCalendar
+                            size={16}
+                            className={
+                              isPast ? "text-slate-500" : "text-purple-300"
+                            }
+                          />
+                        </>
+                      )}
+                    </div>
                   </div>
                   <div
                     className="w-px"
                     style={{
                       height: isMobile ? 6 : 10,
-                      background: isPast ? "#334155" : "#7c3aed",
+                      background: isPast
+                        ? "#334155"
+                        : isNext
+                          ? "#c084fc"
+                          : "#7c3aed",
                     }}
                   />
                 </div>
@@ -412,7 +542,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                           ? s.fa.replace("سشن ", "")
                           : s.en.replace(" Session", "")}
                       </tspan>
-                      <tspan dx="1">{s.icon}</tspan>
+                      <img
+                        className="w-8 brightness-0 saturate-100 invert"
+                        src={s.icon}
+                        alt="icon"
+                      />
                     </text>
                   </g>
                 );
@@ -557,7 +691,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                           flexShrink: 0,
                         }}
                       >
-                        {s.icon}
+                        <img
+                          className="w-8 brightness-0 saturate-100 invert"
+                          src={s.icon}
+                          alt="icon"
+                        />
                       </span>
                       <div
                         style={{
@@ -691,7 +829,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             })}
           </div>
         </div>
-
         <div className="flex items-center justify-end w-full font-normal gap-1.5 px-3 sm:px-4 pt-2 text-[9px] sm:text-[10px] text-[#ffffff]">
           <p className="flex items-center gap-2">
             {i18next.language === "fa"
@@ -700,7 +837,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </p>
           <CiCircleAlert size={isMobile ? 14 : 18} />
         </div>
-
         {tooltip && (
           <div
             className="fixed z-50 pointer-events-none rounded-xl p-2.5 sm:p-3 shadow-xl"
@@ -729,7 +865,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               <>
                 <div className="flex items-center gap-1.5 mb-1.5 sm:mb-2">
                   <span style={{ fontSize: isMobile ? 14 : 18 }}>
-                    {tooltip.data.flag}
+                    <img
+                      className="lg:w-10 w-7 rounded-sm"
+                      src={tooltip.data.flag}
+                      alt="flag"
+                    />
                   </span>
                   <span className="text-xs sm:text-sm font-bold text-slate-100 leading-tight">
                     {i18next.language === "fa"

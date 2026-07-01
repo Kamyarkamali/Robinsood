@@ -48,7 +48,7 @@ export const CandleTooltip: React.FC<TooltipProps> = ({
   const isBull = d.close >= d.open;
 
   return (
-    <div className="border border-white/10 rounded-xl px-3 py-2 text-xs shadow-xl space-y-0.5 bg-[#1a1a2e]">
+    <div className="border border-white/10 rounded-xl px-3 py-2 text-xs shadow-xl space-y-0.5  backdrop-blur-2xl">
       <p className="text-gray-400 mb-1">
         {t?.tooltipDate}: {label}
       </p>

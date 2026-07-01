@@ -38,7 +38,10 @@ function LanguageSwitcher() {
           flex items-center justify-between gap-3
           px-3 py-2 rounded-xl
           min-w-32.5
-          bg-white/80 dark:bg-[#1b1b1b]/80
+          bg-white/80  dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]
           backdrop-blur-md
           border border-gray-200 dark:border-gray-700
           shadow-sm hover:shadow-lg
@@ -46,7 +49,7 @@ function LanguageSwitcher() {
           hover:scale-[1.02]
         "
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 ">
           <img
             src={currentLang === "fa" ? fa : en}
             className="
@@ -82,7 +85,10 @@ function LanguageSwitcher() {
         className={`
           absolute right-0 mt-2 w-40
           rounded-2xl overflow-hidden
-          bg-white/90 dark:bg-[#111]/90
+          bg-white/90  dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]
           backdrop-blur-xl
           border border-gray-200 dark:border-gray-700
           shadow-2xl

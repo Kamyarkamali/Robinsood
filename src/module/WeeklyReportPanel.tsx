@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CardShell from "./CardShell";
-import { weeklyReport } from "../data/fakeData";
+import { weeklyPnlReports, weeklyReport } from "../data/fakeData";
 import { toPersianDigits } from "../helpers/helperFunc";
 import SplitBar from "./SplitBar";
 import { useTranslation } from "react-i18next";
@@ -95,7 +95,10 @@ function DateSelector({
       <select
         value={selectedDate}
         onChange={(e) => onDateChange(e.target.value)}
-        className="w-full bg-zinc-800/80 hover:bg-zinc-800 transition-colors rounded-xl px-4 py-2.5 text-zinc-300 text-xs sm:text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-600"
+        className="w-full  dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525] hover:bg-zinc-800 transition-colors rounded-xl px-4 py-2.5 text-zinc-300 text-xs sm:text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-600"
         style={{ direction: isRTL ? "rtl" : "ltr" }}
       >
         {weeks.map((week) => (
@@ -123,7 +126,7 @@ function DateSelector({
 }
 
 function WeeklyReportPanel() {
-  const [tab, setTab] = useState<"pnl" | "risk">("pnl");
+  const [tab, setTab] = useState<"pnl" | "risk">("risk");
 
   const [selectedDate, setSelectedDate] = useState<string>(() => {
     return new Date().toISOString().split("T")[0];
@@ -132,18 +135,21 @@ function WeeklyReportPanel() {
   const { i18n } = useTranslation();
   const isRTL = i18n.language === "fa";
 
-  const filteredData = weeklyReport.filter(() => true);
-
   return (
     <CardShell
       dir={i18n.language === "fa" ? "ltr" : "rtl"}
       className="flex flex-col h-full"
     >
       <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
-        <div className="flex items-center gap-2 order-2">
+        <div
+          className="flex items-center gap-2 order-2 p-3 rounded-2xl dark:bg-linear-to-b
+        dark:from-[#353535]
+       dark: via-[#2D2D2D]
+       dark: to-[#252525]"
+        >
           <button
             onClick={() => setTab("pnl")}
-            className={`text-xs step-test25 sm:text-sm font-medium px-3 py-1.5 rounded-full transition-colors ${
+            className={`text-xs step-test25 cursor-pointer sm:text-sm  font-medium px-3 py-1.5 rounded-full transition-colors ${
               tab === "pnl"
                 ? "bg-zinc-700 text-white"
                 : "text-zinc-400 hover:text-zinc-200"
@@ -154,7 +160,7 @@ function WeeklyReportPanel() {
 
           <button
             onClick={() => setTab("risk")}
-            className={`text-xs sm:text-sm step-test24 font-medium px-3 py-1.5 rounded-full transition-colors ${
+            className={`text-xs sm:text-sm step-test24 cursor-pointer font-medium px-3 py-1.5 rounded-full transition-colors ${
               tab === "risk"
                 ? "bg-zinc-700 text-white"
                 : "text-zinc-400 hover:text-zinc-200"
@@ -175,39 +181,77 @@ function WeeklyReportPanel() {
       />
 
       <div className="flex flex-col mt-10 gap-4 sm:gap-5 flex-1 justify-between pr-1">
-        {filteredData.length > 0 ? (
-          filteredData.map((row, index) => (
-            <div key={index} className="flex flex-col gap-1.5">
-              <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
-                <span className="text-zinc-400 truncate">
-                  $
-                  {isRTL
-                    ? toPersianDigits(row.amount.toFixed(2))
-                    : row.amount.toFixed(2)}{" "}
-                  (٪{isRTL ? toPersianDigits(row.winPercent) : row.winPercent}
-                  win-٪
-                  {isRTL ? toPersianDigits(row.losePercent) : row.losePercent}
-                  lose)
-                </span>
+        {tab === "risk"
+          ? weeklyReport.map((row, index) => (
+              <div key={index} className="flex flex-col gap-1.5">
+                <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
+                  <span className="text-zinc-400 truncate">
+                    $
+                    {isRTL
+                      ? toPersianDigits(row.amount.toFixed(2))
+                      : row.amount.toFixed(2)}{" "}
+                    (٪
+                    {isRTL ? toPersianDigits(row.winPercent) : row.winPercent}
+                    win-٪
+                    {isRTL ? toPersianDigits(row.losePercent) : row.losePercent}
+                    lose)
+                  </span>
 
-                <span className="text-zinc-200 font-medium whitespace-nowrap">
-                  {i18n.language === "fa" ? row.day.fa : row.day.en}
-                </span>
+                  <span className="text-zinc-200 font-medium whitespace-nowrap">
+                    {isRTL ? row.day.fa : row.day.en}
+                  </span>
+                </div>
+
+                <SplitBar
+                  winPercent={row.winPercent}
+                  lossPercent={row.losePercent}
+                />
               </div>
+            ))
+          : weeklyPnlReports.map((row, index) => {
+              const maxPnl = Math.max(
+                ...weeklyPnlReports.map((d) => Math.abs(d.pnl)),
+              );
 
-              <SplitBar
-                winPercent={row.winPercent}
-                lossPercent={row.losePercent}
-              />
-            </div>
-          ))
-        ) : (
-          <div className="text-center text-zinc-500 py-8 text-sm">
-            {isRTL
-              ? "داده‌ای برای این تاریخ وجود ندارد"
-              : "No data for this date"}
-          </div>
-        )}
+              const width =
+                maxPnl === 0 ? 0 : (Math.abs(row.pnl) / maxPnl) * 100;
+
+              return (
+                <div key={index} className="flex flex-col gap-1.5">
+                  <div className="flex items-center justify-between text-xs sm:text-sm">
+                    <span
+                      className={`font-medium ${
+                        row.pnl > 0
+                          ? "text-emerald-400"
+                          : row.pnl < 0
+                            ? "text-red-400"
+                            : "text-zinc-400"
+                      }`}
+                    >
+                      $
+                      {isRTL
+                        ? toPersianDigits(row.pnl.toFixed(2))
+                        : row.pnl.toFixed(2)}
+                    </span>
+
+                    <span className="text-zinc-200 font-medium whitespace-nowrap">
+                      {isRTL ? row.day.fa : row.day.en}
+                    </span>
+                  </div>
+
+                  <div className="h-3 rounded-full bg-zinc-800 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${
+                        row.pnl >= 0
+                          ? "bg-gradient-to-r from-emerald-500 to-green-400"
+                          : "bg-gradient-to-r from-red-500 to-rose-400"
+                      }`}
+                      style={{ width: `${width}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            })}
       </div>
     </CardShell>
   );
