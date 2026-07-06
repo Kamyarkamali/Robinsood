@@ -146,19 +146,19 @@ function RadarChart({ win, profitFactor, avgWinLoss }: RadarProps) {
 
   const axes = [
     {
-      label: isFa ? ["پیروزی"] : ["Win"],
+      label: isFa ? ["نسبت سوددهی"] : ["Win"],
       angle: -90,
       value: win / 100,
       rawValue: win,
     },
     {
-      label: isFa ? ["سود"] : ["Profit"],
+      label: isFa ? ["ثبات معامله گری"] : ["Profit"],
       angle: 30,
       value: profitFactor / 100,
       rawValue: profitFactor,
     },
     {
-      label: isFa ? ["میانگین", "برد و باخت"] : ["Avg", "Win / Loss"],
+      label: isFa ? ["درک چارت"] : ["Avg", "Win / Loss"],
       angle: 150,
       value: avgWinLoss / 100,
       rawValue: avgWinLoss,
@@ -339,12 +339,12 @@ function StatItem({
   return (
     <div className="flex flex-col items-center justify-center gap-4 p-4 md:p-0 sm:gap-2">
       <span
-        className="text-[13px] sm:text-sm md:text-2xl lg:text-lg bg-[#303030] rounded-xl shadow-2xl px-2 py-1.5 sm:p-3 font-extrabold tracking-tight leading-none w-full text-center min-w-[50px] sm:min-w-[60px]"
+        className="text-[13px] sm:text-sm md:text-2xl lg:text-lg bg-[#303030] rounded-xl shadow-2xl px-2 p-3 sm:p-3 font-extrabold tracking-tight leading-none w-full text-center min-w-[50px] sm:min-w-[60px]"
         style={{ color: color ?? "inherit" }}
       >
         {value}
       </span>
-      <span className="text-[10px] sm:text-[10px] md:text-2xl lg:text-sm font-normal dark:text-[#ffffff] text-gray-500 text-center px-1">
+      <span className="text-[13px]  sm:text-[13px] md:text-2xl lg:text-sm font-normal dark:text-[#ffffff] text-gray-500 text-center px-1">
         {label}
       </span>
     </div>
@@ -362,7 +362,7 @@ function GaugeItem({
 }) {
   return (
     <div className="flex flex-col items-center justify-center gap-1 sm:gap-2 md:gap-3 p-5 lg:p-0 ">
-      <span className="text-[8px] xs:text-[10px] sm:text-[12px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
+      <span className="text-[11px] xs:text-[12px] sm:text-[13px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
         {label}
       </span>
       <Gauge
@@ -417,7 +417,7 @@ export default function TraderScoreCard() {
       dir={isRtl ? "ltr" : "rtl"}
       className="
         w-full
-        max-w-7xl
+        max-w-8xl
         mx-auto
         px-1
         xs:px-2
@@ -432,15 +432,14 @@ export default function TraderScoreCard() {
         sm:gap-4
         md:gap-6
         items-stretch
+        
       "
     >
       <div className="flex step-test34 flex-col gap-2 xs:gap-3 sm:gap-4">
         <div
           className="
             bg-white
-            dark:bg-linear-to-b
-            dark:from-[#282828]
-            dark:to-[#282727]
+            dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
             rounded-2xl
             xs:rounded-2xl
             sm:rounded-3xl
@@ -459,10 +458,10 @@ export default function TraderScoreCard() {
             duration-300
           "
         >
-          <div className="flex flex-col gap-4 h-full justify-between">
+          <div className="flex flex-col gap-4 h-full justify-between ">
             <div
-              className="bg-white dark:bg-linear-to-b dark:from-[#282828] dark:to-[#282727]
-    rounded-3xl border-4 border-gray-200 dark:border-[#303030]
+              className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
             >
               <div className="grid grid-cols-2 step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
@@ -478,8 +477,8 @@ export default function TraderScoreCard() {
             </div>
 
             <div
-              className="bg-white dark:bg-linear-to-b dark:from-[#282828] dark:to-[#282727]
-    rounded-3xl border-4 border-gray-200 dark:border-[#303030]
+              className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
             >
               <div className="grid step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
@@ -499,7 +498,7 @@ export default function TraderScoreCard() {
                 />
                 <StatItem
                   label={t("score.totalLots")}
-                  value={`${d.stats.totalLots}`}
+                  value={`لات ${d.stats.totalLots}`}
                 />
               </div>
             </div>
@@ -510,18 +509,11 @@ export default function TraderScoreCard() {
       <div
         className="
           bg-white
-          dark:bg-linear-to-b
-          dark:from-[#282828]
-          dark:to-[#282727]
-          rounded-xl
-          xs:rounded-2xl
-          sm:rounded-3xl
-          border
-          sm:border-2
-          lg:border-4
+          dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]  rounded-2xl
+          border-4
           step-test37
-          border-gray-200
-          dark:border-[#303030]
+          max-w-7xl
+          dark:border-[#3C3C3C] border-gray-300 
           p-2
           xs:p-3
           sm:p-4

@@ -5,7 +5,10 @@ import SplitBar from "./SplitBar";
 
 function AvgWinLossCard() {
   return (
-    <CardShell className="flex step-test30 flex-col h-full">
+    <CardShell
+      className="flex step-test30 flex-col h-full
+        border-4 dark:border-[#3C3C3C] border-gray-300"
+    >
       <div className="flex flex-col h-full justify-center py-2 sm:py-3 gap-2">
         <h3 className="dark:text-white text-gray-500 text-sm sm:text-base font-normal">
           {t("cart6.win")}
@@ -24,7 +27,6 @@ function AvgWinLossCard() {
                 from-[#34C759]
                 to-[#3ADE63]
                 bg-clip-text
-                text-transparent
                 text-xl
                 sm:text-3xl
                 lg:text-4xl

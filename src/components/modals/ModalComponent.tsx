@@ -49,7 +49,7 @@ function Modal({ open, onClose, children }: ModalProps) {
         className="
           absolute inset-0
           bg-black/60
-          backdrop-blur-md
+          backdrop-blur-2xl
           animate-in fade-in duration-200
         "
       />
@@ -66,7 +66,7 @@ function Modal({ open, onClose, children }: ModalProps) {
           border border-zinc-200
           bg-white
           dark:border-zinc-800
-          dark:bg-[#070B14]
+          dark:bg-[#211c1c]
           shadow-[0_30px_100px_rgba(0,0,0,0.55)]
           animate-in zoom-in-95 duration-200
         "
@@ -84,7 +84,7 @@ function Modal({ open, onClose, children }: ModalProps) {
             sm:px-6
           "
         >
-          <h2 className="text-base sm:text-lg font-semibold text-zinc-900 dark:text-white">
+          <h2 className="text-sm font-semibold text-zinc-900 dark:text-white">
             {i18next.language === "fa" ? "جزئیات" : "Details"}
           </h2>
 

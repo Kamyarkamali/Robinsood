@@ -42,7 +42,7 @@ function CustomTooltip({
 
   return (
     <div
-      className="rounded-xl border border-white/10 bg-[#1a1a2e]/95 px-4 py-3 shadow-2xl backdrop-blur-sm"
+      className="rounded-xl border border-white/10 backdrop-blur-3xl px-4 py-3 shadow-2xl"
       style={{ direction: lang === "fa" ? "rtl" : "ltr" }}
     >
       <p className="mb-2 text-xs text-gray-400">{label}</p>
@@ -123,7 +123,7 @@ function ParamDropdown({
         absolute top-full z-50 mt-2 w-full sm:w-44
         overflow-hidden rounded-xl border shadow-xl
         bg-white border-gray-200
-        dark:bg-[#1a1a2e] dark:border-white/10
+        dark:bg-[#2B2B2B] dark:border-white/10
       "
           style={{ [lang === "fa" ? "right" : "left"]: -52 }}
         >
@@ -170,7 +170,7 @@ export default function TradingDualChart() {
     [period, currentLang],
   );
 
-  const isRtl = currentLang === "fa";
+  const isRtl = currentLang === "en";
 
   const yTick = (v: number) => (isRtl ? toFaNum(v) : String(v));
 
@@ -179,7 +179,11 @@ export default function TradingDualChart() {
       dir={i18next.language === "fa" ? "ltr" : "rtl"}
       className="step-test40 mt-3"
     >
-      <div className="mx-auto rounded-2xl border-4 dark:border-white/10 border-gray-400 bg-white dark:bg-[#2B2B2B] p-4 sm:p-6">
+      <div
+        className="mx-auto rounded-2xl border-4
+        dark:border-[#3C3C3C]
+        border-gray-300 bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] p-4 sm:p-6"
+      >
         <div className="mb-6 flex flex-wrap items-center justify-center sm:justify-between gap-3">
           <div className="flex step-test41 w-full md:w-fit flex-wrap gap-2">
             <ParamDropdown
@@ -236,7 +240,7 @@ export default function TradingDualChart() {
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={data}
-              margin={{ top: 20, right: 16, left: 10, bottom: 10 }}
+              margin={{ top: 19, right: 0, left: 0, bottom: 0 }}
             >
               <CartesianGrid
                 strokeDasharray="4 4"
@@ -246,6 +250,8 @@ export default function TradingDualChart() {
               />
 
               <YAxis
+                width={30}
+                tickMargin={20}
                 yAxisId="left"
                 orientation={isRtl ? "right" : "left"}
                 tickFormatter={yTick}
@@ -265,14 +271,16 @@ export default function TradingDualChart() {
                   offset: 0,
                   fill: "#ff2d55",
                   fontSize: 22,
-                  dx: isRtl ? -30 : 30,
+                  dx: isRtl ? -15 : 15,
                   fontWeight: "bold",
                 }}
               />
 
               <YAxis
+                width={30}
                 yAxisId="right"
                 orientation={isRtl ? "left" : "right"}
+                tickMargin={20}
                 tickFormatter={yTick}
                 tick={{
                   fill: "currentColor",
@@ -289,13 +297,14 @@ export default function TradingDualChart() {
                   position: "top",
                   offset: 0,
                   fontSize: 18,
-                  dx: isRtl ? 30 : -30,
+                  dx: isRtl ? 15 : -15,
                   fill: "#7c6af7",
                   fontWeight: "bold",
                 }}
               />
 
               <XAxis
+                padding={{ left: 0, right: 0 }}
                 dataKey="label"
                 reversed={isRtl}
                 tick={{
@@ -347,8 +356,6 @@ export default function TradingDualChart() {
             </ComposedChart>
           </ResponsiveContainer>
         </div>
-
-        {/* <div className="mt-4 flex flex-wrap justify-center gap-6 text-xs text-gray-400"></div> */}
       </div>
     </div>
   );

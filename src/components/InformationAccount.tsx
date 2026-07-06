@@ -48,7 +48,7 @@ function InformationAccount() {
                   </div>
 
                   <p className="text-[12px] xs:text-[13px] md:text-[15px] text-[#34C759] font-semibold whitespace-nowrap">
-                    ۱۰,۱۵۳.۱۱ $
+                    $10256.75
                   </p>
 
                   <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-lg xs:rounded-xl bg-linear-to-br shadow-md dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] transition-all duration-300">
@@ -84,7 +84,7 @@ function InformationAccount() {
                   </div>
 
                   <p className="text-[12px] xs:text-[13px] md:text-[15px] font-normal text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                    ۱۰,۰۹۳.۹۱ $
+                    $9318.35
                   </p>
 
                   <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-lg xs:rounded-xl bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-md hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] transition-all duration-300">
@@ -100,8 +100,8 @@ function InformationAccount() {
                     <div className="flex items-center gap-1 mb-2 sm:gap-2 min-w-0">
                       <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px] text-black dark:text-white truncate">
                         {i18next.language === "fa"
-                          ? " به دلیل گذر از درادون روزانه"
-                          : "Because the daily drawdown limit was exceeded"}
+                          ? "گذر ار لات مجاز"
+                          : "Passing the allowed lot"}
                       </p>
                       <IoTimeOutline
                         size={14}
@@ -111,7 +111,7 @@ function InformationAccount() {
 
                     <div className="flex items-center mb-2 gap-1 sm:gap-2 shrink-0">
                       <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px] text-gray-500 dark:text-gray-300 whitespace-nowrap">
-                        ۱۴۰۴/۱۰/۲۲ 18:13
+                        ۱۴۰۴/۱۰/۲۲ ۲۲:۴۸
                       </p>
 
                       <FiCalendar size={14} className="text-blue-500" />
@@ -130,7 +130,7 @@ function InformationAccount() {
                 <div className="flex flex-col items-start gap-1 min-w-0 flex-1">
                   <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2">
                     <p className="text-[9px] xs:text-[10px] sm:text-[12px] md:text-[14px] text-black font-normal dark:text-white whitespace-nowrap">
-                      {i18next.language === "fa" ? "فرصت ها" : "Opportunities"}
+                      {i18next.language === "fa" ? "چالش" : "Challenge"}
                     </p>
                     <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-lg xs:rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] flex-shrink-0">
                       <img
@@ -141,9 +141,7 @@ function InformationAccount() {
                     </div>
                   </div>
                   <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[12px] text-gray-500 dark:text-gray-300 font-semibold break-words leading-tight">
-                    {i18next.language === "fa"
-                      ? "چالش دو مرحله ای فرصت ها"
-                      : "Opportunities Two-Step Challenge"}
+                    {i18next.language === "fa" ? "رابین هودی" : "Robin Hood"}
                   </p>
                 </div>
 
@@ -186,8 +184,7 @@ function InformationAccount() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 px-1.5 xs:px-2 sm:px-2.5 py-0.5 xs:py-1 sm:py-1 rounded-lg xs:rounded-xl bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] transition-all duration-300">
-                  <FiCalendar className="text-blue-500 dark:text-blue-400 w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 flex-shrink-0" />
+                <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 px-1.5 xs:px-2 sm:px-2.5 py-0.5 xs:py-1 sm:py-1 rounded-lg xs:rounded-xl">
                   <p className="text-[7px] xs:text-[8px] sm:text-[10px] md:text-[12px] text-gray-600 dark:text-gray-300 whitespace-nowrap font-normal">
                     <span className="text-gray-800 dark:text-white font-medium">
                       ۱۴۰۴/۱۰/۲۲
@@ -197,6 +194,7 @@ function InformationAccount() {
                       18:13:25
                     </span>
                   </p>
+                  <FiCalendar className="text-blue-500 dark:text-blue-400 w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
                 </div>
               </div>
             </div>

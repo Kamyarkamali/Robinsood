@@ -115,82 +115,79 @@ function PassAccountModalContent({
       dir={lang === "fa" ? "rtl" : "ltr"}
       className="mx-auto w-full max-w-4xl"
     >
-      <div className="rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg dark:border-zinc-800 dark:bg-[#0B1120] sm:p-6">
-        <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+      <div className="rounded-2xl border border-zinc-200 bg-white p-3 shadow-lg dark:border-zinc-800 dark:bg-[#2e2b2b]">
+        <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xl font-bold text-zinc-900 dark:text-white sm:text-2xl">
+            <p className="text-sm font-normal text-zinc-900 dark:text-white">
               {t.title}
             </p>
           </div>
 
           <div
             className={`
-              inline-flex w-fit items-center gap-2
-              rounded-2xl border px-4 py-3 shadow-lg
-              ${statusConfig[status].classes}
-            `}
+            inline-flex w-fit items-center gap-2
+            rounded-xl border px-3 py-2 shadow-lg
+            ${statusConfig[status].classes}
+          `}
           >
-            <StatusIcon size={20} />
+            <StatusIcon size={18} />
 
-            <span className="font-medium whitespace-nowrap">
+            <span className="whitespace-nowrap text-xs font-medium">
               {t.statuses[status]}
             </span>
           </div>
         </div>
       </div>
 
-      <div className="mt-6 rounded-3xl border border-zinc-200 bg-white p-5 shadow-lg dark:border-zinc-800 dark:bg-[#0B1120] sm:p-6">
-        <h3 className="text-lg font-bold text-zinc-900 dark:text-white">
+      <div className="mt-4 rounded-2xl border border-zinc-200 bg-white p-4 shadow-lg dark:border-zinc-800 dark:bg-[#2e2b2b]">
+        <h3 className="text-base font-bold text-zinc-900 dark:text-white">
           {t.accountSteps}
         </h3>
 
-        <div className="mt-8 space-y-5">
+        <div className="mt-5 space-y-3">
           {steps.map((step, index) => {
             const Icon = stepIcons[index];
             const active = index <= currentStep;
 
             return (
-              <div key={index} className="flex items-start gap-4">
+              <div key={index} className="flex items-start gap-3">
                 <div className="flex shrink-0 flex-col items-center">
                   <div
                     className={`
-                      flex h-11 w-11 items-center justify-center
-                      rounded-2xl transition-all duration-300
-                      sm:h-12 sm:w-12
-                      ${
-                        active
-                          ? "bg-amber-500 text-white shadow-[0_0_25px_rgba(245,158,11,0.4)]"
-                          : "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-                      }
-                    `}
+                    flex h-7 w-7 items-center justify-center
+                    rounded-xl transition-all duration-300
+                    ${
+                      active
+                        ? "bg-amber-500 text-white shadow-[0_0_20px_rgba(245,158,11,0.35)]"
+                        : "bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                    }
+                  `}
                   >
-                    <Icon size={20} />
+                    <Icon size={15} />
                   </div>
 
                   {index !== steps.length - 1 && (
                     <div
                       className={`
-                        mt-2 h-10 w-0.5
-                        ${
-                          active
-                            ? "bg-amber-500"
-                            : "bg-zinc-200 dark:bg-zinc-700"
-                        }
-                      `}
+                      mt-1.5 h-4 w-0.5
+                      ${
+                        active ? "bg-amber-500" : "bg-zinc-200 dark:bg-zinc-700"
+                      }
+                    `}
                     />
                   )}
                 </div>
 
-                <div className="pt-2">
+                <div className="pt-1">
                   <p
                     className={`
-                      text-sm sm:text-base
-                      ${
-                        active
-                          ? "font-semibold text-zinc-900 dark:text-white"
-                          : "text-zinc-500 dark:text-zinc-400"
-                      }
-                    `}
+                    text-xs sm:text-sm
+                    ${
+                      active
+                        ? "font-semibold text-zinc-900 dark:text-white"
+                        : "text-zinc-500 dark:text-zinc-400"
+                    }
+                  `}
                   >
                     {step}
                   </p>
@@ -203,15 +200,12 @@ function PassAccountModalContent({
 
       <button
         className="
-          mt-6 w-full rounded-2xl
-          bg-amber-500 py-3.5
-          font-medium text-white
-          shadow-lg shadow-amber-500/20
-          transition-all duration-300
-          hover:-translate-y-1
-          hover:bg-amber-600
-          hover:shadow-[0_15px_40px_rgba(245,158,11,0.35)]
-        "
+        mt-4 h-10 w-full rounded-xl
+        bg-amber-500 text-sm font-medium text-white
+        shadow-lg shadow-amber-500/20
+        transition-all duration-300
+        hover:bg-amber-600
+      "
       >
         {t.button}
       </button>

@@ -142,7 +142,7 @@ export default function TradingAnalysisPanel() {
             background: `linear-gradient(135deg, #CB30E0, #FF2D55)`,
           }}
         >
-          <div className="flex-1 bg-white dark:bg-[#2b2b2b] rounded-3xl overflow-hidden flex flex-col lg:flex-row">
+          <div className="flex-1 bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] rounded-3xl overflow-hidden flex flex-col lg:flex-row">
             <section
               className="
             w-full
@@ -174,7 +174,10 @@ export default function TradingAnalysisPanel() {
             >
               <div className="space-y-3 sm:space-y-4 md:space-y-5 flex flex-col items-center">
                 {STATS[lang].map((s, i) => (
-                  <div key={i} className="text-center sm:text-right w-full">
+                  <div
+                    key={i}
+                    className="text-center flex items-center justify-center sm:text-right w-full"
+                  >
                     <span
                       className={`
                     text-[18px] sm:text-[20px] md:text-[23px] font-normal
@@ -191,7 +194,7 @@ export default function TradingAnalysisPanel() {
                       <span className="text-[18px] sm:text-[20px] md:text-[23px] font-normal opacity-70 text-gray-600 dark:text-white">
                         /{mx}
                       </span>
-                      <span className="font-normal text-[18px] sm:text-[20px] md:text-[23px] text-gray-800 dark:text-white block sm:inline">
+                      <span className="font-normal text-center text-[18px] sm:text-[20px] md:text-[23px] text-gray-800 dark:text-white block sm:inline">
                         {s.label}
                       </span>
                     </span>

@@ -1,182 +1,192 @@
-import i18next from "i18next";
+import { HiArrowTrendingUp, HiArrowTrendingDown } from "react-icons/hi2";
+import { BsBarChartFill, BsPeopleFill } from "react-icons/bs";
+import { FaExchangeAlt, FaDollarSign } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
-
-function TrendUpIcon() {
-  return <span>▲</span>;
-}
-
-function TrendDownIcon() {
-  return <span>▲</span>;
-}
 
 export default function CartFacke() {
   const { i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
   const cardStyle = `
-    min-w-0
-    rounded-2xl
-    p-3 sm:p-4
-    h-[130px] sm:h-[145px]
-    transition-all duration-300
-    dark:bg-[#363636]
-    overflow-hidden
     w-full
+    h-[180px]
+    rounded-3xl
+    border-2
+    border border-white/10
+    bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+    backdrop-blur-xl
+    flex flex-col
+    justify-center
+    items-center
+    text-center
+    px-4 py-4
+    transition-all
+    duration-300
+    hover:-translate-y-1
   `;
 
   const positiveBadge = `
     flex items-center gap-1
-    px-2 py-1
+    px-2.5 py-1
     rounded-full
-    bg-green-500/10
-    border border-green-500/20
-    text-green-400
-    text-[8px] sm:text-[10px]
+    bg-[#16C784]/15
+    border border-[#16C784]/30
+    text-[#2FE38A]
+    text-[11px] sm:text-xs
     font-semibold
-    whitespace-nowrap
-    shrink-0
   `;
 
   const negativeBadge = `
     flex items-center gap-1
-    px-2 py-1
+    px-2.5 py-1
     rounded-full
-    bg-red-500/10
-    border border-red-500/20
-    text-red-400
-    text-[8px] sm:text-[10px]
+    bg-[#EA3943]/15
+    border border-[#EA3943]/30
+    text-[#FF5B6B]
+    text-[11px] sm:text-xs
     font-semibold
-    whitespace-nowrap
-    shrink-0
   `;
 
-  const titleClass =
-    "text-[10px] sm:text-xs text-center dark:text-white leading-5";
+  const titleClass = "text-[11px] sm:text-xs text-zinc-400 font-medium mt-2";
 
   const valueClass =
-    "text-lg sm:text-2xl xl:text-[28px] font-bold text-white tabular-nums leading-none";
+    "text-2xl sm:text-3xl font-bold text-white tabular-nums mt-2";
 
   return (
-    <div dir={isRtl ? "rtl" : "ltr"} className="w-full px-3 py-4 md:px-4">
+    <div
+      dir={isRtl ? "rtl" : "ltr"}
+      className="w-full dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] "
+    >
       <div
         className="
-          grid
-          grid-cols-1
-          sm:grid-cols-2
-          lg:grid-cols-3
-          gap-3
+          rounded-2xl
+          border-4 dark:border-[#3C3C3C]
+          backdrop-blur-xl
+          p-3 sm:p-5 lg:p-6
         "
       >
-        {/* Card 1 */}
-        <div className="flex flex-col items-center gap-2">
+        <div
+          className="
+            grid
+            grid-cols-1
+            sm:grid-cols-2
+            lg:grid-cols-3
+            xl:grid-cols-5
+            gap-3 sm:gap-4
+          "
+        >
+          {/* Card 1 */}
           <div className={cardStyle}>
-            <div className="h-full flex items-center justify-between gap-2">
+            <BsBarChartFill size={26} className="text-indigo-400" />
+            <h2 className={valueClass}>18/420</h2>
+            <p className={titleClass}>
+              {isRtl ? "تعداد معاملات باز" : "Total Trades"}
+            </p>
+            <div className="mt-3">
               <div className={positiveBadge}>
-                <TrendUpIcon />
+                <HiArrowTrendingUp />
                 +32%
               </div>
-
-              <h2 className={valueClass}>18/420</h2>
             </div>
           </div>
 
-          <p className={titleClass}>
-            {isRtl ? "تعداد معاملات باز" : "Total Trades"}
-          </p>
-        </div>
-
-        {/* Card 2 */}
-        <div className="flex flex-col items-center gap-2">
+          {/* Card 2 */}
           <div className={cardStyle}>
-            <div className="h-full flex items-center justify-between gap-2">
-              <div className="space-y-2">
-                <p className="text-[9px] sm:text-xs dark:text-white">
-                  {isRtl ? "خرید" : "Buy"}
-                </p>
+            <FaExchangeAlt size={26} className="text-cyan-400" />
 
-                <p className="text-[9px] sm:text-xs dark:text-white">
-                  {isRtl ? "فروش" : "Sell"}
-                </p>
+            <div className="w-full mt-3 space-y-3">
+              <div>
+                <div className="flex justify-between text-[11px] sm:text-xs text-white mb-1">
+                  <span>{isRtl ? "خرید" : "Buy"}</span>
+                  <span className="text-[#2FE38A] font-bold">58%</span>
+                </div>
+                <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                  <div
+                    className="h-full bg-[#16C784]"
+                    style={{ width: "58%" }}
+                  />
+                </div>
               </div>
 
-              <div className="flex flex-col gap-1 text-right">
-                <h2 className="text-lg sm:text-2xl font-bold text-green-400 tabular-nums">
-                  58%
-                </h2>
-
-                <h2 className="text-lg sm:text-2xl font-bold text-red-400 tabular-nums">
-                  42%
-                </h2>
+              <div>
+                <div className="flex justify-between text-[11px] sm:text-xs text-white mb-1">
+                  <span>{isRtl ? "فروش" : "Sell"}</span>
+                  <span className="text-[#FF5B6B] font-bold">42%</span>
+                </div>
+                <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                  <div
+                    className="h-full bg-[#EA3943]"
+                    style={{ width: "42%" }}
+                  />
+                </div>
               </div>
             </div>
+
+            <p className={titleClass}>
+              {isRtl ? "درصد معاملات باز" : "Open Trades"}
+            </p>
           </div>
 
-          <p className={titleClass}>
-            {isRtl ? "درصد معاملات باز" : "Open Trades Percentage"}
-          </p>
-        </div>
-
-        {/* Card 3 */}
-        <div
-          dir={i18next.language === "fa" ? "ltr" : "rtl"}
-          className="flex flex-col items-center gap-2"
-        >
+          {/* Card 3 */}
           <div className={cardStyle}>
-            <div className="h-full flex items-center justify-between gap-2">
-              <h2 className={valueClass}>+13.1%</h2>
+            <HiArrowTrendingUp size={26} className="text-[#16C784]" />
 
+            <h2
+              className="
+                text-2xl sm:text-3xl font-bold mt-2
+                text-transparent bg-gradient-to-r from-[#16C784] to-emerald-300 bg-clip-text
+              "
+            >
+              +13.1%
+            </h2>
+
+            <p className={titleClass}>
+              {isRtl ? "میانگین سود/ضرر" : "Average Live P/L"}
+            </p>
+
+            <div className="mt-3">
               <div className={positiveBadge}>
-                <TrendUpIcon />
+                <HiArrowTrendingUp />
                 +20%
               </div>
             </div>
           </div>
 
-          <p className={titleClass}>
-            {isRtl ? "میانگین سود/ضرر لحظه‌ای کل کاربران" : "Average Live P/L"}
-          </p>
-        </div>
-
-        {/* Card 4 */}
-        <div
-          dir={i18next.language === "fa" ? "ltr" : "rtl"}
-          className="flex flex-col items-center gap-2"
-        >
+          {/* Card 4 */}
           <div className={cardStyle}>
-            <div className="h-full flex items-center justify-between gap-2">
-              <h2 className={valueClass}>$360</h2>
+            <FaDollarSign size={26} className="text-yellow-400" />
 
+            <h2 className={valueClass}>$360</h2>
+
+            <p className={titleClass}>
+              {isRtl ? "میانگین حجم" : "Average Volume"}
+            </p>
+
+            <div className="mt-3">
               <div className={positiveBadge}>
-                <TrendUpIcon />
+                <HiArrowTrendingUp />
                 +20%
               </div>
             </div>
           </div>
 
-          <p className={titleClass}>
-            {isRtl ? "میانگین حجم ولات" : "Average Volume"}
-          </p>
-        </div>
-
-        {/* Card 5 */}
-        <div
-          dir={i18next.language === "fa" ? "ltr" : "rtl"}
-          className="flex flex-col items-center gap-2"
-        >
+          {/* Card 5 */}
           <div className={cardStyle}>
-            <div className="h-full flex items-center justify-between gap-2">
-              <h2 className={valueClass}>53%</h2>
+            <BsPeopleFill size={26} className="text-pink-400" />
 
+            <h2 className={valueClass}>53%</h2>
+
+            <p className={titleClass}>
+              {isRtl ? "کاربران در سود" : "Users in Profit"}
+            </p>
+
+            <div className="mt-3">
               <div className={negativeBadge}>
-                <TrendDownIcon />
-                -27.2
+                <HiArrowTrendingDown />
+                -27.2%
               </div>
             </div>
           </div>
-
-          <p className={titleClass}>
-            {isRtl ? "درصد کاربران در سود لحظه‌ای" : "Users in Profit"}
-          </p>
         </div>
       </div>
     </div>

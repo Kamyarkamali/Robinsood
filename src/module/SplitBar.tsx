@@ -1,11 +1,4 @@
-type SplitBarProps = {
-  winPercent: number;
-  lossPercent: number;
-  winColor?: string;
-  winColorTo?: string;
-  winShadow?: string;
-  lossColor?: string;
-};
+import type { SplitBarProps } from "../types/interfaces";
 
 function SplitBar({
   winPercent,
@@ -16,7 +9,7 @@ function SplitBar({
   lossColor = "#ef4444",
 }: SplitBarProps) {
   return (
-    <div className="relative flex w-full h-2 sm:h-3 md:h-5 rounded-full overflow-hidden bg-zinc-800 shrink-0 max-w-70">
+    <div className="relative flex w-full h-2 sm:h-2 md:h-3 rounded-full overflow-hidden bg-zinc-800 shrink-0 max-w-95">
       <div
         className="h-full transition-all duration-500 ease-out"
         style={{
@@ -38,7 +31,7 @@ function SplitBar({
         <div
           className="
         absolute top-0 bottom-0
-        w-[3px] rounded-full
+        w-0.75 rounded-full
         bg-zinc-900/80
         shadow-[0_0_6px_rgba(0,0,0,0.5)]
       "

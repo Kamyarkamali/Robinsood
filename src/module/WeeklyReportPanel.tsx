@@ -138,9 +138,11 @@ function WeeklyReportPanel() {
   return (
     <CardShell
       dir={i18n.language === "fa" ? "ltr" : "rtl"}
-      className="flex flex-col h-full"
+      className="flex flex-col h-full border-4
+        dark:border-[#3C3C3C]
+        border-gray-300"
     >
-      <div className="flex items-center justify-between mb-4 gap-2 flex-wrap">
+      <div className="flex  items-center justify-between mb-4 gap-2 flex-wrap">
         <div
           className="flex items-center gap-2 order-2 p-3 rounded-2xl dark:bg-linear-to-b
         dark:from-[#353535]
@@ -243,8 +245,8 @@ function WeeklyReportPanel() {
                     <div
                       className={`h-full rounded-full transition-all duration-500 ${
                         row.pnl >= 0
-                          ? "bg-gradient-to-r from-emerald-500 to-green-400"
-                          : "bg-gradient-to-r from-red-500 to-rose-400"
+                          ? "bg-linear-to-r from-emerald-500 to-green-400"
+                          : "bg-linear-to-r from-red-500 to-rose-400"
                       }`}
                       style={{ width: `${width}%` }}
                     />

@@ -90,7 +90,9 @@ function Button({
       className={baseStyles}
       style={gradientBorderStyle}
     >
-      {children}
+      <span className="flex items-center justify-center w-full h-full">
+        {children}
+      </span>
     </button>
   );
 }

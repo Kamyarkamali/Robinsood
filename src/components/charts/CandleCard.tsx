@@ -1,93 +1,46 @@
 import React, { useMemo } from "react";
 import {
-  ComposedChart,
-  Bar,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  Cell,
 } from "recharts";
-import { useTranslation } from "react-i18next";
-
 import { CandleTooltip } from "./Tooltips";
 import type { CandleDataPoint, CardConfig } from "./typesChart";
+import { useTranslation } from "react-i18next";
 
 interface CandleCardProps {
   cfg: CardConfig;
-  title: {
-    fa: string;
-    en: string;
-  };
+  title: { fa: string; en: string };
   value: string | number;
+  valueColor: string;
+  lang: "fa" | "en";
   onCardClick?: () => void;
 }
-
-interface CandleBodyProps {
-  x?: number;
-  y?: number;
-  width?: number;
-  height?: number;
-  payload?: CandleDataPoint;
-}
-
-const CandleBody: React.FC<CandleBodyProps> = ({
-  x = 0,
-  y = 0,
-  width = 0,
-  height = 0,
-  payload,
-}) => {
-  if (!payload) return null;
-
-  const isBull = payload.close >= payload.open;
-
-  const color = isBull ? "#4ade80" : "#f87171";
-  const cx = x + width / 2;
-
-  return (
-    <g>
-      <line
-        x1={cx}
-        y1={y - 4}
-        x2={cx}
-        y2={y + height + 4}
-        stroke={color}
-        strokeWidth={1.5}
-      />
-      <rect
-        x={x + 1}
-        y={y}
-        width={width - 2}
-        height={Math.max(height, 2)}
-        fill={color}
-        rx={2}
-      />
-    </g>
-  );
-};
 
 export const CandleCard: React.FC<CandleCardProps> = ({
   cfg,
   title,
   value,
+  valueColor,
+  lang,
   onCardClick,
 }) => {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
 
-  const bodyData = useMemo(() => {
+  const chartData = useMemo(() => {
     return cfg.data.map((d: CandleDataPoint) => ({
       t: d.t,
-      body: Math.abs((d.close ?? 0) - (d.open ?? 0)),
-      open: d.open ?? 0,
-      close: d.close ?? 0,
-      high: d.high ?? 0,
-      low: d.low ?? 0,
+      v: d.close ?? 0,
     }));
   }, [cfg.data]);
 
   const displayTitle = isFa ? title.fa : title.en;
+
+  const gradId = useMemo(() => `candle-grad-${cfg.id}`, [cfg.id]);
 
   return (
     <div
@@ -103,14 +56,13 @@ export const CandleCard: React.FC<CandleCardProps> = ({
         bg-white dark:bg-transparent
       "
     >
-      <div className="flex justify-between items-center px-4 pt-3 pb-1">
-        <span className="text-white/70 text-sm font-bold leading-snug text-right">
-          {displayTitle}
-        </span>
+      {/* header (exact same style as AreaCard) */}
+      <div className="flex justify-between items-start px-4 pt-3 pb-1">
+        <span className="text-white/70 text-sm font-bold">{displayTitle}</span>
 
         <span
-          className="text-white text-xl font-extrabold"
-          style={{ direction: "ltr" }}
+          className="text-base font-extrabold"
+          style={{ color: valueColor, direction: "ltr" }}
         >
           {value}
         </span>
@@ -118,13 +70,19 @@ export const CandleCard: React.FC<CandleCardProps> = ({
 
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart
-            data={bodyData}
-            margin={{ top: 4, right: 4, left: 4, bottom: 0 }}
-            barCategoryGap="20%"
+          <AreaChart
+            data={chartData}
+            margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
           >
+            <defs>
+              <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#4ade80" stopOpacity={0.35} />
+                <stop offset="100%" stopColor="#4ade80" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+
             <XAxis dataKey="t" hide />
-            <YAxis hide domain={[0, 80]} />
+            <YAxis hide domain={["auto", "auto"]} />
 
             <Tooltip
               content={(props) => (
@@ -132,23 +90,26 @@ export const CandleCard: React.FC<CandleCardProps> = ({
                   active={props.active}
                   payload={props.payload}
                   label={String(props.label)}
-                  lang={i18n.language as "fa" | "en"}
+                  lang={lang}
                 />
               )}
             />
 
-            <Bar
-              dataKey="body"
-              shape={(props: any) => <CandleBody {...props} />}
-            >
-              {bodyData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={entry.close >= entry.open ? "#4ade80" : "#f87171"}
-                />
-              ))}
-            </Bar>
-          </ComposedChart>
+            <Area
+              type="monotone"
+              dataKey="v"
+              stroke="#4ade80"
+              strokeWidth={2.5}
+              fill={`url(#${gradId})`}
+              dot={false}
+              activeDot={{
+                r: 5,
+                fill: "#4ade80",
+                stroke: "#fff",
+                strokeWidth: 2,
+              }}
+            />
+          </AreaChart>
         </ResponsiveContainer>
       </div>
     </div>

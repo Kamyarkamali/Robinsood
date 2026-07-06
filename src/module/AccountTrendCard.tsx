@@ -13,7 +13,9 @@ function AccountTrendCard() {
       step-test32
         relative overflow-hidden
         flex flex-col
-
+        border-4
+        dark:border-[#3C3C3C]
+        border-gray-300
         w-full
         max-w-105 sm:max-w-120 lg:max-w-130
 
@@ -21,7 +23,7 @@ function AccountTrendCard() {
 
         mx-auto
         rounded-4xl
-        border-4 dark:border-[#303030] border-gray-400
+       
         bg-linear-to-br
       "
     >
@@ -60,7 +62,7 @@ function AccountTrendCard() {
               "0 0 10px rgba(52,199,89,.7), 0 0 25px rgba(52,199,89,.4)",
           }}
         >
-          +{toPersianDigits(accountTrend.amount)} $
+          $ {toPersianDigits(accountTrend.amount)} +
         </p>
 
         <p className="dark:text-white/90 text-gray-500 text-center text-xs sm:text-sm lg:text-base w-full">
@@ -75,10 +77,10 @@ function AccountTrendCard() {
             to-[#37dd6133]
             from-[#47d96c88]
             
-            dark:text-blue-300 text-gray-500
+            dark:text-white text-gray-500
             text-xs sm:text-sm
             rounded-xl
-            font-bold
+            font-normal
             p-3 sm:p-4
             text-center
 

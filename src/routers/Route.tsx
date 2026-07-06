@@ -17,6 +17,7 @@ import NewsComponent from "../pages/NewsComponent";
 import TradingAnalysisPanel from "../components/Tradinganalysispanel ";
 import VSComparison from "../components/Vscomparison";
 import TradingTable from "../components/trading/TradingTable";
+import DashboardWindows from "../components/modals/DashboardWindows";
 
 function Route() {
   const [activeComponent, setActiveComponent] =
@@ -44,6 +45,10 @@ function Route() {
       </div>
 
       <DashboardCards
+        activeComponent={activeComponent}
+        setActiveComponent={setActiveComponent}
+      />
+      <DashboardWindows
         activeComponent={activeComponent}
         setActiveComponent={setActiveComponent}
       />

@@ -36,7 +36,7 @@ function MentorModal() {
         className="
           rounded-3xl
           border border-zinc-200 dark:border-zinc-800
-          bg-white dark:bg-[#0B1120]
+          bg-white dark:bg-[#292828]
           p-5 sm:p-6
           shadow-xl
         "
@@ -106,7 +106,7 @@ function MentorModal() {
         </div>
 
         <div className="mt-6 text-center">
-          <h2 className="text-xl sm:text-2xl font-bold text-zinc-900 dark:text-white">
+          <h2 className="text-lg font-bold text-zinc-900 dark:text-white">
             {t.title}
           </h2>
 

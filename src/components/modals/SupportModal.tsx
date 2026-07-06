@@ -38,7 +38,7 @@ function SupportModalContent() {
         className="
         rounded-3xl
           border border-zinc-200 dark:border-zinc-800
-          bg-white dark:bg-[#0B1120]
+          bg-white dark:bg-[#292828]
           p-5 sm:p-6
           shadow-xl
         "
@@ -49,13 +49,13 @@ function SupportModalContent() {
             className="
             relative
             w-full
-            max-w-[520px]
+            max-w-130
             overflow-hidden
             rounded-3xl
-              h-[150px]
-              sm:h-[180px]
-              lg:h-[190px]
-              bg-gradient-to-br
+              h-37.5
+              sm:h-37.5
+              lg:h-47.5
+              bg-linear-to-br
               from-emerald-500/20
               via-emerald-500/5
               to-transparent

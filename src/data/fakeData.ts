@@ -110,19 +110,23 @@ import type {
   Session,
   StatsRow,
   SummaryCard,
+  SymbolInfo,
   Trade,
   TraderScoreData,
+  Trades,
   TradeWinData,
   WeeklyData,
   WeeklyReportRow,
 } from "../types/interfaces";
 import type {
   AvatarItem,
+  ColKey,
   DateKey,
   Lang,
   NewsFilter,
   ParamKey,
   Period,
+  SortType,
   TradeStatus,
   Week,
 } from "../types/type";
@@ -185,7 +189,7 @@ export const challengeCards: ChallengeCard[] = [
       },
       {
         label: {
-          fa: "فاصله = درادون  -  اکوییتی",
+          fa: "درادون - اکوییتی = فاصله",
           en: "Distance = Equity - Drawdown",
         },
         value: "$1008.18 - $1070.18 = $6,22",
@@ -225,7 +229,7 @@ export const challengeCards: ChallengeCard[] = [
 
       {
         label: {
-          fa: "فاصله  =  درادون  - اکوییتی",
+          fa: "درادون - اکوییتی = فاصله",
           en: "Distance = Equity - Drawdown",
         },
         value: "$190.18 = $1070.18 - $8,80",
@@ -575,7 +579,7 @@ export const progressCardsData: Progres[] = [
     bestegor: {
       fa: "پارامترهای تایید شده",
       en: "Verified Parameters",
-      value: "25.55%",
+      value: "4 از 6",
     },
     badgeText: {
       fa: "نیاز داری که تایم بیشتری صرف کنی",
@@ -606,8 +610,8 @@ export const traderScoreData: TraderScoreData = {
   },
   stats: {
     bestSymbol: "XAUUSD",
-    bestTrade: 342,
-    worstTrade: -241,
+    bestTrade: 526.14,
+    worstTrade: -241.32,
     totalLots: 32,
   },
   radar: {
@@ -737,9 +741,9 @@ export const getTranslatedData = (lang: "fa" | "en") => {
 
 export const profitFactor: ProfitFactorData = {
   value: 1.08,
-  winPercent: 58,
-  lossPercent: 42,
-  winLabel: "$911",
+  winPercent: 42,
+  lossPercent: 58,
+  winLabel: "+$911",
   lossLabel: "-$583",
 };
 
@@ -747,20 +751,20 @@ export const avgWinLoss: AvgWinLossData = {
   value: 1.06,
   winPercent: 55,
   lossPercent: 45,
-  winLabel: "611 $",
-  lossLabel: "-583 $",
+  winLabel: "+23.02 $",
+  lossLabel: "-21.92 $",
 };
 
 export const tradeWin: TradeWinData = {
-  percent: 50,
-  winLabel: "$ 611",
-  lossLabel: "-$ 583",
+  percent: "66,66",
+  winLabel: "$ 8",
+  lossLabel: "-$ 4",
 };
 
 export const accountTrend: AccountTrendData = {
   amount: 384,
   percentLabel: "۷.۱٪",
-  balanceStandard: 10273,
+  balanceStandard: 10273.58,
   vsYesterdayPercent: 1.5,
   vsLastTradePercent: -4.3,
 };
@@ -768,9 +772,9 @@ export const accountTrend: AccountTrendData = {
 export const disciplineScore: DisciplineScoreData = {
   score: 0,
   ranges: [
-    { label: "۰ - ۳۰٪", color: "red" },
-    { label: "۳۰ - ۸۰٪", color: "orange" },
-    { label: "۸۰ - ۱۰۰٪", color: "green" },
+    { label: "۰ - ۳۰٪", min: 0, max: 30, color: "red" },
+    { label: "۳۰ - ۸۰٪", min: 30, max: 80, color: "orange" },
+    { label: "۸۰ - ۱۰۰٪", min: 80, max: 100, color: "green" },
   ],
 };
 
@@ -788,7 +792,7 @@ export const weeklyReport: WeeklyReportRow[] = [
     losePercent: 30,
   },
   {
-    day: { fa: "", en: "Monday" },
+    day: { fa: "دوشنبه", en: "Monday" },
     amount: 220,
     winPercent: 70,
     losePercent: 30,
@@ -1273,7 +1277,7 @@ export const i18n: Record<
       { v: "q3_24", l: "کوارتر ۳ – ۲۰۲۴" },
     ],
     mpdl: "سودآورترین روز",
-    stitle: "طولانی‌ترین استریک",
+    stitle: "طولانی‌ترین روزهای متوالی روی سود",
     du: "روز",
     tu: "معامله",
     wds: [
@@ -1313,7 +1317,6 @@ export const i18n: Record<
   },
 };
 
-// ============== Build Days Helper ==============
 export const buildDays = (
   startDay: number,
   totalDays: number,
@@ -1345,13 +1348,13 @@ dec24Days[27] = { ...dec24Days[27], p: 1800, t: 6 };
 dec24Days[28] = { ...dec24Days[28], p: -200, t: 6 };
 
 export const nov24Days = buildDays(5, 30, 31, 10);
-nov24Days[10] = { ...nov24Days[10], p: 980, t: 4 };
-nov24Days[15] = { ...nov24Days[15], p: -150, t: 3 };
-nov24Days[24] = { ...nov24Days[24], p: 620, t: 5 };
+nov24Days[10] = { ...nov24Days[10], p: 200.25, t: 4 };
+nov24Days[15] = { ...nov24Days[15], p: 150.345, t: 3 };
+nov24Days[24] = { ...nov24Days[24], p: 200.25, t: 5 };
 
 export const oct24Days = buildDays(2, 31, 30, 9);
 oct24Days[17] = { ...oct24Days[17], p: 2100, t: 7 };
-oct24Days[22] = { ...oct24Days[22], p: -400, t: 3 };
+oct24Days[22] = { ...oct24Days[22], p: 400, t: 3 };
 oct24Days[30] = { ...oct24Days[30], p: 750, t: 4 };
 
 export const q4Days = buildDays(2, 92, 30, 9);
@@ -1428,7 +1431,6 @@ export const CD: Record<
   },
 };
 
-// ============== Localized Calendar Data ==============
 export const CDLocalized: Record<
   Lang,
   Record<
@@ -1576,11 +1578,14 @@ export const MONTHLY_DATA: DataPoint[] = [
 ];
 
 export const PARAMETERS: Parameter[] = [
-  { id: "volume", label: { fa: "پارامتر 2", en: "Parametr 2" } },
-  { id: "price", label: { fa: "پارامتر 1", en: "Parametr 1" } },
-  { id: "turnover", label: { fa: "ارزش معاملات", en: "Turnover" } },
-  { id: "trades", label: { fa: "تعداد معاملات", en: "Trades" } },
-  { id: "change", label: { fa: "درصد تغییر", en: "% Change" } },
+  {
+    id: "volume",
+    label: { fa: "بالانس معیار 12 شب", en: "Balance criterion 12 AM" },
+  },
+  { id: "price", label: { fa: "حداکثر بالانس", en: "Maximum Balance" } },
+  { id: "turnover", label: { fa: "حداقل بالانس", en: "Minimum Balance" } },
+  { id: "trades", label: { fa: "حداکثر اکوییتی", en: "Maximum Equity" } },
+  { id: "change", label: { fa: "حداقل اکوییتی", en: "Minimum Equity" } },
 ];
 
 export const PERIOD_LABELS: Record<Period, { fa: string; en: string }> = {
@@ -2691,3 +2696,159 @@ export const cards = [
     components: "TransactionList",
   },
 ];
+
+export const SYMBOLS: SymbolInfo[] = [
+  {
+    key: "BTCUSD",
+    label: { fa: "بیت‌کوین", en: "BTC/USD" },
+    color: "#f7931a",
+    short: "BTC",
+  },
+  {
+    key: "ETHUSD",
+    label: { fa: "اتریوم", en: "ETH/USD" },
+    color: "#627eea",
+    short: "ETH",
+  },
+  {
+    key: "XAUUSD",
+    label: { fa: "طلا", en: "Gold" },
+    color: "#fbbf24",
+    short: "XAU",
+  },
+  {
+    key: "EURUSD",
+    label: { fa: "یورو/دلار", en: "EUR/USD" },
+    color: "#38bdf8",
+    short: "EUR",
+  },
+  {
+    key: "GBPUSD",
+    label: { fa: "پوند/دلار", en: "GBP/USD" },
+    color: "#a78bfa",
+    short: "GBP",
+  },
+];
+
+// ---------------
+export const COLUMNS: {
+  key: ColKey;
+  label: BilingualText;
+  sort: SortType;
+  width: string;
+}[] = [
+  { key: "colorBar", label: { fa: "", en: "" }, sort: "none", width: "2%" },
+  {
+    key: "ticket",
+    label: { fa: "تیکت", en: "Ticket" },
+    sort: "string",
+    width: "6%",
+  },
+  {
+    key: "registeredAt",
+    label: { fa: "ثبت", en: "Reg" },
+    sort: "date",
+    width: "5%",
+  },
+  {
+    key: "entryAt",
+    label: { fa: "ورود", en: "Entry" },
+    sort: "date",
+    width: "5%",
+  },
+  {
+    key: "entryPrice",
+    label: { fa: "قیمت ورود", en: "Entry" },
+    sort: "number",
+    width: "5%",
+  },
+  {
+    key: "side",
+    label: { fa: "نوع", en: "Side" },
+    sort: "string",
+    width: "4%",
+  },
+  {
+    key: "symbol",
+    label: { fa: "نماد", en: "Symbol" },
+    sort: "string",
+    width: "6%",
+  },
+  {
+    key: "result",
+    label: { fa: "وضعیت", en: "Result" },
+    sort: "string",
+    width: "5%",
+  },
+  {
+    key: "volume",
+    label: { fa: "حجم", en: "Vol" },
+    sort: "number",
+    width: "4%",
+  },
+  { key: "sl", label: { fa: "SL", en: "SL" }, sort: "number", width: "5%" },
+  { key: "tp", label: { fa: "TP", en: "TP" }, sort: "number", width: "5%" },
+  {
+    key: "exitPrice",
+    label: { fa: "خروج", en: "Exit" },
+    sort: "number",
+    width: "5%",
+  },
+  {
+    key: "exitAt",
+    label: { fa: "زمان خروج", en: "Exit" },
+    sort: "date",
+    width: "5%",
+  },
+  {
+    key: "profitLoss",
+    label: { fa: "سود/زیان", en: "P&L" },
+    sort: "number",
+    width: "5%",
+  },
+  {
+    key: "commission",
+    label: { fa: "کمیسیون", en: "Comm" },
+    sort: "number",
+    width: "4%",
+  },
+  {
+    key: "swap",
+    label: { fa: "سواپ", en: "Swap" },
+    sort: "number",
+    width: "4%",
+  },
+  {
+    key: "isNewsTrade",
+    label: { fa: "خبر", en: "News" },
+    sort: "boolean",
+    width: "4%",
+  },
+  {
+    key: "comment",
+    label: { fa: "کامنت", en: "Comment" },
+    sort: "none",
+    width: "16%",
+  },
+];
+
+export const NUMERIC_RANGE_FIELDS: {
+  key: keyof Trades;
+  label: BilingualText;
+}[] = [
+  { key: "entryPrice", label: { fa: "قیمت ورود", en: "Entry Price" } },
+  { key: "volume", label: { fa: "حجم لات", en: "Volume" } },
+  { key: "sl", label: { fa: "استاپ لاس", en: "SL" } },
+  { key: "tp", label: { fa: "تارگت", en: "TP" } },
+  { key: "exitPrice", label: { fa: "قیمت خروج", en: "Exit Price" } },
+  { key: "profitLoss", label: { fa: "سود و ضرر", en: "P&L" } },
+  { key: "commission", label: { fa: "کمیسیون", en: "Commission" } },
+  { key: "swap", label: { fa: "سواپ", en: "Swap" } },
+];
+
+export const DATE_RANGE_FIELDS: { key: keyof Trades; label: BilingualText }[] =
+  [
+    { key: "registeredAt", label: { fa: "زمان ثبت", en: "Registered" } },
+    { key: "entryAt", label: { fa: "زمان ورود", en: "Entry Time" } },
+    { key: "exitAt", label: { fa: "زمان خروج", en: "Exit Time" } },
+  ];

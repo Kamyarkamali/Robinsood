@@ -8,11 +8,8 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
-  ComposedChart,
-  Bar,
-  Cell,
 } from "recharts";
-import { AreaTooltip, CandleTooltip } from "./Tooltips";
+import { AreaTooltip } from "./Tooltips";
 import type { CandleDataPoint, ChartModalProps } from "./typesChart";
 import i18next from "i18next";
 
@@ -40,89 +37,25 @@ export const ChartModal: React.FC<ChartModalProps> = ({
 
   const renderChart = () => {
     if (cfg.chartType === "candlestick") {
-      const bodyData = cfg.data.map((d: CandleDataPoint) => ({
+      const data = cfg.data.map((d: CandleDataPoint) => ({
         t: d.t,
-        body: Math.abs((d.close ?? 0) - (d.open ?? 0)),
-        open: d.open ?? 0,
-        close: d.close ?? 0,
-        high: d.high ?? 0,
-        low: d.low ?? 0,
+        v: d.close, // 👈 مهم: فقط close
       }));
 
       return (
         <ResponsiveContainer width="100%" height="100%">
-          <ComposedChart data={bodyData} barCategoryGap="25%">
-            <XAxis dataKey="t" stroke={isDark ? "#888" : "#666"} />
-            <YAxis tickMargin={13} stroke={isDark ? "#888" : "#666"} />
+          <AreaChart data={data}>
+            <XAxis dataKey="t" />
+            <YAxis domain={["auto", "auto"]} />
 
-            <Tooltip
-              content={(props) => (
-                <CandleTooltip
-                  active={props.active}
-                  payload={props.payload}
-                  label={String(props.label)}
-                  lang={lang}
-                />
-              )}
+            <Area
+              type="monotone"
+              dataKey="v"
+              stroke="#4ade80"
+              fill="#4ade8030"
+              dot={false}
             />
-
-            <Bar
-              dataKey="body"
-              shape={(props: any) => {
-                const { x = 0, y = 0, width = 0, height = 0, payload } = props;
-                if (!payload) return null;
-
-                const isBull = payload.close >= payload.open;
-
-                const color = isBull
-                  ? isDark
-                    ? "#4ade80"
-                    : "#16a34a"
-                  : isDark
-                    ? "#f87171"
-                    : "#dc2626";
-
-                const cx = x + width / 2;
-
-                return (
-                  <g>
-                    <line
-                      x1={cx}
-                      y1={y - 6}
-                      x2={cx}
-                      y2={y + height + 6}
-                      stroke={color}
-                      strokeWidth={1.5}
-                      opacity={0.8}
-                    />
-                    <rect
-                      x={x + 1}
-                      y={y}
-                      width={width - 2}
-                      height={Math.max(height, 2)}
-                      fill={color}
-                      rx={3}
-                    />
-                  </g>
-                );
-              }}
-            >
-              {bodyData.map((entry, i) => (
-                <Cell
-                  key={i}
-                  fill={
-                    entry.close >= entry.open
-                      ? isDark
-                        ? "#4ade80"
-                        : "#16a34a"
-                      : isDark
-                        ? "#f87171"
-                        : "#dc2626"
-                  }
-                />
-              ))}
-            </Bar>
-          </ComposedChart>
+          </AreaChart>
         </ResponsiveContainer>
       );
     }

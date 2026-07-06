@@ -7,6 +7,8 @@ import type {
   Impact,
   Lang,
   TradeDirection,
+  TradeResult,
+  TradeSide,
   TradeStatus,
 } from "./type";
 
@@ -197,7 +199,6 @@ export interface ChartSettings {
   barColors: {
     belowAverage: string;
     aboveAverage: string;
-    aboveMax: string;
   };
   averageLineWidth: number;
   maxAllowedLineWidth: number;
@@ -216,9 +217,8 @@ export const defaultSettings: ChartSettings = {
   averageLineColor: "#43A047",
   maxAllowedLineColor: "#FDD835",
   barColors: {
-    belowAverage: "#1E88E5",
-    aboveAverage: "#E53935",
-    aboveMax: "#FB923C",
+    belowAverage: "#E53935",
+    aboveAverage: "#43A0473C",
   },
   averageLineWidth: 2,
   maxAllowedLineWidth: 2,
@@ -279,7 +279,7 @@ export interface AvgWinLossData {
 }
 
 export interface TradeWinData {
-  percent: number;
+  percent: number | string;
   winLabel: string;
   lossLabel: string;
 }
@@ -294,7 +294,12 @@ export interface AccountTrendData {
 
 export interface DisciplineScoreData {
   score: number;
-  ranges: { label: string; color: "red" | "orange" | "green" }[];
+  ranges: {
+    label: string;
+    color: "red" | "orange" | "green";
+    min: number;
+    max: number;
+  }[];
 }
 
 export interface WeeklyReportRow {
@@ -559,4 +564,71 @@ export interface CardComponentProps {
 export interface ComponentState {
   activeComponent: string;
   setActiveComponent: (value: string) => void;
+}
+
+export type SplitBarProps = {
+  winPercent: number;
+  lossPercent: number;
+  winColor?: string;
+  winColorTo?: string;
+  winShadow?: string;
+  lossColor?: string;
+};
+
+export interface DayDatas2 {
+  d: number;
+  p?: number;
+  t?: number;
+  m: number;
+}
+// --------------------------------------
+export interface BilingualTextss {
+  fa: string;
+  en: string;
+}
+
+export interface SymbolInfo {
+  key: string;
+  label: BilingualText;
+  color: string;
+  short: string;
+}
+
+export interface Trades {
+  id: number;
+  ticket: string;
+  registeredAt: string;
+  entryAt: string;
+  entryPrice: number;
+  side: TradeSide;
+  symbol: string;
+  result: TradeResult;
+  status: TradeStatus;
+  volume: number;
+  sl: number;
+  tp: number;
+  exitPrice: number | null;
+  exitAt: string | null;
+  profitLoss: number;
+  commission: number;
+  swap: number;
+  isNewsTrade: boolean;
+  comment: string;
+}
+
+export interface NumericRanges {
+  min: string;
+  max: string;
+}
+export interface DateRanges {
+  from: string;
+  to: string;
+}
+
+export interface Filters {
+  symbol: string;
+  side: "all" | TradeSide;
+  result: "all" | TradeResult;
+  numeric: Record<string, NumericRanges>;
+  dates: Record<string, DateRanges>;
 }

@@ -19,7 +19,7 @@ const formatValue = (
 
   return language === "fa"
     ? `${value.toLocaleString(locale)} روز`
-    : `${value.toLocaleString(locale)} Days`;
+    : `${value.toLocaleString(locale)} Day`;
 };
 const ProgressCard: React.FC<Props> = ({ data }) => {
   const { i18n } = useTranslation();
@@ -61,11 +61,11 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         flex flex-col
         gap-4
         rounded-2xl
-        border-2
-        dark:bg-[#282828]
-        bg-white
+        border-4
         dark:border-[#3C3C3C]
         border-gray-300
+        dark:bg-[#282828]
+        bg-white
         shadow-sm
         transition-all
         duration-300

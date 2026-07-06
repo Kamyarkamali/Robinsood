@@ -56,3 +56,29 @@ export type ModalType =
   | "passAccount"
   | "education"
   | null;
+
+export type TradeSide = "buy" | "sell";
+export type TradeStatuss = "active" | "closed" | "planned";
+export type TradeResult = "profit" | "loss" | "pending";
+
+export type ColKey =
+  | "colorBar"
+  | "ticket"
+  | "registeredAt"
+  | "entryAt"
+  | "entryPrice"
+  | "side"
+  | "symbol"
+  | "result"
+  | "volume"
+  | "sl"
+  | "tp"
+  | "exitPrice"
+  | "exitAt"
+  | "profitLoss"
+  | "commission"
+  | "swap"
+  | "isNewsTrade"
+  | "comment";
+
+export type SortType = "number" | "string" | "date" | "boolean" | "none";

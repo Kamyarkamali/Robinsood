@@ -14,7 +14,7 @@ export default function AccountStats() {
       dir={i18n.language === "fa" ? "ltr" : "rtl"}
       className="w-full p-3 sm:p-5 lg:p-6"
     >
-      <div className="max-w-7xl step-test23 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5">
+      <div className="max-w-8xl step-test23 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-5 ">
         <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4 sm:gap-5 order-3 lg:order-1">
           <ProfitFactorCard />
           <AvgWinLossCard />

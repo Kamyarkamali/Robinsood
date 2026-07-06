@@ -49,13 +49,100 @@ interface DataPoint {
   equityHigh: number;
   equityLow: number;
   equityClose: number;
+  fullDate?: Date;
+}
+
+// توابع کمکی برای محور X
+function getTimeStep(tf: TimeFrame): number {
+  const steps: Record<TimeFrame, number> = {
+    "1min": 60 * 1000,
+    "1min+": 60 * 1000,
+    "5min": 5 * 60 * 1000,
+    "10min": 10 * 60 * 1000,
+    "30min": 30 * 60 * 1000,
+    "1h": 60 * 60 * 1000,
+    "4h": 4 * 60 * 60 * 1000,
+    "12h": 12 * 60 * 60 * 1000,
+    "1day": 24 * 60 * 60 * 1000,
+  };
+  return steps[tf] || 60 * 1000;
+}
+
+function getTickCount(tf: TimeFrame): number {
+  const counts: Record<TimeFrame, number> = {
+    "1min": 12,
+    "1min+": 10,
+    "5min": 8,
+    "10min": 6,
+    "30min": 5,
+    "1h": 4,
+    "4h": 3,
+    "12h": 2,
+    "1day": 2,
+  };
+  return counts[tf] || 6;
+}
+
+function getXTicks(data: DataPoint[], tf: TimeFrame): string[] {
+  if (data.length === 0) return [];
+  const tickCount = getTickCount(tf);
+  const step = Math.max(1, Math.floor(data.length / tickCount));
+  return data
+    .filter((_, index) => index % step === 0 || index === data.length - 1)
+    .map((d) => d.time);
+}
+
+function formatTimeByFrame(
+  value: string,
+  index: number,
+  tf: TimeFrame,
+  data: DataPoint[],
+): string {
+  if (index === 0 || index === data.length - 1) {
+    return value;
+  }
+
+  switch (tf) {
+    case "1min":
+    case "1min+":
+    case "5min":
+    case "10min":
+    case "30min":
+      return value;
+    case "1h":
+    case "4h":
+    case "12h":
+      return value.split(":")[0] + ":00";
+    case "1day":
+      return value;
+    default:
+      return value;
+  }
 }
 
 function generateData(tf: TimeFrame): DataPoint[] {
   const seed = tf.length * 7 + tf.charCodeAt(0);
-  const count = 200;
+
+  const pointsPerTimeFrame: Record<TimeFrame, number> = {
+    "1min": 200,
+    "1min+": 180,
+    "5min": 150,
+    "10min": 120,
+    "30min": 100,
+    "1h": 80,
+    "4h": 60,
+    "12h": 40,
+    "1day": 30,
+  };
+
+  const count = pointsPerTimeFrame[tf] || 200;
   const pts: DataPoint[] = [];
   let balance: number = 400;
+  const timeStep = getTimeStep(tf);
+
+  const now = new Date();
+  now.setHours(0, 0, 0, 0);
+
   for (let i = 0; i < count; i++) {
     const drift = (i / count) * 620 + 380;
     balance = Math.max(
@@ -68,11 +155,15 @@ function generateData(tf: TimeFrame): DataPoint[] {
     const high =
       Math.max(open, close) + Math.abs(Math.sin(i * 1.3 + seed)) * 15;
     const low = Math.min(open, close) - Math.abs(Math.sin(i * 1.7 + seed)) * 15;
-    const h = String(Math.floor(i / 60) % 24).padStart(2, "0");
-    const m = String(i % 60).padStart(2, "0");
+
+    const date = new Date(now.getTime() - (count - i) * timeStep);
+    const h = String(date.getHours()).padStart(2, "0");
+    const m = String(date.getMinutes()).padStart(2, "0");
+
     pts.push({
       index: i,
       time: `${h}:${m}`,
+      fullDate: date,
       target: 960 + Math.sin(i * 0.1 + seed) * 10,
       dailyDrawdown: 500 + Math.sin(i * 0.15 + seed) * 8,
       totalDrawdown: 395 + Math.sin(i * 0.12 + seed) * 6,
@@ -113,12 +204,18 @@ function computeDomain(
 
 function niceTicks([dMin, dMax]: [number, number], count = 4): number[] {
   const range = dMax - dMin;
+  if (range === 0) return [dMin];
+
   const rawStep = range / (count - 1);
   const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
   const step = Math.ceil(rawStep / mag) * mag;
-  const start = Math.ceil(dMin / step) * step;
+  const finalStep = Math.max(1, step);
+
+  const start = Math.floor(dMin / finalStep) * finalStep;
   const ticks: number[] = [];
-  for (let t = start; t <= dMax + 0.001; t += step) ticks.push(Math.round(t));
+  for (let t = start; t <= dMax + finalStep * 0.001; t += finalStep) {
+    ticks.push(Math.round(t * 100) / 100);
+  }
   return ticks;
 }
 
@@ -166,9 +263,15 @@ const CandleBar = ({
 
 const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
+
+  // پیدا کردن داده کامل برای نمایش زمان دقیق‌تر
+  const fullTime = label;
+
   return (
     <div
-      className={`bg-[#1a1230] flex flex-col items-center gap-1 backdrop-blur-2xl dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[9px] sm:text-[13px] shadow-2xl max-w-40 sm:max-w-50 ${isRtl ? "text-right" : "text-left"}`}
+      className={`bg-[#1a1230] flex flex-col items-center gap-1 backdrop-blur-2xl dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[9px] sm:text-[13px] shadow-2xl max-w-40 sm:max-w-50 ${
+        isRtl ? "text-right" : "text-left"
+      }`}
       style={{
         backgroundColor: settings?.colors?.background || "#1a1230",
         borderColor: settings?.colors?.primary || "#3b1f7a",
@@ -178,7 +281,7 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
         className="text-[#a78bfa] font-bold mb-0.5 text-[9px] sm:text-[11px]"
         style={{ color: settings?.colors?.secondary || "#a78bfa" }}
       >
-        {label}
+        {fullTime}
       </p>
       {payload
         .filter((p: any) => p.dataKey !== "equity")
@@ -284,6 +387,11 @@ export default function TradingChart() {
   const yTicks = useMemo(
     () => niceTicks(yDomain, settings.axis.tickCount),
     [yDomain, settings.axis.tickCount],
+  );
+
+  const xTicks = useMemo(
+    () => getXTicks(visibleData, timeFrame),
+    [visibleData, timeFrame],
   );
 
   const [chartHeight, setChartHeight] = useState<number>(320);
@@ -402,7 +510,9 @@ export default function TradingChart() {
       >
         <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
           <div
-            className={`flex items-center gap-1 sm:gap-2 flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`flex items-center gap-1 sm:gap-2 flex-wrap ${
+              isRtl ? "flex-row-reverse" : ""
+            }`}
           >
             <div className="flex step-test19 bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1">
               {(["balance", "profit"] as Mode[]).map((m) => (
@@ -452,7 +562,9 @@ export default function TradingChart() {
 
           <div
             dir={i18next.language === "fa" ? "ltr" : "rtl"}
-            className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${
+              isRtl ? "flex-row-reverse" : ""
+            }`}
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             <div className="flex items-center gap-1 sm:gap-2 p-1 justify-center w-full  rounded-2xl">
@@ -501,8 +613,8 @@ export default function TradingChart() {
                 data={visibleData}
                 margin={{
                   top: 5,
-                  right: window.innerWidth < 480 ? 5 : 10,
-                  left: window.innerWidth < 480 ? 5 : 10,
+                  right: window.innerWidth < 480 ? 25 : 40,
+                  left: window.innerWidth < 480 ? 25 : 40,
                   bottom: 5,
                 }}
               >
@@ -551,6 +663,7 @@ export default function TradingChart() {
                 {settings.axis.showXAxis && (
                   <XAxis
                     dataKey="time"
+                    ticks={xTicks}
                     tick={{
                       fill: "#ffff",
                       fontSize: Math.min(
@@ -564,17 +677,18 @@ export default function TradingChart() {
                     }}
                     axisLine={{ stroke: settings.colors.grid }}
                     tickLine={false}
-                    interval={Math.ceil(
-                      visibleCount /
-                        Math.min(
-                          settings.axis.tickCount,
-                          window.innerWidth < 480
-                            ? 2
-                            : window.innerWidth < 640
-                              ? 3
-                              : settings.axis.tickCount,
-                        ),
-                    )}
+                    tickFormatter={(value) => {
+                      const dataIndex = visibleData.findIndex(
+                        (d) => d.time === value,
+                      );
+                      if (dataIndex === -1) return value;
+                      return formatTimeByFrame(
+                        value,
+                        dataIndex,
+                        timeFrame,
+                        visibleData,
+                      );
+                    }}
                   />
                 )}
 
@@ -583,16 +697,17 @@ export default function TradingChart() {
                   ticks={yTicks}
                   tick={{
                     fill: "#ffffff",
-                    fontSize: 11,
+                    fontSize: window.innerWidth < 480 ? 9 : 11,
                   }}
                   axisLine={false}
                   tickLine={false}
-                  width={4}
+                  tickMargin={window.innerWidth < 480 ? 5 : 20}
+                  width={window.innerWidth < 480 ? 35 : 10}
                   tickFormatter={(v) => {
                     if (v >= 1000) return (v / 1000).toFixed(0) + "k";
                     return v.toLocaleString();
                   }}
-                  orientation={isRtl ? "right" : "left"}
+                  orientation={isRtl ? "left" : "right"}
                 />
 
                 {settings.display.showTooltip && (
@@ -728,7 +843,9 @@ export default function TradingChart() {
 
         {settings.display.showLegend && (
           <div
-            className={`flex step-test22 flex-wrap justify-center gap-x-1.5 sm:gap-x-5 gap-y-0.5 sm:gap-y-2 ${isRtl ? "flex-row-reverse" : ""}`}
+            className={`flex step-test22 flex-wrap justify-center gap-x-1.5 sm:gap-x-5 gap-y-0.5 sm:gap-y-2 ${
+              isRtl ? "flex-row-reverse" : ""
+            }`}
           >
             {SERIES_CONFIG.map(({ key, tKey, color }) => (
               <button

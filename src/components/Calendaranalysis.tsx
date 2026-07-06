@@ -54,8 +54,8 @@ function Dropdown<T extends string>({
 
       {open && (
         <div
-          dir={i18next.language === "fa" ? "rtl" : "ltr"}
-          className="absolute top-[calc(100%+6px)] z-50 min-w-40 sm:min-w-45 rounded-xl border p-1.5
+          dir={i18next.language === "fa" ? "ltr" : "rtl"}
+          className="absolute top-[calc(100%+6px)] flex flex-col items-center z-50 min-w-40 sm:min-w-45 rounded-xl border p-1.5
             bg-white dark:bg-[#2B2B2B]
             border-gray-200 dark:border-neutral-700
             shadow-lg dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
@@ -87,6 +87,93 @@ function Dropdown<T extends string>({
         </div>
       )}
     </div>
+  );
+}
+
+//@ts-ignore
+function MonthDropdown({
+  active,
+  onSelect,
+  lang,
+  dates,
+}: {
+  active: DateKey;
+  onSelect: (v: DateKey) => void;
+  lang: Lang;
+  dates: { v: DateKey; l: string }[];
+}) {
+  const isFa = lang === "fa";
+
+  const months = dates.filter((d) => {
+    const v = d.v as string;
+    return (
+      v.includes("dec") ||
+      v.includes("nov") ||
+      v.includes("oct") ||
+      v.includes("sep") ||
+      v.includes("aug") ||
+      v.includes("jul") ||
+      v.includes("jun") ||
+      v.includes("may") ||
+      v.includes("apr") ||
+      v.includes("mar") ||
+      v.includes("feb") ||
+      v.includes("jan")
+    );
+  });
+
+  const finalMonths = months.length > 0 ? months : dates.slice(0, 3);
+
+  const activeMonth = finalMonths.find((m) => m.v === active);
+  const label = activeMonth?.l || (isFa ? "ماه" : "Month");
+
+  return (
+    <Dropdown
+      label={label}
+      items={finalMonths}
+      active={active}
+      section={isFa ? "ماه‌های سال" : "Months"}
+      onSelect={onSelect}
+    />
+  );
+}
+//@ts-ignore
+function QuarterDropdown({
+  active,
+  onSelect,
+  lang,
+  dates,
+}: {
+  active: DateKey;
+  onSelect: (v: DateKey) => void;
+  lang: Lang;
+  dates: { v: DateKey; l: string }[];
+}) {
+  const isFa = lang === "fa";
+
+  const quarters = dates.filter((d) => {
+    const v = d.v as string;
+    return (
+      v.includes("q1") ||
+      v.includes("q2") ||
+      v.includes("q3") ||
+      v.includes("q4")
+    );
+  });
+
+  const finalQuarters = quarters.length > 0 ? quarters : dates.slice(3);
+
+  const activeQuarter = finalQuarters.find((q) => q.v === active);
+  const label = activeQuarter?.l || (isFa ? "کوارتر" : "Quarter");
+
+  return (
+    <Dropdown
+      label={label}
+      items={finalQuarters}
+      active={active}
+      section={isFa ? "کوارترهای سال" : "Quarters"}
+      onSelect={onSelect}
+    />
   );
 }
 
@@ -163,7 +250,7 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
 
   return (
     <div
-      className={`md:rounded-[14px] rounded-sm px-1.5 sm:px-3 py-1.5 sm:py-2.5 flex flex-col justify-between overflow-hidden transition-all
+      className={`md:rounded-[14px] rounded-sm px-1.5 sm:px-3 py-1.5 sm:py-2.5 flex flex-col overflow-hidden transition-all
         w-full min-h-15 sm:min-h-16.25 lg:h-16.25
         ${bg}
       `}
@@ -177,11 +264,11 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
       {has && (
         <div className="flex flex-col gap-0.5 text-center">
           <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
-            {isProfit ? "+" : "-"}
-            {day.p!}$
+            {isProfit}
+            {day.p!}
           </span>
           <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
-            {day.t!} {day.t! > 1 ? "trades" : "trade"}
+            {day.t!} {i18next.language === "fa" ? "ترید" : "Trade"}
           </span>
         </div>
       )}
@@ -190,7 +277,6 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
 }
 
 export default function CalendarAnalysis() {
-  // گرفتن زبان فعلی از i18next، اگر نبود فارسی پیش‌فرض
   const [lang, setLang] = useState<Lang>(() => {
     const currentLang = i18next.language;
     return currentLang === "en" || currentLang === "fa"
@@ -199,9 +285,9 @@ export default function CalendarAnalysis() {
   });
 
   const [sp, setSp] = useState<ParamKey>("pnl");
-  const [sd, setSd] = useState<DateKey>("dec24");
+  const [selectedMonth, setSelectedMonth] = useState<DateKey>("dec24");
+  const [selectedQuarter, setSelectedQuarter] = useState<DateKey>("q4_24");
 
-  // گوش دادن به تغییرات زبان از بیرون (دکمه‌های تغییر زبان در جای دیگر پروژه)
   useEffect(() => {
     const handleLanguageChange = () => {
       const newLang = i18next.language as Lang;
@@ -210,31 +296,64 @@ export default function CalendarAnalysis() {
       }
     };
 
-    // اضافه کردن listener
     i18next.on("languageChanged", handleLanguageChange);
 
-    // پاک کردن listener هنگام unmount
     return () => {
       i18next.off("languageChanged", handleLanguageChange);
     };
   }, []);
 
   const T = i18n[lang];
-  const cd = CDLocalized[lang][sd];
+
+  const cd = CDLocalized[lang][selectedMonth];
 
   const ap = T.params.find((p) => p.v === sp);
-  const ad = T.dates.find((d) => d.v === sd);
 
   const weeks: DayDatas[][] = [];
-  for (let i = 0; i < cd.days.length; i += 7)
-    weeks.push(cd.days.slice(i, i + 7));
+  if (cd && cd.days) {
+    for (let i = 0; i < cd.days.length; i += 7)
+      weeks.push(cd.days.slice(i, i + 7));
+  }
+
+  const allDates = T.dates;
+  const monthItems = allDates.filter((d) => {
+    const v = d.v as string;
+    return (
+      v.includes("dec") ||
+      v.includes("nov") ||
+      v.includes("oct") ||
+      v.includes("sep") ||
+      v.includes("aug") ||
+      v.includes("jul") ||
+      v.includes("jun") ||
+      v.includes("may") ||
+      v.includes("apr") ||
+      v.includes("mar") ||
+      v.includes("feb") ||
+      v.includes("jan")
+    );
+  });
+
+  const quarterItems = allDates.filter((d) => {
+    const v = d.v as string;
+    return (
+      v.includes("q1") ||
+      v.includes("q2") ||
+      v.includes("q3") ||
+      v.includes("q4")
+    );
+  });
 
   return (
     <div
-      className="p-2 step-test39 transition-colors"
+      className="p-2 step-test39 transition-colors "
       dir={lang === "fa" ? "rtl" : "ltr"}
     >
-      <div className="bg-gray-50 dark:bg-[#2B2B2B] rounded-2xl border-4 dark:border-white/10 border-gray-400 p-2 sm:p-4 lg:p-6">
+      <div
+        className="bg-gray-50 dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] rounded-2xl border-4
+        dark:border-[#3C3C3C]
+        border-gray-300 p-2 sm:p-4 lg:p-6"
+      >
         <div className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5">
           <div
             className={`flex flex-wrap gap-2 justify-center sm:${i18next.language === "fa" ? "justify-end" : "justify-start"} w-full sm:gap-2.5`}
@@ -246,12 +365,27 @@ export default function CalendarAnalysis() {
               section={T.psec}
               onSelect={setSp}
             />
+
             <Dropdown
-              label={ad?.l ?? T.dp}
-              items={T.dates}
-              active={sd}
-              section={T.dsec}
-              onSelect={setSd}
+              label={
+                monthItems.find((m) => m.v === selectedMonth)?.l ||
+                (lang === "fa" ? "ماه" : "Month")
+              }
+              items={monthItems.length > 0 ? monthItems : T.dates.slice(0, 3)}
+              active={selectedMonth}
+              section={lang === "fa" ? "ماه‌های سال" : "Months"}
+              onSelect={(v) => setSelectedMonth(v as DateKey)}
+            />
+
+            <Dropdown
+              label={
+                quarterItems.find((q) => q.v === selectedQuarter)?.l ||
+                (lang === "fa" ? "کوارتر" : "Quarter")
+              }
+              items={quarterItems.length > 0 ? quarterItems : T.dates.slice(3)}
+              active={selectedQuarter}
+              section={lang === "fa" ? "کوارترهای سال" : "Quarters"}
+              onSelect={(v) => setSelectedQuarter(v as DateKey)}
             />
           </div>
 
@@ -260,10 +394,10 @@ export default function CalendarAnalysis() {
               <span className="text-xs sm:text-[15px] font-bold text-gray-500 dark:text-neutral-400">
                 {T.mpdl}
               </span>
-              <span className="text-[11px] sm:text-[13px] text-gray-500 dark:text-neutral-400">
+              <span className="text-[11px] sm:text-[13px] text-center w-full text-gray-500 dark:text-neutral-400">
                 {cd?.mpd?.date}
               </span>
-              <span className="text-[18px] sm:text-[22px] text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
+              <span className="text-[18px] sm:text-[22px] w-full text-center text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
                 ${cd?.mpd?.pnl ?? 0}
               </span>
             </div>
@@ -271,27 +405,27 @@ export default function CalendarAnalysis() {
             <div className="hidden sm:block w-px self-stretch min-h-12.5 bg-gray-300 dark:bg-neutral-700" />
 
             <div className="flex items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
-              <StreakDonut wins={cd.str.w} losses={cd.str.l} />
+              <StreakDonut wins={cd?.str?.w ?? 0} losses={cd?.str?.l ?? 0} />
               <div className="flex flex-col gap-0.5 min-w-0">
-                <span className="text-[11px] sm:text-[13px] font-bold text-gray-900 dark:text-white">
+                <span className="text-[11px] text-center sm:text-[13px] font-bold text-gray-900 dark:text-white">
                   {T.stitle}
                 </span>
-                <span className="text-[8px] sm:text-[10px] text-gray-500 dark:text-neutral-500 truncate">
-                  {cd.str.s} – {cd.str.e}
+                <span className="text-[8px] text-center sm:text-[10px] text-gray-500 dark:text-white truncate">
+                  {cd?.str?.s} – {cd?.str?.e}
                 </span>
                 <div className="flex items-center gap-1 sm:gap-1.5 mt-1 flex-wrap">
                   <span className="text-[9px] sm:text-[11px] font-semibold text-gray-700 dark:text-neutral-300 whitespace-nowrap">
-                    {cd.str.d} {T.du} – {cd.str.t} {T.tu}
+                    {cd?.str?.d} {T.du} – {cd?.str?.t} {T.tu}
                   </span>
                   <span className="text-yellow-400 text-[10px] sm:text-xs">
                     <FlashIcon />
                   </span>
                   <div className="flex flex-col gap-2">
-                    <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 py-0.5 rounded bg-indigo-600 text-white">
-                      {cd.str.w}
+                    <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 rounded bg-indigo-600 text-white">
+                      {cd?.str?.w}
                     </span>
-                    <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 py-0.5 rounded bg-red-600 text-white">
-                      {cd.str.l}
+                    <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 rounded bg-red-600 text-white">
+                      {cd?.str?.l}
                     </span>
                   </div>
                 </div>
@@ -314,6 +448,7 @@ export default function CalendarAnalysis() {
                 </div>
               ))}
             </div>
+
             {weeks.map((week, wi) => (
               <div
                 key={wi}
@@ -323,7 +458,7 @@ export default function CalendarAnalysis() {
                   <DayCell
                     key={`${wi}-${di}`}
                     day={day}
-                    isCur={day.m === cd.cur}
+                    isCur={day.m === cd?.cur}
                   />
                 ))}
               </div>

@@ -1,4 +1,4 @@
-function QuarterGauge({ percent }: { percent: number }) {
+function QuarterGauge({ percent }: { percent: any }) {
   const size = 160;
   const stroke = 12;
 
@@ -20,7 +20,7 @@ function QuarterGauge({ percent }: { percent: number }) {
             d={`M 0 ${radius} A ${radius} ${radius} 0 0 1 ${radius * 2} ${radius}`}
             fill="none"
             stroke="#EF4444"
-            strokeOpacity="0.25"
+            strokeOpacity="0.9"
             strokeWidth={stroke}
             strokeLinecap="round"
           />
@@ -42,7 +42,7 @@ function QuarterGauge({ percent }: { percent: number }) {
           dominantBaseline="middle"
           className="text-xs sm:text-sm font-bold fill-current dark:fill-white fill-slate-900"
         >
-          {Math.round(percent)}%
+          {/* {Math.round(percent)}% */}
         </text>
       </svg>
     </div>

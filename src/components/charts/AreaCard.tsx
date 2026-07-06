@@ -1,4 +1,3 @@
-// components/trading/AreaCard.tsx
 import React, { useMemo } from "react";
 import {
   AreaChart,

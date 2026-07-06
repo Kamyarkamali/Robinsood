@@ -26,12 +26,11 @@ interface Props {
 }
 
 const defaultSettings: ChartSettings = {
-  averageLineColor: "#43A047",
-  maxAllowedLineColor: "#FDD835",
+  averageLineColor: "#FFA500",
+  maxAllowedLineColor: "#22C55E",
   barColors: {
-    belowAverage: "#1E88E5",
-    aboveAverage: "#E53935",
-    aboveMax: "#FB923C",
+    belowAverage: "#EF4444",
+    aboveAverage: "#22C55E",
   },
   averageLineWidth: 2,
   maxAllowedLineWidth: 2,
@@ -199,7 +198,7 @@ const ChartSettingsPanel: React.FC<{
                   <label className="block text-xs font-medium dark:text-gray-300 mb-1">
                     بالای حد مجاز
                   </label>
-                  <input
+                  {/* <input
                     type="color"
                     value={settings.barColors.aboveMax}
                     onChange={(e) =>
@@ -212,7 +211,7 @@ const ChartSettingsPanel: React.FC<{
                       })
                     }
                     className="w-full h-8 rounded cursor-pointer"
-                  />
+                  /> */}
                 </div>
               </div>
             </div>
@@ -546,15 +545,14 @@ const TradingChartCard: React.FC<Props> = ({
   const maxAllowedY = valueToY(data.maxAllowedLine);
 
   const getBarColor = (day: ChartData2["days"][number]) => {
-    const below = day.belowAverage ?? day.value < data.averageLine;
-    if (!below) return settings.barColors.belowAverage;
-    return day.value < data.maxAllowedLine
-      ? settings.barColors.aboveAverage
-      : settings.barColors.aboveMax;
-  };
+    if (day.value < data.maxAllowedLine) {
+      return settings.barColors.belowAverage;
+    }
 
+    return settings.barColors.aboveAverage;
+  };
   function formatValue(value: number, unit: ChartUnit): string {
-    const formatDecimal = (num: number) => Number(num.toFixed(3)).toString();
+    const formatDecimal = (num: number) => num.toFixed(3);
 
     if (unit === "time") {
       const h = Math.floor(value / 3600);
@@ -572,9 +570,9 @@ const TradingChartCard: React.FC<Props> = ({
     }
 
     if (unit === "lot") {
-      if (value >= 1) return formatDecimal(value);
-      if (value >= 0.01) return formatDecimal(value * 1000);
-      return formatDecimal(value * 1000000);
+      // if (value >= 1) return formatDecimal(value);
+      // if (value >= 0.01) return formatDecimal(value * 1000);
+      return formatDecimal(value);
     }
 
     return formatDecimal(value);
@@ -807,7 +805,7 @@ const TradingChartCard: React.FC<Props> = ({
                     }
                     strokeDasharray="8 4"
                   />
-                  <rect
+                  {/* <rect
                     x={fixedWidth - paddingRight - (isMobile ? 50 : 70)}
                     y={avgY - (isMobile ? 10 : 14)}
                     width={isMobile ? 45 : 65}
@@ -815,7 +813,7 @@ const TradingChartCard: React.FC<Props> = ({
                     rx={isMobile ? 4 : 6}
                     fill={settings.averageLineColor}
                     opacity={0.15}
-                  />
+                  /> */}
                 </>
               )}
 
@@ -834,7 +832,7 @@ const TradingChartCard: React.FC<Props> = ({
                     }
                     strokeDasharray="8 4"
                   />
-                  <rect
+                  {/* <rect
                     x={fixedWidth - paddingRight - (isMobile ? 50 : 70)}
                     y={maxAllowedY - (isMobile ? 10 : 14)}
                     width={isMobile ? 45 : 65}
@@ -842,7 +840,7 @@ const TradingChartCard: React.FC<Props> = ({
                     rx={isMobile ? 4 : 6}
                     fill={settings.maxAllowedLineColor}
                     opacity={0.15}
-                  />
+                  /> */}
                 </>
               )}
             </svg>
@@ -853,7 +851,7 @@ const TradingChartCard: React.FC<Props> = ({
             style={{ direction: "rtl" }}
           >
             <div className="flex flex-col gap-1 sm:gap-1.5">
-              <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-green-500/10 dark:bg-green-500/5">
+              <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-orange-500/10 text-orange-400 dark:bg-[#2B2B2B]">
                 <span className="text-green-500 text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
                   <img className="w-3.5 sm:w-4.5" src={chart} alt="chart" />
                   {t("cart1.Average")}
@@ -863,7 +861,7 @@ const TradingChartCard: React.FC<Props> = ({
                 </span>
               </div>
 
-              <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-orange-500/10 dark:bg-orange-500/5">
+              <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-green-500/10 text-green-500 dark:bg-[#2B2B2B]">
                 <span className="text-orange-400 text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
                   <img className="w-3.5 sm:w-4.5" src={iconAlert} alt="alert" />{" "}
                   {t("cart1.Limit")}
@@ -874,7 +872,7 @@ const TradingChartCard: React.FC<Props> = ({
               </div>
             </div>
 
-            <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 dark:bg-[#2a2a4a]">
+            <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 dark:bg-[#2B2B2B]">
               <span className="text-[10px] sm:text-[11px] text-gray-600 dark:text-[#aaa] flex items-center gap-0.5 sm:gap-1">
                 <img className="w-3.5 sm:w-4.5" src={tick} alt="Success" />
                 {t("cart1.Trading")}
@@ -884,8 +882,7 @@ const TradingChartCard: React.FC<Props> = ({
                 <span className="text-green-500 font-semibold">
                   {data.acceptedDays}
                 </span>
-
-                <span className="text-gray-400">/</span>
+                <span>از</span>
 
                 <span className="font-medium">{data.requiredDays}</span>
 

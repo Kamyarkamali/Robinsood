@@ -15,9 +15,9 @@ export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
       className="
       border-4
         w-full
-        bg-white dark:bg-[#4340404d]
+        bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
        dark:border-[#3A3A3A] border-gray-400
-        rounded-xl sm:rounded-2xl
+        rounded-2xl sm:rounded-2xl
         p-3 sm:p-4 md:p-5
         flex flex-col items-center justify-center
         transition-colors

@@ -11,7 +11,7 @@ import type { CardConfig } from "./typesChart";
 const TradingPanel: React.FC = () => {
   const [lang] = useState<"fa" | "en">("fa");
   const [selectedCard, setSelectedCard] = useState<CardConfig | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const t = useMemo(() => (translations as any)[lang], [lang]);
   const dir = useMemo(() => (lang === "fa" ? "ltr" : "rtl"), [lang]);
@@ -33,8 +33,8 @@ const TradingPanel: React.FC = () => {
   );
 
   return (
-    <div className="h-fit flex step-test38 items-center justify-center p-2 sm:p-4 md:p-6 font-lahzeh transition-colors">
-      <div className="w-full max-w-310" dir={dir}>
+    <div className="h-fit  flex step-test38 items-center  justify-center p-2 sm:p-4 md:p-6 font-lahzeh transition-colors">
+      <div className="w-full max-w-8xl" dir={dir}>
         <div className="flex flex-col lg:flex-row gap-3 sm:gap-5 lg:gap-6">
           <div className="w-full lg:w-70 xl:w-[320px] shrink-0">
             <DonutChart data={DEFAULT_DONUT_DATA} title={t.panelTitle} />
@@ -72,6 +72,7 @@ const TradingPanel: React.FC = () => {
               };
 
               return cfg.chartType === "candlestick" ? (
+                // @ts-ignore
                 <CandleCard {...commonProps} />
               ) : (
                 <AreaCard {...commonProps} valueColor={cfg.valueColor} />

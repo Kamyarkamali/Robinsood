@@ -196,7 +196,9 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
       <div
         ref={rootRef}
-        className="bg-[#2B2B2B] step-test43 rounded-2xl border-4 md:pr-2 md:pl-2 mt-3 dark:border-white/10 border-gray-400 text-slate-200 w-full min-h-0 pb-3  overflow-hidden select-none"
+        className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] step-test43 rounded-2xl border-4
+        dark:border-[#3C3C3C]
+        border-gray-300 md:pr-2 md:pl-2 mt-3 text-slate-200 w-full min-h-0 pb-3  overflow-hidden select-none"
         onClick={(e) => {
           if (!(e.target as HTMLElement).closest(".tooltip-trigger")) {
             clearTooltip();
@@ -265,7 +267,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             </div>
           </div>
         </div>
-        <div className="mx-2 sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
+        <div className="mx-2  sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
           <div
             className="relative border-b border-[#1e2d3d]"
             style={{ height: newsAreaHeight, overflow: "visible" }}
@@ -667,7 +669,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               const drawBar = (sH: number, eH: number, label: boolean) => (
                 <div
                   key={`${s.id}-${sH}`}
-                  className="absolute flex items-center overflow-hidden rounded-lg border"
+                  className="absolute md:flex hidden items-center overflow-hidden rounded-lg border"
                   style={{
                     [isRtl ? "left" : "right"]: pct(sH),
                     width: pct(eH - sH),

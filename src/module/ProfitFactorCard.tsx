@@ -6,7 +6,11 @@ import Pill from "./Pill";
 
 function ProfitFactorCard() {
   return (
-    <CardShell className="relative step-test29 flex items-center justify-center h-full rounded-[24.14px] border-4 dark:border-[#303030] border-gray-400">
+    <CardShell
+      className="relative
+        border-4 dark:border-[#3C3C3C] border-gray-300 
+         step-test29 flex items-center justify-center h-full rounded-2xl"
+    >
       <div className="flex flex-col gap-3 items-start justify-between">
         <h3 className="font-normal text-center w-full dark:text-[#ffffff] text-gray-500 text-sm md:text-[24px]">
           {t("cart5.profit")}
@@ -32,7 +36,7 @@ function ProfitFactorCard() {
         </span>
       </div>
 
-      <div className="flex-1 flex items-center justify-center py-2">
+      <div className="flex-1 ml-3 flex items-center justify-center py-2">
         <div className="relative w-37.5 h-37.5 flex items-center justify-center">
           <FullDonut
             winPercent={profitFactor.winPercent}
@@ -44,7 +48,7 @@ function ProfitFactorCard() {
             <Pill tone="red">{profitFactor.lossLabel}</Pill>
           </div>
 
-          <div className="absolute top-10 -right-9">
+          <div className="absolute top-10 -right-11">
             <Pill tone="green">{profitFactor.winLabel}</Pill>
           </div>
         </div>

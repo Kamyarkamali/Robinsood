@@ -124,8 +124,8 @@
     "LastTrade": "Compared to Last Trade"
   },
   "cart5": {
-    "profit": "Profit Factor",
-    "wind": "Win Rate"
+    "profit": "Profitability ratio",
+    "wind": "Average loss"
   },
   "cart6": {
     "win": "Avg win loss"
@@ -144,7 +144,7 @@
     "title3": "Consistency Score can help improve your trading performance."
   },
   "card8": {
-    "title1": "Trade Win"
+    "title1": "Profitability ratio"
   },
   "tabale2": {
     "calander": "Calendar analysis"
