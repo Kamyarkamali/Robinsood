@@ -8,8 +8,6 @@ import i18next, { t } from "i18next";
 import CartFacke from "../module/CartFacke";
 import { useMemo, useState } from "react";
 
-/* ---------------- Metric Section ---------------- */
-
 function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
   const { i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
@@ -35,8 +33,6 @@ function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
     </div>
   );
 }
-
-/* ---------------- Metric Row ---------------- */
 
 function MetricRow({ row }: { row: MetricRow }) {
   return (
@@ -64,7 +60,6 @@ function MetricRow({ row }: { row: MetricRow }) {
           </div>
         </div>
 
-        {/* CENTER LABEL (FIXED) */}
         <div className="flex justify-center items-center w-full sm:w-auto">
           <div className="px-3 py-1 rounded-lg bg-[#2f2f2f] dark:bg-[#444] border border-[#555]">
             <span className="text-[10px] sm:text-[11px] md:text-[12px] text-white whitespace-nowrap">
@@ -73,7 +68,6 @@ function MetricRow({ row }: { row: MetricRow }) {
           </div>
         </div>
 
-        {/* RIGHT BAR */}
         <div className="w-full sm:w-[45%]">
           <div className="w-full h-[18px] sm:h-[24px] rounded-full bg-[#3F3F3F] overflow-hidden">
             <div
@@ -86,8 +80,6 @@ function MetricRow({ row }: { row: MetricRow }) {
     </div>
   );
 }
-
-/* ---------------- Main Component ---------------- */
 
 export default function VSComparison() {
   const { i18n } = useTranslation();
@@ -103,16 +95,12 @@ export default function VSComparison() {
     { id: "real", fa: "کاربران ریل", en: "Real Users" },
   ];
 
-  /* -------- helper -------- */
-
   const scaleMetrics = (data: MetricRow[], factor: number) =>
     data.map((item) => ({
       ...item,
       leftValue: Math.floor(item.leftValue * factor),
       leftBar: Math.min(Math.floor(item.leftBar * factor), 100),
     }));
-
-  /* -------- computed -------- */
 
   const currentPerformanceMetrics = useMemo(() => {
     if (comparisonType === "all") return performanceMetrics;
@@ -127,8 +115,6 @@ export default function VSComparison() {
       return scaleMetrics(behaviorMetrics, 0.8);
     return scaleMetrics(behaviorMetrics, 1.15);
   }, [comparisonType]);
-
-  /* ---------------- UI ---------------- */
 
   return (
     <>

@@ -33,8 +33,10 @@ function Route() {
     createAppTour(lang, theme).drive();
   };
 
+  console.log(activeComponent);
+
   return (
-    <div className="pr-4 pl-4">
+    <div className="pr-4 pl-4 min-h-screen">
       <div className="w-full max-w-372.5 mx-auto px-4 md:pt-2">
         <Navbar activeComponent={activeComponent} />
       </div>
@@ -54,7 +56,7 @@ function Route() {
       />
 
       {activeComponent === "ShowAllComponents" && (
-        <div id="ShowAllComponents">
+        <div>
           <HomePage />
         </div>
       )}

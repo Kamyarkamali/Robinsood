@@ -23,7 +23,7 @@ function InformationAccount() {
       <h1 className="md:text-2xl text-md font-bold px-4 mb-4 mt-4">
         {t("labels.parametr5")}
       </h1>
-      <div className="w-full flex flex-wrap items-center justify-center gap-6 p-4 ">
+      <div className="w-full flex flex-wrap items-center justify-center gap-6 p-4">
         <div className={cardOuter}>
           <div className={cardInner}>
             <div className="flex step-test8 flex-col w-full gap-2.5 font-normal pr-2 pb-1">
