@@ -146,7 +146,7 @@ export default function ChallengeCardComponent({ card }: Props) {
                     {/* @ts-ignore */}
                     {i18n.language === "fa" ? m.label.fa : m.label.en}
                   </span>
-                  <span className="text-[#e7e1e1] text-[13px] font-bold text-center break-all">
+                  <span className="text-[#a59e9e] text-[13px] font-normal text-center break-all">
                     {m.value}
                   </span>
                 </div>

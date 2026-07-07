@@ -1,6 +1,7 @@
 import React from "react";
 import type { Progres } from "../types/interfaces";
 import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 interface Props {
   data: Progres;
@@ -17,7 +18,7 @@ const formatValue = (
     return `$${value.toLocaleString(locale)}`;
   }
 
-  return language === "fa"
+  return i18next.language === "fa"
     ? `${value.toLocaleString(locale)} روز`
     : `${value.toLocaleString(locale)} Day`;
 };

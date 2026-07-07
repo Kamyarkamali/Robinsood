@@ -39,21 +39,52 @@ export const ChartModal: React.FC<ChartModalProps> = ({
     if (cfg.chartType === "candlestick") {
       const data = cfg.data.map((d: CandleDataPoint) => ({
         t: d.t,
-        v: d.close, // 👈 مهم: فقط close
+        v: d.close ?? 0,
       }));
+
+      const lastValue = data.length > 0 ? data[data.length - 1].v : 0;
+      const prevValue = data.length > 1 ? data[data.length - 2].v : 0;
+      const isUp = lastValue >= prevValue;
+      const strokeColor = isUp ? "#4ade80" : "#ef4444";
+      const gradId = `modal-candle-grad-${cfg.id}`;
 
       return (
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data}>
-            <XAxis dataKey="t" />
-            <YAxis domain={["auto", "auto"]} />
+            <defs>
+              <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={strokeColor} stopOpacity={0.35} />
+                <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+
+            <XAxis dataKey="t" stroke={isDark ? "#fff" : "#666"} />
+            <YAxis tickMargin={24} stroke={isDark ? "#fff" : "#666"} />
+
+            <Tooltip
+              content={(props) => (
+                <AreaTooltip
+                  active={props.active}
+                  payload={props.payload}
+                  label={String(props.label)}
+                  lang={lang}
+                />
+              )}
+            />
 
             <Area
               type="monotone"
               dataKey="v"
-              stroke="#4ade80"
-              fill="#4ade8030"
+              stroke={strokeColor}
+              strokeWidth={2.5}
+              fill={`url(#${gradId})`}
               dot={false}
+              activeDot={{
+                r: 5,
+                fill: strokeColor,
+                stroke: "#fff",
+                strokeWidth: 2,
+              }}
             />
           </AreaChart>
         </ResponsiveContainer>
@@ -97,6 +128,12 @@ export const ChartModal: React.FC<ChartModalProps> = ({
             strokeWidth={2.5}
             fill={`url(#${gradId})`}
             dot={false}
+            activeDot={{
+              r: 5,
+              fill: cfg.strokeColor,
+              stroke: "#fff",
+              strokeWidth: 2,
+            }}
           />
         </AreaChart>
       </ResponsiveContainer>
@@ -113,7 +150,10 @@ export const ChartModal: React.FC<ChartModalProps> = ({
         <Dialog.Content
           className={`
             fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2
-            w-[95vw] max-w-5xl h-[85vh]
+            w-[700px] 
+            max-w-[95vw]
+            h-[550px]
+            max-h-[85vh]
             rounded-3xl border shadow-2xl z-50
             overflow-hidden flex flex-col
             ${theme.panel}
@@ -131,7 +171,9 @@ export const ChartModal: React.FC<ChartModalProps> = ({
               <h2 className={`${theme.text} font-semibold text-lg`}>
                 {i18next.language === "fa" ? title?.fa : title?.en}
               </h2>
-              <span className={`${theme.muted} text-xs`}>Market overview</span>
+              <span className={`${theme.muted} text-xs`}>
+                {i18next.language === "fa" ? "نمایش دقیق" : "Detailed view"}
+              </span>
             </div>
 
             <button

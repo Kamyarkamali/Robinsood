@@ -497,7 +497,6 @@ const ChartModal = ({
       );
     }
 
-    // Area chart
     const gradId = `modal-grad-${cfg.id}`;
     return (
       <ResponsiveContainer width="100%" height={400}>
@@ -552,7 +551,7 @@ const ChartModal = ({
               <X className="w-5 h-5 text-white" />
             </button>
           </div>
-          <div className="h-[400px] w-full">{renderChart()}</div>
+          <div className="h-100 w-full">{renderChart()}</div>
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>
@@ -630,7 +629,7 @@ export default function TradingPanel() {
               {donutAssets.map((a, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <span
-                    className="w-3 h-3 rounded-full flex-shrink-0"
+                    className="w-3 h-3 rounded-full shrink-0"
                     style={{ background: a.color }}
                   />
                   <span className="text-white/70 text-xs">{a.name}</span>
@@ -648,6 +647,7 @@ export default function TradingPanel() {
                   <CandleCard
                     key={cfg.id}
                     cfg={cfg}
+                    // @ts-ignore
                     title={cardI18n.title}
                     value={cfg.value}
                     lang={lang}
@@ -659,6 +659,7 @@ export default function TradingPanel() {
                 <AreaCard
                   key={cfg.id}
                   cfg={cfg}
+                  // @ts-ignore
                   title={cardI18n.title}
                   value={cfg.value}
                   valueColor={cfg.valueColor}
@@ -683,6 +684,8 @@ export default function TradingPanel() {
           isOpen={isModalOpen}
           onClose={closeModal}
           cfg={selectedCard}
+          // @ts-ignore
+
           title={
             // @ts-ignore
             t.cards.find((c) => c.id === selectedCard.id)?.title ||

@@ -34,7 +34,6 @@ export const ChartModal: React.FC<ChartModalProps> = ({
 
   const [isDarkMode, setIsDarkMode] = useState(false);
 
-  // تشخیص موبایل
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);

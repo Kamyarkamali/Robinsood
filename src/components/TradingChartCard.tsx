@@ -50,6 +50,7 @@ const ChartSettingsPanel: React.FC<{
   onSettingsChange: (settings: ChartSettings) => void;
   isOpen: boolean;
   onClose: () => void;
+  isInModal?: boolean;
 }> = ({ settings, onSettingsChange, isOpen, onClose }) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
@@ -198,20 +199,6 @@ const ChartSettingsPanel: React.FC<{
                   <label className="block text-xs font-medium dark:text-gray-300 mb-1">
                     بالای حد مجاز
                   </label>
-                  {/* <input
-                    type="color"
-                    value={settings.barColors.aboveMax}
-                    onChange={(e) =>
-                      onSettingsChange({
-                        ...settings,
-                        barColors: {
-                          ...settings.barColors,
-                          aboveMax: e.target.value,
-                        },
-                      })
-                    }
-                    className="w-full h-8 rounded cursor-pointer"
-                  /> */}
                 </div>
               </div>
             </div>
@@ -627,12 +614,14 @@ const TradingChartCard: React.FC<Props> = ({
                 </button>
               )}
 
-              <button
-                onClick={() => setIsSettingsOpen(true)}
-                className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
-              >
-                <Settings className="w-4 step-test17 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
-              </button>
+              {!isInModal && (
+                <button
+                  onClick={() => setIsSettingsOpen(true)}
+                  className="p-1.5 sm:p-2 hover:bg-gray-100 dark:hover:bg-[#2a2a4a] rounded-full transition-colors"
+                >
+                  <Settings className="w-4 step-test17 h-4 sm:w-5 sm:h-5 text-gray-600 dark:text-gray-400" />
+                </button>
+              )}
             </div>
           </div>
 

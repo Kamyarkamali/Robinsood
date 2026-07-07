@@ -4,13 +4,11 @@ import { FaHashtag } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { FiActivity, FiFlag } from "react-icons/fi";
 import { FiCalendar } from "react-icons/fi";
-import { Wallet } from "lucide-react";
 import chaleng from "../assets/images/chaleng.png";
 import wallet from "../assets/images/wallet.png";
 import { MdShowChart } from "react-icons/md";
 import { MdOutlineShowChart } from "react-icons/md";
 import { TbChartHistogram } from "react-icons/tb";
-import { FiXCircle } from "react-icons/fi";
 import { PiChartLineDown } from "react-icons/pi";
 import { IoTimeOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
@@ -51,7 +49,7 @@ function InformationAccount() {
                     $10256.75
                   </p>
 
-                  <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-lg xs:rounded-xl bg-linear-to-br shadow-md dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] transition-all duration-300">
+                  <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-lg xs:rounded-xl bg-linear-to-br transition-all duration-300">
                     <p className="text-[8px] xs:text-[9px] md:text-[10px] font-semibold text-[#34C759] whitespace-nowrap">
                       {i18next.language === "fa"
                         ? " +1.5% نسبت به دیروز"
@@ -87,7 +85,7 @@ function InformationAccount() {
                     $9318.35
                   </p>
 
-                  <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-lg xs:rounded-xl bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-md hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] transition-all duration-300">
+                  <div className="flex items-center gap-1.5 px-1.5 xs:px-2 py-0.5 xs:py-1 rounded-lg xs:rounded-xl bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] transition-all duration-300">
                     <span className="text-[8px] xs:text-[9px] md:text-[10px] font-bold text-red-500 whitespace-nowrap">
                       {i18next.language === "fa" ? "ریسک 2%" : "Risk 2%"}
                     </span>
@@ -130,9 +128,9 @@ function InformationAccount() {
                 <div className="flex flex-col items-start gap-1 min-w-0 flex-1">
                   <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2">
                     <p className="text-[9px] xs:text-[10px] sm:text-[12px] md:text-[14px] text-black font-normal dark:text-white whitespace-nowrap">
-                      {i18next.language === "fa" ? "چالش" : "Challenge"}
+                      {i18next.language === "fa" ? "نوع اکانت" : "Account Type"}
                     </p>
-                    <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-lg xs:rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] flex-shrink-0">
+                    <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-lg xs:rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] dark:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] flex-shrink-0">
                       <img
                         className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5 object-contain"
                         src={chaleng}
@@ -141,35 +139,35 @@ function InformationAccount() {
                     </div>
                   </div>
                   <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[12px] text-gray-500 dark:text-gray-300 font-semibold break-words leading-tight">
-                    {i18next.language === "fa" ? "رابین هودی" : "Robin Hood"}
+                    {i18next.language === "fa" ? "چالش" : "Robin Hood"}
                   </p>
                 </div>
 
                 <div className="flex flex-col items-end gap-0.5 shrink-0">
-                  <div className="flex items-center justify-end gap-1 xs:gap-1.5 sm:gap-2">
-                    <CircleIcon color="#FF383C" />
-                    <p className="text-[9px] xs:text-[10px] sm:text-[12px] md:text-[14px] text-black dark:text-white font-normal whitespace-nowrap">
-                      {i18next.language === "fa"
-                        ? "بالانس اولیه"
-                        : "Initial Balance"}
-                    </p>
-                    <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-lg xs:rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] flex-shrink-0">
-                      <Wallet className="text-emerald-500 dark:text-emerald-400 w-3 h-3 xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4" />
+                  <div className="flex flex-col items-center justify-end gap-1 xs:gap-1.5 sm:gap-2">
+                    <div className="flex items-center gap-1">
+                      <CircleIcon color="#FF383C" />
+
+                      <p className="text-[9px] xs:text-[10px]  sm:text-[12px] md:text-[14px] text-black dark:text-white font-normal whitespace-nowrap">
+                        {i18next.language === "fa"
+                          ? "نوع چالش"
+                          : "Challenge Type"}
+                      </p>
                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-0.5 xs:gap-1">
-                    <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[13px] text-[#FF383C] text-center font-semibold whitespace-nowrap">
-                      {i18next.language === "fa" ? "رد شده" : "Rejected"}
+                    <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[13px] dark:text-white text-center font-semibold whitespace-nowrap">
+                      {i18next.language === "fa" ? "رابین هودی" : "Robin Hood"}
                     </p>
-                    <FiXCircle className="text-red-500 w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-5 sm:h-5" />
+                    {/* <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-lg xs:rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] flex-shrink-0">
+                    </div> */}
                   </div>
 
-                  <p className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-semibold text-gray-500 dark:text-[#FF383C] leading-tight text-right whitespace-normal max-w-[80px] xs:max-w-[100px] sm:max-w-[130px]">
+                  <div className="flex items-center gap-0.5 xs:gap-1"></div>
+
+                  {/* <p className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-semibold text-gray-500 dark:text-[#FF383C] leading-tight text-right whitespace-normal max-w-[80px] xs:max-w-[100px] sm:max-w-[130px]">
                     {i18next.language === "fa"
                       ? "گذر از روز های معاملاتی"
                       : "Trading Days Requirement Not Met"}
-                  </p>
+                  </p> */}
                 </div>
               </div>
 
@@ -184,7 +182,7 @@ function InformationAccount() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 px-1.5 xs:px-2 sm:px-2.5 py-0.5 xs:py-1 sm:py-1 rounded-lg xs:rounded-xl">
+                {/* <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 px-1.5 xs:px-2 sm:px-2.5 py-0.5 xs:py-1 sm:py-1 rounded-lg xs:rounded-xl">
                   <p className="text-[7px] xs:text-[8px] sm:text-[10px] md:text-[12px] text-gray-600 dark:text-gray-300 whitespace-nowrap font-normal">
                     <span className="text-gray-800 dark:text-white font-medium">
                       ۱۴۰۴/۱۰/۲۲
@@ -195,7 +193,7 @@ function InformationAccount() {
                     </span>
                   </p>
                   <FiCalendar className="text-blue-500 dark:text-blue-400 w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
@@ -222,7 +220,7 @@ function InformationAccount() {
                         ? "شماره اکانت"
                         : "Account Number"}
                     </p>
-                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[6px_6px_12px_#c8cdd6,_-6px_-6px_12px_#ffffff,_inset_1px_1px_2px_rgba(255,255,255,0.8)] dark:shadow-[4px_4px_10px_#1f1f1f,_-4px_-4px_10px_#3d3d3d,_inset_1px_1px_2px_rgba(255,255,255,0.05)] group-hover:shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:group-hover:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] transition-all duration-300 flex-shrink-0">
+                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center shrink-0">
                       <FaHashtag
                         size={14}
                         className="text-gray-600 dark:text-gray-200 drop-shadow-[0_1px_2px_rgba(0,0,0,0.05)] dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.3)] group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300"
@@ -243,10 +241,10 @@ function InformationAccount() {
                         ? "بالانس اولیه"
                         : "Initial Balance"}
                     </p>
-                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 cursor-pointer bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[6px_6px_12px_#c8cdd6,_-6px_-6px_12px_#ffffff,_inset_1px_1px_2px_rgba(255,255,255,0.8)] dark:shadow-[4px_4px_10px_#1f1f1f,_-4px_-4px_10px_#3d3d3d,_inset_1px_1px_2px_rgba(255,255,255,0.05)] hover:shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:hover:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] transition-all duration-300 group flex-shrink-0">
+                    <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-xl flex items-center justify-center cursor-pointer bg-linear-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shrink-0">
                       <FiActivity
                         size={14}
-                        className="text-[#00C0E8] drop-shadow-[0_1px_2px_rgba(0,192,232,0.2)] dark:drop-shadow-[0_1px_2px_rgba(0,192,232,0.3)] group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"
+                        className="text-[#00C0E8] group-hover:scale-110 group-hover:rotate-12 transition-all duration-300"
                       />
                     </div>
                   </div>
@@ -258,10 +256,10 @@ function InformationAccount() {
               </div>
 
               <div className="flex justify-center px-2 sm:px-3 md:px-5">
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2 py-1 xs:px-2.5 xs:py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-[6px_6px_12px_#c8cdd6,_-6px_-6px_12px_#ffffff,_inset_1px_1px_2px_rgba(255,255,255,0.8)] dark:shadow-[4px_4px_10px_#1f1f1f,_-4px_-4px_10px_#3d3d3d,_inset_1px_1px_2px_rgba(255,255,255,0.05)] hover:shadow-[3px_3px_8px_#c8cdd6,_-3px_-3px_8px_#ffffff] dark:hover:shadow-[3px_3px_8px_#1f1f1f,_-3px_-3px_8px_#3d3d3d] max-w-full overflow-hidden">
+                <div className="flex items-center gap-1.5 sm:gap-2 px-2 py-1 xs:px-2.5 xs:py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] max-w-full overflow-hidden">
                   <FiCalendar
                     size={13}
-                    className="text-blue-500 dark:text-blue-400 drop-shadow-[0_1px_2px_rgba(59,130,246,0.2)] dark:drop-shadow-[0_1px_2px_rgba(59,130,246,0.3)] flex-shrink-0"
+                    className="text-blue-500 dark:text-blue-400 shrink-0"
                   />
                   <p className="text-[8px] xs:text-[9px] sm:text-[11px] md:text-[13px] font-normal text-gray-600 dark:text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis">
                     {i18next.language === "fa"

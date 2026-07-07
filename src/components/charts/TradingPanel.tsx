@@ -1,11 +1,9 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { AreaCard } from "./AreaCard";
-import { CandleCard } from "./CandleCard";
 import { ChartModal } from "./ChartModal";
 import { DonutChart } from "./DonutChart";
 import { cardConfigs, DEFAULT_DONUT_DATA } from "./constants";
 import { translations } from "../../data/fakeData";
-
 import type { CardConfig } from "./typesChart";
 
 const TradingPanel: React.FC = () => {
@@ -27,13 +25,15 @@ const TradingPanel: React.FC = () => {
   }, []);
 
   const getCardTitle = useCallback(
-    // @ts-ignore
-    (cardId: string) => t.cards.find((c) => c.id === cardId)?.title || cardId,
+    (cardId: string) => {
+      const found = t.cards.find((c: any) => c.id === cardId);
+      return found?.title || { fa: cardId, en: cardId };
+    },
     [t.cards],
   );
 
   return (
-    <div className="h-fit  flex step-test38 items-center  justify-center p-2 sm:p-4 md:p-6 font-lahzeh transition-colors">
+    <div className="h-fit flex step-test38 items-center justify-center p-2 sm:p-4 md:p-6 font-lahzeh transition-colors">
       <div className="w-full max-w-8xl" dir={dir}>
         <div className="flex flex-col lg:flex-row gap-3 sm:gap-5 lg:gap-6">
           <div className="w-full lg:w-70 xl:w-[320px] shrink-0">
@@ -50,7 +50,7 @@ const TradingPanel: React.FC = () => {
               auto-rows-[120px] sm:auto-rows-[140px] lg:auto-rows-[160px]
               gap-22 sm:gap-10 md:gap-4 lg:gap-5
               border-4
-              dark:dark:border-[#3A3A3A]
+              dark:border-[#3A3A3A]
               border-gray-400
               bg-zinc-100 dark:bg-[#4340404d]
               p-3 sm:p-5 md:p-7 lg:p-9
@@ -62,20 +62,16 @@ const TradingPanel: React.FC = () => {
             {cardConfigs.map((cfg) => {
               const title = getCardTitle(cfg.id);
 
-              const commonProps = {
-                key: cfg.id,
-                cfg,
-                title,
-                value: cfg.value,
-                lang,
-                onCardClick: () => handleCardClick(cfg),
-              };
-
-              return cfg.chartType === "candlestick" ? (
-                // @ts-ignore
-                <CandleCard {...commonProps} />
-              ) : (
-                <AreaCard {...commonProps} valueColor={cfg.valueColor} />
+              return (
+                <AreaCard
+                  key={cfg.id}
+                  cfg={cfg}
+                  title={title}
+                  value={cfg.value}
+                  valueColor={cfg.valueColor || "#4ade80"}
+                  lang={lang}
+                  onCardClick={() => handleCardClick(cfg)}
+                />
               );
             })}
           </div>

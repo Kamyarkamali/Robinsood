@@ -192,7 +192,7 @@ export const challengeCards: ChallengeCard[] = [
           fa: "درادون - اکوییتی = فاصله",
           en: "Distance = Equity - Drawdown",
         },
-        value: "$1008.18 - $1070.18 = $6,22",
+        value: "$10000 - $1023.50 = $23.50",
       },
     ],
   },
@@ -264,14 +264,14 @@ export const challengeCards: ChallengeCard[] = [
           fa: "روزهای مجاز چالش",
           en: "Required Trading Days",
         },
-        value: "∞ روز",
+        value: "12 روز",
       },
       {
         label: {
           fa: "باقی‌مانده تا انفعال",
           en: "Remaining Until Inactive",
         },
-        value: "∞",
+        value: "11 روز",
       },
     ],
   },
@@ -349,7 +349,7 @@ export const challengeCards: ChallengeCard[] = [
           fa: "MDL | FL",
           en: "MDL | FL",
         },
-        value: "(0%) | (0%)",
+        value: "(121%) | (110%)",
       },
     ],
   },
@@ -374,21 +374,21 @@ export const challengeCards: ChallengeCard[] = [
           fa: "پر اهمیت",
           en: "High Importance",
         },
-        value: "0 از 1",
+        value: "8 از 1",
       },
       {
         label: {
           fa: "اهمیت متوسط",
           en: "Medium Importance",
         },
-        value: "0 از 2",
+        value: "6 از 2",
       },
       {
         label: {
           fa: "کم اهمیت",
           en: "Low Importance",
         },
-        value: "0 از 7",
+        value: "5 از 7",
       },
     ],
   },
@@ -1080,7 +1080,6 @@ export const translations = {
         id: "maxWinStreak",
         title: {
           fa: "رکورد بیشترین\nضرر متوالی",
-
           en: "Max Consecutive\nWin Streak",
         },
         valueLabelSuffix: "",
@@ -1089,7 +1088,6 @@ export const translations = {
         id: "maxLossStreak",
         title: {
           fa: "رکورد بیشترین\nسود متوالی",
-
           en: "Max Consecutive\nLoss Streak",
         },
         valueLabelSuffix: "",
@@ -1102,6 +1100,54 @@ export const translations = {
     tooltipHigh: "بالا",
     tooltipLow: "پایین",
     tooltipDate: "تاریخ",
+  },
+  en: {
+    panelTitle: "Traded Currencies",
+    cards: [
+      {
+        id: "riskReward",
+        title: { fa: "ریسک به ریوارد", en: "Risk to Reward" },
+        valueLabelSuffix: "",
+      },
+      {
+        id: "todayTrend",
+        title: { fa: "برآیند امروز", en: "Today's Result" },
+        valueLabelSuffix: "",
+      },
+      {
+        id: "todayTrades",
+        title: { fa: "تعداد\nترید امروز", en: "Today's\nTrade Count" },
+        valueLabelSuffix: "",
+      },
+      {
+        id: "tradeCount",
+        title: { fa: "شمارنده ترید", en: "Trade Counter" },
+        valueLabelSuffix: "",
+      },
+      {
+        id: "maxWinStreak",
+        title: {
+          fa: "رکورد بیشترین\nضرر متوالی",
+          en: "Max Consecutive\nWin Streak",
+        },
+        valueLabelSuffix: "",
+      },
+      {
+        id: "maxLossStreak",
+        title: {
+          fa: "رکورد بیشترین\nسود متوالی",
+          en: "Max Consecutive\nLoss Streak",
+        },
+        valueLabelSuffix: "",
+      },
+    ],
+    tooltipValue: "Value",
+    tooltipTrade: "Trade",
+    tooltipOpen: "Open",
+    tooltipClose: "Close",
+    tooltipHigh: "High",
+    tooltipLow: "Low",
+    tooltipDate: "Date",
   },
 };
 

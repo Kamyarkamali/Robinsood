@@ -35,6 +35,7 @@ function symbolInfo(key: string) {
 function randomBetween(min: number, max: number) {
   return Math.random() * (max - min) + min;
 }
+
 function randomDateWithin(daysBack: number) {
   const now = Date.now();
   const past = now - Math.random() * daysBack * 86400000;
@@ -480,6 +481,7 @@ export default function TradingTable() {
   const lang = i18n.language;
   const isRtl = lang === "fa";
 
+  // state ها / States
   const [allTrades] = useState<Trades[]>(() => generateFakeTrades(60));
   const [filters, setFilters] = useState<Filters>(emptyFilters());
   const [sort, setSort] = useState<SortState>({ col: null, dir: "asc" });
@@ -490,7 +492,6 @@ export default function TradingTable() {
 
   const filterRef = useRef<HTMLDivElement>(null);
 
-  // تشخیص موبایل
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -500,7 +501,6 @@ export default function TradingTable() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // بستن فیلتر با کلیک خارج از آن
   useEffect(() => {
     const handler = (e: MouseEvent) => {
       if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
@@ -543,6 +543,7 @@ export default function TradingTable() {
       numeric: { ...f.numeric, [key]: { ...f.numeric[key], [part]: value } },
     }));
   };
+
   const updateDate = (key: string, part: "from" | "to", value: string) => {
     setFilters((f) => ({
       ...f,
@@ -583,7 +584,6 @@ export default function TradingTable() {
         dark:border-[#3C3C3C] border-gray-300"
       >
         <div className="mx-auto rounded-2xl bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] shadow-xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
-          {/* TOP BAR: stats + filter button - ریسپانسیو */}
           <div className="flex flex-col lg:flex-row items-center gap-4 px-4 sm:px-6 py-4">
             <div className="flex-1 w-full flex items-center justify-center">
               <LinearStat
@@ -619,10 +619,10 @@ export default function TradingTable() {
                   className={`absolute ${
                     isMobile
                       ? "left-1/2 -translate-x-1/2 top-full mt-2 w-[95vw]"
-                      : "left-3 lg:left-auto lg:-right-72 -top-9 w-[92vw] lg:w-[480px]"
+                      : "left-3/2 top-0 -translate-x-1/2 mt-2 w-105"
                   } max-h-[80vh] overflow-y-auto bg-white dark:bg-[#2B2B2B] rounded-xl shadow-2xl border border-gray-200 dark:border-[#3a3a3a] p-4 z-100`}
                 >
-                  <div className="flex items-center justify-between mb-3 sticky top-0 bg-white dark:bg-[#2B2B2B] z-10 pb-2 border-b border-gray-100 dark:border-[#3a3a3a]">
+                  <div className="flex items-center justify-between mb-3 top-0 bg-white dark:bg-[#2B2B2B]  z-10 pb-2 border-b border-gray-100 dark:border-[#3a3a3a]">
                     <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
                       {isRtl ? "فیلتر پیشرفته" : "Advanced Filters"}
                     </h3>
@@ -637,7 +637,6 @@ export default function TradingTable() {
                     </button>
                   </div>
 
-                  {/* فیلترهای اصلی - ریسپانسیو */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
                     <div>
                       <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">
@@ -705,7 +704,6 @@ export default function TradingTable() {
                     </div>
                   </div>
 
-                  {/* بازه‌های عددی - ریسپانسیو */}
                   <div className="mb-4">
                     <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
                       {isRtl ? "بازه‌های عددی" : "Numeric Ranges"}
@@ -745,7 +743,6 @@ export default function TradingTable() {
                     </div>
                   </div>
 
-                  {/* بازه‌های زمانی - ریسپانسیو */}
                   <div className="mb-4">
                     <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
                       {isRtl ? "بازه‌های زمانی" : "Date Ranges"}
@@ -786,7 +783,6 @@ export default function TradingTable() {
                     </div>
                   </div>
 
-                  {/* تعداد ردیف در هر صفحه - ریسپانسیو */}
                   <div className="mb-4">
                     <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
                       {isRtl ? "تعداد ردیف در هر صفحه" : "Rows per page"}
@@ -822,7 +818,6 @@ export default function TradingTable() {
             </div>
           </div>
 
-          {/* DESKTOP TABLE */}
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full table-fixed">
               <thead>
@@ -968,7 +963,6 @@ export default function TradingTable() {
             </table>
           </div>
 
-          {/* موبایل: کارت‌ها */}
           <div className="md:hidden px-4 py-3">
             {paginatedTrades.map((trade) => (
               <TradeCard key={trade.id} trade={trade} lang={lang} />
@@ -980,7 +974,7 @@ export default function TradingTable() {
             )}
           </div>
 
-          {/* PAGINATION - ریسپانسیو */}
+          {/* صفحه‌بندی / Pagination */}
           {totalPages > 1 && (
             <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-[#3a3a3a] gap-3 flex-wrap">
               <span className="text-[11px] text-gray-400 dark:text-gray-500 text-center sm:text-left">

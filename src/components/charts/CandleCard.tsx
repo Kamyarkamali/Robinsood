@@ -56,7 +56,6 @@ export const CandleCard: React.FC<CandleCardProps> = ({
         bg-white dark:bg-transparent
       "
     >
-      {/* header (exact same style as AreaCard) */}
       <div className="flex justify-between items-start px-4 pt-3 pb-1">
         <span className="text-white/70 text-sm font-bold">{displayTitle}</span>
 
