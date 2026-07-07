@@ -1577,15 +1577,163 @@ export const MONTHLY_DATA: DataPoint[] = [
   { date: { fa: "شهریور", en: "Sep" }, param1: 2100, param2: 1900 },
 ];
 
-export const PARAMETERS: Parameter[] = [
+export const PARAMETERS_FIRST: Parameter[] = [
   {
-    id: "volume",
-    label: { fa: "بالانس معیار 12 شب", en: "Balance criterion 12 AM" },
+    id: "balance_midnight",
+    label: { fa: "بالانس معیار 12 شب", en: "Balance at Midnight" },
   },
-  { id: "price", label: { fa: "حداکثر بالانس", en: "Maximum Balance" } },
-  { id: "turnover", label: { fa: "حداقل بالانس", en: "Minimum Balance" } },
-  { id: "trades", label: { fa: "حداکثر اکوییتی", en: "Maximum Equity" } },
-  { id: "change", label: { fa: "حداقل اکوییتی", en: "Minimum Equity" } },
+  { id: "max_balance", label: { fa: "حداکثر بالانس", en: "Max Balance" } },
+  { id: "min_balance", label: { fa: "حداقل بالانس", en: "Min Balance" } },
+  { id: "max_equity", label: { fa: "حداکثر اکوییتی", en: "Max Equity" } },
+  { id: "min_equity", label: { fa: "حداقل اکوییتی", en: "Min Equity" } },
+  {
+    id: "daily_drawdown_allowed_num",
+    label: {
+      fa: "درادون روزانه مجاز (عددی)",
+      en: "Daily Drawdown Allowed (Num)",
+    },
+  },
+  {
+    id: "daily_drawdown_max_num",
+    label: {
+      fa: "حداکثر درادون روزانه دیده شده (عددی)",
+      en: "Max Daily Drawdown Seen (Num)",
+    },
+  },
+  {
+    id: "daily_drawdown_allowed_percent",
+    label: {
+      fa: "درادون روزانه مجاز (درصدی)",
+      en: "Daily Drawdown Allowed (%)",
+    },
+  },
+  {
+    id: "daily_drawdown_max_percent",
+    label: {
+      fa: "حداکثر درادون روزانه دیده شده (درصدی)",
+      en: "Max Daily Drawdown Seen (%)",
+    },
+  },
+  { id: "outcome", label: { fa: "برایند", en: "Outcome" } },
+  { id: "total_trades", label: { fa: "تعداد معاملات", en: "Total Trades" } },
+  {
+    id: "winning_trades",
+    label: { fa: "تعداد معاملات سودده", en: "Winning Trades" },
+  },
+  {
+    id: "losing_trades",
+    label: { fa: "تعداد معاملات ضررده", en: "Losing Trades" },
+  },
+  { id: "total_lots", label: { fa: "مجموع لات", en: "Total Lots" } },
+  { id: "total_risk", label: { fa: "مجموع ریسک", en: "Total Risk" } },
+  { id: "max_mdl", label: { fa: "حداکثر mdl", en: "Max MDL" } },
+  { id: "max_fl", label: { fa: "حداکثر fl", en: "Max FL" } },
+  {
+    id: "trades_in_news",
+    label: { fa: "تعداد ترید در خبر", en: "Trades in News" },
+  },
+  {
+    id: "trades_in_red_news",
+    label: { fa: "تعداد ترید در خبر قرمز", en: "Trades in Red News" },
+  },
+  {
+    id: "trades_in_blue_news",
+    label: { fa: "تعداد ترید در خبر آبی", en: "Trades in Blue News" },
+  },
+  {
+    id: "trades_in_green_news",
+    label: { fa: "تعداد ترید در خبر سبز", en: "Trades in Green News" },
+  },
+  {
+    id: "total_profits",
+    label: { fa: "مجموع فقط سودها", en: "Total Profits" },
+  },
+  { id: "total_losses", label: { fa: "مجموع فقط ضررها", en: "Total Losses" } },
+  { id: "avg_profits", label: { fa: "میانگین سودها", en: "Avg Profits" } },
+  { id: "avg_losses", label: { fa: "میانگین ضررها", en: "Avg Losses" } },
+];
+
+export const PARAMETERS_SECOND: Parameter[] = [
+  { id: "avg_lots", label: { fa: "میانگین لات", en: "Avg Lots" } },
+  { id: "avg_risk", label: { fa: "میانگین ریسک", en: "Avg Risk" } },
+  {
+    id: "total_commission",
+    label: { fa: "مجموع کمیسیون", en: "Total Commission" },
+  },
+  {
+    id: "trades_with_sl",
+    label: { fa: "تعداد معاملات با sl", en: "Trades with SL" },
+  },
+  {
+    id: "trades_without_sl",
+    label: { fa: "تعداد معاملات بدون sl", en: "Trades without SL" },
+  },
+  {
+    id: "trades_with_tp",
+    label: { fa: "تعداد معاملات با tp", en: "Trades with TP" },
+  },
+  {
+    id: "trades_without_tp",
+    label: { fa: "تعداد معاملات بدون tp", en: "Trades without TP" },
+  },
+  { id: "profit_factor", label: { fa: "ضریب سودآوری", en: "Profit Factor" } },
+  { id: "profit_ratio", label: { fa: "نسبت سوددهی", en: "Profit Ratio" } },
+  {
+    id: "trades_under_30s",
+    label: { fa: "تعداد معاملات زیر 30 ثانیه", en: "Trades Under 30s" },
+  },
+  {
+    id: "outcome_under_30s",
+    label: { fa: "برایند معاملات زیر 30 ثانیه", en: "Outcome Under 30s" },
+  },
+  {
+    id: "trades_under_1min",
+    label: { fa: "تعداد معاملات زیر 1 دقیقه", en: "Trades Under 1min" },
+  },
+  {
+    id: "outcome_under_1min",
+    label: { fa: "برایند معاملات زیر 1 دقیقه", en: "Outcome Under 1min" },
+  },
+  {
+    id: "trades_under_2min",
+    label: { fa: "تعداد معاملات زیر 2 دقیقه", en: "Trades Under 2min" },
+  },
+  {
+    id: "outcome_under_2min",
+    label: { fa: "برایند معاملات زیر 2 دقیقه", en: "Outcome Under 2min" },
+  },
+  {
+    id: "total_trade_time",
+    label: { fa: "مجموع تایم معاملات", en: "Total Trade Time" },
+  },
+  {
+    id: "avg_trade_time",
+    label: { fa: "میانگین تایم معاملات", en: "Avg Trade Time" },
+  },
+  {
+    id: "total_short_trades",
+    label: { fa: "تعداد معاملات short کل", en: "Total Short Trades" },
+  },
+  {
+    id: "winning_short_trades",
+    label: { fa: "تعداد معاملات short سودده", en: "Winning Short Trades" },
+  },
+  {
+    id: "losing_short_trades",
+    label: { fa: "تعداد معملات short ضررده", en: "Losing Short Trades" },
+  },
+  {
+    id: "total_long_trades",
+    label: { fa: "تعداد معاملات long کل", en: "Total Long Trades" },
+  },
+  {
+    id: "winning_long_trades",
+    label: { fa: "تعداد معاملات long سودده", en: "Winning Long Trades" },
+  },
+  {
+    id: "losing_long_trades",
+    label: { fa: "تعداد معاملات long ضررده", en: "Losing Long Trades" },
+  },
 ];
 
 export const PERIOD_LABELS: Record<Period, { fa: string; en: string }> = {

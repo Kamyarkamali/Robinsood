@@ -61,7 +61,7 @@ export function DropdownFainalTabale<T extends string>({
       <button
         dir={i18next.language === "fa" ? "rtl" : "ltr"}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between sm:justify-center lg:h-12.5 gap-2 w-full text-[10px] lg:text-[12px] font-normal sm:w-auto dark:bg-[#3F3F3F] bg-gray-100 border border-gray-300 dark:border-white/15 rounded-full px-3.5 py-2 text-gray-700 dark:text-white text-sm cursor-pointer transition"
+        className="flex items-center justify-between sm:justify-center lg:h-12.5 gap-2 w-full text-[10px] lg:text-[12px] font-normal sm:w-auto dark:bg-transparent bg-gray-100 border border-gray-300 dark:border-gray-600 rounded-2xl shadow-lg px-3.5 py-2 text-gray-700 dark:text-white text-sm cursor-pointer transition"
       >
         {icon && (
           <span className="text-gray-500 dark:text-gray-500 text-sm">
@@ -95,7 +95,7 @@ export function DropdownFainalTabale<T extends string>({
       </button>
 
       {isOpen && (
-        <div className="absolute top-full mt-1.5 z-50 bg-white dark:bg-[#1a1a2a] border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-2xl min-w-45 w-full sm:w-auto">
+        <div className="absolute top-full mt-1.5 z-50 bg-white dark:bg-transparent backdrop-blur-3xl cursor-pointer border border-gray-200 dark:border-white/10 rounded-xl overflow-hidden shadow-2xl min-w-45 w-full sm:w-auto">
           {options.map((opt) => (
             <button
               key={opt.key}

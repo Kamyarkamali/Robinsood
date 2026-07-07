@@ -423,6 +423,7 @@ export interface NewsItem {
   impact: Impact;
   tradeable: boolean;
   status: BilingualText;
+  date?: any;
 }
 
 export interface FilterButtonsProps {
@@ -631,4 +632,27 @@ export interface Filters {
   result: "all" | TradeResult;
   numeric: Record<string, NumericRanges>;
   dates: Record<string, DateRanges>;
+}
+
+export interface DateObject {
+  year: number;
+  month: number;
+  day: number;
+}
+
+export interface DateRangePickerProps {
+  dateRange: { start: Date | null; end: Date | null };
+  setDateRange: (range: { start: Date | null; end: Date | null }) => void;
+  showDatePicker: boolean;
+  setShowDatePicker: (show: boolean) => void;
+  lang: Lang;
+}
+
+export interface NewsTableProps {
+  data: NewsItem[];
+  lang: Lang;
+  isLoading?: boolean;
+  sortConfig: { key: string; direction: "asc" | "desc" | null };
+  requestSort: (key: string) => void;
+  getSortIcon: (key: string) => string;
 }

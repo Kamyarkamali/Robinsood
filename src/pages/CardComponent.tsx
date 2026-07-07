@@ -193,10 +193,11 @@ function CardComponent({ onStartTour }: CardComponentProps) {
                     <button
                       className={`
                         absolute
+                        rotate-180
                         ${
                           language === "fa"
-                            ? "left-16 -bottom-5"
-                            : "right-70 -bottom-9"
+                            ? "left-20 -bottom-5"
+                            : "right-10 -bottom-9"
                         }
                        
                         flex

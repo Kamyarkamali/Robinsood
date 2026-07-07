@@ -198,15 +198,17 @@ export default function TradingSessionsMap({ lang = "fa" }) {
         ref={rootRef}
         className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] step-test43 rounded-2xl border-4
         dark:border-[#3C3C3C]
-        border-gray-300 md:pr-2 md:pl-2 mt-3 text-slate-200 w-full min-h-0 pb-3  overflow-hidden select-none"
+        border-gray-300 md:pr-2 md:pl-2 mt-3 text-slate-200 w-full min-h-0 pb-3 overflow-hidden select-none"
         onClick={(e) => {
           if (!(e.target as HTMLElement).closest(".tooltip-trigger")) {
             clearTooltip();
           }
         }}
       >
+        {/* Header - Improved for mobile */}
         <div className="relative flex items-start px-3 mt-4 sm:px-5 pt-4 pb-2">
-          <div className="flex-col">
+          {/* Left section - hidden on mobile */}
+          <div className="hidden sm:flex sm:flex-col">
             <div className="flex items-center gap-2 text-sm sm:text-lg font-normal">
               <GrLanguage size={isMobile ? 18 : 25} />
               {i18next.language === "fa"
@@ -221,12 +223,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             </div>
           </div>
 
-          <div className="absolute z-10 left-1/2 lg:-translate-x-1/2 -translate-x-50 bottom-3">
-            <div
-              className="
-      flex flex-col items-center gap-1
-    "
-            >
+          {/* Center - Clock (always visible, centered on mobile) */}
+          <div
+            className={`flex-1 ${isMobile ? "flex justify-center" : "absolute left-1/2 -translate-x-1/2 bottom-3"}`}
+          >
+            <div className="flex flex-col items-center gap-1">
               <div className="flex items-center gap-1.5">
                 <IoMdTime
                   className="text-indigo-300 shrink-0"
@@ -266,8 +267,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               </span>
             </div>
           </div>
+
+          {/* Right section - empty spacer for balance */}
+          <div className="hidden sm:block w-32" />
         </div>
-        <div className="mx-2  sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
+
+        <div className="mx-2 sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
           <div
             className="relative border-b border-[#1e2d3d]"
             style={{ height: newsAreaHeight, overflow: "visible" }}

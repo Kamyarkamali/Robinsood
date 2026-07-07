@@ -1,23 +1,24 @@
 import { ImpactBadge } from "../module/ImpactBadge";
 import i18next from "i18next";
-import type { NewsItem } from "../types/interfaces";
-import type { Lang } from "../types/type";
-
-interface NewsTableProps {
-  data: NewsItem[];
-  lang: Lang;
-  isLoading?: boolean;
-}
+import type { NewsTableProps } from "../types/interfaces";
 
 const COLUMNS = [
   { key: "symbol", label: { fa: "نماد", en: "Symbol" } },
-  { key: "day", label: { fa: "روز و تاریخ و ساعت", en: "Date & Time" } },
+  { key: "day", label: { fa: "روز", en: "Day" } },
+  { key: "date", label: { fa: "تاریخ", en: "Date" } },
+  { key: "time", label: { fa: "ساعت", en: "Time" } },
   { key: "news", label: { fa: "خبر", en: "News" } },
   { key: "impact", label: { fa: "تاثیر", en: "Impact" } },
   { key: "status", label: { fa: "وضعیت حساب", en: "Account Status" } },
 ];
 
-export function NewsTable({ data, lang, isLoading }: NewsTableProps) {
+export function NewsTable({
+  data,
+  lang,
+  isLoading,
+  requestSort,
+  getSortIcon,
+}: NewsTableProps) {
   if (isLoading) {
     return (
       <div className="py-10 text-center text-gray-400 dark:text-gray-600 text-sm">
@@ -42,9 +43,19 @@ export function NewsTable({ data, lang, isLoading }: NewsTableProps) {
             {COLUMNS.map((col) => (
               <th
                 key={col.key}
-                className="px-3.5 py-3 text-[10px] lg:text-xs font-medium text-gray-500 dark:text-white whitespace-nowrap border-b border-gray-200 dark:border-white/5"
+                onClick={() => requestSort(col.key)}
+                className="px-3.5 py-3 text-[10px] lg:text-xs font-medium text-gray-500 dark:text-white whitespace-nowrap border-b border-gray-200 dark:border-white/5 cursor-pointer hover:bg-gray-200 dark:hover:bg-white/5 transition select-none"
               >
-                {i18next.language === "fa" ? col?.label?.fa : col?.label?.en}
+                <div className="flex items-center gap-1.5">
+                  <span>
+                    {i18next.language === "fa"
+                      ? col?.label?.fa
+                      : col?.label?.en}
+                  </span>
+                  <span className="text-gray-400 dark:text-gray-500 text-[10px]">
+                    {getSortIcon(col.key)}
+                  </span>
+                </div>
               </th>
             ))}
           </tr>
@@ -56,7 +67,7 @@ export function NewsTable({ data, lang, isLoading }: NewsTableProps) {
               className="border-b border-gray-100 dark:border-white/5 last:border-0 hover:bg-gray-50 dark:hover:bg-white/3 transition-colors"
             >
               <td className="px-3.5 py-3.5">
-                <div className="flex justify-center  items-center gap-2">
+                <div className="flex justify-center items-center gap-2">
                   <img
                     className="w-10 object-center rounded-sm"
                     src={row?.flag}
@@ -67,19 +78,23 @@ export function NewsTable({ data, lang, isLoading }: NewsTableProps) {
                   </span>
                 </div>
               </td>
-              <td className="px-3.5 py-3.5 text-[10px] text-center lg:text-sm text-gray-600 dark:text-white text-sm whitespace-nowrap">
-                {i18next.language === "fa" ? row?.day?.fa : row?.day?.fa} –{" "}
+              <td className="px-3.5 py-3.5 text-[10px] text-center lg:text-sm text-gray-600 dark:text-white">
+                {i18next.language === "fa" ? row?.day?.fa : row?.day?.en}
+              </td>
+              <td className="px-3.5 py-3.5 text-[10px] text-center lg:text-sm text-gray-600 dark:text-white">
+                {row?.date}
+              </td>
+              <td className="px-3.5 py-3.5 text-[10px] text-center lg:text-sm text-gray-600 dark:text-white">
                 {row?.time}
               </td>
               <td className="px-3.5 py-3.5 text-gray-700 text-center dark:text-gray-300 text-[10px] lg:text-sm">
                 {i18next.language === "fa" ? row?.news.fa : row?.news?.en}
               </td>
-              <div className="flex justify-center">
-                <td className="px-3.5 py-3.5 text-[10px] lg:text-sm">
+              <td className="px-3.5 py-3.5 text-[10px] lg:text-sm">
+                <div className="flex justify-center">
                   <ImpactBadge impact={row.impact} lang={lang} />
-                </td>
-              </div>
-
+                </div>
+              </td>
               <td
                 className={`px-3.5 py-3.5 text-[10px] lg:text-sm ${
                   row.status.fa === "معامله شده"
