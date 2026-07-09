@@ -1,3 +1,4 @@
+// AreaCard.tsx
 import React, { useMemo } from "react";
 import {
   AreaChart,
@@ -35,22 +36,45 @@ export const AreaCard: React.FC<AreaCardProps> = ({
   const isFa = i18n.language === "fa";
   const gradId = useMemo(() => `grad-${cfg.id}`, [cfg.id]);
 
+  const isCandlestick = cfg.chartType === "candlestick";
+
   const chartData = useMemo(() => {
+    if (isCandlestick) {
+      // برای کندلی
+      return cfg.data.map((d: any) => ({
+        t: isFa ? d.tFa || d.t : d.t,
+        close: d.close,
+        open: d.open,
+        high: d.high,
+        low: d.low,
+      }));
+    }
+    // برای area
     return cfg.data.map((d: any) => ({
-      t: d.t,
+      t: isFa ? d.tFa || d.t : d.t,
       v: d.close ?? d.v ?? 0,
     }));
-  }, [cfg.data]);
+  }, [cfg.data, isCandlestick, isFa]);
 
-  const strokeColor = useMemo(() => {
-    if (cfg.strokeColor) return cfg.strokeColor;
+  // محاسبه رنگ برای کندلی
+  const candleColor = useMemo(() => {
+    if (isCandlestick && chartData.length > 0) {
+      const last = chartData[chartData.length - 1];
+      return last.close >= last.open ? "#4ade80" : "#ef4444";
+    }
+    return cfg.strokeColor || "#4ade80";
+  }, [isCandlestick, chartData, cfg.strokeColor]);
 
-    const lastValue =
-      chartData.length > 0 ? chartData[chartData.length - 1].v : 0;
-    const prevValue =
-      chartData.length > 1 ? chartData[chartData.length - 2].v : 0;
-    return lastValue >= prevValue ? "#4ade80" : "#ef4444";
-  }, [chartData, cfg.strokeColor]);
+  // داده‌ای که برای نمایش استفاده میشه (close برای کندلی)
+  const displayData = useMemo(() => {
+    if (isCandlestick) {
+      return chartData.map((d: any) => ({
+        ...d,
+        v: d.close,
+      }));
+    }
+    return chartData;
+  }, [isCandlestick, chartData]);
 
   return (
     <div
@@ -81,13 +105,13 @@ export const AreaCard: React.FC<AreaCardProps> = ({
       <div className="flex-1">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
-            data={chartData}
+            data={displayData}
             margin={{ top: 4, right: 0, left: 0, bottom: 0 }}
           >
             <defs>
               <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={strokeColor} stopOpacity={0.35} />
-                <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
+                <stop offset="0%" stopColor={candleColor} stopOpacity={0.35} />
+                <stop offset="100%" stopColor={candleColor} stopOpacity={0} />
               </linearGradient>
             </defs>
 
@@ -101,6 +125,7 @@ export const AreaCard: React.FC<AreaCardProps> = ({
                   payload={props.payload}
                   label={String(props.label)}
                   lang={lang}
+                  chartType={cfg.chartType}
                 />
               )}
             />
@@ -108,13 +133,13 @@ export const AreaCard: React.FC<AreaCardProps> = ({
             <Area
               type="monotone"
               dataKey="v"
-              stroke={strokeColor}
+              stroke={candleColor}
               strokeWidth={2.5}
               fill={`url(#${gradId})`}
               dot={false}
               activeDot={{
                 r: 5,
-                fill: strokeColor,
+                fill: candleColor,
                 stroke: "#fff",
                 strokeWidth: 2,
               }}

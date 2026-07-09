@@ -22,7 +22,6 @@ function FullDonut({
           className="w-full h-full"
           preserveAspectRatio="xMidYMid meet"
         >
-          {/* Track */}
           <circle
             cx={center}
             cy={center}
@@ -33,7 +32,6 @@ function FullDonut({
             opacity={0.25}
           />
 
-          {/* Win */}
           <circle
             cx={center}
             cy={center}
@@ -46,7 +44,6 @@ function FullDonut({
             transform={`rotate(-90 ${center} ${center})`}
           />
 
-          {/* Loss */}
           <circle
             cx={center}
             cy={center}
@@ -60,7 +57,6 @@ function FullDonut({
             transform={`rotate(-90 ${center} ${center})`}
           />
 
-          {/* Center Number */}
           <text
             x={center}
             y={center - size * 0.03}
@@ -73,7 +69,6 @@ function FullDonut({
             {winPercent}%
           </text>
 
-          {/* Label */}
           <text
             x={center}
             y={center + size * 0.13}
@@ -88,17 +83,16 @@ function FullDonut({
         </svg>
       </div>
 
-      {/* Responsive Legend */}
       <div className="flex items-center justify-center gap-2 sm:gap-4 flex-wrap">
         <div className="flex items-center gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
+          <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
           <span className="text-xs sm:text-sm font-medium text-green-500">
             {Math.round(winPercent)}%
           </span>
         </div>
 
         <div className="flex items-center gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-red-500" />
+          <div className="w-2.5 h-2.5 rounded-full bg-green-500" />
           <span className="text-xs sm:text-sm font-medium text-red-500">
             {Math.round(100 - winPercent)}%
           </span>

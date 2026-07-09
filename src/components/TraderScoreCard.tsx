@@ -435,9 +435,10 @@ export default function TraderScoreCard() {
         
       "
     >
-      <div className="flex step-test34 flex-col gap-2 xs:gap-3 sm:gap-4">
-        <div
-          className="
+      <div className="flex flex-col gap-3">
+        <div className="flex step-test34 flex-col gap-2 xs:gap-3 sm:gap-4">
+          <div
+            className="
             bg-white
             dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
             rounded-2xl
@@ -457,51 +458,52 @@ export default function TraderScoreCard() {
             transition-shadow
             duration-300
           "
+          >
+            <div className="flex flex-col gap-4 h-full justify-between ">
+              <div
+                className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
+    p-4 md:p-6 shadow-lg"
+              >
+                <div className="grid grid-cols-2 step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                  {gauges.map((g) => (
+                    <GaugeItem
+                      key={g.key}
+                      label={t(`score.${g.key}`)}
+                      value={g.value}
+                      color={g.color}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
+    p-4 md:p-6 shadow-lg"
         >
-          <div className="flex flex-col gap-4 h-full justify-between ">
-            <div
-              className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
-    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
-    p-4 md:p-6 shadow-lg"
-            >
-              <div className="grid grid-cols-2 step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-                {gauges.map((g) => (
-                  <GaugeItem
-                    key={g.key}
-                    label={t(`score.${g.key}`)}
-                    value={g.value}
-                    color={g.color}
-                  />
-                ))}
-              </div>
-            </div>
-
-            <div
-              className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
-    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
-    p-4 md:p-6 shadow-lg"
-            >
-              <div className="grid step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-                <StatItem
-                  label={t("score.bestSymbol")}
-                  value={d.stats.bestSymbol}
-                />
-                <StatItem
-                  label={t("score.bestTrade")}
-                  value={`+${d.stats.bestTrade} $`}
-                  color="#22c55e"
-                />
-                <StatItem
-                  label={t("score.worstTrade")}
-                  value={`-${Math.abs(d.stats.worstTrade)} $`}
-                  color="#ef4444"
-                />
-                <StatItem
-                  label={t("score.totalLots")}
-                  value={`لات ${d.stats.totalLots}`}
-                />
-              </div>
-            </div>
+          <div className="grid step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+            <StatItem
+              label={t("score.bestSymbol")}
+              value={d.stats.bestSymbol}
+            />
+            <StatItem
+              label={t("score.bestTrade")}
+              value={`+$ ${d.stats.bestTrade}`}
+              color="#22c55e"
+            />
+            <StatItem
+              label={t("score.worstTrade")}
+              value={`-$ ${Math.abs(d.stats.worstTrade)}`}
+              color="#ef4444"
+            />
+            <StatItem
+              color="#22c55e"
+              label={t("score.totalLots")}
+              value={`+$ لات${d.stats.totalLots}`}
+            />
           </div>
         </div>
       </div>

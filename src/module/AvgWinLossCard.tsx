@@ -22,10 +22,10 @@ function AvgWinLossCard() {
                   "0 0 10px rgba(52,199,89,.7), 0 0 25px rgba(52,199,89,.4)",
               }}
               className="
-                text-emerald-400
-                bg-linear-to-b
-                from-[#34C759]
-                to-[#3ADE63]
+                text-green-500
+                 bg-linear-to-b
+               from-[#34C759]
+              to-[#3ADE63]
                 bg-clip-text
                 text-xl
                 sm:text-3xl

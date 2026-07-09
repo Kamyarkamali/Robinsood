@@ -17,13 +17,30 @@ function TradeWinCard() {
             {t("card8.title1")}
           </h3>
 
-          <span className="text-zinc-100 text-lg sm:text-4xl lg:text-[33px] font-bold">
+          <span
+            style={{
+              textShadow:
+                "0 0 10px rgba(52,199,89,.7), 0 0 25px rgba(52,199,89,.4)",
+            }}
+            className="
+                text-green-500
+                 bg-linear-to-b
+               from-[#34C759]
+              to-[#3ADE63]
+                bg-clip-text
+                text-xl
+                sm:text-3xl
+                lg:text-4xl
+                font-bold
+                whitespace-nowrap
+              "
+          >
             {tradeWin.percent}%
           </span>
         </div>
 
         <div className="relative flex items-center justify-center flex-1">
-          <div className="relative w-[120px] sm:w-[140px] lg:w-[160px]">
+          <div className="relative w-30 sm:w-35 lg:w-[160px]">
             <div className="absolute -top-2 -right-3">
               <Pill tone="green">{tradeWin.winLabel}</Pill>
             </div>

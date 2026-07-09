@@ -49,7 +49,7 @@ function AccountTrendCard() {
             w-full
             font-extrabold tabular-nums
 
-            text-[32px] sm:text-[44px] lg:text-[60px]
+            text-[32px] sm:text-[44px] lg:text-[40px]
 
             bg-linear-to-b
             from-[#34C759]
@@ -62,7 +62,7 @@ function AccountTrendCard() {
               "0 0 10px rgba(52,199,89,.7), 0 0 25px rgba(52,199,89,.4)",
           }}
         >
-          $ {toPersianDigits(accountTrend.amount)} +
+          {toPersianDigits(accountTrend.amount)} $+
         </p>
 
         <p className="dark:text-white/90 text-gray-500 text-center text-xs sm:text-sm lg:text-base w-full">

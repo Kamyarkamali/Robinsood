@@ -21,7 +21,7 @@ export const AreaTooltip: React.FC<TooltipProps> = ({
   const typedPayload = payload as AreaTooltipPayload[];
 
   return (
-    <div className="border border-white/10 rounded-xl px-3 py-2 text-xs backdrop-blur-3xl bg-[#1a1a2e]/90 shadow-xl">
+    <div className="border border-white/10 rounded-xl px-3 py-2 text-xs backdrop-blur-3xl shadow-xl">
       <p className="text-gray-400 mb-1">
         {t?.tooltipDate || "Date"}: {label}
       </p>

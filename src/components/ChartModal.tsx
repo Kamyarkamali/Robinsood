@@ -126,7 +126,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
       }}
     >
       <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-lg z-[100] data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:duration-150" />
+        <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-lg z-100 data-[state=open]:animate-in data-[state=open]:fade-in data-[state=open]:duration-200 data-[state=closed]:animate-out data-[state=closed]:fade-out data-[state=closed]:duration-150" />
 
         <Dialog.Content
           ref={modalRef}
@@ -134,7 +134,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
           className={`
             fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 
             ${isMobile ? "w-[98vw] max-h-[95vh] p-2" : "w-[92vw] max-w-4xl max-h-[85vh] p-3 sm:p-4 md:p-5"}
-            bg-white dark:bg-[#0f0f1a] rounded-2xl 
+            bg-white dark:bg-[#2E2E2E] rounded-2xl 
             border border-gray-200 dark:border-[#2a2a4a] 
             shadow-2xl z-101
             overflow-hidden

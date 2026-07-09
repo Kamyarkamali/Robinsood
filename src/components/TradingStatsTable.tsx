@@ -59,7 +59,6 @@ const StatsTable = ({
         </div>
       )}
 
-      {/* ردیف‌ها */}
       {data.map((row, i) => (
         <div
           key={i}

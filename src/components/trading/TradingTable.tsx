@@ -481,7 +481,6 @@ export default function TradingTable() {
   const lang = i18n.language;
   const isRtl = lang === "fa";
 
-  // state ها / States
   const [allTrades] = useState<Trades[]>(() => generateFakeTrades(60));
   const [filters, setFilters] = useState<Filters>(emptyFilters());
   const [sort, setSort] = useState<SortState>({ col: null, dir: "asc" });

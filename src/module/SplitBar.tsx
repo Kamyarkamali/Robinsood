@@ -9,7 +9,7 @@ function SplitBar({
   lossColor = "#ef4444",
 }: SplitBarProps) {
   return (
-    <div className="relative flex w-full h-2 sm:h-2 md:h-3 rounded-full overflow-hidden bg-zinc-800 shrink-0 max-w-95">
+    <div className="relative flex w-full h-2 sm:h-2 md:h-3 rounded-full overflow-hidden bg-zinc-800 shrink-0 max-w-104">
       <div
         className="h-full transition-all duration-500 ease-out"
         style={{

@@ -232,7 +232,7 @@ export const challengeCards: ChallengeCard[] = [
           fa: "درادون - اکوییتی = فاصله",
           en: "Distance = Equity - Drawdown",
         },
-        value: "$190.18 = $1070.18 - $8,80",
+        value: "$190.18 = $1070.18 - $190.18",
       },
     ],
   },
@@ -404,10 +404,10 @@ export const chartsData: ChartData2[] = [
     },
     unit: "lot",
     days: [
-      { label: { fa: "1 روز", en: "1 day" }, value: 0.01 },
-      { label: { fa: "4 روز", en: "4 days" }, value: 0.01 },
-      { label: { fa: "6 روز", en: "6 days" }, value: 0.01 },
-      { label: { fa: "8 روز", en: "8 days" }, value: 0.01 },
+      { label: { fa: "1 روز", en: "1 day" }, value: 10000 },
+      { label: { fa: "4 روز", en: "4 days" }, value: 9000 },
+      { label: { fa: "6 روز", en: "6 days" }, value: 8000 },
+      { label: { fa: "8 روز", en: "8 days" }, value: 7000 },
     ],
     averageLine: 0.01,
     maxAllowedLine: 0.008,
@@ -756,13 +756,13 @@ export const avgWinLoss: AvgWinLossData = {
 };
 
 export const tradeWin: TradeWinData = {
-  percent: "66,66",
+  percent: "66.66",
   winLabel: "$ 8",
   lossLabel: "-$ 4",
 };
 
 export const accountTrend: AccountTrendData = {
-  amount: 384,
+  amount: 384.25,
   percentLabel: "۷.۱٪",
   balanceStandard: 10273.58,
   vsYesterdayPercent: 1.5,
@@ -826,31 +826,31 @@ export const weeklyReport: WeeklyReportRow[] = [
 export const weeklyPnlReports = [
   {
     day: { fa: "شنبه", en: "Saturday" },
-    pnl: 220,
+    pnl: 22000,
   },
   {
     day: { fa: "یکشنبه", en: "Sunday" },
-    pnl: -120,
+    pnl: -12000,
   },
   {
     day: { fa: "دوشنبه", en: "Monday" },
-    pnl: 90,
+    pnl: 90000,
   },
   {
     day: { fa: "سه‌شنبه", en: "Tuesday" },
-    pnl: 350,
+    pnl: 35000,
   },
   {
     day: { fa: "چهارشنبه", en: "Wednesday" },
-    pnl: -70,
+    pnl: -7000,
   },
   {
     day: { fa: "پنجشنبه", en: "Thursday" },
-    pnl: 180,
+    pnl: 18000,
   },
   {
     day: { fa: "جمعه", en: "Friday" },
-    pnl: 0,
+    pnl: 110,
   },
 ];
 

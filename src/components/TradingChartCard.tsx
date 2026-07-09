@@ -56,7 +56,7 @@ const ChartSettingsPanel: React.FC<{
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50" />
-        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-[500px] max-h-[80vh] overflow-y-auto bg-white dark:bg-[#1a1a2e] rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-[#2a2a4a] z-50 animate-in fade-in zoom-in-95 duration-200">
+        <Dialog.Content className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] max-w-125 max-h-[80vh] overflow-y-auto bg-white dark:bg-[#2E2E2E] rounded-2xl p-6 shadow-2xl border border-gray-200 dark:border-[#2a2a4a] z-50 animate-in fade-in zoom-in-95 duration-200">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold dark:text-white">
               ⚙️ تنظیمات چارت
@@ -158,8 +158,8 @@ const ChartSettingsPanel: React.FC<{
               </label>
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                    زیر میانگین
+                  <label className="block text-center text-xs font-medium dark:text-gray-300 mb-1">
+                    زیر حد مجاز
                   </label>
                   <input
                     type="color"
@@ -177,8 +177,8 @@ const ChartSettingsPanel: React.FC<{
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                    بالای میانگین
+                  <label className="block text-xs text-center font-medium dark:text-gray-300 mb-1">
+                    بالای حد مجاز
                   </label>
                   <input
                     type="color"
@@ -194,11 +194,6 @@ const ChartSettingsPanel: React.FC<{
                     }
                     className="w-full h-8 rounded cursor-pointer"
                   />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                    بالای حد مجاز
-                  </label>
                 </div>
               </div>
             </div>
@@ -315,7 +310,7 @@ const ChartSettingsPanel: React.FC<{
 
             <button
               onClick={() => onSettingsChange(defaultSettings)}
-              className="w-full py-2 bg-gray-200 dark:bg-[#2a2a4a] hover:bg-gray-300 dark:hover:bg-[#3a3a5a] rounded-lg font-medium dark:text-white transition-colors"
+              className="w-full py-2 bg-gray-200 dark:bg-[#21213a] shadow-2xl cursor-pointer font-normal hover:bg-gray-300 dark:hover:bg-[#3a3a5a] rounded-lg dark:text-white transition-colors"
             >
               🔄 بازنشانی به تنظیمات پیش‌فرض
             </button>
@@ -573,9 +568,7 @@ const TradingChartCard: React.FC<Props> = ({
     }
     if (unit === "currency") return `$${value.toFixed(0)}`;
     if (unit === "lot") {
-      if (value >= 1) return `${value.toFixed(1)}`;
-      if (value >= 0.01) return `${(value * 1000).toFixed(0)}m`;
-      return `${(value * 1000000).toFixed(0)}μ`;
+      return value.toString();
     }
     return `${value}`;
   }
@@ -794,15 +787,6 @@ const TradingChartCard: React.FC<Props> = ({
                     }
                     strokeDasharray="8 4"
                   />
-                  {/* <rect
-                    x={fixedWidth - paddingRight - (isMobile ? 50 : 70)}
-                    y={avgY - (isMobile ? 10 : 14)}
-                    width={isMobile ? 45 : 65}
-                    height={isMobile ? 14 : 20}
-                    rx={isMobile ? 4 : 6}
-                    fill={settings.averageLineColor}
-                    opacity={0.15}
-                  /> */}
                 </>
               )}
 
@@ -821,15 +805,6 @@ const TradingChartCard: React.FC<Props> = ({
                     }
                     strokeDasharray="8 4"
                   />
-                  {/* <rect
-                    x={fixedWidth - paddingRight - (isMobile ? 50 : 70)}
-                    y={maxAllowedY - (isMobile ? 10 : 14)}
-                    width={isMobile ? 45 : 65}
-                    height={isMobile ? 14 : 20}
-                    rx={isMobile ? 4 : 6}
-                    fill={settings.maxAllowedLineColor}
-                    opacity={0.15}
-                  /> */}
                 </>
               )}
             </svg>

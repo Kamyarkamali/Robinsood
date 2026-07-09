@@ -1,9 +1,9 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import CardShell from "./CardShell";
 import { weeklyPnlReports, weeklyReport } from "../data/fakeData";
 import { toPersianDigits } from "../helpers/helperFunc";
 import SplitBar from "./SplitBar";
-import { useTranslation } from "react-i18next";
 
 function DateSelector({
   selectedDate,
@@ -230,10 +230,7 @@ function WeeklyReportPanel() {
                             : "text-zinc-400"
                       }`}
                     >
-                      $
-                      {isRTL
-                        ? toPersianDigits(row.pnl.toFixed(2))
-                        : row.pnl.toFixed(2)}
+                      {row.pnl > 200 ? "+" : "-"}$ {Math.abs(row.pnl)}
                     </span>
 
                     <span className="text-zinc-200 font-medium whitespace-nowrap">
