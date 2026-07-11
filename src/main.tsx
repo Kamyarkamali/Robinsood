@@ -4,10 +4,13 @@ import "./index.css";
 import App from "./App.tsx";
 import "./i18n/index.ts";
 import { Toaster } from "react-hot-toast";
+import { BrowserRouter } from "react-router-dom";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <App />
-    <Toaster position="bottom-left" />
+    <BrowserRouter>
+      <App />
+      <Toaster position="bottom-left" />
+    </BrowserRouter>
   </StrictMode>,
 );

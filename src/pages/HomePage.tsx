@@ -1,30 +1,13 @@
-import InformationAccount from "../components/InformationAccount";
-import ChallengeGrid from "../components/ChallengeGrid";
-import TradingChart from "../components/TradingChart";
-import TradingAnalysisPanel from "../components/Tradinganalysispanel ";
-import VSComparison from "../components/Vscomparison";
-import TradingTable from "../components/trading/TradingTable";
-import ChangeComponent from "../module/ChangeComponent";
-import TodayeInformation from "./TodayeInformation";
-import DetailseAccount from "./DetailseAccount";
-import NewsComponent from "./NewsComponent";
+import { Route, Routes } from "react-router-dom";
+import DashboardLayout from "../layout/DashboardLayout";
 
 function HomePage() {
   return (
-    <div>
-      {/* <WellcomeComponent /> */}
-      {/* <DetailseComponent /> */}
-      <InformationAccount />
-      <ChallengeGrid />
-      <TodayeInformation />
-      <TradingChart />
-      <DetailseAccount />
-      <ChangeComponent />
-      <NewsComponent />
-      <TradingAnalysisPanel />
-      <VSComparison />
-      <TradingTable />
-    </div>
+    <Routes>
+      <Route path="/" element={<DashboardLayout />}>
+        <Route index element={<h1>تست ساخت سایدبار</h1>} />
+      </Route>
+    </Routes>
   );
 }
 

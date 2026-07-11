@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { useEffect, useState } from "react";
 import { useTheme } from "./hooks/useTheme";
 import TradeLoader from "./module/TradeLoading";
-import Route from "./routers/Route";
+import HomePage from "./pages/HomePage";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);
@@ -39,7 +39,8 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] text-black dark:bg-[#202020] dark:text-white transition-colors">
-      <Route />
+      {/* <Route /> */}
+      <HomePage />
     </div>
   );
 }

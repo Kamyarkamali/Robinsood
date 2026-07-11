@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { Dispatch, ReactNode, SetStateAction } from "react";
 import type {
   ChallengeStatus,
   ChartType,
@@ -11,6 +11,7 @@ import type {
   TradeSide,
   TradeStatus,
 } from "./type";
+import type { LucideIcon } from "lucide-react";
 
 export interface ButtonProps {
   children: ReactNode;
@@ -655,4 +656,15 @@ export interface NewsTableProps {
   sortConfig: { key: string; direction: "asc" | "desc" | null };
   requestSort: (key: string) => void;
   getSortIcon: (key: string) => string;
+}
+
+export interface SidebarItemType {
+  title: string;
+  path: string;
+  icon: LucideIcon;
+}
+
+export interface openState {
+  open: boolean;
+  setOpen: Dispatch<SetStateAction<boolean>>;
 }

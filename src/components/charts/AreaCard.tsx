@@ -1,4 +1,3 @@
-// AreaCard.tsx
 import React, { useMemo } from "react";
 import {
   AreaChart,
@@ -60,6 +59,7 @@ export const AreaCard: React.FC<AreaCardProps> = ({
   const candleColor = useMemo(() => {
     if (isCandlestick && chartData.length > 0) {
       const last = chartData[chartData.length - 1];
+      // @ts-ignore
       return last.close >= last.open ? "#4ade80" : "#ef4444";
     }
     return cfg.strokeColor || "#4ade80";
@@ -125,6 +125,7 @@ export const AreaCard: React.FC<AreaCardProps> = ({
                   payload={props.payload}
                   label={String(props.label)}
                   lang={lang}
+                  // @ts-ignore
                   chartType={cfg.chartType}
                 />
               )}

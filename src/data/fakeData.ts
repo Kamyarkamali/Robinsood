@@ -143,6 +143,15 @@ import {
   TrendingDown,
   Trophy,
 } from "lucide-react";
+import { FaRegUser } from "react-icons/fa";
+import {
+  HiOutlineAcademicCap,
+  HiOutlineBellAlert,
+  HiOutlineDocumentCheck,
+  HiOutlineLifebuoy,
+  HiOutlineUserGroup,
+} from "react-icons/hi2";
+import type { IconType } from "react-icons/lib";
 
 export const buttonSection = [
   { id: 1, en: "show all items", fa: "نمایش همه آیتم ها" },
@@ -3046,3 +3055,64 @@ export const DATE_RANGE_FIELDS: { key: keyof Trades; label: BilingualText }[] =
     { key: "entryAt", label: { fa: "زمان ورود", en: "Entry Time" } },
     { key: "exitAt", label: { fa: "زمان خروج", en: "Exit Time" } },
   ];
+
+// منو سایدبار
+export type SidebarItem = {
+  path: string;
+  icon: IconType;
+  title: {
+    fa: string;
+    en: string;
+  };
+};
+
+export const sidebarItems: SidebarItem[] = [
+  {
+    path: "/",
+    icon: FaRegUser,
+    title: {
+      fa: "اکانت های من",
+      en: "My Accounts",
+    },
+  },
+  {
+    path: "/accounts",
+    icon: HiOutlineBellAlert,
+    title: {
+      fa: "اطلاعیه ها",
+      en: "Announcements",
+    },
+  },
+  {
+    path: "/users",
+    icon: HiOutlineDocumentCheck,
+    title: {
+      fa: "درخواست پاسی",
+      en: "Pass Request",
+    },
+  },
+  {
+    path: "/settings",
+    icon: HiOutlineUserGroup,
+    title: {
+      fa: "درخواست منتور/تراپیست",
+      en: "Mentor / Therapist Request",
+    },
+  },
+  {
+    path: "/support",
+    icon: HiOutlineLifebuoy,
+    title: {
+      fa: "درخواست پشتیبانی",
+      en: "Support Request",
+    },
+  },
+  {
+    path: "/tutorial",
+    icon: HiOutlineAcademicCap,
+    title: {
+      fa: "آموزش پنل آنالیز",
+      en: "Analytics Panel Tutorial",
+    },
+  },
+];

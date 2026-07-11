@@ -98,6 +98,7 @@ function ParamDropdown({
         className="
           flex items-center justify-between gap-1
           w-full
+          
           rounded-xl px-3 py-1.5 text-[10px] sm:text-xs font-medium
           border transition-all duration-200
           bg-white/10 text-gray-700 border-gray-200
@@ -107,7 +108,7 @@ function ParamDropdown({
           shadow-sm
         "
       >
-        <span className="truncate flex-1 text-left">
+        <span className="truncate flex-1 text-left ">
           {i18next.language === "fa"
             ? selected?.label?.fa
             : selected?.label?.en}
@@ -162,7 +163,16 @@ function ParamDropdown({
               />
             </div>
 
-            <div className="overflow-y-auto max-h-[220px] p-1">
+            <div
+              className="
+    overflow-y-auto
+    overflow-x-hidden
+    pr-2
+    scrollbar-thin
+    scrollbar-thumb-gray-400
+    dark:scrollbar-thumb-gray-600
+            max-h-55 p-1"
+            >
               {filteredOptions.length === 0 ? (
                 <div className="px-3 py-4 text-xs text-center text-gray-500 dark:text-gray-400">
                   {lang === "fa" ? "موردی یافت نشد" : "No results found"}
