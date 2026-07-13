@@ -5,13 +5,16 @@ import AllAccounts from "./AllAccounts";
 
 function HomePage() {
   return (
-    <Routes>
-      <Route path="/" element={<DashboardLayout />}>
-        <Route index element={<MyAccounts />} />
+    <>
+      <Routes>
+        <Route path="/" element={<DashboardLayout />}>
+          <Route index element={<MyAccounts />} />
 
-        <Route path="/accounts" element={<AllAccounts />} />
-      </Route>
-    </Routes>
+          <Route path="/accounts" element={<AllAccounts />} />
+        </Route>
+      </Routes>
+      {/* <HomePageTest /> */}
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { TiArrowRight } from "react-icons/ti";
 
 import Icon1 from "../assets/3D-icon/3dicons-shield-front-color.png";
@@ -15,6 +15,7 @@ import Modal from "../components/modals/ModalComponent";
 import type { ModalType } from "../types/type";
 import type { CardComponentProps } from "../types/interfaces";
 import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 function CardComponent({ onStartTour }: CardComponentProps) {
   const [modalType, setModalType] = useState<ModalType>(null);
@@ -114,8 +115,13 @@ function CardComponent({ onStartTour }: CardComponentProps) {
     i18n: { language },
   } = useTranslation();
 
+  const lang = i18next.language;
+
   return (
     <>
+      <h1 className="font-bold text-md md:text-xl">
+        {lang === "fa" ? "امکانات" : "Facilities"}
+      </h1>
       <section className="mt-3">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
           {cards.map((card) => (
@@ -167,11 +173,11 @@ function CardComponent({ onStartTour }: CardComponentProps) {
 
                 <div className="relative flex items-center justify-between w-full gap-4">
                   <div className="flex-1 min-w-0 text-right">
-                    <h2 className="text-sm md:text-base font-normal text-zinc-900 dark:text-white leading-7 line-clamp-2">
+                    <h2 className="text-sm md:text-[12px] font-bold text-zinc-900 dark:text-white leading-7 line-clamp-2">
                       {language === "fa" ? card?.title?.fa : card.title?.en}
                     </h2>
 
-                    <p className="mt-3 text-xs md:text-sm leading-6 text-zinc-500 dark:text-zinc-400">
+                    <p className="mt-3 text-sm md:text-[12px] font-normal leading-6 text-zinc-500 dark:text-zinc-400">
                       {language === "fa" ? card?.desc?.fa : card.desc?.en}
                     </p>
                   </div>

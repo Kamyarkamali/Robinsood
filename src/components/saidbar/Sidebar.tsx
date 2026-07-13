@@ -11,6 +11,10 @@ export default function Sidebar() {
   const [open, setOpen] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [size, setSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
   const lang = i18next.language;
 
@@ -18,6 +22,7 @@ export default function Sidebar() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
+    console.log(window.innerWidth);
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -154,11 +159,13 @@ export default function Sidebar() {
       className={`
         ${open ? "w-72" : "w-24"}
         relative
+        text-gray-500
         transition-all
         duration-300
-        bg-zinc-900
+       dark:bg-zinc-900
+       bg-[#F3F4F6]
         p-4
-        text-white
+        dark:text-white
         border-r
         border-zinc-800
         flex flex-col
@@ -171,14 +178,19 @@ export default function Sidebar() {
       <div
         className={`
           absolute
-          top-28
-          transition-all
-          duration-300
-        `}
-        style={{
-          right: open ? "260px" : "100%",
-          transform: open ? "translateX(0)" : "translateX(50%)",
-        }}
+            top-28
+            transition-all
+            duration-300
+             ${
+               lang === "fa"
+                 ? open
+                   ? "-translate-x-61"
+                   : "-translate-x-14"
+                 : open
+                   ? "translate-x-63"
+                   : "translate-x-14"
+             }
+`}
       >
         <BtnSaidbar open={open} setOpen={setOpen} />
       </div>
@@ -203,7 +215,7 @@ export default function Sidebar() {
                 ${
                   isActive
                     ? neumorphicActive
-                    : `text-zinc-300 ${neumorphicHover}`
+                    : `dark:text-zinc-300 text-zinc-700 ${neumorphicHover}`
                 }
               `
             }

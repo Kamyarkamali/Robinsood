@@ -29,16 +29,16 @@ export default function TradingCover() {
 
   return (
     <div className="relative mt-2 w-full overflow-hidden rounded-2xl">
-      <div className="relative w-full aspect-4/3 sm:aspect-16/8 md:aspect-16/4.5">
-        <div className="absolute inset-0">
-          <img
-            src={cover}
-            alt="Trading cover"
-            className="h-full rounded-2xl w-full object-contain md:object-cover"
-          />
-
-          <div className="absolute inset-0" />
-        </div>
+      <div className="relative w-full aspect-[7/3] sm:aspect-[16/8] md:aspect-[16/4.5]">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `url(${cover})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+            backgroundRepeat: "no-repeat",
+          }}
+        />
 
         <div
           className="pointer-events-none absolute inset-0"
@@ -61,22 +61,22 @@ export default function TradingCover() {
             }`}
           >
             <h1 className="font-bold leading-tight tracking-tight text-white">
-              <span className="text-xl sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
+              <span className="text-sm sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
                 {t.titleNormal}
               </span>
 
-              <span className="text-xl text-purple-400 sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
+              <span className="text-sm text-purple-400 sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
                 {" "}
                 {t.titleAccent}
               </span>
 
-              <span className="text-xl sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
+              <span className="text-sm sm:text-2xl md:text-xl lg:text-2xl xl:text-3xl">
                 {" "}
                 {t.titleEnd}
               </span>
             </h1>
 
-            <p className="max-w-full text-sm leading-relaxed text-slate-300 sm:max-w-[85%] md:max-w-[75%] md:text-base">
+            <p className="max-w-full text-[12px] leading-relaxed text-slate-300 sm:max-w-[85%] md:max-w-[75%] md:text-base">
               {t.subtitle}
             </p>
           </div>

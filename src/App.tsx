@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useTheme } from "./hooks/useTheme";
 import TradeLoader from "./module/TradeLoading";
 import HomePage from "./pages/HomePage";
+import Route from "./routers/Route";
 
 function App() {
   const [loading, setLoading] = useState<boolean>(true);

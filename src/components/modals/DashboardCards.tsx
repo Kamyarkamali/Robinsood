@@ -16,35 +16,22 @@ const DashboardCards: FC<ComponentState> = ({
     <section
       dir={isFa ? "rtl" : "ltr"}
       className="
-      border-4 dark:border-white/10 border-gray-400
         w-full
         mt-3
         rounded-2xl sm:rounded-[30px]
         p-4 sm:p-5 md:p-6
-        dark:bg-linear-to-b
-        dark:from-[#353535]
-       dark: via-[#2D2D2D]
-       dark: to-[#252525]
       "
     >
       <div
-        dir={i18next.language === "fa" ? "ltr" : "rtl"}
+        dir={isFa ? "ltr" : "rtl"}
         className={`flex flex-col gap-1 mb-3 ${
           isFa ? "items-end" : "items-start"
         }`}
       >
-        <div className="flex items-center gap-2">
-          <FcElectricity className="text-xl sm:text-2xl" />
-
-          <h2 className="font-semibold text-base sm:text-lg md:text-xl text-white">
-            {isFa ? "دسترسی سریع به امکانات پنل" : "Quick Access To Dashboard"}
-          </h2>
-        </div>
-
-        <p className="text-xs sm:text-sm text-zinc-400">
-          {isFa
-            ? "مهم‌ترین ابزارها و بخش‌های پنل در یک نگاه"
-            : "Most important dashboard sections at a glance"}
+        <p
+          className={`${isFa ? "text-right" : "text-left"} w-full text-md sm:text-xl dark:text-white font-bold`}
+        >
+          {isFa ? "دسته بندی ها" : "Categories"}
         </p>
       </div>
 
@@ -55,7 +42,7 @@ const DashboardCards: FC<ComponentState> = ({
           sm:grid-cols-2
           md:grid-cols-3
           lg:grid-cols-4
-          xl:grid-cols-6
+          xl:grid-cols-5
           2xl:grid-cols-8
           gap-3 md:gap-4
         "

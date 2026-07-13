@@ -43,21 +43,21 @@ function CardAccounts() {
   const lang = i18next.language;
 
   return (
-    <section className="space-y-6">
+    <section className="space-y-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl xl:text-2xl font-bold text-slate-800 dark:text-white">
-          اکانت های من
+        <h2 className="text-lg font-bold text-slate-800 dark:text-white">
+          {lang === "fa" ? "اکانت های من" : "My Accounts"}
         </h2>
 
         <Link
           to="/accounts"
-          className="text-cyan-600 dark:text-cyan-400 text-sm xl:text-base hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+          className="text-cyan-600 dark:text-cyan-400 text-sm hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
         >
-          تمامی آیتم ها
+          {lang === "fa" ? " تمامی آیتم ها" : "All Items"}
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-3 gap-4">
         {fakeChallengeAccounts.slice(0, 4).map((account) => {
           // @ts-ignore
           const status = statusConfig[account.cardStatus];
@@ -68,27 +68,23 @@ function CardAccounts() {
               className={`
                 relative
                 overflow-hidden
-                rounded-[28px]
+                rounded-2xl
                 border
                 ${status.border}
                 bg-white
-                dark:bg-[#181F29]
-                shadow-[8px_8px_18px_rgba(0,0,0,0.08),-8px_-8px_18px_rgba(255,255,255,0.7),inset_1px_1px_2px_rgba(255,255,255,0.8),inset_-1px_-1px_2px_rgba(0,0,0,0.05)]
-                dark:shadow-[8px_8px_18px_#0d1219,-8px_-8px_18px_#222d38,inset_1px_1px_2px_rgba(255,255,255,0.05),inset_-1px_-1px_2px_rgba(255,255,255,0.03)]
-                hover:shadow-[10px_10px_22px_rgba(0,0,0,0.1),-10px_-10px_22px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(255,255,255,0.9),inset_-1px_-1px_2px_rgba(0,0,0,0.05)]
-                dark:hover:shadow-[10px_10px_22px_#0c1118,-10px_-10px_22px_#26313c,inset_1px_1px_2px_rgba(255,255,255,0.06),inset_-1px_-1px_2px_rgba(255,255,255,0.04)]
+                dark:bg-[#2B2B2B]
                 transition-all
                 duration-300
-                hover:-translate-y-1
+                hover:-translate-y-0.5
               `}
             >
               <div
                 className={`
                   absolute
-                  -left-10
-                  -top-10
-                  w-32
-                  h-32
+                  -left-8
+                  -top-8
+                  w-28
+                  h-28
                   rounded-full
                   blur-3xl
                   ${status.glow}
@@ -99,28 +95,28 @@ function CardAccounts() {
                 to={`/accounts/${account.id}`}
                 className="relative flex flex-col xl:flex-row h-full"
               >
-                <div className="w-full bg-transparent xl:w-36 flex items-center justify-center p-4">
+                <div className="w-full bg-transparent xl:w-28 flex items-center justify-center p-3">
                   <img
                     src={account.icon}
                     alt={lang === "fa" ? account?.title?.fa : account.title?.en}
-                    className="w-24 md:w-28 xl:w-32 object-contain"
+                    className="w-20 md:w-24 xl:w-28 object-contain"
                   />
                 </div>
 
-                <div className="flex-1 p-4 xl:p-5 min-w-0 flex flex-col">
-                  <h3 className="text-lg xl:text-xl font-extrabold text-slate-800 dark:text-white truncate">
+                <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col">
+                  <h3 className="text-base xl:text-lg font-extrabold text-slate-800 dark:text-white truncate">
                     {lang === "fa" ? account?.title?.fa : account.title?.en}
                   </h3>
 
-                  <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+                  <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                     {/* سرمایه */}
                     <div>
-                      <p className="text-[11px] text-slate-500 dark:text-zinc-400 mb-2">
+                      <p className="text-[10px] text-slate-500 dark:text-zinc-400 mb-1.5">
                         {lang === "fa" ? "سرمایه" : "Capital"}
                       </p>
 
                       <h4
-                        className={`text-xl xl:text-2xl font-black ${status.text}`}
+                        className={`text-lg xl:text-xl font-black ${status.text}`}
                       >
                         ${account.capital.toLocaleString()}
                       </h4>
@@ -128,28 +124,27 @@ function CardAccounts() {
 
                     {/* مرحله */}
                     <div>
-                      <p className="text-[11px] text-center text-slate-500 dark:text-zinc-400 mb-2">
+                      <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
                         {lang === "fa" ? "مرحله" : "Step"}
                       </p>
 
                       <div
                         className={`
-                          h-9
-                          xl:h-10
-                          rounded-xl
+                          h-8
+                          xl:h-9
+                          rounded-lg
                           border
                           ${status.badge}
                           flex
                           items-center
                           justify-center
-                          gap-2
+                          gap-1.5
                           text-xs
-                          xl:text-sm
-                          shadow-[inset_2px_2px_5px_rgba(0,0,0,0.08),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]
-                          dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,.35),inset_-2px_-2px_5px_rgba(255,255,255,.06)]
+                          shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
+                          dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
                         `}
                       >
-                        <FaFlag />
+                        <FaFlag className="text-xs" />
                         <span>
                           {lang === "fa"
                             ? account?.stageLabel?.fa
@@ -160,28 +155,27 @@ function CardAccounts() {
 
                     {/* وضعیت */}
                     <div>
-                      <p className="text-[11px] text-center text-slate-500 dark:text-zinc-400 mb-2">
+                      <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
                         {lang === "fa" ? "وضعیت" : "Status"}
                       </p>
 
                       <div
                         className={`
-                          h-9
-                          xl:h-10
-                          rounded-xl
+                          h-8
+                          xl:h-9
+                          rounded-lg
                           border
                           ${status.badge}
                           flex
                           items-center
                           justify-center
-                          gap-2
+                          gap-1.5
                           text-xs
-                          xl:text-sm
-                          shadow-[inset_2px_2px_5px_rgba(0,0,0,0.08),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]
-                          dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,.35),inset_-2px_-2px_5px_rgba(255,255,255,.06)]
+                          shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
+                          dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
                         `}
                       >
-                        {status.icon}
+                        <span className="text-xs">{status.icon}</span>
                         <span>
                           {lang === "fa"
                             ? account?.cardStatusLabel?.fa
@@ -192,36 +186,36 @@ function CardAccounts() {
                   </div>
 
                   {/* Footer */}
-                  <div className="mt-auto pt-5 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between">
-                    <span className="text-slate-400 dark:text-zinc-500 text-sm xl:text-base font-bold">
+                  <div className="mt-auto pt-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between">
+                    <span className="text-slate-400 dark:text-zinc-500 text-xs font-bold">
                       #{account.id}
                     </span>
 
                     <Link
                       to={`/accounts/${account.id}`}
                       className="
-                        h-10
-                        w-10
-                        xl:h-11
-                        xl:w-11
-                        rounded-xl
+                        h-8
+                        w-8
+                        xl:h-9
+                        xl:w-9
+                        rounded-lg
                         border
                         border-slate-200/70
                         dark:border-white/10
                         flex
                         items-center
                         justify-center
-                        shadow-[4px_4px_10px_rgba(0,0,0,0.06),-4px_-4px_10px_rgba(255,255,255,0.8),inset_1px_1px_2px_rgba(255,255,255,0.8),inset_-1px_-1px_2px_rgba(0,0,0,0.05)]
-                        dark:shadow-[4px_4px_10px_#0c1118,-4px_-4px_10px_#212b35,inset_1px_1px_2px_rgba(255,255,255,0.05),inset_-1px_-1px_2px_rgba(255,255,255,0.03)]
-                        hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.08),inset_-3px_-3px_6px_rgba(255,255,255,0.9)]
-                        dark:hover:shadow-[inset_3px_3px_6px_#0c1118,inset_-3px_-3px_6px_#212b35]
+                        shadow-[3px_3px_8px_rgba(0,0,0,0.05),-3px_-3px_8px_rgba(255,255,255,0.7),inset_1px_1px_2px_rgba(255,255,255,0.8),inset_-1px_-1px_2px_rgba(0,0,0,0.05)]
+                        dark:shadow-[3px_3px_8px_#0c1118,-3px_-3px_8px_#212b35,inset_1px_1px_2px_rgba(255,255,255,0.05),inset_-1px_-1px_2px_rgba(255,255,255,0.03)]
+                        hover:shadow-[inset_3px_3px_5px_rgba(0,0,0,0.08),inset_-3px_-3px_5px_rgba(255,255,255,0.9)]
+                        dark:hover:shadow-[inset_3px_3px_5px_#0c1118,inset_-3px_-3px_5px_#212b35]
                         transition-all
                         duration-300
                         text-slate-700
                         dark:text-white
                       "
                     >
-                      <HiOutlineArrowLeft size={18} />
+                      <HiOutlineArrowLeft size={16} />
                     </Link>
                   </div>
                 </div>

@@ -8,6 +8,9 @@ import { avatarData } from "../data/fakeData";
 import i18next from "i18next";
 import { useTheme } from "../hooks/useTheme";
 import { useUser } from "../hooks/useUser";
+import { Link } from "react-router-dom";
+import { IoMdMenu } from "react-icons/io";
+import { IoMdClose } from "react-icons/io";
 
 interface UserMenuProps {
   isSidebarOpen?: boolean;
@@ -17,10 +20,12 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
   const { i18n } = useTranslation();
   const { resolvedTheme, isDark, setLight, setDark } = useTheme();
   const { user, updateUser } = useUser();
+  const [menu, setMenu] = useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
+  const lang = i18next.language;
 
   const [open, setOpen] = useState(false);
   const [avatarModal, setAvatarModal] = useState(false);
@@ -88,18 +93,6 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
     (item: AvatarItem) => (resolvedTheme === "dark" ? item.dark : item.light),
     [resolvedTheme],
   );
-
-  // const selectedName = useMemo(() => {
-  //   const current = list.find(
-  //     (a) => a.dark === user.avatar || a.light === user.avatar,
-  //   );
-
-  //   if (current) {
-  //     return i18n.language === "fa" ? current.fa : current.en;
-  //   }
-
-  //   return user.name;
-  // }, [i18n.language, user.avatar, list, user.name]);
 
   const handleSelectAvatar = useCallback(
     (item: AvatarItem) => {
@@ -206,7 +199,7 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
               </svg>
             </div>
 
-            <div className="absolute top-[4px] right-[4px] pointer-events-none">
+            <div className="absolute top-1 right-1 pointer-events-none">
               <svg height="20" width="20" viewBox="0 0 512 512">
                 <path
                   d="M343.1,315c-1.8,0.1-3.5,0.1-5.3,0.1c-29.1,0-56.5-11.3-77.1-31.9c-20.6-20.6-31.9-48-31.9-77.1c0-16.6,3.7-32.6,10.6-47.1c3.1-6.4,6.8-12.5,11.1-18.2c-7.6,0.8-14.9,2.4-22,4.6c-46.8,14.8-80.7,58.5-80.7,110.2c0,63.8,51.7,115.5,115.5,115.5c35.3,0,66.8-15.8,88-40.7c4.8-5.7,9.2-11.9,12.8-18.5C357.3,313.6,350.3,314.7,343.1,315z"
@@ -227,7 +220,6 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
         ref={buttonRef}
         whileHover={{ scale: isSidebarOpen ? 1.02 : 1 }}
         whileTap={{ scale: isSidebarOpen ? 0.98 : 1 }}
-        onClick={toggleDropdown}
         className={`
   flex items-center gap-1.5 sm:gap-2 cursor-pointer
   justify-center
@@ -253,27 +245,53 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
             transition={{ duration: 0.2 }}
             className="text-[12px] sm:text-[14px]"
           ></motion.div>
-          <div className="flex items-center gap-2">
-            <span className="text-[10px] whitespace-nowrap sm:text-xs ${styles.text} ">
-              صفحه اصلی
-            </span>
-            <span className="text-[10px] whitespace-nowrap sm:text-xs ${styles.text} ">
-              پلتفرم
-            </span>
-            <span
-              className={`
-    text-[10px] sm:text-xs ${styles.text} 
-    whitespace-nowrap 
-    flex items-center 
-    justify-center  
-    w-full
-    gap-1 
-  `}
+          <section className="flex flex-col items-center">
+            <button
+              onClick={() => setMenu(!menu)}
+              className="transition-transform duration-300"
             >
-              تنظیمات
-              <FiChevronDown className={styles.text} />
-            </span>
-          </div>
+              {menu ? <IoMdClose size={25} /> : <IoMdMenu size={25} />}
+            </button>
+
+            <div
+              className={`
+      overflow-hidden
+      transition-all
+      duration-300
+      ease-in-out
+
+      ${
+        menu
+          ? "max-h-40 opacity-100 scale-100 mt-3"
+          : "max-h-0 opacity-0 scale-95 mt-0"
+      }
+    `}
+            >
+              <div className="flex flex-col items-center gap-2">
+                <Link
+                  to="/"
+                  className={`text-[10px] sm:text-xs whitespace-nowrap ${styles.text}`}
+                >
+                  {lang === "fa" ? "صفحه اصلی" : "Home"}
+                </Link>
+
+                <span
+                  className={`text-[10px] sm:text-xs whitespace-nowrap ${styles.text}`}
+                >
+                  {lang === "fa" ? "پلتفرم" : "Platform"}
+                </span>
+
+                <span
+                  onClick={toggleDropdown}
+                  className={`text-[10px] sm:text-xs whitespace-nowrap flex items-center gap-1 ${styles.text}`}
+                >
+                  {lang === "fa" ? "تنظیمات" : "Settings"}
+
+                  <FiChevronDown />
+                </span>
+              </div>
+            </div>
+          </section>
         </motion.div>
       </motion.div>
 

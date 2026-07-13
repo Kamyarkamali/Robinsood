@@ -2781,17 +2781,17 @@ export const NEWS: NewsEvent[] = [
 ];
 
 export const cards = [
-  {
-    id: 11,
-    fa: "نمایش تمامی آیتم‌ها",
-    en: "Show All",
-    descFa: "مشاهده همه امکانات پنل",
-    descEn: "View all features",
-    icon: Plus,
-    color: "text-violet-500",
-    line: "bg-violet-500",
-    components: "ShowAllComponents",
-  },
+  // {
+  //   id: 11,
+  //   fa: "نمایش تمامی آیتم‌ها",
+  //   en: "Show All",
+  //   descFa: "مشاهده همه امکانات پنل",
+  //   descEn: "View all features",
+  //   icon: Plus,
+  //   color: "text-violet-500",
+  //   line: "bg-violet-500",
+  //   components: "ShowAllComponents",
+  // },
   {
     id: 1,
     fa: "اطلاعات چالش",
