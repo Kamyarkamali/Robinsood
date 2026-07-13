@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { TiArrowRight } from "react-icons/ti";
 
 import Icon1 from "../assets/3D-icon/3dicons-shield-front-color.png";

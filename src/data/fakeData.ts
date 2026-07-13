@@ -141,7 +141,6 @@ import {
   FileText,
   Newspaper,
   PieChart,
-  Plus,
   ShieldCheck,
   SlidersHorizontal,
   TrendingDown,

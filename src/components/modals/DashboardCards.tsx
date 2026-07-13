@@ -1,7 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { FcElectricity } from "react-icons/fc";
 import { cards } from "../../data/fakeData";
-import i18next from "i18next";
 import type { FC } from "react";
 import type { ComponentState } from "../../types/interfaces";
 
