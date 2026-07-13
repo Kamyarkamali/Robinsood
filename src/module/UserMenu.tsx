@@ -7,24 +7,23 @@ import type { AvatarItem, Lang } from "../types/type";
 import { avatarData } from "../data/fakeData";
 import i18next from "i18next";
 import { useTheme } from "../hooks/useTheme";
+import { useUser } from "../hooks/useUser";
 
-export default function UserMenu() {
+interface UserMenuProps {
+  isSidebarOpen?: boolean;
+}
+
+export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
   const { i18n } = useTranslation();
-
   const { resolvedTheme, isDark, setLight, setDark } = useTheme();
+  const { user, updateUser } = useUser();
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
   const buttonRef = useRef<HTMLDivElement | null>(null);
 
-  const DEFAULT = avatarData[0];
-
   const [open, setOpen] = useState(false);
   const [avatarModal, setAvatarModal] = useState(false);
-
-  const [selectedAvatar, setSelectedAvatar] = useState<string>(
-    () => localStorage.getItem("avatar") || DEFAULT.dark,
-  );
 
   const list = useMemo(() => avatarData, []);
 
@@ -90,33 +89,34 @@ export default function UserMenu() {
     [resolvedTheme],
   );
 
-  const selectedName = useMemo(() => {
-    const current = list.find(
-      (a) => a.dark === selectedAvatar || a.light === selectedAvatar,
-    );
+  // const selectedName = useMemo(() => {
+  //   const current = list.find(
+  //     (a) => a.dark === user.avatar || a.light === user.avatar,
+  //   );
 
-    if (!current) {
-      return i18n.language === "fa" ? "انتخاب پروفایل" : "Select Profile";
-    }
+  //   if (current) {
+  //     return i18n.language === "fa" ? current.fa : current.en;
+  //   }
 
-    return i18n.language === "fa" ? current.fa : current.en;
-  }, [i18n.language, selectedAvatar, list]);
+  //   return user.name;
+  // }, [i18n.language, user.avatar, list, user.name]);
 
   const handleSelectAvatar = useCallback(
     (item: AvatarItem) => {
       const src = getSrc(item);
-      setSelectedAvatar(src);
-      localStorage.setItem("avatar", src);
+      updateUser({ avatar: src });
       setAvatarModal(false);
       setOpen(false);
     },
-    [getSrc],
+    [getSrc, updateUser],
   );
 
   const toggleDropdown = useCallback(() => {
-    setOpen((prev) => !prev);
-    if (!open) setAvatarModal(false);
-  }, [open]);
+    if (isSidebarOpen) {
+      setOpen((prev) => !prev);
+      if (!open) setAvatarModal(false);
+    }
+  }, [open, isSidebarOpen]);
 
   const styles = useMemo(() => {
     const isDark = resolvedTheme === "dark";
@@ -130,6 +130,7 @@ export default function UserMenu() {
       avatarBorder: isDark ? "bg-[#2B2B2B]" : "bg-white",
       buttonBg: isDark ? "bg-[#2B2B2B2B]" : "bg-white/50",
       hoverBg: isDark ? "hover:bg-white/10" : "hover:bg-black/5",
+      inputBg: isDark ? "bg-zinc-800/50" : "bg-gray-100/50",
     };
   }, [resolvedTheme]);
 
@@ -205,7 +206,6 @@ export default function UserMenu() {
               </svg>
             </div>
 
-            {/* Moon Icon */}
             <div className="absolute top-[4px] right-[4px] pointer-events-none">
               <svg height="20" width="20" viewBox="0 0 512 512">
                 <path
@@ -222,47 +222,63 @@ export default function UserMenu() {
   );
 
   return (
-    <div className="relative z-9999">
+    <div className="relative w-full">
       <motion.div
         ref={buttonRef}
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
+        whileHover={{ scale: isSidebarOpen ? 1.02 : 1 }}
+        whileTap={{ scale: isSidebarOpen ? 0.98 : 1 }}
         onClick={toggleDropdown}
         className={`
-          flex items-center gap-1.5 sm:gap-2 cursor-pointer
-          px-1.5 sm:px-2 py-1 rounded-full w-fit
-          ${styles.buttonBg}
-          transition-all duration-200
-          backdrop-blur-lg
-        `}
+  flex items-center gap-1.5 sm:gap-2 cursor-pointer
+  justify-center
+  px-1.5 sm:px-2 py-1 rounded-full
+  transition-all duration-200
+  backdrop-blur-lg
+  w-full  
+  ${!isSidebarOpen && "opacity-50 cursor-not-allowed"}
+`}
+        title={!isSidebarOpen ? "سایدبار را باز کنید" : ""}
       >
-        <div className="relative">
-          <div className="p-[1.5px] rounded-full bg-linear-to-r from-cyan-400 via-blue-500 to-fuchsia-500">
-            <img
-              src={selectedAvatar}
-              className={`w-7 h-7 sm:w-8 sm:h-8 md:w-9 md:h-9 rounded-full object-cover ${styles.avatarBorder}`}
-              loading="lazy"
-              alt="avatar"
-            />
-          </div>
-          <span className="absolute bottom-0 right-0 w-2 h-2 sm:w-2.5 sm:h-2.5 bg-green-500 rounded-full border-2 border-[#2B2B2B]" />
-        </div>
         <motion.div
-          animate={{ rotate: open ? 180 : 0 }}
+          animate={{
+            opacity: 1,
+            width: "auto",
+            marginLeft: 4,
+          }}
           transition={{ duration: 0.2 }}
-          className="text-[12px] sm:text-[14px]"
+          className="flex items-center gap-1 w-full justify-between"
         >
-          <FiChevronDown className={styles.text} />
+          <motion.div
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ duration: 0.2 }}
+            className="text-[12px] sm:text-[14px]"
+          ></motion.div>
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] whitespace-nowrap sm:text-xs ${styles.text} ">
+              صفحه اصلی
+            </span>
+            <span className="text-[10px] whitespace-nowrap sm:text-xs ${styles.text} ">
+              پلتفرم
+            </span>
+            <span
+              className={`
+    text-[10px] sm:text-xs ${styles.text} 
+    whitespace-nowrap 
+    flex items-center 
+    justify-center  
+    w-full
+    gap-1 
+  `}
+            >
+              تنظیمات
+              <FiChevronDown className={styles.text} />
+            </span>
+          </div>
         </motion.div>
-        <span
-          className={`text-[10px] sm:text-xs ${styles.text} whitespace-nowrap`}
-        >
-          {selectedName}
-        </span>
       </motion.div>
 
       <AnimatePresence mode="wait">
-        {open && (
+        {open && isSidebarOpen && (
           <motion.div
             ref={dropdownRef}
             initial={{ opacity: 0, scale: 0.95, y: -10 }}
@@ -270,29 +286,32 @@ export default function UserMenu() {
             exit={{ opacity: 0, scale: 0.95, y: -10 }}
             transition={{ duration: 0.15 }}
             className={`
-              absolute ${i18next.language === "fa" ? "right-0" : "left-0"} 
-              mt-2 w-56 sm:w-64
+              absolute 
+              ${i18next.language === "fa" ? "right-0" : "left-0"} 
+              bottom-full
+              mb-2
+              w-56 sm:w-64 md:w-72
+              max-w-[calc(100vw-2rem)]
               rounded-2xl
               ${styles.dropdownBg}
               border ${styles.border}
-              overflow-hidden
               shadow-2xl
               backdrop-blur-2xl
+              z-50
+              max-h-[70vh] sm:max-h-[80vh]
             `}
           >
-            {/* LANG */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.05 }}
+              transition={{ delay: 0.08 }}
               className="p-2 sm:p-3 border-b border-white/10"
             >
               <div className="flex items-center justify-between gap-2">
                 <p className={`text-[10px] ${styles.textSecondary}`}>
                   {i18next.language === "fa" ? "زبان" : "Language"}
                 </p>
-
-                <div className="flex gap-1 sm:gap-2">
+                <div className="flex gap-1">
                   {["fa", "en"].map((l) => (
                     <motion.button
                       key={l}
@@ -300,7 +319,7 @@ export default function UserMenu() {
                       whileTap={{ scale: 0.95 }}
                       onClick={() => changeLang(l as Lang)}
                       className={`
-                        text-[10px] px-2 sm:px-3 cursor-pointer py-0.5 sm:py-1 rounded-lg
+                        text-[10px] px-1.5 sm:px-2 cursor-pointer py-0.5 rounded-lg
                         transition-colors duration-150
                         ${
                           i18next.language === l
@@ -349,13 +368,13 @@ export default function UserMenu() {
                   setOpen(false);
                 }}
                 className={`
-                  flex items-center gap-1.5 sm:gap-2 
+                  flex items-center gap-1.5
                   text-[10px] sm:text-xs ${styles.text} 
-                  w-full justify-center py-1.5 sm:py-2 rounded-lg 
+                  w-full justify-center py-1.5 rounded-lg 
                   ${styles.hoverBg} transition-colors duration-150 cursor-pointer
                 `}
               >
-                <FiEdit2 className="text-[12px] sm:text-[14px] " />
+                <FiEdit2 className="text-[12px] sm:text-[14px]" />
                 {i18next.language === "fa" ? "ویرایش آواتار" : "Edit Avatar"}
               </motion.button>
             </motion.div>
@@ -363,7 +382,6 @@ export default function UserMenu() {
         )}
       </AnimatePresence>
 
-      {/* MODAL */}
       <AnimatePresence mode="wait">
         {avatarModal && (
           <motion.div
@@ -372,6 +390,7 @@ export default function UserMenu() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
             className="fixed inset-0 z-9999 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm"
+            onClick={() => setAvatarModal(false)}
           >
             <motion.div
               ref={modalRef}
@@ -390,6 +409,7 @@ export default function UserMenu() {
                 max-h-[85vh] sm:max-h-[90vh]
                 overflow-y-auto
               `}
+              onClick={(e) => e.stopPropagation()}
             >
               <div className="flex justify-between items-center mb-3 sm:mb-4 sticky top-0 z-10 pb-2">
                 <p className={`text-xs sm:text-sm font-medium ${styles.text}`}>
@@ -397,7 +417,6 @@ export default function UserMenu() {
                     ? "انتخاب آواتار"
                     : "Select Avatar"}
                 </p>
-
                 <motion.button
                   whileHover={{ rotate: 90, scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
@@ -408,10 +427,14 @@ export default function UserMenu() {
                 </motion.button>
               </div>
 
-              {/* GRID */}
               <div className="grid grid-cols-3 xs:grid-cols-4 gap-2 sm:gap-3 max-h-[350px] sm:max-h-[400px] overflow-y-auto p-0.5 sm:p-1">
                 {list.map((item, index) => {
                   const src = getSrc(item);
+                  const isSelected =
+                    user.avatar === item.dark || user.avatar === item.light;
+                  const displayName =
+                    i18n.language === "fa" ? item.fa : item.en;
+
                   return (
                     <motion.div
                       key={item.id}
@@ -426,7 +449,9 @@ export default function UserMenu() {
                         rounded-lg sm:rounded-xl
                         p-1.5 sm:p-2
                         ${styles.buttonBg}
-                        border ${styles.border}
+                        border-2 ${
+                          isSelected ? "border-cyan-400" : styles.border
+                        }
                         transition-colors duration-150
                         hover:shadow-lg
                         group
@@ -436,31 +461,32 @@ export default function UserMenu() {
                         <img
                           src={src}
                           className="w-full h-12 sm:h-14 object-cover rounded-lg transition-transform duration-200 group-hover:scale-110"
-                          alt={item.en}
+                          alt={displayName}
                           loading="lazy"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
                       </div>
 
                       <span
                         className={`
-                        text-[6px] sm:text-[7px] ${styles.textSecondary} 
-                        block text-center mt-1 sm:mt-1.5 
-                        transition-colors duration-150 group-hover:${styles.text}
-                      `}
+                          text-[8px] sm:text-[9px] ${styles.textSecondary} 
+                          block text-center mt-1 sm:mt-1.5 
+                          transition-colors duration-150 group-hover:${styles.text}
+                          font-medium
+                        `}
                       >
-                        {i18next.language === "fa" ? item.fa : item.en}
+                        {displayName}
                       </span>
 
-                      {(selectedAvatar === item.dark ||
-                        selectedAvatar === item.light) && (
+                      {isSelected && (
                         <motion.div
                           layoutId="selectedAvatar"
-                          className="absolute -top-1 -right-1 w-3 h-3 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white"
-                          initial={{ scale: 0 }}
-                          animate={{ scale: 1 }}
-                          transition={{ type: "spring", duration: 0.3 }}
-                        />
+                          className="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 bg-cyan-400 rounded-full border-2 border-white flex items-center justify-center"
+                        >
+                          <span className="text-[8px] sm:text-[10px] text-white font-bold">
+                            ✓
+                          </span>
+                        </motion.div>
                       )}
                     </motion.div>
                   );

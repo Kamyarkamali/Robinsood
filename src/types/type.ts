@@ -6,6 +6,7 @@ export type Lang = "fa" | "en";
 export type Theme = "dark" | "light";
 export type ParamKey = "pnl" | "winrate" | "trades" | "rr";
 export type DateKey = "dec24" | "nov24" | "oct24" | "q4_24" | "q3_24";
+export type Locale = "fa" | "en";
 
 interface DayData {
   d: number;
@@ -82,3 +83,44 @@ export type ColKey =
   | "comment";
 
 export type SortType = "number" | "string" | "date" | "boolean" | "none";
+
+export interface User {
+  id: number;
+  name: string;
+  avatar: string;
+  online: boolean;
+}
+export type ChallengeAccountType = "free" | "challenge" | "real";
+
+export type ChallengeStage = "stage1" | "stage2" | "stage3";
+
+export type CardStatus = "passed" | "trading" | "rejected" | "reviewing";
+
+export type TableStatus = "approved" | "rejected" | "reviewing" | "finished";
+
+export type ChallengeIconType =
+  | "diamond-green"
+  | "diamond-gold"
+  | "diamond-red"
+  | "rocket";
+
+export interface ChallengeAccount {
+  id: string;
+  title: { fa: string; en: string };
+  accountType: ChallengeAccountType;
+  accountTypeLabel: { fa: string; en: string };
+  capital: number;
+  stage: ChallengeStage;
+  stageLabel: { fa: string; en: string };
+  cardStatus: CardStatus;
+  cardStatusLabel: { fa: string; en: string };
+  tableStatus: TableStatus;
+  tableStatusLabel: { fa: string; en: string };
+  statusReason: { fa: string; en: string };
+  startDateJalali: string;
+  startTime: string;
+  accountNumber: string;
+  balance: number;
+  icon: ChallengeIconType;
+  isActive: boolean;
+}

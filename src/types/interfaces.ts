@@ -668,3 +668,100 @@ export interface openState {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
 }
+
+export interface LocalizedText {
+  fa: string;
+  en: string;
+}
+
+export type ChallengeAccountType = "free" | "challenge" | "real";
+export type ChallengeStage = "stage1" | "stage2" | "stage3";
+export type CardStatus = "passed" | "trading" | "rejected" | "reviewing";
+export type TableStatus = "approved" | "rejected" | "reviewing" | "finished";
+export type ChallengeIconType =
+  | "diamond-green"
+  | "diamond-gold"
+  | "diamond-red"
+  | "rocket";
+
+export interface ChallengeAccount {
+  id: string;
+  title: LocalizedText;
+  accountType: ChallengeAccountType;
+  accountTypeLabel: LocalizedText;
+  capital: number;
+  stage: ChallengeStage;
+  stageLabel: LocalizedText;
+  cardStatus: CardStatus;
+  cardStatusLabel: LocalizedText;
+  tableStatus: TableStatus;
+  tableStatusLabel: LocalizedText;
+  statusReason: LocalizedText;
+  startDateJalali: string;
+  startTime: string;
+  accountNumber: string;
+  balance: number;
+  icon: any;
+  isActive: boolean;
+}
+
+export interface Account {
+  id: any;
+  icon: string;
+  title: {
+    fa: string;
+    en: string;
+  };
+  capital: number;
+  balance: number;
+  accountNumber: string;
+  accountType: "challenge" | "real" | "free";
+  accountTypeLabel: {
+    fa: string;
+    en: string;
+  };
+  cardStatus: "passed" | "trading" | "rejected";
+  cardStatusLabel: {
+    fa: string;
+    en: string;
+  };
+  tableStatus: "approved" | "reviewing" | "rejected";
+  tableStatusLabel: {
+    fa: string;
+    en: string;
+  };
+  stage: "stage1" | "stage2" | "stage3";
+  stageLabel: {
+    fa: string;
+    en: string;
+  };
+  startDateJalali: string;
+  startTime: string;
+}
+
+export type FilterType = "all" | "challenge" | "real" | "free";
+export type FilterStatus = "all" | "approved" | "reviewing" | "rejected";
+export type FilterStage = "all" | "stage1" | "stage2" | "stage3";
+export type ViewMode = "table" | "card";
+
+export interface StatusConfig {
+  icon: React.ComponentType<{ className?: string }>;
+  class: string;
+}
+
+export interface StatusConfigMap {
+  approved: StatusConfig;
+  reviewing: StatusConfig;
+  rejected: StatusConfig;
+}
+
+export interface FiltersProps {
+  search: string;
+  setSearch: (value: string) => void;
+  type: FilterType;
+  setType: (value: FilterType) => void;
+  status: FilterStatus;
+  setStatus: (value: FilterStatus) => void;
+  stage: FilterStage;
+  setStage: (value: FilterStage) => void;
+}

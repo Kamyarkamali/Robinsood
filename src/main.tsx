@@ -5,12 +5,15 @@ import App from "./App.tsx";
 import "./i18n/index.ts";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
+import { UserProvider } from "./context/UserContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-      <Toaster position="bottom-left" />
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <App />
+        <Toaster position="bottom-left" />
+      </BrowserRouter>
+    </UserProvider>
   </StrictMode>,
 );

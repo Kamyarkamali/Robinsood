@@ -1,50 +1,58 @@
-import type { FC } from "react";
-import type { openState } from "../../types/interfaces";
+import { useMemo } from "react";
+import { useTranslation } from "react-i18next";
+import { avatarData } from "../../data/fakeData";
+import { useUser } from "../../hooks/useUser";
 
-const ProfileSidbar: FC<openState> = ({ open }) => {
+interface ProfileSidbarProps {
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+export default function ProfileSidbar({ open }: ProfileSidbarProps) {
+  const { user } = useUser();
+  const { i18n } = useTranslation();
+
+  const avatarName = useMemo(() => {
+    const current = avatarData.find(
+      (a) => a.dark === user.avatar || a.light === user.avatar,
+    );
+
+    if (current) {
+      return i18n.language === "fa" ? current.fa : current.en;
+    }
+    return null;
+  }, [user.avatar, i18n.language]);
+
   return (
-    <div
-      className={`
-        mb-8
-        transition-all
-        duration-300
-        hover:scale-[1.02]
-      `}
-    >
-      <div
-        className={`${
-          open ? "flex-row py-5 px-4" : "flex-col py-5"
-        } flex items-center justify-center gap-4`}
-      >
-        <div className="relative shrink-0">
+    <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-zinc-800">
+      <div className="relative shrink-0">
+        <div className="p-0.5 rounded-full bg-linear-to-r from-cyan-400 via-blue-500 to-fuchsia-500">
           <img
-            src="https://i.pravatar.cc/150?img=12"
-            alt="profile"
-            className="w-16 h-16 rounded-full object-cover border-2 border-zinc-700"
+            src={user.avatar}
+            alt="avatar"
+            className="w-8 h-8 sm:w-10 sm:h-10 rounded-full object-cover"
           />
-
-          <span className="absolute bottom-0 right-0 h-4 w-4 rounded-full bg-green-500 border-2 border-zinc-900 animate-pulse"></span>
         </div>
+        <span className="absolute bottom-0 right-0 w-2.5 h-2.5 sm:w-3 sm:h-3 bg-green-500 rounded-full border-2 border-zinc-900" />
+      </div>
 
-        <div
-          className={`
-              overflow-hidden
-              transition-all
-              duration-300
-              ${open ? "opacity-100 w-40" : "opacity-0 w-0 pointer-events-none"}
-            `}
-        >
-          <h3 className="font-semibold text-white whitespace-nowrap">
-            هومن حریقی
-          </h3>
-
-          <p className="text-xs text-green-400 mt-1 whitespace-nowrap">
-            ● آنلاین
+      <div
+        className={`
+          overflow-hidden
+          transition-all
+          duration-300
+          ${open ? "opacity-100 w-auto" : "opacity-0 w-0"}
+        `}
+      >
+        {avatarName && (
+          <p className="text-[10px] sm:text-[11px] text-cyan-400 truncate">
+            {avatarName}
           </p>
-        </div>
+        )}
+        <p className="text-[10px] sm:text-[11px] text-green-400 truncate">
+          آنلاین
+        </p>
       </div>
     </div>
   );
-};
-
-export default ProfileSidbar;
+}
