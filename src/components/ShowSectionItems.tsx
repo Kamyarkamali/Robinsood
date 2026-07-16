@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import type { ShowSectionItemsProps } from "../types/interfaces";
-import ChallengeGrid from "./ChallengeGrid";
+import ChallengeGrid from "../pages/AccountSections/ChallengeGrid";
 
 function ShowSectionItems({ activeId }: ShowSectionItemsProps) {
   const { t } = useTranslation();

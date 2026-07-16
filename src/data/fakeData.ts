@@ -157,16 +157,66 @@ import {
 import type { IconType } from "react-icons/lib";
 
 export const buttonSection = [
-  { id: 1, en: "show all items", fa: "نمایش همه آیتم ها" },
-  { id: 2, en: "challenge info", fa: "اطلاعات چالش" },
-  { id: 3, en: "today control params", fa: "پارامتر های کنترلی امروز" },
-  { id: 4, en: "drawdown chart", fa: "چارت درادون" },
-  { id: 5, en: "account stats", fa: "آمار و جزییات حساب" },
-  { id: 6, en: "calendar analysis", fa: "تحلیل تقویمی" },
-  { id: 7, en: "news status", fa: "وضعیت اخبار" },
-  { id: 8, en: "ai trading", fa: "هوش مصنوعی ترید" },
-  { id: 9, en: "comparison", fa: "مقایسه با سایرین" },
-  { id: 10, en: "trades", fa: "معاملات" },
+  {
+    id: 1,
+    slug: "all-items",
+    en: "show all items",
+    fa: "نمایش همه آیتم ها",
+  },
+  {
+    id: 2,
+    slug: "challenge-info",
+    en: "challenge info",
+    fa: "اطلاعات چالش",
+  },
+  {
+    id: 3,
+    slug: "today-control-params",
+    en: "today control params",
+    fa: "پارامتر های کنترلی امروز",
+  },
+  {
+    id: 4,
+    slug: "drawdown-chart",
+    en: "drawdown chart",
+    fa: "چارت درادون",
+  },
+  {
+    id: 5,
+    slug: "account-stats",
+    en: "account stats",
+    fa: "آمار و جزییات حساب",
+  },
+  {
+    id: 6,
+    slug: "calendar-analysis",
+    en: "calendar analysis",
+    fa: "تحلیل تقویمی",
+  },
+  {
+    id: 7,
+    slug: "news-status",
+    en: "news status",
+    fa: "وضعیت اخبار",
+  },
+  {
+    id: 8,
+    slug: "ai-trading",
+    en: "ai trading",
+    fa: "هوش مصنوعی ترید",
+  },
+  {
+    id: 9,
+    slug: "comparison",
+    en: "comparison",
+    fa: "مقایسه با سایرین",
+  },
+  {
+    id: 10,
+    slug: "trades",
+    en: "trades",
+    fa: "معاملات",
+  },
 ];
 
 export const challengeCards: ChallengeCard[] = [
@@ -2780,19 +2830,9 @@ export const NEWS: NewsEvent[] = [
 ];
 
 export const cards = [
-  // {
-  //   id: 11,
-  //   fa: "نمایش تمامی آیتم‌ها",
-  //   en: "Show All",
-  //   descFa: "مشاهده همه امکانات پنل",
-  //   descEn: "View all features",
-  //   icon: Plus,
-  //   color: "text-violet-500",
-  //   line: "bg-violet-500",
-  //   components: "ShowAllComponents",
-  // },
   {
     id: 1,
+    slug: "challenge-info",
     fa: "اطلاعات چالش",
     en: "Challenge Info",
     descFa: "جزئیات و وضعیت چالش",
@@ -2800,10 +2840,11 @@ export const cards = [
     icon: ShieldCheck,
     color: "text-emerald-500",
     line: "bg-emerald-500",
-    components: "InformationAccount",
+    components: "",
   },
   {
     id: 2,
+    slug: "today-parameters",
     fa: "پارامترهای امروز",
     en: "Today's Parameters",
     descFa: "محدودیت‌ها و پارامترها",
@@ -2811,10 +2852,11 @@ export const cards = [
     icon: SlidersHorizontal,
     color: "text-blue-500",
     line: "bg-blue-500",
-    components: "ChallengeGrid",
+    components: "",
   },
   {
     id: 3,
+    slug: "evaluation-parameters",
     fa: "پارامترهای ارزیابی",
     en: "Evaluation",
     descFa: "معیارها و قوانین ارزیابی",
@@ -2822,10 +2864,11 @@ export const cards = [
     icon: ClipboardCheck,
     color: "text-violet-500",
     line: "bg-violet-500",
-    components: "ProgressCardsSection",
+    components: "",
   },
   {
     id: 4,
+    slug: "drawdown-chart",
     fa: "چارت دراداون",
     en: "Drawdown Chart",
     descFa: "نمودار دراداون روزانه و کلی",
@@ -2833,10 +2876,11 @@ export const cards = [
     icon: TrendingDown,
     color: "text-red-500",
     line: "bg-red-500",
-    components: "chart",
+    components: "",
   },
   {
     id: 5,
+    slug: "account-statistics",
     fa: "آمار و جزئیات حساب",
     en: "Statistics",
     descFa: "عملکرد و آمار حساب",
@@ -2844,10 +2888,11 @@ export const cards = [
     icon: PieChart,
     color: "text-blue-500",
     line: "bg-blue-500",
-    components: "detailseAc",
+    components: "",
   },
   {
     id: 6,
+    slug: "calendar-analysis",
     fa: "تحلیل تقویمی",
     en: "Calendar Analysis",
     descFa: "تحلیل رویدادها و ساعات",
@@ -2855,10 +2900,11 @@ export const cards = [
     icon: CalendarDays,
     color: "text-violet-500",
     line: "bg-violet-500",
-    components: "detaileCalendre",
+    components: "",
   },
   {
     id: 7,
+    slug: "news-status",
     fa: "وضعیت اخبار",
     en: "News",
     descFa: "اخبار و رویدادهای مهم",
@@ -2866,10 +2912,11 @@ export const cards = [
     icon: Newspaper,
     color: "text-orange-500",
     line: "bg-orange-500",
-    components: "newsComponent",
+    components: "",
   },
   {
     id: 8,
+    slug: "ai-trading",
     fa: "هوش مصنوعی ترید",
     en: "AI Trade",
     descFa: "تحلیل رفتار معاملاتی",
@@ -2877,10 +2924,11 @@ export const cards = [
     icon: Brain,
     color: "text-emerald-500",
     line: "bg-emerald-500",
-    components: "AiComponent",
+    components: "",
   },
   {
     id: 9,
+    slug: "comparison",
     fa: "مقایسه با کاربران",
     en: "Compare Users",
     descFa: "مقایسه و رتبه‌بندی",
@@ -2888,10 +2936,11 @@ export const cards = [
     icon: Trophy,
     color: "text-yellow-500",
     line: "bg-yellow-500",
-    components: "Comparison",
+    components: "",
   },
   {
     id: 10,
+    slug: "trades",
     fa: "لیست معاملات",
     en: "Trade List",
     descFa: "تاریخچه معاملات",
@@ -2899,7 +2948,7 @@ export const cards = [
     icon: FileText,
     color: "text-blue-500",
     line: "bg-blue-500",
-    components: "TransactionList",
+    components: "",
   },
 ];
 

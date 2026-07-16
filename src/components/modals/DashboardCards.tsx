@@ -2,11 +2,9 @@ import { useTranslation } from "react-i18next";
 import { cards } from "../../data/fakeData";
 import type { FC } from "react";
 import type { ComponentState } from "../../types/interfaces";
+import { Link } from "react-router-dom";
 
-const DashboardCards: FC<ComponentState> = ({
-  setActiveComponent,
-  activeComponent,
-}) => {
+const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
 
@@ -49,8 +47,9 @@ const DashboardCards: FC<ComponentState> = ({
           const Icon = item.icon;
 
           return (
-            <div
-              onClick={() => setActiveComponent(item?.components)}
+            <Link
+              to={`/account/${item.slug}`}
+              // onClick={() => setActiveComponent(item?.components)}
               key={item.id}
               className={`
                 ${
@@ -147,7 +146,7 @@ const DashboardCards: FC<ComponentState> = ({
                   ${item.line}
                 `}
               />
-            </div>
+            </Link>
           );
         })}
       </div>

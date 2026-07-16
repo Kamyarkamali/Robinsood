@@ -1,11 +1,9 @@
-import CircleIcon from "../icons/CircleIcon";
-import { cardInner, cardOuter } from "../styles/buttonStyles";
 import { FaHashtag } from "react-icons/fa";
 import toast from "react-hot-toast";
 import { FiActivity, FiFlag } from "react-icons/fi";
 import { FiCalendar } from "react-icons/fi";
-import chaleng from "../assets/images/chaleng.png";
-import wallet from "../assets/images/wallet.png";
+import chaleng from "../../assets/images/chaleng.png";
+import wallet from "../../assets/images/wallet.png";
 import { MdShowChart } from "react-icons/md";
 import { MdOutlineShowChart } from "react-icons/md";
 import { TbChartHistogram } from "react-icons/tb";
@@ -13,6 +11,8 @@ import { PiChartLineDown } from "react-icons/pi";
 import { IoTimeOutline } from "react-icons/io5";
 import { useTranslation } from "react-i18next";
 import i18next from "i18next";
+import { cardInner, cardOuter } from "../../styles/buttonStyles";
+import CircleIcon from "../../icons/CircleIcon";
 
 function InformationAccount() {
   const { t } = useTranslation();

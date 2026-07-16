@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { challengeCards } from "../data/fakeData";
-import ChallengeCardComponent from "./ChallengeCard";
 import { useTranslation } from "react-i18next";
+import { challengeCards } from "../../data/fakeData";
+import ChallengeCardComponent from "../../components/ChallengeCard";
 
 export default function ChallengeGrid() {
   const [hidden, setHidden] = useState<{

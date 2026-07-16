@@ -29,7 +29,7 @@ export default function TradingCover() {
 
   return (
     <div className="relative mt-2 w-full overflow-hidden rounded-2xl">
-      <div className="relative w-full aspect-[7/3] sm:aspect-[16/8] md:aspect-[16/4.5]">
+      <div className="relative w-full aspect-7/3 sm:aspect-20/8 md:aspect-23/4.5">
         <div
           className="absolute inset-0"
           style={{

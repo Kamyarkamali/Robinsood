@@ -1,9 +1,9 @@
 import {
-  areaDataRiskReward,
-  areaDataTodayTrend,
-  areaDataTodayTrades,
-  areaDataMaxWin,
   areaDataMaxLoss,
+  areaDataMaxWin,
+  areaDataRiskReward,
+  areaDataTodayTrades,
+  areaDataTodayTrend,
   candlestickData,
   donutAssets,
 } from "../../data/fakeData";

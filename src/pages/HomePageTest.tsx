@@ -1,5 +1,3 @@
-import InformationAccount from "../components/InformationAccount";
-import ChallengeGrid from "../components/ChallengeGrid";
 import TradingChart from "../components/TradingChart";
 import TradingAnalysisPanel from "../components/Tradinganalysispanel ";
 import VSComparison from "../components/Vscomparison";
@@ -8,6 +6,8 @@ import ChangeComponent from "../module/ChangeComponent";
 import TodayeInformation from "./TodayeInformation";
 import DetailseAccount from "./DetailseAccount";
 import NewsComponent from "./NewsComponent";
+import InformationAccount from "./AccountSections/InformationAccount";
+import ChallengeGrid from "./AccountSections/ChallengeGrid";
 
 function HomePageTest() {
   return (

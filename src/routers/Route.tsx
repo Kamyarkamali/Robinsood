@@ -7,8 +7,6 @@ import TradingCover from "../module/Tradingcover ";
 import CardComponent from "../pages/CardComponent";
 import DashboardCards from "../components/modals/DashboardCards";
 import HomePage from "../pages/HomePage";
-import InformationAccount from "../components/InformationAccount";
-import ChallengeGrid from "../components/ChallengeGrid";
 import TodayeInformation from "../pages/TodayeInformation";
 import TradingChart from "../components/TradingChart";
 import DetailseAccount from "../pages/DetailseAccount";
@@ -18,6 +16,8 @@ import TradingAnalysisPanel from "../components/Tradinganalysispanel ";
 import VSComparison from "../components/Vscomparison";
 import TradingTable from "../components/trading/TradingTable";
 import DashboardWindows from "../components/modals/DashboardWindows";
+import InformationAccount from "../pages/AccountSections/InformationAccount";
+import ChallengeGrid from "../pages/AccountSections/ChallengeGrid";
 
 function Route() {
   const [activeComponent, setActiveComponent] =

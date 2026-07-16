@@ -18,7 +18,9 @@ function MyAccounts() {
 
   return (
     <div>
-      <TradingCover />
+      <section className="hidden md:block">
+        <TradingCover />
+      </section>
       <section className="mt-5">
         <CardAccounts />
       </section>
