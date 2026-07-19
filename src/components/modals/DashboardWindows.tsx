@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { cards } from "../../data/fakeData";
 import type { ComponentState } from "../../types/interfaces";
 import { useTranslation } from "react-i18next";
@@ -11,7 +12,7 @@ export default function DashboardWindows({
 
   return (
     <div
-      dir="ltr"
+      dir="rtl"
       className="
         fixed bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2
         z-50
@@ -40,7 +41,11 @@ export default function DashboardWindows({
           const active = activeComponent === item.components;
 
           return (
-            <div key={item.id} className="relative group shrink-0">
+            <Link
+              to={`/account/${item?.slug}`}
+              key={item.id}
+              className="relative group shrink-0"
+            >
               <div
                 className="
                   absolute -top-14 left-1/2 -translate-x-1/2
@@ -72,7 +77,7 @@ export default function DashboardWindows({
                   `}
                 />
               </button>
-            </div>
+            </Link>
           );
         })}
       </div>

@@ -7,16 +7,19 @@ import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/UserContext.tsx";
 import { ModalProvider } from "./context/ModalContext.tsx";
+import { PdfProvider } from "./context/PdfContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ModalProvider>
-      <UserProvider>
-        <BrowserRouter>
-          <App />
-          <Toaster position="bottom-left" />
-        </BrowserRouter>
-      </UserProvider>
-    </ModalProvider>
+    <PdfProvider>
+      <ModalProvider>
+        <UserProvider>
+          <BrowserRouter>
+            <App />
+            <Toaster position="bottom-left" />
+          </BrowserRouter>
+        </UserProvider>
+      </ModalProvider>
+    </PdfProvider>
   </StrictMode>,
 );

@@ -15,6 +15,7 @@ function HomePage() {
           <Route path="/account/:section" element={<AccountSection />} />
         </Route>
       </Routes>
+
       {/* <HomePageTest /> */}
     </>
   );

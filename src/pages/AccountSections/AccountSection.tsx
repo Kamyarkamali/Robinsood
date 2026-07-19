@@ -1,5 +1,6 @@
 import { useParams } from "react-router-dom";
 import { componentMap } from "../../configs/componentMap";
+import AccountNavbar from "../../module/AccountNavbar";
 
 const AccountSection = () => {
   const { section } = useParams<{ section: string }>();
@@ -15,9 +16,13 @@ const AccountSection = () => {
   }
 
   return (
-    <>
-      <Component />
-    </>
+    <div>
+      <AccountNavbar />
+
+      <div id="account-pdf">
+        <Component />
+      </div>
+    </div>
   );
 };
 

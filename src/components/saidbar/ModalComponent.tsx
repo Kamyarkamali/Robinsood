@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { FiX } from "react-icons/fi";
 import i18next from "i18next";
 
@@ -31,9 +32,9 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
 
   if (!open) return null;
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
       onClick={onClose}
     >
       <div
@@ -54,7 +55,8 @@ const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
         </button>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 

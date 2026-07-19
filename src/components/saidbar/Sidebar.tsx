@@ -1,37 +1,163 @@
-import { useState, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { useMemo, useState, useEffect, useCallback, memo } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
-import BtnSaidbar from "../ui/BtnSaidbar";
-import { sidebarItems } from "../../data/fakeData";
-import ProfileSidbar from "./ProfileSidbar";
-import UserMenu from "../../module/UserMenu";
 import i18next from "i18next";
 
-export default function Sidebar() {
+import BtnSaidbar from "../ui/BtnSaidbar";
+import ProfileSidbar from "./ProfileSidbar";
+import UserMenu from "../../module/UserMenu";
+import type { ModalType } from "../../types/type";
+import PassAccountModalContent from "../modals/PassModal";
+import SupportModalContent from "../modals/SupportModal";
+import MentorModal from "../modals/MentorModal";
+import EducationModalContent from "../modals/EducationModal";
+import Modal from "./ModalComponent";
+import {
+  HiOutlineAcademicCap,
+  HiOutlineChatBubbleLeftRight,
+  HiOutlineShieldCheck,
+  HiOutlineUserGroup,
+} from "react-icons/hi2";
+
+interface SidebarProps {
+  onStartTour?: () => void;
+}
+
+const MemoizedProfileSidbar = memo(ProfileSidbar);
+const MemoizedUserMenu = memo(UserMenu);
+const MemoizedModal = memo(Modal);
+
+function debounce<T extends (...args: any[]) => any>(
+  func: T,
+  wait: number,
+): {
+  (...args: Parameters<T>): void;
+  cancel: () => void;
+} {
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+
+  const debounced = (...args: Parameters<T>) => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => func(...args), wait);
+  };
+
+  debounced.cancel = () => {
+    if (timeout) clearTimeout(timeout);
+  };
+
+  return debounced;
+}
+
+export default function Sidebar({ onStartTour }: SidebarProps) {
   const [open, setOpen] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
+  const [modalType, setModalType] = useState<ModalType>(null);
 
   const lang = i18next.language;
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
+  const handleStartTour = useCallback(() => {
+    setModalType(null);
+    setTimeout(() => {
+      onStartTour?.();
+    }, 500);
+  }, [onStartTour]);
 
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
+  const cards = useMemo(
+    () => [
+      {
+        type: "passAccount" as const,
+        step: "step-pass-account",
+        component: <PassAccountModalContent />,
+        icon: HiOutlineShieldCheck,
+        title: {
+          fa: "درخواست پاس حساب و رفتن به مرحله بعد",
+          en: "Pass Account Request & Proceed to the Next Stage",
+        },
+      },
+      {
+        type: "support" as const,
+        step: "step-support",
+        component: <SupportModalContent />,
+        icon: HiOutlineChatBubbleLeftRight,
+        title: {
+          fa: "درخواست پشتیبانی",
+          en: "Support Request",
+        },
+      },
+      {
+        type: "mentor" as const,
+        step: "step-mentor",
+        component: <MentorModal />,
+        icon: HiOutlineUserGroup,
+        title: {
+          fa: "درخواست منتور و تراپیست",
+          en: "Mentor & Therapist Request",
+        },
+      },
+      {
+        type: "education" as const,
+        step: "step-education",
+        component: <EducationModalContent onStartTour={handleStartTour} />,
+        icon: HiOutlineAcademicCap,
+        title: {
+          fa: "آموزش و راهنما",
+          en: "Education & Guide",
+        },
+      },
+    ],
+    [handleStartTour],
+  );
 
-    return () => window.removeEventListener("resize", checkMobile);
+  const currentCard = useMemo(
+    () => cards.find((card) => card.type === modalType),
+    [cards, modalType],
+  );
+
+  const handleCloseMobile = useCallback(() => {
+    setMobileOpen(false);
+  }, []);
+
+  const handleOpenMobile = useCallback(() => {
+    setMobileOpen(true);
+  }, []);
+
+  const handleSetModalType = useCallback((type: ModalType) => {
+    setModalType(type);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setModalType(null);
+  }, []);
+
+  const handleToggleSidebar = useCallback(() => {
+    setOpen((prev) => !prev);
   }, []);
 
   useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < 768;
+      setIsMobile(mobile);
+      if (!mobile) {
+        setMobileOpen(false);
+      }
+    };
+
+    const debouncedCheck = debounce(checkMobile, 150);
+    checkMobile();
+    window.addEventListener("resize", debouncedCheck);
+    return () => {
+      window.removeEventListener("resize", debouncedCheck);
+      debouncedCheck.cancel();
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!mobileOpen || !isMobile) return;
+
     const handleClickOutside = (e: MouseEvent) => {
-      if (mobileOpen && isMobile) {
-        const target = e.target as HTMLElement;
-        if (!target.closest("aside") && !target.closest("button")) {
-          setMobileOpen(false);
-        }
+      const target = e.target as HTMLElement;
+      if (!target.closest("aside") && !target.closest("button")) {
+        setMobileOpen(false);
       }
     };
 
@@ -50,23 +176,24 @@ export default function Sidebar() {
     };
   }, [mobileOpen, isMobile]);
 
-  const neumorphicActive = `
-    shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-    bg-zinc-800/50
-    text-white
-    border border-white/5
-  `;
-
-  const neumorphicHover = `
-    hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-    hover:bg-zinc-800/30
-  `;
+  const modalNode = useMemo(
+    () => (
+      <div className="z-9999">
+        <MemoizedModal open={modalType !== null} onClose={handleCloseModal}>
+          {currentCard && (
+            <div className={currentCard.step}>{currentCard.component}</div>
+          )}
+        </MemoizedModal>
+      </div>
+    ),
+    [modalType, currentCard, handleCloseModal],
+  );
 
   if (isMobile) {
     return (
       <>
         <button
-          onClick={() => setMobileOpen(true)}
+          onClick={handleOpenMobile}
           className={`
             fixed top-4 left-4 z-50
             p-2.5 rounded-xl
@@ -74,16 +201,19 @@ export default function Sidebar() {
             border border-zinc-800
             cursor-pointer
             shadow-lg
-            ${mobileOpen ? "hidden" : "block"}
+            transition-opacity duration-200
+            ${mobileOpen ? "opacity-0 pointer-events-none" : "opacity-100"}
           `}
+          aria-label="Open menu"
         >
           <FiMenu size={24} />
         </button>
 
         {mobileOpen && (
           <div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
-            onClick={() => setMobileOpen(false)}
+            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={handleCloseMobile}
+            aria-hidden="true"
           />
         )}
 
@@ -91,153 +221,171 @@ export default function Sidebar() {
           className={`
             fixed top-0 left-0 z-50
             w-72 h-full
-            dark:bg-zinc-900
+            dark:bg-zinc-900 bg-white
             p-4
-            dark:text-white
+            dark:text-white text-gray-800
             border-r border-zinc-800
             flex flex-col
             transition-transform duration-300 ease-in-out
+            [will-change:transform]
+            [contain:layout_style]
             ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
           `}
+          role="navigation"
+          aria-label="Sidebar navigation"
         >
           <button
-            onClick={() => setMobileOpen(false)}
-            className="absolute top-4 right-4 p-2 rounded-xl hover:bg-zinc-800 transition-colors"
+            onClick={handleCloseMobile}
+            className="absolute top-4 right-4 p-2 rounded-xl hover:bg-zinc-800/20 transition-colors"
+            aria-label="Close menu"
           >
             <FiX size={22} />
           </button>
 
-          <ProfileSidbar open={true} setOpen={setOpen} />
+          <MemoizedProfileSidbar open={true} setOpen={handleToggleSidebar} />
 
-          <nav className="space-y-2 flex-1 overflow-y-auto mt-12">
-            {sidebarItems.map(({ title, path, icon: Icon }) => (
-              <NavLink
-                title={lang === "fa" ? title?.fa : title?.en}
-                key={lang === "fa" ? title?.fa : title?.en}
-                to={path}
-                onClick={() => setMobileOpen(false)}
-                className={({ isActive }) =>
-                  `
-                    flex
-                    items-center
-                    gap-4
-                    rounded-2xl
-                    px-5
-                    py-3
-                    transition-all
-                    duration-300
-                    min-w-0
-                    ${
-                      isActive
-                        ? neumorphicActive
-                        : `text-zinc-300 ${neumorphicHover}`
-                    }
-                  `
-                }
+          <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
+            {cards.map((card) => (
+              <button
+                key={card.type}
+                type="button"
+                title={lang === "fa" ? card.title.fa : card.title.en}
+                onClick={() => {
+                  handleSetModalType(card.type);
+                  handleCloseMobile();
+                }}
+                className={`
+                  ${card.step}
+                  w-full
+                  flex
+                  items-center
+                  gap-4
+                  rounded-2xl
+                  px-5
+                  py-3
+                  transition-colors
+                  duration-200
+                  min-w-0
+                  text-zinc-300
+                  cursor-pointer
+                  hover:bg-zinc-800/30
+                  active:scale-95
+                `}
               >
-                <Icon size={22} className="shrink-0" />
-                <span className="whitespace-nowrap overflow-hidden text-[12px] font-normal">
-                  {lang === "fa" ? title?.fa : title?.en}
+                <card.icon size={22} className="shrink-0" />
+                <span className=" overflow-hidden text-[12px] font-normal text-start">
+                  {lang === "fa" ? card.title.fa : card.title.en}
                 </span>
-              </NavLink>
+              </button>
             ))}
           </nav>
 
-          <UserMenu isSidebarOpen={true} />
+          <MemoizedUserMenu isSidebarOpen={true} />
         </aside>
+
+        {modalNode}
       </>
     );
   }
 
+  // Desktop version
   return (
     <aside
       className={`
-        ${open ? "w-58" : "w-24"}
         relative
         text-gray-500
-        transition-all
+        transition-[width]
         duration-300
-       dark:bg-zinc-900
-       bg-[#F3F4F6]
+        ease-in-out
+        [will-change:width]
+        [contain:layout_style]
+        dark:bg-zinc-900 bg-[#F3F4F6]
         p-4
-        dark:text-white
-        border-r
-        border-zinc-800
+        dark:text-white text-gray-800
+        border-r border-zinc-800
         flex flex-col
         min-h-screen
         sticky top-0
+        ${open ? "w-65" : "w-24"}
       `}
+      role="navigation"
+      aria-label="Sidebar navigation"
     >
-      <ProfileSidbar open={open} setOpen={setOpen} />
+      <MemoizedProfileSidbar open={open} setOpen={handleToggleSidebar} />
 
       <div
         className={`
-          absolute
-            top-28
-            transition-all
-            duration-300
-             ${
-               lang === "fa"
-                 ? open
-                   ? "-translate-x-48"
-                   : "-translate-x-14"
-                 : open
-                   ? "translate-x-63"
-                   : "translate-x-14"
-             }
-`}
+          absolute top-28 transition-transform duration-300 [will-change:transform]
+          ${
+            lang === "fa"
+              ? open
+                ? "-translate-x-55"
+                : "-translate-x-14"
+              : open
+                ? "translate-x-63"
+                : "translate-x-14"
+          }
+        `}
       >
-        <BtnSaidbar open={open} setOpen={setOpen} />
+        <BtnSaidbar open={open} setOpen={handleToggleSidebar} />
       </div>
 
-      <nav className="space-y-2 flex-1 overflow-y-auto mt-12">
-        {sidebarItems.map(({ title, path, icon: Icon }) => (
-          <NavLink
-            title={lang === "fa" ? title?.fa : title?.en}
-            key={title.en}
-            to={path}
-            className={({ isActive }) =>
+      <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
+        {cards.map((card) => (
+          <button
+            key={card.type}
+            type="button"
+            title={lang === "fa" ? card.title.fa : card.title.en}
+            onClick={() => handleSetModalType(card.type)}
+            className={`
+              ${card.step}
+              w-full
+              flex
+              items-center
+              rounded-2xl
+              px-5
+              gap-2
+              py-3
+              transition-colors duration-200
+              cursor-pointer
+              dark:text-zinc-300 text-zinc-700
+              hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+              hover:bg-zinc-800/30
+              active:scale-95
+              ${
+                modalType === card.type
+                  ? `
+                shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                bg-zinc-800/50
+                text-white
+                border border-white/5
               `
-                flex
-                items-center
-                gap-4
-                rounded-2xl
-                px-5
-                py-3
-                transition-all
-                duration-300
-                min-w-0
-                ${
-                  isActive
-                    ? neumorphicActive
-                    : `dark:text-zinc-300 text-zinc-700 ${neumorphicHover}`
-                }
-              `
-            }
+                  : ""
+              }
+              ${!open ? "justify-center px-0" : ""}
+            `}
           >
-            <Icon size={22} className="shrink-0" />
+            <card.icon size={22} className="shrink-0" />
 
             <span
               className={`
-                whitespace-nowrap
-                text-[13px]
+                text-[11px]
                 overflow-hidden
-                transition-all
-                duration-300
-                ${
-                  open
-                    ? "opacity-100 w-44"
-                    : "opacity-0 w-0 pointer-events-none"
-                }
+                w-44
+                transition-opacity duration-200
+                text-start
+                ${open ? "opacity-100" : "opacity-0 pointer-events-none w-0"}
               `}
             >
-              {lang === "fa" ? title?.fa : title?.en}
+              {lang === "fa" ? card.title.fa : card.title.en}
             </span>
-          </NavLink>
+          </button>
         ))}
       </nav>
 
-      <UserMenu isSidebarOpen={open} />
+      <MemoizedUserMenu isSidebarOpen={open} />
+
+      {modalNode}
     </aside>
   );
 }
