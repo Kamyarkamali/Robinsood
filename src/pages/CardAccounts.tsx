@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { HiOutlineArrowLeft } from "react-icons/hi2";
 import { FaFlag } from "react-icons/fa6";
 import {
   BsCheckCircleFill,
@@ -31,7 +30,7 @@ const useIsMobile = () => {
 function CardAccounts() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const isMobile = useIsMobile();
-  const displayCount = isMobile ? 1 : 2;
+  const displayCount = isMobile ? 1 : 3;
   const [active, setActive] = useState<string | null>("1002025415");
 
   const statusConfig = {
@@ -124,7 +123,7 @@ function CardAccounts() {
                   />
 
                   <div className="relative flex flex-col xl:flex-row h-full">
-                    <div className="w-full bg-transparent xl:w-28 flex items-center justify-center p-3">
+                    <div className="w-full bg-transparent xl:w-25 flex items-center justify-center p-3">
                       <img
                         src={account.icon}
                         alt={
@@ -219,7 +218,7 @@ function CardAccounts() {
                           #{account.id}
                         </span>
 
-                        <Link
+                        {/* <Link
                           to={`/accounts/${account.id}`}
                           className="
                             h-8
@@ -244,7 +243,7 @@ function CardAccounts() {
                           "
                         >
                           <HiOutlineArrowLeft size={16} />
-                        </Link>
+                        </Link> */}
                       </div>
                     </div>
                   </div>

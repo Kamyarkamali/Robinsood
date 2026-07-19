@@ -14,7 +14,11 @@ const AccountSection = () => {
     return <h1>404</h1>;
   }
 
-  return <Component />;
+  return (
+    <>
+      <Component />
+    </>
+  );
 };
 
 export default AccountSection;

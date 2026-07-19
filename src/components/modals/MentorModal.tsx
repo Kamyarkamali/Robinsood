@@ -41,7 +41,6 @@ function MentorModal() {
           shadow-xl
         "
       >
-        {/* هنگام اتصال بک‌اند این بخش را با تگ video جایگزین کنید */}
         <div className="flex justify-center">
           <div
             className="

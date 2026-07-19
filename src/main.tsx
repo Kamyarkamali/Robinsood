@@ -6,14 +6,17 @@ import "./i18n/index.ts";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter } from "react-router-dom";
 import { UserProvider } from "./context/UserContext.tsx";
+import { ModalProvider } from "./context/ModalContext.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <UserProvider>
-      <BrowserRouter>
-        <App />
-        <Toaster position="bottom-left" />
-      </BrowserRouter>
-    </UserProvider>
+    <ModalProvider>
+      <UserProvider>
+        <BrowserRouter>
+          <App />
+          <Toaster position="bottom-left" />
+        </BrowserRouter>
+      </UserProvider>
+    </ModalProvider>
   </StrictMode>,
 );

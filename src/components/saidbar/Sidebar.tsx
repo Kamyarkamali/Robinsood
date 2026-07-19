@@ -8,7 +8,7 @@ import UserMenu from "../../module/UserMenu";
 import i18next from "i18next";
 
 export default function Sidebar() {
-  const [open, setOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
 
@@ -18,7 +18,6 @@ export default function Sidebar() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
     };
-    console.log(window.innerWidth);
 
     checkMobile();
     window.addEventListener("resize", checkMobile);
@@ -153,7 +152,7 @@ export default function Sidebar() {
   return (
     <aside
       className={`
-        ${open ? "w-72" : "w-24"}
+        ${open ? "w-58" : "w-24"}
         relative
         text-gray-500
         transition-all
@@ -180,7 +179,7 @@ export default function Sidebar() {
              ${
                lang === "fa"
                  ? open
-                   ? "-translate-x-61"
+                   ? "-translate-x-48"
                    : "-translate-x-14"
                  : open
                    ? "translate-x-63"

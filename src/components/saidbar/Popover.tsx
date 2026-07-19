@@ -1,6 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { HiOutlineArrowLeft } from "react-icons/hi2";
-import { Link } from "react-router-dom";
 import { FaFlag } from "react-icons/fa6";
 import { IoCloseOutline } from "react-icons/io5";
 import {
@@ -284,8 +283,8 @@ const Popover: React.FC<PopoverProps> = ({ account, children, lang }) => {
               </div>
 
               {/* دکمه انتقال */}
-              <Link
-                to={`/accounts/${account.id}`}
+              <div
+                // to={`/accounts/${account.id}`}
                 onClick={() => setIsOpen(false)}
                 className="
                   w-full
@@ -309,7 +308,7 @@ const Popover: React.FC<PopoverProps> = ({ account, children, lang }) => {
               >
                 <span>{lang === "fa" ? "مشاهده جزئیات" : "View Details"}</span>
                 <HiOutlineArrowLeft size={18} />
-              </Link>
+              </div>
             </div>
           </div>
         </>
