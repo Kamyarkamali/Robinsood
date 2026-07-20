@@ -73,6 +73,7 @@ function CardAccounts() {
           </h2>
 
           <Link
+            id="home2"
             to="/accounts"
             onClick={(e) => {
               e.preventDefault();

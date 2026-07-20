@@ -232,10 +232,7 @@ export default function TradingDualChart() {
   const yTick = (v: number) => (isRtl ? toFaNum(v) : String(v));
 
   return (
-    <div
-      dir={i18next.language === "fa" ? "ltr" : "rtl"}
-      className="step-test40 mt-3"
-    >
+    <div id="date4" className="step-test40 mt-3">
       <div
         className="mx-auto rounded-2xl border-4
         dark:border-[#3C3C3C]
@@ -245,7 +242,10 @@ export default function TradingDualChart() {
           {/* ردیف اول: دراپ‌داون‌ها */}
           <div className="flex flex-wrap items-center justify-center gap-2">
             {/* دکمه اول */}
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5">
+            <div
+              id="date5"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5"
+            >
               <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 {currentLang === "fa" ? "محور اول:" : "Axis 1:"}
               </span>
@@ -259,7 +259,10 @@ export default function TradingDualChart() {
             </div>
 
             {/* دکمه دوم */}
-            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5">
+            <div
+              id="date6"
+              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5"
+            >
               <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 {currentLang === "fa" ? "محور دوم:" : "Axis 2:"}
               </span>
@@ -274,7 +277,7 @@ export default function TradingDualChart() {
           </div>
 
           {/* ردیف دوم: دکمه‌های دوره */}
-          <div className="flex items-center justify-center">
+          <div id="date7" className="flex items-center justify-center">
             <div
               className="
                 flex overflow-hidden rounded-2xl border

@@ -37,7 +37,8 @@ export const cardInner =
   "flex items-center justify-center " +
   "dark:bg-gradient-to-t dark:from-[#222222] shadow-lg dark:to-[#303030] dark:text-white dark:border-transparent dark:shadow-xl" +
   "shadow-[0px_4px_8px_rgba(0,0,0,0.12)] " +
-  "dark:shadow-[0px_4px_8px_rgba(0,0,0,0.6)] ";
+  "dark:shadow-[0px_4px_8px_rgba(0,0,0,0.6)] " +
+  "step-title";
 // "shadow-[inset_6px_6px_14px_rgba(0,0,0,0.12),inset_-6px_-6px_14px_rgba(255,255,255,0.6),0_18px_35px_-12px_rgba(0,0,0,0.25)] " +
 // "dark:shadow-[inset_6px_6px_14px_rgba(0,0,0,0.4),inset_-4px_-4px_10px_rgba(255,255,255,0.05),0_20px_40px_-12px_rgba(0,0,0,0.7)]";
 // ---------------------------------------------------------------------------------------------------

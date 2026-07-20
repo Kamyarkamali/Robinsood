@@ -12,6 +12,7 @@ interface DonutChartProps {
 export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
   return (
     <div
+      id="detailse18"
       className="
       border-4
         w-full

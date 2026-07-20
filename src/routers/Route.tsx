@@ -29,7 +29,7 @@ function Route() {
     const theme = document.documentElement.classList.contains("dark")
       ? "dark"
       : "light";
-
+    // @ts-ignore
     createAppTour(lang, theme).drive();
   };
 

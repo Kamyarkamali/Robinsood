@@ -137,12 +137,15 @@ function WeeklyReportPanel() {
 
   return (
     <CardShell
-      dir={i18n.language === "fa" ? "ltr" : "rtl"}
+      dir={i18n.language ? "ltr" : "rtl"}
       className="flex flex-col h-full border-4
         dark:border-[#3C3C3C]
         border-gray-300"
     >
-      <div className="flex  items-center justify-between mb-4 gap-2 flex-wrap">
+      <div
+        id="detailse5"
+        className="flex  items-center justify-between mb-4 gap-2 flex-wrap"
+      >
         <div
           className="flex items-center gap-2 order-2 p-3 rounded-2xl dark:bg-linear-to-b
         dark:from-[#353535]
@@ -161,6 +164,7 @@ function WeeklyReportPanel() {
           </button>
 
           <button
+            id="detailse6"
             onClick={() => setTab("risk")}
             className={`text-xs sm:text-sm step-test24 cursor-pointer font-medium px-3 py-1.5 rounded-full transition-colors ${
               tab === "risk"

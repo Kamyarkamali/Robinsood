@@ -18,10 +18,6 @@ import {
   HiOutlineUserGroup,
 } from "react-icons/hi2";
 
-interface SidebarProps {
-  onStartTour?: () => void;
-}
-
 const MemoizedProfileSidbar = memo(ProfileSidbar);
 const MemoizedUserMenu = memo(UserMenu);
 const MemoizedModal = memo(Modal);
@@ -47,20 +43,16 @@ function debounce<T extends (...args: any[]) => any>(
   return debounced;
 }
 
-export default function Sidebar({ onStartTour }: SidebarProps) {
+export default function Sidebar() {
   const [open, setOpen] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
   const [modalType, setModalType] = useState<ModalType>(null);
-
   const lang = i18next.language;
 
-  const handleStartTour = useCallback(() => {
+  const handleCloseModal = useCallback(() => {
     setModalType(null);
-    setTimeout(() => {
-      onStartTour?.();
-    }, 500);
-  }, [onStartTour]);
+  }, []);
 
   const cards = useMemo(
     () => [
@@ -97,15 +89,15 @@ export default function Sidebar({ onStartTour }: SidebarProps) {
       {
         type: "education" as const,
         step: "step-education",
-        component: <EducationModalContent onStartTour={handleStartTour} />,
+        component: <EducationModalContent onClose={handleCloseModal} />,
         icon: HiOutlineAcademicCap,
         title: {
-          fa: "آموزش و راهنما",
+          fa: "آموزش و راهنما صفحه اصلی",
           en: "Education & Guide",
         },
       },
     ],
-    [handleStartTour],
+    [],
   );
 
   const currentCard = useMemo(
@@ -123,10 +115,6 @@ export default function Sidebar({ onStartTour }: SidebarProps) {
 
   const handleSetModalType = useCallback((type: ModalType) => {
     setModalType(type);
-  }, []);
-
-  const handleCloseModal = useCallback(() => {
-    setModalType(null);
   }, []);
 
   const handleToggleSidebar = useCallback(() => {

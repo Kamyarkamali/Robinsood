@@ -263,8 +263,6 @@ const CandleBar = ({
 
 const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
-
-  // پیدا کردن داده کامل برای نمایش زمان دقیق‌تر
   const fullTime = label;
 
   return (
@@ -488,6 +486,7 @@ export default function TradingChart() {
         {t("labels.parametr4")}
       </h1>
       <div
+        id="chart4"
         dir={isRtl ? "rtl" : "ltr"}
         className="
         w-full
@@ -510,6 +509,7 @@ export default function TradingChart() {
       >
         <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
           <div
+            id="chart1"
             className={`flex items-center gap-1 sm:gap-2 flex-wrap ${
               isRtl ? "flex-row-reverse" : ""
             }`}
@@ -561,6 +561,7 @@ export default function TradingChart() {
           </div>
 
           <div
+            id="chart2"
             dir={i18next.language === "fa" ? "ltr" : "rtl"}
             className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${
               isRtl ? "flex-row-reverse" : ""
@@ -843,6 +844,7 @@ export default function TradingChart() {
 
         {settings.display.showLegend && (
           <div
+            id="chart3"
             className={`flex step-test22 flex-wrap justify-center gap-x-1.5 sm:gap-x-5 gap-y-0.5 sm:gap-y-2 ${
               isRtl ? "flex-row-reverse" : ""
             }`}

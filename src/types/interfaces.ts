@@ -544,6 +544,7 @@ export interface TourStep {
   id: string;
   element: string;
   side?: "top" | "right" | "bottom" | "left";
+  scope: string;
 
   title: {
     fa: string;

@@ -3,6 +3,7 @@ import DashboardLayout from "../layout/DashboardLayout";
 import MyAccounts from "./MyAccounts";
 import AllAccounts from "./AllAccounts";
 import AccountSection from "./AccountSections/AccountSection";
+import DashboardWindows from "../components/modals/DashboardWindows";
 
 function HomePage() {
   return (
@@ -15,7 +16,8 @@ function HomePage() {
           <Route path="/account/:section" element={<AccountSection />} />
         </Route>
       </Routes>
-
+      {/* @ts-ignore */}
+      <DashboardWindows />
       {/* <HomePageTest /> */}
     </>
   );

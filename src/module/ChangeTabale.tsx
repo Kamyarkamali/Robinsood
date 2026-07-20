@@ -10,6 +10,7 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
           {t("labels.parametr6")}
         </h1>
         <div
+          id="detailse1"
           className="
         w-full max-w-55
         flex items-center
@@ -24,6 +25,7 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
       "
         >
           <button
+            id="detailse2"
             onClick={() => setShowTabale("عددی")}
             className={`
           flex-1
@@ -49,6 +51,7 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
           </button>
 
           <button
+            id="detailse3"
             onClick={() => setShowTabale("نمودار")}
             className={`
           flex-1

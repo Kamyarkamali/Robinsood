@@ -195,6 +195,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
       </h1>
 
       <div
+        id="tabale1"
         ref={rootRef}
         className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] step-test43 rounded-2xl border-4
         dark:border-[#3C3C3C]

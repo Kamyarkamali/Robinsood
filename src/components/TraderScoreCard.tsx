@@ -414,6 +414,7 @@ export default function TraderScoreCard() {
 
   return (
     <div
+      id="detailse14"
       dir={isRtl ? "ltr" : "rtl"}
       className="
         w-full
@@ -461,6 +462,7 @@ export default function TraderScoreCard() {
           >
             <div className="flex flex-col gap-4 h-full justify-between ">
               <div
+                id="detailse15"
                 className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
     rounded-2xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
@@ -480,6 +482,7 @@ export default function TraderScoreCard() {
           </div>
         </div>
         <div
+          id="detailse16"
           className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
     rounded-2xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
@@ -509,6 +512,7 @@ export default function TraderScoreCard() {
       </div>
 
       <div
+        id="detailse17"
         className="
           bg-white
           dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]  rounded-2xl

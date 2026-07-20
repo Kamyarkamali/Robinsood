@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { componentMap } from "../../configs/componentMap";
 import AccountNavbar from "../../module/AccountNavbar";
+import type { TourScope } from "../../components/tour/tourSteps";
 
 const AccountSection = () => {
   const { section } = useParams<{ section: string }>();
@@ -17,7 +18,7 @@ const AccountSection = () => {
 
   return (
     <div>
-      <AccountNavbar />
+      <AccountNavbar scope={section as TourScope} />
 
       <div id="account-pdf">
         <Component />

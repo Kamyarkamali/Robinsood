@@ -26,8 +26,9 @@ export default function ChallengeGrid() {
       <h1 className="md:text-2xl text-md font-bold px-4 mb-4 mt-4">
         {t("labels.parametr2")}
       </h1>
-      <div className="flex items-center gap-3 px-4 mb-4 mt-3">
+      <div className="flex items-center gap-3 px-4 mb-4 mt-3 ">
         <button
+          id="today1"
           onClick={() => toggle("active")}
           className={`
       relative flex items-center step-test11 gap-2 px-4 py-2 rounded-xl
@@ -51,6 +52,7 @@ export default function ChallengeGrid() {
         </button>
 
         <button
+          id="today2"
           onClick={() => toggle("inactive")}
           className={`
       relative flex items-center step-test12 gap-2 px-4 py-2 rounded-xl
@@ -73,7 +75,10 @@ export default function ChallengeGrid() {
           {t("btn.inactive")}
         </button>
       </div>
-      <div className="grid grid-cols-1 step-test13 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 p-2 sm:p-3 lg:p-4 w-full place-items-center">
+      <div
+        id="today3"
+        className="grid grid-cols-1 step-test13 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3 sm:gap-4 lg:gap-5 p-2 sm:p-3 lg:p-4 w-full place-items-center"
+      >
         {challengeCards
           .filter((card) => {
             if (hidden.active && card.status === "active") return false;

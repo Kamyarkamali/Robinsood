@@ -3,12 +3,8 @@ import { cards } from "../../data/fakeData";
 import { type FC } from "react";
 import type { ComponentState } from "../../types/interfaces";
 import { Link } from "react-router-dom";
-import DashboardWindows from "./DashboardWindows";
 
-const DashboardCards: FC<ComponentState> = ({
-  activeComponent,
-  setActiveComponent,
-}) => {
+const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
 
@@ -154,10 +150,6 @@ const DashboardCards: FC<ComponentState> = ({
           );
         })}
       </div>
-      <DashboardWindows
-        activeComponent={activeComponent}
-        setActiveComponent={setActiveComponent}
-      />
     </section>
   );
 };

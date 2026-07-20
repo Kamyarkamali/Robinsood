@@ -90,7 +90,7 @@ function CardComponent({ onStartTour }: CardComponentProps) {
       {
         type: "education" as const,
         step: "step-education",
-        component: <EducationModalContent onStartTour={handleStartTour} />,
+        component: <EducationModalContent onClose={handleStartTour} />,
         title: {
           fa: "آموزش و راهنما",
           en: "Education & Guide",

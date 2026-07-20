@@ -118,11 +118,14 @@ export default function VSComparison() {
 
   return (
     <>
-      <h1 className="md:text-2xl text-md font-bold px-4 mt-3 mb-3">
+      <h1 className="md:text-2xl text-fmd font-bold px-4 mt-3 mb-3">
         {t("labels.parametr12")}
       </h1>
 
-      <div className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] w-full max-w-8xl rounded-2xl mt-3 border-4 dark:border-[#3C3C3C] border-gray-300 mx-auto text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6">
+      <div
+        id="com1"
+        className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] w-full max-w-8xl rounded-2xl mt-3 border-4 dark:border-[#3C3C3C] border-gray-300 mx-auto text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"
+      >
         <div className="w-full max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-4">
           {/* HEADER */}
           <div className="flex items-center justify-between">
@@ -148,7 +151,10 @@ export default function VSComparison() {
           </div>
 
           {/* FILTER */}
-          <div className="w-full flex justify-center sticky top-2 z-20">
+          <div
+            id="com2"
+            className="w-full flex justify-center sticky top-2 z-20"
+          >
             <div className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-3 gap-1 shadow-xl">
               {comparisonTabs.map((item) => (
                 <button
@@ -156,7 +162,7 @@ export default function VSComparison() {
                   onClick={() => setComparisonType(item.id as any)}
                   className={`px-4 py-3 rounded-2xl text-sm font-normal transition-all duration-300 ${
                     comparisonType === item.id
-                      ? "bg-gradient-to-r from-[#6D28D9] to-[#9333EA] text-white shadow-lg"
+                      ? "bg-linear-to-r from-[#6D28D9] to-[#9333EA] text-white shadow-lg"
                       : "text-gray-400 hover:text-white hover:bg-[#313131]"
                   }`}
                 >
@@ -167,7 +173,7 @@ export default function VSComparison() {
           </div>
 
           {/* METRICS */}
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div id="com3" className="flex flex-col lg:flex-row gap-4">
             <MetricSection
               title={
                 i18n.language === "fa"

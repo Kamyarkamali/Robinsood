@@ -248,7 +248,7 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
           <section className="flex flex-col items-center">
             <button
               onClick={() => setMenu(!menu)}
-              className="transition-transform duration-300"
+              className="transition-transform duration-300 cursor-pointer"
             >
               {menu ? <IoMdClose size={25} /> : <IoMdMenu size={25} />}
             </button>

@@ -24,7 +24,7 @@ function InformationAccount() {
       <div className="w-full flex flex-wrap items-center justify-center gap-6 p-4">
         <div className={cardOuter}>
           <div className={cardInner}>
-            <div className="flex step-test8 flex-col w-full gap-2.5 font-normal pr-2 pb-1">
+            <div className="flex flex-col w-full gap-2.5 font-normal pr-2 pb-1">
               <div className="grid grid-cols-3 sm:grid-cols-3 w-full text-center items-stretch gap-3 sm:gap-4">
                 <div className="flex flex-col items-center justify-center gap-2 py-1.5">
                   <div
@@ -122,7 +122,7 @@ function InformationAccount() {
         </div>
 
         <div className={cardOuter}>
-          <div className={cardInner}>
+          <div className={cardInner} id="step-title2">
             <div className="flex flex-col step-test9 w-full gap-2 font-normal">
               <div className="flex items-start justify-between w-full px-1.5 xs:px-2 sm:px-3 gap-1.5 xs:gap-2 sm:gap-3">
                 <div className="flex flex-col items-start gap-1 min-w-0 flex-1">
@@ -157,17 +157,9 @@ function InformationAccount() {
                     <p className="text-[8px] xs:text-[9px] sm:text-[10px] md:text-[13px] dark:text-white text-center font-semibold whitespace-nowrap">
                       {i18next.language === "fa" ? "رابین هودی" : "Robin Hood"}
                     </p>
-                    {/* <div className="w-5 h-5 xs:w-6 xs:h-6 sm:w-7 sm:h-7 rounded-lg xs:rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-105 bg-gradient-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] hover:shadow-[2px_2px_5px_#c8cdd6,_-2px_-2px_5px_#ffffff] dark:hover:shadow-[2px_2px_5px_#1f1f1f,_-2px_-2px_5px_#3d3d3d] flex-shrink-0">
-                    </div> */}
                   </div>
 
                   <div className="flex items-center gap-0.5 xs:gap-1"></div>
-
-                  {/* <p className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-semibold text-gray-500 dark:text-[#FF383C] leading-tight text-right whitespace-normal max-w-[80px] xs:max-w-[100px] sm:max-w-[130px]">
-                    {i18next.language === "fa"
-                      ? "گذر از روز های معاملاتی"
-                      : "Trading Days Requirement Not Met"}
-                  </p> */}
                 </div>
               </div>
 
@@ -181,27 +173,14 @@ function InformationAccount() {
                     {i18next.language === "fa" ? "مرحله ۱" : "Phase 1"}
                   </p>
                 </div>
-
-                {/* <div className="flex items-center gap-1 xs:gap-1.5 sm:gap-2 px-1.5 xs:px-2 sm:px-2.5 py-0.5 xs:py-1 sm:py-1 rounded-lg xs:rounded-xl">
-                  <p className="text-[7px] xs:text-[8px] sm:text-[10px] md:text-[12px] text-gray-600 dark:text-gray-300 whitespace-nowrap font-normal">
-                    <span className="text-gray-800 dark:text-white font-medium">
-                      ۱۴۰۴/۱۰/۲۲
-                    </span>
-                    <span className="hidden xs:inline"> — </span>
-                    <span className="text-gray-800 dark:text-white font-medium">
-                      18:13:25
-                    </span>
-                  </p>
-                  <FiCalendar className="text-blue-500 dark:text-blue-400 w-2.5 h-2.5 xs:w-3 xs:h-3 sm:w-3.5 sm:h-3.5 shrink-0" />
-                </div> */}
               </div>
             </div>
           </div>
         </div>
 
         <div className={cardOuter}>
-          <div className={cardInner}>
-            <div className="flex step-test10 flex-col w-full gap-4 font-normal">
+          <div className={cardInner} id="step-title3">
+            <div className="flex flex-col w-full gap-4 font-normal">
               <div className="flex items-start justify-between w-full px-2 sm:px-3 md:px-5">
                 <div
                   className="flex flex-col items-start gap-1 cursor-pointer group flex-1 min-w-0"

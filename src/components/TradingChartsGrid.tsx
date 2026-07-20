@@ -7,6 +7,7 @@ const TradingChartsGrid: React.FC = () => {
     <div className="mx-auto w-full">
       <div className="w-full step-test15  h-full rounded-[25px] border-4 dark:border-white/10 border-gray-400 dark:bg-[#242424] p-4 sm:p-6">
         <div
+          id="order2"
           className="
         grid
         grid-cols-1

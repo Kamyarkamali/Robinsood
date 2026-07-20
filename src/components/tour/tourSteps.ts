@@ -1,5 +1,3 @@
-import type { TourStep } from "../../types/interfaces";
-
 // توضیحات
 // -----------------------------------------------------------------
 // جناب حریقی برای تغیر موارد آموزش این موارد رو لحاظ بفرماید:برای عنوان آموزش مقادیر داخل تایتل رو تغیر بدید هر دو به زبان فارسی و انگلیسی هستن
@@ -7,367 +5,1186 @@ import type { TourStep } from "../../types/interfaces";
 // آیدی و المنت تغیر نکند
 // ----------------------------------------------------------------
 
+import type { Lang } from "../../types/type";
+
+export type TourScope =
+  | "news-status"
+  | "challenge-info"
+  | "today-parameters"
+  | "evaluation-parameters"
+  | "drawdown-chart"
+  | "account-statistics"
+  | "calendar-analysis"
+  | "home"
+  | "challengeModal"
+  | "TourScope"
+  | "trades"
+  | "comparison"
+  | "ai-trading";
+
+export interface TourStep {
+  id: string;
+
+  scope: TourScope;
+
+  element: string;
+
+  order?: number;
+
+  enabled?: boolean;
+
+  side?: "top" | "bottom" | "left" | "right" | "over";
+
+  title: Record<Lang, string>;
+
+  description: Record<Lang, string>;
+}
+
 export const tourSteps: TourStep[] = [
   {
-    id: "dashboard",
-    element: ".step-pass-account",
+    id: "challenge-info-1",
+    scope: "challenge-info",
+    order: 1,
+
+    element: ".step-title",
+
     side: "bottom",
+
     title: {
-      fa: "تست1",
-      en: "test1",
+      fa: "اطلاعات چالش",
+      en: "Challenge Information",
     },
+
     description: {
-      fa: "توضیحات تست",
-      en: "desc1 test",
+      fa: "در این قسمت اطلاعات کلی چالش نمایش داده می‌شود.",
+      en: "General information about the challenge is shown here.",
     },
   },
+
   {
-    id: "chart",
-    element: ".step-support",
+    id: "challenge-info-2",
+    scope: "challenge-info",
+    order: 2,
+
+    element: "#step-title2",
+
     side: "left",
+
     title: {
-      fa: "تست2",
-      en: "test2",
+      fa: "جدول اطلاعات",
+      en: "Information Table",
     },
+
     description: {
-      fa: "اینجا عملکرد معاملات نمایش داده می‌شود.",
-      en: "Your trading performance is shown here.",
+      fa: "تمام اطلاعات حساب در این جدول قرار دارد.",
+      en: "All account information is displayed in this table.",
+    },
+  },
+
+  {
+    id: "challenge-info-3",
+    scope: "challenge-info",
+    order: 3,
+
+    element: "#step-title3",
+
+    side: "top",
+
+    title: {
+      fa: "دانلود گزارش",
+      en: "Download Report",
+    },
+
+    description: {
+      fa: "از این قسمت می‌توانید گزارش را دانلود کنید.",
+      en: "Download the report from here.",
+    },
+  },
+
+  {
+    id: "dashboard-3",
+    scope: "today-parameters",
+    order: 4,
+
+    element: "#today1",
+
+    side: "right",
+
+    title: {
+      fa: "پارامتر",
+      en: "Mentor",
+    },
+
+    description: {
+      fa: "پارامترهای کنلرلی",
+      en: "Contact your mentor here.",
+    },
+  },
+
+  {
+    id: "dashboard-3",
+    scope: "today-parameters",
+    order: 5,
+
+    element: "#today2",
+
+    side: "right",
+
+    title: {
+      fa: "پارامتر",
+      en: "Mentor",
+    },
+
+    description: {
+      fa: "پارامترهای کنلرلی",
+      en: "Contact your mentor here.",
+    },
+  },
+
+  {
+    id: "dashboard-3",
+    scope: "today-parameters",
+    order: 6,
+
+    element: "#today3",
+
+    side: "right",
+
+    title: {
+      fa: "پارامتر",
+      en: "Mentor",
+    },
+
+    description: {
+      fa: "پارامترهای کنلرلی",
+      en: "Contact your mentor here.",
+    },
+  },
+
+  {
+    id: "dashboard-4",
+    scope: "evaluation-parameters",
+    order: 7,
+
+    element: "#order1",
+
+    side: "top",
+
+    title: {
+      fa: "ارزیابی",
+      en: "Education",
+    },
+
+    description: {
+      fa: "پارامتر ارزیابی-تست",
+      en: "Education section",
+    },
+  },
+
+  {
+    id: "dashboard-4",
+    scope: "evaluation-parameters",
+    order: 8,
+
+    element: "#order2",
+
+    side: "top",
+
+    title: {
+      fa: "ارزیابی",
+      en: "Education",
+    },
+
+    description: {
+      fa: "پارامتر ارزیابی-تست",
+      en: "Education section",
+    },
+  },
+
+  {
+    id: "account-download",
+    scope: "drawdown-chart",
+    order: 9,
+
+    element: "#chart1",
+
+    side: "bottom",
+
+    title: {
+      fa: "چارت",
+      en: "chart",
+    },
+
+    description: {
+      fa: "توضیحات چارت-تست",
+      en: "chart-test",
+    },
+  },
+
+  {
+    id: "account-download",
+    scope: "drawdown-chart",
+    order: 10,
+
+    element: "#chart2",
+
+    side: "bottom",
+
+    title: {
+      fa: "چارت",
+      en: "chart",
+    },
+
+    description: {
+      fa: "توضیحات چارت-تست",
+      en: "chart-test",
+    },
+  },
+
+  {
+    id: "account-download",
+    scope: "drawdown-chart",
+    order: 11,
+
+    element: "#chart3",
+
+    side: "bottom",
+
+    title: {
+      fa: "چارت",
+      en: "chart",
+    },
+
+    description: {
+      fa: "توضیحات چارت-تست",
+      en: "chart-test",
+    },
+  },
+
+  {
+    id: "account-download",
+    scope: "drawdown-chart",
+    order: 12,
+
+    element: "#chart4",
+
+    side: "bottom",
+
+    title: {
+      fa: "چارت",
+      en: "chart",
+    },
+
+    description: {
+      fa: "توضیحات چارت-تست",
+      en: "chart-test",
+    },
+  },
+
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 13,
+
+    element: "#detailse1",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 14,
+
+    element: "#detailse2",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
     },
   },
   {
-    id: "test3",
-    element: ".step-mentor",
-    side: "right",
-    title: { fa: "تست3", en: "test3" },
-    description: { fa: "توضیحات تست3", en: "desc3 test" },
-  },
-  {
-    id: "test4",
-    element: ".step-education",
-    side: "top",
-    title: { fa: "تست4", en: "test4" },
-    description: { fa: "توضیحات تست4", en: "desc4 test" },
-  },
-  {
-    id: "test5",
-    element: ".step-test5",
-    side: "bottom",
-    title: { fa: "تست5", en: "test5" },
-    description: { fa: "توضیحات تست5", en: "desc5 test" },
-  },
-  {
-    id: "test6",
-    element: ".step-test6",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 15,
+
+    element: "#detailse3",
+
     side: "left",
-    title: { fa: "تست6", en: "test6" },
-    description: { fa: "توضیحات تست6", en: "desc6 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
+
   {
-    id: "test7",
-    element: ".step-test7",
-    side: "right",
-    title: { fa: "تست7", en: "test7" },
-    description: { fa: "توضیحات تست7", en: "desc7 test" },
-  },
-  {
-    id: "test8",
-    element: ".step-test8",
-    side: "top",
-    title: { fa: "تست8", en: "test8" },
-    description: { fa: "توضیحات تست8", en: "desc8 test" },
-  },
-  {
-    id: "test9",
-    element: ".step-test9",
-    side: "bottom",
-    title: { fa: "تست9", en: "test9" },
-    description: { fa: "توضیحات تست9", en: "desc9 test" },
-  },
-  {
-    id: "test10",
-    element: ".step-test10",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 16,
+
+    element: "#detailse4",
+
     side: "left",
-    title: { fa: "تست10", en: "test10" },
-    description: { fa: "توضیحات تست10", en: "desc10 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
+
   {
-    id: "test11",
-    element: ".step-test11",
-    side: "right",
-    title: { fa: "تست11", en: "test11" },
-    description: { fa: "توضیحات تست11", en: "desc11 test" },
-  },
-  {
-    id: "test12",
-    element: ".step-test12",
-    side: "top",
-    title: { fa: "تست12", en: "test12" },
-    description: { fa: "توضیحات تست12", en: "desc12 test" },
-  },
-  {
-    id: "test13",
-    element: ".step-test13",
-    side: "bottom",
-    title: { fa: "تست13", en: "test13" },
-    description: { fa: "توضیحات تست13", en: "desc13 test" },
-  },
-  {
-    id: "test14",
-    element: ".step-test14",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 17,
+
+    element: "#detailse5",
+
     side: "left",
-    title: { fa: "تست14", en: "test14" },
-    description: { fa: "توضیحات تست14", en: "desc14 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test15",
-    element: ".step-test15",
-    side: "right",
-    title: { fa: "تست15", en: "test15" },
-    description: { fa: "توضیحات تست15", en: "desc15 test" },
-  },
-  {
-    id: "test16",
-    element: ".step-test16",
-    side: "top",
-    title: { fa: "تست16", en: "test16" },
-    description: { fa: "توضیحات تست16", en: "desc16 test" },
-  },
-  {
-    id: "test17",
-    element: ".step-test17",
-    side: "bottom",
-    title: { fa: "تست17", en: "test17" },
-    description: { fa: "توضیحات تست17", en: "desc17 test" },
-  },
-  {
-    id: "test18",
-    element: ".step-test18",
-    side: "bottom",
-    title: { fa: "تست17", en: "test18" },
-    description: { fa: "توضیحات تست18", en: "desc18 test" },
-  },
-  {
-    id: "test19",
-    element: ".step-test19",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 18,
+
+    element: "#detailse6",
+
     side: "left",
-    title: { fa: "تست19", en: "test19" },
-    description: { fa: "توضیحات تست19", en: "desc19 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test20",
-    element: ".step-test20",
-    side: "right",
-    title: { fa: "تست20", en: "test20" },
-    description: { fa: "توضیحات تست20", en: "desc20 test" },
-  },
-  {
-    id: "test21",
-    element: ".step-test21",
-    side: "top",
-    title: { fa: "تست21", en: "test21" },
-    description: { fa: "توضیحات تست21", en: "desc21 test" },
-  },
-  {
-    id: "test22",
-    element: ".step-test22",
-    side: "bottom",
-    title: { fa: "تست22", en: "test22" },
-    description: { fa: "توضیحات تست22", en: "desc22 test" },
-  },
-  {
-    id: "test23",
-    element: ".step-test23",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 19,
+
+    element: "#detailse7",
+
     side: "left",
-    title: { fa: "تست23", en: "test23" },
-    description: { fa: "توضیحات تست23", en: "desc23 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test24",
-    element: ".step-test24",
-    side: "right",
-    title: { fa: "تست24", en: "test24" },
-    description: { fa: "توضیحات تست24", en: "desc24 test" },
-  },
-  {
-    id: "test25",
-    element: ".step-test25",
-    side: "top",
-    title: { fa: "تست25", en: "test25" },
-    description: { fa: "توضیحات تست25", en: "desc25 test" },
-  },
-  //   {
-  //     id: "test26",
-  //     element: ".step-test26",
-  //     side: "bottom",
-  //     title: { fa: "تست26", en: "test26" },
-  //     description: { fa: "توضیحات تست26", en: "desc26 test" },
-  //   },
-  //   {
-  //     id: "test27",
-  //     element: ".step-test27",
-  //     side: "left",
-  //     title: { fa: "تست27", en: "test27" },
-  //     description: { fa: "توضیحات تست27", en: "desc27 test" },
-  //   },
-  {
-    id: "test28",
-    element: ".step-test28",
-    side: "right",
-    title: { fa: "تست28", en: "test28" },
-    description: { fa: "توضیحات تست28", en: "desc28 test" },
-  },
-  {
-    id: "test29",
-    element: ".step-test29",
-    side: "top",
-    title: { fa: "تست29", en: "test29" },
-    description: { fa: "توضیحات تست29", en: "desc29 test" },
-  },
-  {
-    id: "test30",
-    element: ".step-test30",
-    side: "bottom",
-    title: { fa: "تست30", en: "test30" },
-    description: { fa: "توضیحات تست30", en: "desc30 test" },
-  },
-  {
-    id: "test31",
-    element: ".step-test31",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 20,
+
+    element: "#detailse8",
+
     side: "left",
-    title: { fa: "تست31", en: "test31" },
-    description: { fa: "توضیحات تست31", en: "desc31 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test32",
-    element: ".step-test32",
-    side: "right",
-    title: { fa: "تست32", en: "test32" },
-    description: { fa: "توضیحات تست32", en: "desc32 test" },
-  },
-  {
-    id: "test33",
-    element: ".step-test33",
-    side: "top",
-    title: { fa: "تست33", en: "test33" },
-    description: { fa: "توضیحات تست33", en: "desc33 test" },
-  },
-  {
-    id: "test34",
-    element: ".step-test34",
-    side: "bottom",
-    title: { fa: "تست34", en: "test34" },
-    description: { fa: "توضیحات تست34", en: "desc34 test" },
-  },
-  {
-    id: "test35",
-    element: ".step-test35",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 21,
+
+    element: "#detailse9",
+
     side: "left",
-    title: { fa: "تست35", en: "test35" },
-    description: { fa: "توضیحات تست35", en: "desc35 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test36",
-    element: ".step-test36",
-    side: "right",
-    title: { fa: "تست36", en: "test36" },
-    description: { fa: "توضیحات تست36", en: "desc36 test" },
-  },
-  {
-    id: "test37",
-    element: ".step-test37",
-    side: "top",
-    title: { fa: "تست37", en: "test37" },
-    description: { fa: "توضیحات تست37", en: "desc37 test" },
-  },
-  {
-    id: "test38",
-    element: ".step-test38",
-    side: "bottom",
-    title: { fa: "تست38", en: "test38" },
-    description: { fa: "توضیحات تست38", en: "desc38 test" },
-  },
-  {
-    id: "test39",
-    element: ".step-test39",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 22,
+
+    element: "#detailse10",
+
     side: "left",
-    title: { fa: "تست39", en: "test39" },
-    description: { fa: "توضیحات تست39", en: "desc39 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
+
   {
-    id: "test40",
-    element: ".step-test40",
-    side: "right",
-    title: { fa: "تست40", en: "test40" },
-    description: { fa: "توضیحات تست40", en: "desc40 test" },
-  },
-  {
-    id: "test41",
-    element: ".step-test41",
-    side: "top",
-    title: { fa: "تست41", en: "test41" },
-    description: { fa: "توضیحات تست41", en: "desc41 test" },
-  },
-  {
-    id: "test42",
-    element: ".step-test42",
-    side: "bottom",
-    title: { fa: "تست42", en: "test42" },
-    description: { fa: "توضیحات تست42", en: "desc42 test" },
-  },
-  {
-    id: "test43",
-    element: ".step-test43",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 23,
+
+    element: "#detailse11",
+
     side: "left",
-    title: { fa: "تست43", en: "test43" },
-    description: { fa: "توضیحات تست43", en: "desc43 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test44",
-    element: ".step-test44",
-    side: "right",
-    title: { fa: "تست44", en: "test44" },
-    description: { fa: "توضیحات تست44", en: "desc44 test" },
-  },
-  {
-    id: "test45",
-    element: ".step-test45",
-    side: "top",
-    title: { fa: "تست45", en: "test45" },
-    description: { fa: "توضیحات تست45", en: "desc45 test" },
-  },
-  {
-    id: "test46",
-    element: ".step-test46",
-    side: "bottom",
-    title: { fa: "تست46", en: "test46" },
-    description: { fa: "توضیحات تست46", en: "desc46 test" },
-  },
-  {
-    id: "test47",
-    element: ".step-test47",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 24,
+
+    element: "#detailse12",
+
     side: "left",
-    title: { fa: "تست47", en: "test47" },
-    description: { fa: "توضیحات تست47", en: "desc47 test" },
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 25,
+
+    element: "#detailse13",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 26,
+
+    element: "#detailse14",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test48",
-    element: ".step-test48",
-    side: "right",
-    title: { fa: "تست48", en: "test48" },
-    description: { fa: "توضیحات تست48", en: "desc48 test" },
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 27,
+
+    element: "#detailse15",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test49",
-    element: ".step-test49",
-    side: "top",
-    title: { fa: "تست49", en: "test49" },
-    description: { fa: "توضیحات تست49", en: "desc49 test" },
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 28,
+
+    element: "#detailse16",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
   },
   {
-    id: "test50",
-    element: ".step-test50",
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 29,
+
+    element: "#detailse17",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 30,
+
+    element: "#detailse18",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 31,
+
+    element: "#detailse19",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+  {
+    id: "account-chart",
+    scope: "account-statistics",
+    order: 32,
+
+    element: "#detailse20",
+
+    side: "left",
+
+    title: {
+      fa: "آمار",
+      en: "Chart",
+    },
+
+    description: {
+      fa: "آمار-تست",
+      en: "Trading chart.",
+    },
+  },
+  // ================= Modal =================
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 33,
+
+    element: "#date1",
+
     side: "bottom",
-    title: { fa: "تست50", en: "test50" },
-    description: { fa: "توضیحات تست50", en: "desc50 test" },
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 34,
+
+    element: "#date2",
+
+    side: "bottom",
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 35,
+
+    element: "#date3",
+
+    side: "bottom",
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 36,
+
+    element: "#date4",
+
+    side: "bottom",
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 37,
+
+    element: "#date5",
+
+    side: "bottom",
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 38,
+
+    element: "#date6",
+
+    side: "bottom",
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-title",
+    scope: "calendar-analysis",
+    order: 39,
+
+    element: "#date7",
+
+    side: "bottom",
+
+    title: {
+      fa: "تقویمی",
+      en: "Modal",
+    },
+
+    description: {
+      fa: "تحلیل تقویمی",
+      en: "This is the first modal section.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 40,
+
+    element: "#tabale1",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 41,
+
+    element: "#tabale2",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 42,
+
+    element: "#tabale3",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 43,
+
+    element: "#tabale4",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 44,
+
+    element: "#tabale5",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 45,
+
+    element: "#tabale6",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "news-status",
+    order: 46,
+
+    element: "#tabale7",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "ai-trading",
+    order: 47,
+
+    element: "#ai",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "comparison",
+    order: 48,
+
+    element: "#com1",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+  {
+    id: "modal-submit",
+    scope: "comparison",
+    order: 49,
+
+    element: "#com2",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+  {
+    id: "modal-submit",
+    scope: "comparison",
+    order: 50,
+
+    element: "#com3",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "comparison",
+    order: 51,
+
+    element: "#com4",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "trades",
+    order: 52,
+
+    element: "#trade1",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "trades",
+    order: 53,
+
+    element: "#trade2",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "trades",
+    order: 54,
+
+    element: "#trade3",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  // آموزش صفحه اصلی
+  {
+    id: "modal-submit",
+    scope: "home",
+    order: 55,
+
+    element: "#home1",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "home",
+    order: 56,
+
+    element: "#home2",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "home",
+    order: 57,
+
+    element: "#home3",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
+  },
+
+  {
+    id: "modal-submit",
+    scope: "home",
+    order: 58,
+
+    element: "#home4",
+
+    side: "top",
+
+    title: {
+      fa: "ثبت",
+      en: "Submit",
+    },
+
+    description: {
+      fa: "برای ثبت اطلاعات روی این دکمه کلیک کنید.",
+      en: "Click here to submit.",
+    },
   },
 ];

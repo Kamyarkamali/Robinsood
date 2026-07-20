@@ -54,6 +54,7 @@ export default function CartFacke() {
 
   return (
     <div
+      id="com4"
       dir={isRtl ? "rtl" : "ltr"}
       className="w-full dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] "
     >

@@ -1,15 +1,26 @@
 import { HiOutlineAcademicCap } from "react-icons/hi2";
 import AccountPdfButton from "./DownloadPdfButton";
 import i18next from "i18next";
-
-const AccountNavbar = () => {
+import { createAppTour } from "../components/tour/appTour";
+import type { Lang } from "../types/type";
+import type { TourScope } from "../components/tour/tourSteps";
+interface AccountNavbarProps {
+  scope: TourScope;
+}
+const AccountNavbar = ({ scope }: AccountNavbarProps) => {
   const lang = i18next.language;
+
+  const theme: "dark" | "light" = "dark";
+
+  const handleStartTour = () => {
+    createAppTour(lang as Lang, theme, scope).drive();
+  };
 
   return (
     <nav
       dir="ltr"
       className="
-        sticky top-4 z-50
+        sticky top-0 z-20
         mx-auto mb-5
         flex w-full max-w-7xl
         items-center justify-between
@@ -24,6 +35,7 @@ const AccountNavbar = () => {
       "
     >
       <button
+        onClick={handleStartTour}
         className="
           group
           mt-5

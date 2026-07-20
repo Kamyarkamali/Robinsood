@@ -12,7 +12,7 @@ function ProfitFactorCard() {
          step-test29 flex items-center justify-center h-full rounded-2xl"
     >
       <div className="flex flex-col gap-3 items-start justify-between">
-        <h3 className="font-normal text-center w-full dark:text-[#ffffff] text-gray-500 text-sm md:text-[24px]">
+        <h3 className="font-normal text-center w-full dark:text-[#ffffff] text-gray-500 text-sm md:text-[20px]">
           {t("cart5.profit")}
         </h3>
 
@@ -40,7 +40,7 @@ function ProfitFactorCard() {
         <div className="relative w-37.5 h-37.5 flex items-center justify-center">
           <FullDonut
             winPercent={profitFactor.winPercent}
-            size={150}
+            size={190}
             strokeWidth={14}
           />
 
@@ -48,7 +48,7 @@ function ProfitFactorCard() {
             <Pill tone="red">{profitFactor.lossLabel}</Pill>
           </div>
 
-          <div className="absolute top-10 -right-11">
+          <div className="absolute top-10 -right-10">
             <Pill tone="green">{profitFactor.winLabel}</Pill>
           </div>
         </div>

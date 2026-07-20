@@ -17,7 +17,9 @@ function DetailseAccount() {
           <TradingPanel />
         </>
       ) : (
-        <TradingStatsTable />
+        <section>
+          <TradingStatsTable />
+        </section>
       )}
     </section>
   );

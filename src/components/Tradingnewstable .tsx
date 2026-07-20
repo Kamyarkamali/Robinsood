@@ -111,6 +111,7 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
 
   return (
     <div
+      id="tabale2"
       dir={i18next.language === "fa" ? "rtl" : "ltr"}
       className="bg-gray-50 step-test44 rounded-2xl mt-3 border-4
       dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
@@ -119,13 +120,16 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
     >
       <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
         <div className="flex step-test45 items-center gap-3 flex-wrap w-full md:w-auto">
-          <FilterButtons
-            impactFilter={impactFilter}
-            onFilterChange={setImpactFilter}
-            lang={lang}
-          />
+          <section id="tabale3">
+            <FilterButtons
+              impactFilter={impactFilter}
+              onFilterChange={setImpactFilter}
+              lang={lang}
+            />
+          </section>
 
           <button
+            id="tabale4"
             onClick={() => setTradeInNews((v) => !v)}
             className="flex justify-center w-full sm:w-45 h-15 dark:bg-linear-to-r items-center gap-2 font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] border border-gray-300 dark:border-white/10 rounded-full px-3.5 py-1.5 text-gray-700 dark:text-gray-300 text-[14px] cursor-pointer hover:bg-gray-200 dark:hover:bg-white/10 transition"
           >
@@ -163,7 +167,10 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 mb-4 p-3 bg-white/50 dark:bg-white/5 rounded-xl border border-gray-200/50 dark:border-white/5">
+      <div
+        id="tabale6"
+        className="flex flex-wrap items-center gap-3 mb-4 p-3 bg-white/50 dark:bg-white/5 rounded-xl border border-gray-200/50 dark:border-white/5"
+      >
         <DateRangePicker
           dateRange={dateRange}
           setDateRange={setDateRange}

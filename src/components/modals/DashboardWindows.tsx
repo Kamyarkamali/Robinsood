@@ -16,7 +16,7 @@ export default function DashboardWindows({
       className="
         fixed bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2
         z-50
-        w-full px-2
+         px-2
         flex justify-center
       "
     >

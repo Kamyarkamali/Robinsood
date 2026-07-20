@@ -578,6 +578,7 @@ export default function TradingTable() {
       </h1>
 
       <div
+        id="trade1"
         dir={isRtl ? "rtl" : "ltr"}
         className="w-full step-test51 mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
         dark:border-[#3C3C3C] border-gray-300"
@@ -598,7 +599,11 @@ export default function TradingTable() {
               />
             </div>
 
-            <div className="relative shrink-0 w-full lg:w-auto" ref={filterRef}>
+            <div
+              className="relative shrink-0 w-full lg:w-auto"
+              ref={filterRef}
+              id="trade2"
+            >
               <button
                 onClick={() => setIsFilterOpen((v) => !v)}
                 className="flex items-center justify-center w-full lg:w-auto gap-2 px-4 py-2 rounded-xl border border-gray-300 dark:border-[#4a4a4a] bg-gray-50 dark:bg-[#3a3a3a] text-gray-700 dark:text-gray-200 text-sm hover:bg-gray-100 dark:hover:bg-[#4a4a4a] transition-colors"
@@ -975,7 +980,10 @@ export default function TradingTable() {
 
           {/* صفحه‌بندی / Pagination */}
           {totalPages > 1 && (
-            <div className="flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-[#3a3a3a] gap-3 flex-wrap">
+            <div
+              id="trade3"
+              className="flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-[#3a3a3a] gap-3 flex-wrap"
+            >
               <span className="text-[11px] text-gray-400 dark:text-gray-500 text-center sm:text-left">
                 {isRtl
                   ? `صفحه ${currentPage + 1} از ${totalPages}`

@@ -12,7 +12,7 @@ function MyAccounts() {
     const theme = document.documentElement.classList.contains("dark")
       ? "dark"
       : "light";
-
+    // @ts-ignore
     createAppTour(lang, theme).drive();
   };
 
@@ -21,13 +21,13 @@ function MyAccounts() {
       <section className="hidden md:block">
         <TradingCover />
       </section>
-      <section className="mt-5">
+      <section id="home1" className="mt-5">
         <CardAccounts />
       </section>
-      <section className="mt-5">
+      <section id="home3" className="mt-5">
         <CardComponent onStartTour={handleStartTour} />
       </section>
-      <section className="mt-4">
+      <section id="home4" className="mt-4">
         {/* @ts-ignore */}
         <DashboardCards />
       </section>

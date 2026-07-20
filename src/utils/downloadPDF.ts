@@ -5,29 +5,33 @@ export const DownloadPDF = async () => {
   const element = document.getElementById("account-pdf");
 
   if (!element) {
-    console.log("PDF element not found");
+    console.error("Element #account-pdf not found");
     return;
   }
 
   try {
-    const image = await toJpeg(element, {
-      quality: 0.5,
-      pixelRatio: 1,
+    const imgData = await toJpeg(element, {
+      quality: 1,
+      pixelRatio: 2,
       cacheBust: true,
+      backgroundColor: "#2B2B2B",
     });
 
-    const width = 210;
+    const tempPdf = new jsPDF();
+    const imgProps = tempPdf.getImageProperties(imgData);
 
-    const height = (element.offsetHeight * width) / element.offsetWidth;
+    const pdfWidth = 210;
+
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
 
     const pdf = new jsPDF({
-      orientation: "portrait",
+      orientation: pdfWidth > pdfHeight ? "landscape" : "portrait",
       unit: "mm",
-      format: [width, height],
+      format: [pdfWidth, pdfHeight],
       compress: true,
     });
 
-    pdf.addImage(image, "JPEG", 0, 0, width, height);
+    pdf.addImage(imgData, "JPEG", 0, 0, pdfWidth, pdfHeight, undefined, "FAST");
 
     pdf.save("account.pdf");
   } catch (error) {

@@ -346,6 +346,7 @@ export default function CalendarAnalysis() {
 
   return (
     <div
+      id="date1"
       className="p-2 step-test39 transition-colors "
       dir={lang === "fa" ? "rtl" : "ltr"}
     >
@@ -354,7 +355,10 @@ export default function CalendarAnalysis() {
         dark:border-[#3C3C3C]
         border-gray-300 p-2 sm:p-4 lg:p-6"
       >
-        <div className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5">
+        <div
+          id="date2"
+          className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5"
+        >
           <div
             className={`flex flex-wrap gap-2 justify-center sm:${i18next.language === "fa" ? "justify-end" : "justify-start"} w-full sm:gap-2.5`}
           >
@@ -436,7 +440,7 @@ export default function CalendarAnalysis() {
 
         <hr className="border-gray-300 dark:border-neutral-700 mb-3 sm:mb-4" />
 
-        <div className="overflow-x-auto -mx-2 sm:mx-0">
+        <div id="date3" className="overflow-x-auto -mx-2 sm:mx-0">
           <div className="min-w-0 sm:min-w-85 px-2 sm:px-0">
             <div className="grid grid-cols-7 gap-1 sm:gap-2.5 mb-1.5">
               {T.wds.map((w) => (

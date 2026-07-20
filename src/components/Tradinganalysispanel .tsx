@@ -122,7 +122,7 @@ export default function TradingAnalysisPanel() {
       <h1 className="md:text-2xl text-md font-bold px-4 mb-4 mt-4">
         {t("labels.parametr11")}
       </h1>
-      <div className="w-full mx-auto mt-3 ">
+      <div id="ai" className="w-full mx-auto mt-3 ">
         <div
           dir={lang === "fa" ? "ltr" : "rtl"}
           className="
