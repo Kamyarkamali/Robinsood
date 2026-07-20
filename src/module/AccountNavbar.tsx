@@ -22,7 +22,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
       className="
         sticky top-0 z-20
         mx-auto mb-5
-        flex w-full max-w-7xl
+        flex w-full max-w-327.5
         items-center justify-between
         rounded-2xl
         md:border md:border-white/15
@@ -74,6 +74,8 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
           {lang === "fa" ? "آموزش" : "Tutorial"}
         </span>
       </button>
+
+      <h1>مشخصات</h1>
 
       <AccountPdfButton />
     </nav>

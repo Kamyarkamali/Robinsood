@@ -1,6 +1,7 @@
 import React from "react";
 import {
   BsCheckCircleFill,
+  BsCircle,
   BsHourglassSplit,
   BsXCircleFill,
 } from "react-icons/bs";
@@ -26,9 +27,15 @@ const statusConfig: StatusConfigMap = {
 
 interface TableViewProps {
   accounts: Account[];
+  selectedAccountNumber?: string | null;
+  onSelectAccount?: (accountNumber: string) => void;
 }
 
-const TableView: React.FC<TableViewProps> = ({ accounts }) => {
+const TableView: React.FC<TableViewProps> = ({
+  accounts,
+  selectedAccountNumber = null,
+  onSelectAccount,
+}) => {
   const lang = i18next.language;
 
   return (
@@ -75,6 +82,9 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
               <th className="text-center px-1 sm:px-2 w-15 sm:w-17.5 md:w-30">
                 {lang === "fa" ? "شروع" : "Started"}
               </th>
+              <th className="text-center px-1 sm:px-2 w-15 sm:w-20 md:w-30">
+                {lang === "fa" ? "انتخاب" : "Select"}
+              </th>
             </tr>
           </thead>
 
@@ -82,6 +92,11 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
             {accounts.map((account) => {
               const statusItem = statusConfig[account.tableStatus];
               const Icon = statusItem.icon;
+              const isSelected =
+                selectedAccountNumber === account.accountNumber;
+              const cellBorderClass = isSelected
+                ? "border-cyan-500 dark:border-cyan-400 ring-1 ring-cyan-500/30 dark:ring-cyan-400/30"
+                : "border-gray-500";
 
               return (
                 <tr
@@ -97,13 +112,13 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                   "
                 >
                   <td
-                    className="
+                    className={`
                       rounded-r-3xl
                       border
-                      border-gray-500
+                      ${cellBorderClass}
                       px-2 sm:px-3 md:px-4
                       py-2 sm:py-2.5 md:py-4
-                    "
+                    `}
                   >
                     <div className="flex items-center gap-2 sm:gap-2.5 md:gap-3">
                       <img
@@ -154,8 +169,7 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                   </td>
 
                   <td
-                    className="text-center px-1 sm:px-2 border
-                      border-gray-500"
+                    className={`text-center px-1 sm:px-2 border ${cellBorderClass}`}
                   >
                     <span
                       className="
@@ -173,24 +187,23 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                   </td>
 
                   <td
-                    className="
+                    className={`
                       text-center px-1 sm:px-2
                       border
-                      border-gray-500
+                      ${cellBorderClass}
                       font-bold
                       text-[9px] sm:text-[10px] md:text-sm
                       whitespace-nowrap
                       font-mono
                       text-gray-700
                       dark:text-gray-200
-                    "
+                    `}
                   >
                     ${account.capital.toLocaleString()}
                   </td>
 
                   <td
-                    className="text-center px-1 sm:px-2 border 
-                      border-gray-500"
+                    className={`text-center px-1 sm:px-2 border ${cellBorderClass}`}
                   >
                     <div>
                       <span
@@ -219,8 +232,7 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                   </td>
 
                   <td
-                    className="text-center px-1 sm:px-2  rounded-none border
-                      border-gray-500"
+                    className={`text-center px-1 sm:px-2 rounded-none border ${cellBorderClass}`}
                   >
                     <div
                       className={`
@@ -249,9 +261,9 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                   </td>
 
                   <td
-                    className="
-                    border
-                      border-gray-500
+                    className={`
+                      border
+                      ${cellBorderClass}
                       rounded-2xl
                       rounded-l-none
                       rounded-r-none
@@ -262,14 +274,13 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                       whitespace-nowrap
                       font-mono
                       text-gray-700
-                    "
+                    `}
                   >
                     ${account.balance.toLocaleString()}
                   </td>
 
                   <td
-                    className="text-center px-1 sm:px-2 border
-                      border-gray-500 rounded-2xl rounded-r-none"
+                    className={`text-center px-1 sm:px-2 border ${cellBorderClass}`}
                   >
                     <p
                       className="
@@ -291,6 +302,50 @@ const TableView: React.FC<TableViewProps> = ({ accounts }) => {
                     >
                       {account.startTime}
                     </span>
+                  </td>
+
+                  <td
+                    className={`text-center px-1 sm:px-2 border ${cellBorderClass} rounded-2xl rounded-r-none`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => onSelectAccount?.(account.accountNumber)}
+                      className={`
+                        inline-flex
+                        items-center
+                        justify-center
+                        gap-1
+                        px-2 sm:px-2.5 md:px-3
+                        py-1 sm:py-1.5
+                        rounded-lg sm:rounded-xl
+                        text-[7px] sm:text-[8px] md:text-xs
+                        font-bold
+                        whitespace-nowrap
+                        border
+                        transition-all
+                        duration-200
+                        ${
+                          isSelected
+                            ? "bg-cyan-500 border-cyan-500 text-white hover:bg-cyan-600"
+                            : "bg-transparent border-gray-300 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:border-cyan-500 hover:text-cyan-600"
+                        }
+                      `}
+                    >
+                      {isSelected ? (
+                        <BsCheckCircleFill className="text-[7px] sm:text-[9px] md:text-sm" />
+                      ) : (
+                        <BsCircle className="text-[7px] sm:text-[9px] md:text-sm" />
+                      )}
+                      <span className="hidden sm:inline">
+                        {isSelected
+                          ? lang === "fa"
+                            ? "انتخاب شد"
+                            : "Selected"
+                          : lang === "fa"
+                            ? "انتخاب"
+                            : "Select"}
+                      </span>
+                    </button>
                   </td>
                 </tr>
               );

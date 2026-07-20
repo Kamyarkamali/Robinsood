@@ -1,5 +1,11 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import { FiChevronDown, FiEdit2, FiX } from "react-icons/fi";
+import {
+  FiChevronDown,
+  FiEdit2,
+  FiX,
+  FiSettings,
+  FiHome,
+} from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -9,8 +15,7 @@ import i18next from "i18next";
 import { useTheme } from "../hooks/useTheme";
 import { useUser } from "../hooks/useUser";
 import { Link } from "react-router-dom";
-import { IoMdMenu } from "react-icons/io";
-import { IoMdClose } from "react-icons/io";
+import { HiOutlineChartBar } from "react-icons/hi2";
 
 interface UserMenuProps {
   isSidebarOpen?: boolean;
@@ -20,7 +25,6 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
   const { i18n } = useTranslation();
   const { resolvedTheme, isDark, setLight, setDark } = useTheme();
   const { user, updateUser } = useUser();
-  const [menu, setMenu] = useState<boolean>(false);
 
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const modalRef = useRef<HTMLDivElement | null>(null);
@@ -237,61 +241,138 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
             width: "auto",
             marginLeft: 4,
           }}
-          transition={{ duration: 0.2 }}
-          className="flex items-center gap-1 w-full justify-between"
+          transition={{ duration: 0.25 }}
+          className={`
+flex
+items-center
+justify-center
+w-full
+transition-all
+duration-300
+${isSidebarOpen ? "flex-row" : "flex-col"}
+`}
         >
-          <motion.div
-            animate={{ rotate: open ? 180 : 0 }}
-            transition={{ duration: 0.2 }}
-            className="text-[12px] sm:text-[14px]"
-          ></motion.div>
-          <section className="flex flex-col items-center">
-            <button
-              onClick={() => setMenu(!menu)}
-              className="transition-transform duration-300 cursor-pointer"
-            >
-              {menu ? <IoMdClose size={25} /> : <IoMdMenu size={25} />}
-            </button>
+          {/* صفحه اصلی */}
+          <Link
+            to="/"
+            className={`
+flex
+items-center
+justify-center
+rounded-xl
+backdrop-blur-xl
+${styles.border}
+${styles.text}
+transition-all
+duration-300
+cursor-pointer
 
-            <div
+${
+  isSidebarOpen
+    ? "px-2.5 py-1.5 gap-1.5 min-w-20.5 text-[9px] lg:text-[10px]"
+    : "w-10 h-10 p-0"
+}
+`}
+          >
+            <FiHome size={isSidebarOpen ? 13 : 18} />
+            <span
               className={`
-      overflow-hidden
-      transition-all
-      duration-300
-      ease-in-out
+overflow-hidden
+whitespace-nowrap
+transition-all
+duration-300
 
-      ${
-        menu
-          ? "max-h-40 opacity-100 scale-100 mt-3"
-          : "max-h-0 opacity-0 scale-95 mt-0"
-      }
-    `}
+${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
+`}
             >
-              <div className="flex flex-col items-center gap-2">
-                <Link
-                  to="/"
-                  className={`text-[10px] sm:text-xs whitespace-nowrap ${styles.text}`}
-                >
-                  {lang === "fa" ? "صفحه اصلی" : "Home"}
-                </Link>
+              {lang === "fa" ? "صفحه اصلی" : "Home"}
+            </span>
+          </Link>
 
-                <span
-                  className={`text-[10px] sm:text-xs whitespace-nowrap ${styles.text}`}
-                >
-                  {lang === "fa" ? "پلتفرم" : "Platform"}
-                </span>
+          {/* پلتفرم */}
+          <Link
+            to="/platform"
+            className={`
+flex
+items-center
+justify-center
+rounded-xl
+${styles.border}
+${styles.text}
+transition-all
+duration-300
+cursor-pointer
 
-                <span
-                  onClick={toggleDropdown}
-                  className={`text-[10px] sm:text-xs whitespace-nowrap flex items-center gap-1 ${styles.text}`}
-                >
-                  {lang === "fa" ? "تنظیمات" : "Settings"}
 
-                  <FiChevronDown />
-                </span>
-              </div>
-            </div>
-          </section>
+${
+  isSidebarOpen
+    ? "px-2.5 py-1.5 gap-1.5 min-w-20.5 text-[9px] lg:text-[10px]"
+    : "w-10 h-10 p-0"
+}
+`}
+          >
+            <HiOutlineChartBar size={isSidebarOpen ? 13 : 18} />
+            <span
+              className={`
+overflow-hidden
+whitespace-nowrap
+transition-all
+duration-300
+
+${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
+`}
+            >
+              {lang === "fa" ? "پلتفرم" : "Platform"}
+            </span>
+          </Link>
+
+          {/* تنظیمات */}
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={toggleDropdown}
+            className={`
+flex
+items-center
+justify-center
+rounded-xl
+backdrop-blur-xl
+${styles.border}
+${styles.text}
+transition-all
+duration-300
+
+
+${
+  isSidebarOpen
+    ? "py-1.5 gap-0.5 min-w-20.5 text-[9px] lg:text-[10px]"
+    : "w-10 h-10 p-0"
+}
+`}
+          >
+            <FiSettings size={isSidebarOpen ? 13 : 18} />
+
+            <span
+              className={`
+overflow-hidden
+whitespace-nowrap
+transition-all
+duration-300
+
+${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
+`}
+            >
+              {lang === "fa" ? "تنظیمات" : "Settings"}
+            </span>
+
+            {isSidebarOpen && (
+              <motion.div
+                animate={{ rotate: open ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+              >
+                <FiChevronDown size={12} />
+              </motion.div>
+            )}
+          </motion.button>
         </motion.div>
       </motion.div>
 
@@ -299,25 +380,29 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
         {open && isSidebarOpen && (
           <motion.div
             ref={dropdownRef}
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            onClick={(e) => e.stopPropagation()}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: -10 }}
-            transition={{ duration: 0.15 }}
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            transition={{
+              type: "spring",
+              stiffness: 260,
+              damping: 22,
+            }}
             className={`
-              absolute 
-              ${i18next.language === "fa" ? "right-0" : "left-0"} 
-              bottom-full
-              mb-2
-              w-56 sm:w-64 md:w-72
-              max-w-[calc(100vw-2rem)]
-              rounded-2xl
-              ${styles.dropdownBg}
-              border ${styles.border}
-              shadow-2xl
-              backdrop-blur-2xl
-              z-50
-              max-h-[70vh] sm:max-h-[80vh]
-            `}
+          fixed
+          left-0
+          bottom-10
+            right-0
+          w-full
+          max-w-sm
+          rounded-3xl
+          ${styles.dropdownBg}
+          border ${styles.border}
+          backdrop-blur-2xl
+          shadow-2xl
+
+        `}
           >
             <motion.div
               initial={{ opacity: 0, x: -20 }}

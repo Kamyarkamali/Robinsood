@@ -56,6 +56,7 @@ export type ModalType =
   | "mentor"
   | "passAccount"
   | "education"
+  | "myacc"
   | null;
 
 export type TradeSide = "buy" | "sell";

@@ -16,7 +16,12 @@ import {
   HiOutlineChatBubbleLeftRight,
   HiOutlineShieldCheck,
   HiOutlineUserGroup,
+  HiOutlineUserCircle,
+  HiOutlineBell,
 } from "react-icons/hi2";
+import { Link } from "react-router-dom";
+import ChallengeAccountsModal from "../../pages/AllAccounts";
+import NotificationsModal from "../modals/NotificationsModal";
 
 const MemoizedProfileSidbar = memo(ProfileSidbar);
 const MemoizedUserMenu = memo(UserMenu);
@@ -43,11 +48,16 @@ function debounce<T extends (...args: any[]) => any>(
   return debounced;
 }
 
+type ExtendedModalType = ModalType | "notifications";
+
 export default function Sidebar() {
   const [open, setOpen] = useState<boolean>(true);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [mobileOpen, setMobileOpen] = useState<boolean>(false);
-  const [modalType, setModalType] = useState<ModalType>(null);
+  const [modalType, setModalType] = useState<ExtendedModalType>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [notificationCount, setNotificationCount] = useState<number>(3);
+
   const lang = i18next.language;
 
   const handleCloseModal = useCallback(() => {
@@ -96,8 +106,19 @@ export default function Sidebar() {
           en: "Education & Guide",
         },
       },
+
+      {
+        type: "notifications" as const,
+        step: "step-notifications",
+        component: <NotificationsModal onClose={handleCloseModal} />,
+        icon: HiOutlineBell,
+        title: {
+          fa: "اعلان ها",
+          en: "Notifications",
+        },
+      },
     ],
-    [],
+    [handleCloseModal],
   );
 
   const currentCard = useMemo(
@@ -113,12 +134,18 @@ export default function Sidebar() {
     setMobileOpen(true);
   }, []);
 
-  const handleSetModalType = useCallback((type: ModalType) => {
+  const handleSetModalType = useCallback((type: ExtendedModalType) => {
     setModalType(type);
   }, []);
 
   const handleToggleSidebar = useCallback(() => {
     setOpen((prev) => !prev);
+  }, []);
+
+  // تابع برای کاهش تعداد نوتیفیکیشن بعد از باز کردن
+  const handleOpenNotifications = useCallback(() => {
+    handleSetModalType("notifications");
+    setNotificationCount(0); // ریست کردن تعداد نوتیفیکیشن
   }, []);
 
   useEffect(() => {
@@ -177,6 +204,75 @@ export default function Sidebar() {
     [modalType, currentCard, handleCloseModal],
   );
 
+  // const renderButton = (btn: any, isMobileView: boolean = false) => {
+  //   const isNotifications = btn.type === "notifications";
+
+  //   return (
+  //     <button
+  //       key={btn.type}
+  //       type="button"
+  //       title={lang === "fa" ? btn.title.fa : btn.title.en}
+  //       onClick={
+  //         isNotifications
+  //           ? handleOpenNotifications
+  //           : () => handleSetModalType(btn.type)
+  //       }
+  //       className={`
+  //         ${btn.step}
+  //         w-full
+  //         flex
+  //         items-center
+  //         rounded-2xl
+  //         px-5
+  //         gap-2
+  //         py-3
+  //         transition-colors
+  //         duration-200
+  //         cursor-pointer
+  //         dark:text-zinc-300 text-zinc-700
+  //         hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+  //         hover:bg-zinc-800/30
+  //         active:scale-95
+  //         ${
+  //           modalType === btn.type
+  //             ? `
+  //           shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+  //           bg-zinc-800/50
+  //           text-white
+  //           border border-white/5
+  //         `
+  //             : ""
+  //         }
+  //         ${!open && !isMobileView ? "justify-center px-0" : ""}
+  //         ${isMobileView ? "gap-4" : ""}
+  //       `}
+  //     >
+  //       <div className="relative shrink-0">
+  //         <btn.icon size={isMobileView ? 22 : 22} />
+
+  //         {isNotifications && notificationCount > 0 && (
+  //           <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+  //             {notificationCount}
+  //           </span>
+  //         )}
+  //       </div>
+
+  //       <span
+  //         className={`
+  //           text-[${isMobileView ? "12px" : "11px"}]
+  //           overflow-hidden
+  //           ${isMobileView ? "w-auto" : "w-44"}
+  //           transition-opacity duration-200
+  //           text-start
+  //           ${open || isMobileView ? "block" : "hidden pointer-events-none w-0"}
+  //         `}
+  //       >
+  //         {lang === "fa" ? btn.title.fa : btn.title.en}
+  //       </span>
+  //     </button>
+  //   );
+  // };
+
   if (isMobile) {
     return (
       <>
@@ -233,6 +329,42 @@ export default function Sidebar() {
           <MemoizedProfileSidbar open={true} setOpen={handleToggleSidebar} />
 
           <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
+            <Link
+              id="home2"
+              to="/accounts"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsModalOpen(true);
+                handleCloseMobile();
+              }}
+              className="w-full flex items-center gap-4 rounded-2xl px-5 py-3 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+            >
+              <HiOutlineUserCircle size={22} className="shrink-0" />
+              <span className="overflow-hidden text-[12px] font-normal text-start">
+                {lang === "fa" ? " اکانت های من" : "MyAccounts"}
+              </span>
+            </Link>
+
+            <button
+              onClick={() => {
+                handleOpenNotifications();
+                handleCloseMobile();
+              }}
+              className="w-full flex items-center gap-4 rounded-2xl px-5 py-3 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+            >
+              <div className="relative shrink-0">
+                <HiOutlineBell size={22} />
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                    {notificationCount}
+                  </span>
+                )}
+              </div>
+              <span className="overflow-hidden text-[12px] font-normal text-start">
+                {lang === "fa" ? "اطلاعیه ها" : "notifications"}
+              </span>
+            </button>
+
             {cards.map((card) => (
               <button
                 key={card.type}
@@ -261,7 +393,7 @@ export default function Sidebar() {
                 `}
               >
                 <card.icon size={22} className="shrink-0" />
-                <span className=" overflow-hidden text-[12px] font-normal text-start">
+                <span className="overflow-hidden text-[12px] font-normal text-start">
                   {lang === "fa" ? card.title.fa : card.title.en}
                 </span>
               </button>
@@ -278,102 +410,205 @@ export default function Sidebar() {
 
   // Desktop version
   return (
-    <aside
-      className={`
-        relative
-        text-gray-500
-        transition-[width]
-        duration-300
-        ease-in-out
-        [will-change:width]
-        [contain:layout_style]
-        dark:bg-zinc-900 bg-[#F3F4F6]
-        p-4
-        dark:text-white text-gray-800
-        border-r border-zinc-800
-        flex flex-col
-        min-h-screen
-        sticky top-0
-        ${open ? "w-65" : "w-24"}
-      `}
-      role="navigation"
-      aria-label="Sidebar navigation"
-    >
-      <MemoizedProfileSidbar open={open} setOpen={handleToggleSidebar} />
-
-      <div
+    <>
+      <aside
         className={`
-          absolute top-28 transition-transform duration-300 [will-change:transform]
-          ${
-            lang === "fa"
-              ? open
-                ? "-translate-x-55"
-                : "-translate-x-14"
-              : open
-                ? "translate-x-63"
-                : "translate-x-14"
-          }
+          relative
+          text-gray-500
+          transition-[width]
+          duration-300
+          ease-in-out
+          [will-change:width]
+          [contain:layout_style]
+          dark:bg-zinc-900 bg-[#F3F4F6]
+          p-4
+          dark:text-white text-gray-800
+          border-r border-zinc-800
+          flex flex-col
+          min-h-screen
+          sticky top-0
+          ${open ? "w-65" : "w-24"}
         `}
+        role="navigation"
+        aria-label="Sidebar navigation"
       >
-        <BtnSaidbar open={open} setOpen={handleToggleSidebar} />
-      </div>
+        <MemoizedProfileSidbar open={open} setOpen={handleToggleSidebar} />
 
-      <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
-        {cards.map((card) => (
-          <button
-            key={card.type}
-            type="button"
-            title={lang === "fa" ? card.title.fa : card.title.en}
-            onClick={() => handleSetModalType(card.type)}
-            className={`
-              ${card.step}
-              w-full
-              flex
-              items-center
-              rounded-2xl
-              px-5
-              gap-2
-              py-3
-              transition-colors duration-200
-              cursor-pointer
-              dark:text-zinc-300 text-zinc-700
-              hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-              hover:bg-zinc-800/30
-              active:scale-95
-              ${
-                modalType === card.type
-                  ? `
-                shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                bg-zinc-800/50
-                text-white
-                border border-white/5
-              `
-                  : ""
-              }
-              ${!open ? "justify-center px-0" : ""}
-            `}
-          >
-            <card.icon size={22} className="shrink-0" />
+        <div
+          className={`
+            absolute top-28 transition-transform duration-300 [will-change:transform]
+            ${
+              lang === "fa"
+                ? open
+                  ? "-translate-x-55"
+                  : "-translate-x-14"
+                : open
+                  ? "translate-x-63"
+                  : "translate-x-14"
+            }
+          `}
+        >
+          <BtnSaidbar open={open} setOpen={handleToggleSidebar} />
+        </div>
 
-            <span
+        <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
+          <div className="flex flex-col items-center justify-center">
+            <Link
+              id="home2"
+              to="/accounts"
+              onClick={(e) => {
+                e.preventDefault();
+                setIsModalOpen(true);
+              }}
               className={`
-                text-[11px]
-                overflow-hidden
-                w-44
-                transition-opacity duration-200
-                text-start
-                ${open ? "opacity-100" : "opacity-0 pointer-events-none w-0"}
+                w-full
+                flex
+                items-center
+                rounded-2xl
+                text-[12px]
+                px-5
+                gap-2
+                py-3
+                transition-colors
+                duration-200
+                cursor-pointer
+                dark:text-zinc-300 text-zinc-700
+                hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                hover:bg-zinc-800/30
+                active:scale-95
+                ${!open ? "justify-center px-0" : ""}
               `}
             >
-              {lang === "fa" ? card.title.fa : card.title.en}
-            </span>
-          </button>
-        ))}
-      </nav>
+              <HiOutlineUserCircle size={22} className="shrink-0" />
+              <span
+                className={`
+                  text-[11px]
+                  overflow-hidden
+                  w-44
+                  transition-opacity duration-200
+                  text-start
+                  ${open ? "block" : "hidden pointer-events-none w-0"}
+                `}
+              >
+                {lang === "fa" ? " اکانت های من" : "MyAccounts"}
+              </span>
+            </Link>
 
-      <MemoizedUserMenu isSidebarOpen={open} />
+            <button
+              onClick={handleOpenNotifications}
+              className={`
+                w-full
+                flex
+                items-center
+                rounded-2xl
+                text-[12px]
+                px-5
+                gap-2
+                py-3
+                transition-colors
+                duration-200
+                cursor-pointer
+                dark:text-zinc-300 text-zinc-700
+                hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                hover:bg-zinc-800/30
+                active:scale-95
+                ${
+                  modalType === "notifications"
+                    ? `
+                  shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                  bg-zinc-800/50
+                  text-white
+                  border border-white/5
+                `
+                    : ""
+                }
+                ${!open ? "justify-center px-0" : ""}
+              `}
+            >
+              <div className="relative shrink-0">
+                <HiOutlineBell size={22} />
+                {notificationCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                    {notificationCount}
+                  </span>
+                )}
+              </div>
+              <span
+                className={`
+                  text-[11px]
+                  overflow-hidden
+                  w-44
+                  transition-opacity duration-200
+                  text-start
+                  ${open ? "block" : "hidden pointer-events-none w-0"}
+                `}
+              >
+                {lang === "fa" ? "اطلاعیه ها" : "notifications"}
+              </span>
+            </button>
+          </div>
 
-      {modalNode}
-    </aside>
+          {cards.map((card) => (
+            <button
+              key={card.type}
+              type="button"
+              title={lang === "fa" ? card.title.fa : card.title.en}
+              onClick={() => handleSetModalType(card.type)}
+              className={`
+                ${card.step}
+                w-full
+                flex
+                items-center
+                rounded-2xl
+                px-5
+                gap-2
+                py-3
+                transition-colors
+                duration-200
+                cursor-pointer
+                dark:text-zinc-300 text-zinc-700
+                hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                hover:bg-zinc-800/30
+                active:scale-95
+                ${
+                  modalType === card.type
+                    ? `
+                  shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                  bg-zinc-800/50
+                  text-white
+                  border border-white/5
+                `
+                    : ""
+                }
+                ${!open ? "justify-center px-0" : ""}
+              `}
+            >
+              <card.icon size={22} className="shrink-0" />
+
+              <span
+                className={`
+                  text-[11px]
+                  overflow-hidden
+                  w-44
+                  transition-opacity duration-200
+                  text-start
+                  ${open ? "block" : "hidden pointer-events-none w-0"}
+                `}
+              >
+                {lang === "fa" ? card.title.fa : card.title.en}
+              </span>
+            </button>
+          ))}
+        </nav>
+
+        <MemoizedUserMenu isSidebarOpen={open} />
+
+        {modalNode}
+      </aside>
+      <ChallengeAccountsModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 }

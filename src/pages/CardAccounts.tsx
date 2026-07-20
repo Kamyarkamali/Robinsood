@@ -85,7 +85,7 @@ function CardAccounts() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 2xl:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-3 gap-4">
           {fakeChallengeAccounts.slice(0, displayCount).map((account) => {
             // @ts-ignore
             const status = statusConfig[account.cardStatus];
@@ -135,7 +135,7 @@ function CardAccounts() {
                     </div>
 
                     <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col">
-                      <h3 className="text-base xl:text-lg font-extrabold text-slate-800 dark:text-white truncate">
+                      <h3 className="text-base xl:text-md font-extrabold text-slate-800 dark:text-white truncate">
                         {lang === "fa" ? account?.title?.fa : account.title?.en}
                       </h3>
 
@@ -146,7 +146,7 @@ function CardAccounts() {
                           </p>
 
                           <h4
-                            className={`text-lg xl:text-xl font-black ${status.text}`}
+                            className={`text-sm xl:text-md font-black ${status.text}`}
                           >
                             ${account.capital.toLocaleString()}
                           </h4>
@@ -173,8 +173,8 @@ function CardAccounts() {
                               dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
                             `}
                           >
-                            <FaFlag className="text-xs" />
-                            <span>
+                            <FaFlag className="text-md" />
+                            <span className="text-[10px]">
                               {lang === "fa"
                                 ? account?.stageLabel?.fa
                                 : account?.stageLabel?.en}
@@ -198,6 +198,7 @@ function CardAccounts() {
                               items-center
                               justify-center
                               gap-1.5
+                              text-[10px]
                               text-xs
                               shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
                               dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
@@ -218,33 +219,6 @@ function CardAccounts() {
                         <span className="text-slate-400 dark:text-zinc-500 text-xs font-bold">
                           #{account.id}
                         </span>
-
-                        {/* <Link
-                          to={`/accounts/${account.id}`}
-                          className="
-                            h-8
-                            w-8
-                            xl:h-9
-                            xl:w-9
-                            rounded-lg
-                            border
-                            border-slate-200/70
-                            dark:border-white/10
-                            flex
-                            items-center
-                            justify-center
-                            shadow-[3px_3px_8px_rgba(0,0,0,0.05),-3px_-3px_8px_rgba(255,255,255,0.7),inset_1px_1px_2px_rgba(255,255,255,0.8),inset_-1px_-1px_2px_rgba(0,0,0,0.05)]
-                            dark:shadow-[3px_3px_8px_#0c1118,-3px_-3px_8px_#212b35,inset_1px_1px_2px_rgba(255,255,255,0.05),inset_-1px_-1px_2px_rgba(255,255,255,0.03)]
-                            hover:shadow-[inset_3px_3px_5px_rgba(0,0,0,0.08),inset_-3px_-3px_5px_rgba(255,255,255,0.9)]
-                            dark:hover:shadow-[inset_3px_3px_5px_#0c1118,inset_-3px_-3px_5px_#212b35]
-                            transition-all
-                            duration-300
-                            text-slate-700
-                            dark:text-white
-                          "
-                        >
-                          <HiOutlineArrowLeft size={16} />
-                        </Link> */}
                       </div>
                     </div>
                   </div>

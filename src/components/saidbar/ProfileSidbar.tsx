@@ -24,7 +24,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
   }, [user.avatar, i18n.language]);
 
   return (
-    <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-zinc-800">
+    <div className="flex items-center justify-center gap-2 sm:gap-3 mb-4 sm:mb-6 pb-3 sm:pb-4 border-b border-zinc-800">
       <div className="relative shrink-0">
         <div className="p-0.5 rounded-full bg-linear-to-r from-cyan-400 via-blue-500 to-fuchsia-500">
           <img
@@ -40,18 +40,19 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
         className={`
           overflow-hidden
           transition-all
+          flex flex-col items-center
           duration-300
           ${open ? "opacity-100 w-auto" : "opacity-0 w-0"}
         `}
       >
+        <p className="text-[10px] sm:text-[11px] text-green-400 truncate">
+          آنلاین
+        </p>
         {avatarName && (
           <p className="text-[10px] sm:text-[11px] text-cyan-400 truncate">
             {avatarName}
           </p>
         )}
-        <p className="text-[10px] sm:text-[11px] text-green-400 truncate">
-          آنلاین
-        </p>
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import {
   BsCheckCircleFill,
+  BsCircle,
   BsHourglassSplit,
   BsXCircleFill,
 } from "react-icons/bs";
@@ -26,9 +27,15 @@ const statusConfig: StatusConfigMap = {
 
 interface AccountCardProps {
   account: Account;
+  isSelected?: boolean;
+  onSelect?: (accountNumber: string) => void;
 }
 
-const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
+const AccountCard: React.FC<AccountCardProps> = ({
+  account,
+  isSelected = false,
+  onSelect,
+}) => {
   const statusItem = statusConfig[account.tableStatus];
   const Icon = statusItem.icon;
 
@@ -36,18 +43,21 @@ const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
 
   return (
     <div
-      className="
+      className={`
         rounded-2xl
         p-4
         bg-white
         dark:bg-[#2B2B2B]
         border-2
-        border-gray-200/50
-        dark:border-white/5
         transition-all
         duration-200
         hover:-translate-y-0.5
-      "
+        ${
+          isSelected
+            ? "border-cyan-500 dark:border-cyan-400 ring-2 ring-cyan-500/30 dark:ring-cyan-400/30"
+            : "border-gray-200/50 dark:border-white/5"
+        }
+      `}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
@@ -136,6 +146,45 @@ const AccountCard: React.FC<AccountCardProps> = ({ account }) => {
           </p>
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={() => onSelect?.(account.accountNumber)}
+        className={`
+          mt-3
+          w-full
+          inline-flex
+          items-center
+          justify-center
+          gap-1.5
+          px-3
+          py-1.5
+          rounded-xl
+          text-[10px]
+          font-bold
+          transition-all
+          duration-200
+          border
+          ${
+            isSelected
+              ? "bg-cyan-500 border-cyan-500 text-white hover:bg-cyan-600"
+              : "bg-transparent border-gray-300 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:border-cyan-500 hover:text-cyan-600"
+          }
+        `}
+      >
+        {isSelected ? (
+          <BsCheckCircleFill className="text-[10px]" />
+        ) : (
+          <BsCircle className="text-[10px]" />
+        )}
+        {isSelected
+          ? lang === "fa"
+            ? "انتخاب شد"
+            : "Selected"
+          : lang === "fa"
+            ? "انتخاب"
+            : "Select"}
+      </button>
     </div>
   );
 };

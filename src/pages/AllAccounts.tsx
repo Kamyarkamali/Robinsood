@@ -28,6 +28,10 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
   const [viewMode, setViewMode] = useState<ViewMode>("card");
   const [isMobile, setIsMobile] = useState<boolean>(true);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  // NEW: track which account is currently selected
+  const [selectedAccountNumber, setSelectedAccountNumber] = useState<
+    string | null
+  >(null);
   const lang = i18next.language;
 
   useEffect(() => {
@@ -101,6 +105,13 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
     }
   }, [isOpen]);
 
+  // NEW: handler passed down to CardView / TableView
+  const handleSelectAccount = (accountNumber: string): void => {
+    setSelectedAccountNumber((prev) =>
+      prev === accountNumber ? null : accountNumber,
+    );
+  };
+
   if (!isOpen && !isAnimating) return null;
 
   return (
@@ -132,6 +143,7 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
           duration-300
           ${isOpen ? "opacity-100 scale-100" : "opacity-0 scale-95"}
         `}
+        onClick={onClose}
       >
         <div
           className="
@@ -272,11 +284,19 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
 
           <div className="transition-all duration-300">
             {viewMode === "card" ? (
-              // @ts-ignore
-              <CardView accounts={filteredAccounts} />
+              <CardView
+                // @ts-ignore
+                accounts={filteredAccounts}
+                selectedAccountNumber={selectedAccountNumber}
+                onSelectAccount={handleSelectAccount}
+              />
             ) : (
-              // @ts-ignore
-              <TableView accounts={filteredAccounts} />
+              <TableView
+                // @ts-ignore
+                accounts={filteredAccounts}
+                selectedAccountNumber={selectedAccountNumber}
+                onSelectAccount={handleSelectAccount}
+              />
             )}
           </div>
         </div>

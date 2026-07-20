@@ -3224,7 +3224,7 @@ export const fakeChallengeAccounts: ChallengeAccount[] = [
     accountTypeLabel: { fa: "واقعی", en: "Real" },
     capital: 2000,
     stage: "stage3",
-    stageLabel: { fa: "مرحله سوم ریل", en: "Stage Three Real" },
+    stageLabel: { fa: "مرحله سوم", en: "Stage Three Real" },
     cardStatus: "rejected",
     cardStatusLabel: { fa: "رد شده", en: "Rejected" },
     tableStatus: "rejected",
