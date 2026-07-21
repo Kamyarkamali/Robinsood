@@ -215,22 +215,45 @@ export default function Sidebar() {
   if (isMobile) {
     return (
       <>
-        <button
-          onClick={handleOpenMobile}
-          className={`
-            fixed top-2 left-5 z-50
-            p-2.5 rounded-xl
-            border border-zinc-800
-            backdrop-blur-3xl
-            cursor-pointer
-            shadow-lg
-            transition-opacity duration-200
-            ${mobileOpen ? "opacity-0 pointer-events-none" : "opacity-100"}
-          `}
-          aria-label="Open menu"
-        >
-          <FiMenu size={24} />
-        </button>
+        <div className="absolute z-10 flex justify-between w-full">
+          <button
+            onClick={handleOpenNotifications}
+            className={`
+              p-2.5 rounded-xl
+              m-1
+              border border-zinc-800
+              backdrop-blur-3xl
+              cursor-pointer
+              shadow-lg
+              transition-all duration-200
+              hover:scale-105
+              relative
+            `}
+            aria-label="Notifications"
+          >
+            <HiOutlineBell size={24} />
+            {notificationCount > 0 && (
+              <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                {notificationCount}
+              </span>
+            )}
+          </button>
+          <button
+            onClick={handleOpenMobile}
+            className={`
+              p-2.5 rounded-xl
+              border border-zinc-800
+              backdrop-blur-3xl
+              cursor-pointer
+              shadow-lg
+              transition-opacity duration-200
+              ${mobileOpen ? "opacity-0 pointer-events-none" : "opacity-100"}
+            `}
+            aria-label="Open menu"
+          >
+            <FiMenu size={24} />
+          </button>
+        </div>
 
         {mobileOpen && (
           <div
@@ -300,25 +323,7 @@ export default function Sidebar() {
                 </span>
               </Link>
 
-              <button
-                onClick={() => {
-                  handleOpenNotifications();
-                  handleCloseMobile();
-                }}
-                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
-              >
-                <div className="relative shrink-0">
-                  <HiOutlineBell size={22} />
-                  {notificationCount > 0 && (
-                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
-                      {notificationCount}
-                    </span>
-                  )}
-                </div>
-                <span className="overflow-hidden text-[12px] font-normal text-start">
-                  {lang === "fa" ? "اطلاعیه ها" : "Notifications"}
-                </span>
-              </button>
+              {/* حذف دکمه اطلاعیه ها از اینجا چون بالا اضافه شد */}
             </div>
 
             <Divider />
@@ -375,8 +380,6 @@ export default function Sidebar() {
               </button>
             </div>
           </nav>
-
-          {/* <MemoizedUserMenu isSidebarOpen={true} /> */}
         </aside>
 
         {modalNode}
@@ -738,8 +741,6 @@ export default function Sidebar() {
             </button>
           </div>
         </nav>
-
-        {/* <MemoizedUserMenu isSidebarOpen={open} /> */}
 
         {modalNode}
       </aside>

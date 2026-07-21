@@ -37,7 +37,6 @@ function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
 function MetricRow({ row }: { row: MetricRow }) {
   return (
     <div className="flex flex-col gap-1">
-      {/* VALUES */}
       <div className="flex items-center justify-between">
         <span className="text-[#f5c842] text-xs sm:text-sm font-bold">
           +{row.leftValue}
@@ -48,9 +47,7 @@ function MetricRow({ row }: { row: MetricRow }) {
         </span>
       </div>
 
-      {/* CHART ROW */}
       <div className="flex items-center gap-2 sm:gap-1">
-        {/* LEFT BAR */}
         <div className="w-full sm:w-[45%] flex justify-end">
           <div className="w-full h-4 sm:h-5 rounded-lg bg-[#3F3F3F] overflow-hidden flex flex-row-reverse">
             <div
@@ -120,33 +117,34 @@ export default function VSComparison() {
     <>
       <div
         id="com1"
-        className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] w-full max-w-8xl rounded-2xl mt-3 border-4 dark:border-[#3C3C3C] border-gray-300 mx-auto text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"
+        className="dark:bg-linear-to-b w-full max-w-8xl rounded-2xl mt-3 text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"
       >
         <div className="w-full max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-4">
-          {/* HEADER */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between w-full">
+            {/* Users */}
             <div
-              className={`flex flex-col items-center flex-1 ${isRtl ? "order-3" : "order-1"}`}
+              className={`flex flex-col items-center flex-1 ${
+                isRtl ? "order-3" : "order-1"
+              }`}
             >
               <UsersIcon />
-              <span className="text-gray-400 font-bold">
+
+              <span className="text-gray-400 font-bold md:block hidden">
                 {i18n.language === "fa" ? "کاربران رابین سود" : "Robin Users"}
               </span>
             </div>
 
-            <img src={VS} className="w-10 sm:w-12" />
+            <ProfileIcon />
 
-            <div
-              className={`flex flex-col items-center flex-1 ${isRtl ? "order-1" : "order-3"}`}
-            >
-              <ProfileIcon />
-              <span className="text-gray-400 font-bold">
-                {i18n.language === "fa" ? "شما" : "You"}
-              </span>
+            <span className="text-gray-400 font-bold md:block hidden">
+              {i18n.language === "fa" ? "شما" : "You"}
+            </span>
+
+            <div className="flex-4 flex items-center justify-center">
+              <img src={VS} className="w-10 sm:w-10 object-contain" alt="VS" />
             </div>
           </div>
 
-          {/* FILTER */}
           <div
             id="com2"
             className="w-full flex justify-center sticky top-2 z-20"

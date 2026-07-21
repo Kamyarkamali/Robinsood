@@ -462,9 +462,8 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                         relative cursor-pointer
                         rounded-xl
                         p-1.5 sm:p-2
-                        bg-zinc-800/50
                         border-2 
-                        ${isSelected ? "border-cyan-400 shadow-lg shadow-cyan-500/20" : "border-transparent"}
+                        ${isSelected ? "border-cyan-400 w-fit shadow-lg shadow-cyan-500/20" : "border-transparent"}
                         transition-all duration-200
                         group
                       `}
@@ -474,16 +473,17 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                       <div className="relative overflow-hidden rounded-lg">
                         <motion.img
                           src={src}
-                          className="w-full h-12 sm:h-14 object-cover rounded-lg"
+                          className="w-full object-cover rounded-lg"
                           alt={displayName}
                           loading="lazy"
                           whileHover={{ scale: 1.1 }}
                           transition={{ duration: 0.3 }}
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                        <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                       </div>
                       <span
                         className={`
+                          text-wrap
                           text-[8px] sm:text-[9px] 
                           block text-center mt-1.5 sm:mt-2 
                           transition-colors duration-200
