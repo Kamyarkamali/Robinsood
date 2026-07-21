@@ -17,7 +17,7 @@ const AccountSection = () => {
   }
 
   return (
-    <div>
+    <div className="pb-1 md:pb-0">
       <AccountNavbar scope={section as TourScope} />
 
       <div id="account-pdf">

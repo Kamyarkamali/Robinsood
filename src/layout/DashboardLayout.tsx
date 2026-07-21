@@ -6,7 +6,7 @@ export default function DashboardLayout() {
     <div className="flex h-screen">
       <SaidbarComponent />
 
-      <main className="flex-1 overflow-auto p-6">
+      <main className="flex-1 overflow-auto p-6 pb-27">
         <Outlet />
       </main>
     </div>
