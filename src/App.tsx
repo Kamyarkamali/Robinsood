@@ -39,7 +39,6 @@ function App() {
 
   return (
     <div className="min-h-screen bg-[#F4F6F8] text-black dark:bg-[#202020] dark:text-white transition-colors">
-      {/* <Route /> */}
       <HomePage />
     </div>
   );
