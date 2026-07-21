@@ -17,7 +17,7 @@ export default function CategoriesModal({
   const isFa = i18n.language === "fa";
   const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [hoveredId, setHoveredId] = useState<number | null>(null);
 
   useEffect(() => {

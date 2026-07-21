@@ -105,7 +105,6 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
     }
   }, [isOpen]);
 
-  // NEW: handler passed down to CardView / TableView
   const handleSelectAccount = (accountNumber: string): void => {
     setSelectedAccountNumber((prev) =>
       prev === accountNumber ? null : accountNumber,
@@ -201,7 +200,7 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
 
           <div className="mb-4 text-center">
             <h2 className="text-xl font-bold text-gray-800 dark:text-white">
-              {lang === "fa" ? "همه اکانت‌ها" : "All Accounts"}
+              {lang === "fa" ? "سایر اکانت ها" : "All Accounts"}
             </h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               {lang === "fa"

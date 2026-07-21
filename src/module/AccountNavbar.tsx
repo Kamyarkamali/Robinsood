@@ -111,7 +111,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             onMouseLeave={() => setIsHoveringPrev(false)}
             className={`
               flex items-center justify-center
-              w-10 h-10 rounded-full
+             md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
               ${
                 prevRoute
@@ -123,9 +123,9 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             title={lang === "fa" ? "صفحه قبلی" : "Previous"}
           >
             {lang === "fa" ? (
-              <HiOutlineChevronLeft className="w-5 h-5" />
+              <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
             ) : (
-              <HiOutlineChevronRight className="w-5 h-5" />
+              <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
             )}
           </button>
 
@@ -144,7 +144,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <h1 className="whitespace-nowrap text-xl font-semibold text-white">
+          <h1 className="whitespace-nowrap text-sm md:text-xl font-normal md:font-semibold text-white">
             {i18next.language === "fa"
               ? current?.title?.fa
               : current?.title?.en}
@@ -159,7 +159,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             onMouseLeave={() => setIsHoveringNext(false)}
             className={`
               flex items-center justify-center
-              w-10 h-10 rounded-full
+              md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
               ${
                 nextRoute
@@ -171,9 +171,9 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             title={lang === "fa" ? "صفحه بعدی" : "Next"}
           >
             {lang === "fa" ? (
-              <HiOutlineChevronRight className="w-5 h-5" />
+              <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
             ) : (
-              <HiOutlineChevronLeft className="w-5 h-5" />
+              <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
             )}
           </button>
 

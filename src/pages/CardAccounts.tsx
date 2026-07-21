@@ -81,7 +81,7 @@ function CardAccounts() {
             }}
             className="text-cyan-600 dark:text-cyan-400 text-sm hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
           >
-            {lang === "fa" ? " تمامی آیتم ها" : "All Items"}
+            {lang === "fa" ? "سایر اکانت ها" : "Other accounts"}
           </Link>
         </div>
 

@@ -105,17 +105,15 @@ export default function MobileBottomNav() {
       <div
         dir={isFa ? "rtl" : "ltr"}
         className="
-          fixed bottom-0 left-0 right-0
-          z-50
-          px-3 pb-3 pt-2
+          fixed bottom-5 left-0 right-0
+          z-30
+          px-3 pt-2
+          border
           md:hidden
-          /* ---------- شیشه‌ای با گرادینت بنفش تیره ملایم ---------- */
-          bg-gradient-to-br
-          from-[#2a1a3a]/80
-          via-[#1e1030]/85
-          to-[#0d0a1a]/90
+          bg-linear-to-br
+         rounded-2xl
           backdrop-blur-2xl
-          border-t border-white/10
+          border-t border-gray-700
           shadow-[0_-20px_60px_rgba(88,28,135,0.15)]
         "
       >
@@ -159,7 +157,7 @@ export default function MobileBottomNav() {
                           ${
                             active
                               ? `
-                                bg-gradient-to-br from-purple-600/40 to-violet-700/40
+                                bg-linear-to-br from-purple-600/40 to-violet-700/40
                                 shadow-[0_0_40px_rgba(139,92,246,0.2)]
                                 backdrop-blur-sm
                                 border border-white/20
