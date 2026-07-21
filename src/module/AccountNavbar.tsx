@@ -4,6 +4,8 @@ import i18next from "i18next";
 import { createAppTour } from "../components/tour/appTour";
 import type { Lang } from "../types/type";
 import type { TourScope } from "../components/tour/tourSteps";
+import { routes } from "../data/fakeData";
+import { useParams } from "react-router-dom";
 interface AccountNavbarProps {
   scope: TourScope;
 }
@@ -16,13 +18,16 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
     createAppTour(lang as Lang, theme, scope).drive();
   };
 
+  const { section } = useParams();
+  const current = routes.find((route) => route.path === `/account/${section}`);
+
   return (
     <nav
       dir="ltr"
       className="
         sticky top-0 z-20
         mx-auto mb-5
-        flex w-full max-w-327.5
+        flex w-full max-w-326.5
         items-center justify-between
         rounded-2xl
         md:border md:border-white/15
@@ -38,7 +43,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
         onClick={handleStartTour}
         className="
           group
-          mt-5
+          mt-11
           md:mt-0
           flex items-center gap-2
 
@@ -75,7 +80,18 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
         </span>
       </button>
 
-      <h1>مشخصات</h1>
+      <div
+        className="flex items-center gap-4  mt-11
+          md:mt-0"
+      >
+        <div className="h-px w-12 bg-white/10" />
+
+        <h1 className="whitespace-nowrap  text-xl font-semibold text-white">
+          {i18next.language === "fa" ? current?.title?.fa : current?.title?.en}
+        </h1>
+
+        <div className="h-px w-12 bg-white/10" />
+      </div>
 
       <AccountPdfButton />
     </nav>

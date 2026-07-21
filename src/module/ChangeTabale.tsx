@@ -6,9 +6,6 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
   return (
     <div>
       <div className="flex flex-col items-center pr-9 md:flex-row">
-        <h1 className="md:text-2xl text-[11px] text-nowrap font-bold lg:px-2 mt-4 md:mb-4">
-          {t("labels.parametr6")}
-        </h1>
         <div
           id="detailse1"
           className="

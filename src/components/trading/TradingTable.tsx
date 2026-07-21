@@ -191,12 +191,12 @@ function fmtDateTime(iso: string | null, lang: string) {
 function SymbolBadge({ symKey, lang }: { symKey: string; lang: string }) {
   const s = symbolInfo(symKey);
   return (
-    <div className="flex items-center gap-1 justify-end">
-      <span className="text-[10px] font-medium text-gray-800 dark:text-gray-100 whitespace-nowrap">
+    <div className="flex items-center gap-1.5 justify-end whitespace-nowrap">
+      <span className="text-xs font-medium text-gray-800 dark:text-gray-100 whitespace-nowrap">
         {lang === "fa" ? s.label.fa : s.label.en}
       </span>
       <div
-        className="w-5 h-5 rounded-full flex items-center justify-center text-[7px] font-extrabold shrink-0 border"
+        className="w-7 h-7 rounded-full flex items-center justify-center text-[9px] font-extrabold shrink-0 border"
         style={{
           background: `${s.color}22`,
           borderColor: `${s.color}55`,
@@ -213,7 +213,7 @@ function SideBadge({ side, lang }: { side: TradeSide; lang: string }) {
   const isBuy = side === "buy";
   return (
     <span
-      className={`inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-bold whitespace-nowrap
+      className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-bold whitespace-nowrap
       ${isBuy ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30" : "bg-rose-500/15 text-rose-400 border border-rose-500/30"}`}
     >
       {isBuy ? (lang === "fa" ? "بای" : "Buy") : lang === "fa" ? "سل" : "Sell"}
@@ -242,7 +242,7 @@ function ResultBadge({ result, lang }: { result: TradeResult; lang: string }) {
   const m = map[result];
   return (
     <span
-      className={`inline-flex items-center px-1.5 py-0.5 rounded text-[8px] font-bold whitespace-nowrap border ${m.cls}`}
+      className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-bold whitespace-nowrap border ${m.cls}`}
     >
       {lang === "fa" ? m.fa : m.en}
     </span>
@@ -251,7 +251,7 @@ function ResultBadge({ result, lang }: { result: TradeResult; lang: string }) {
 
 function ColorBarHeaderChip() {
   return (
-    <div className="flex w-4 h-3 rounded-sm mx-auto border border-white/10">
+    <div className="flex w-5 h-4 rounded-sm mx-auto border border-white/10">
       <div className="flex-1 bg-emerald-500" />
       <div className="flex-1 bg-rose-500" />
     </div>
@@ -268,7 +268,7 @@ function SortChevrons({
   return (
     <span className="flex flex-col -space-y-1 shrink-0">
       <ChevronUp
-        size={7}
+        size={10}
         className={
           active && dir === "asc"
             ? "text-emerald-400"
@@ -276,7 +276,7 @@ function SortChevrons({
         }
       />
       <ChevronDown
-        size={7}
+        size={10}
         className={
           active && dir === "desc"
             ? "text-emerald-400"
@@ -477,7 +477,7 @@ function TradeCard({ trade, lang }: { trade: Trades; lang: string }) {
 }
 
 export default function TradingTable() {
-  const { i18n, t } = useTranslation();
+  const { i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
 
@@ -571,12 +571,6 @@ export default function TradingTable() {
 
   return (
     <>
-      <h1 className="md:text-2xl text-md font-bold px-4 mt-3 mb-3">
-        {t("items.item10", {
-          defaultValue: isRtl ? "جدول معاملات" : "Trades Table",
-        })}
-      </h1>
-
       <div
         id="trade1"
         dir={isRtl ? "rtl" : "ltr"}
@@ -757,7 +751,7 @@ export default function TradingTable() {
                         const range = filters.dates[key];
                         return (
                           <div key={key}>
-                            <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">
+                            <label className="text-[10px] text-center w-full text-gray-500 dark:text-gray-400 block mb-1">
                               {isRtl ? field.label.fa : field.label.en}
                             </label>
                             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1">
@@ -823,33 +817,32 @@ export default function TradingTable() {
           </div>
 
           <div className="hidden md:block overflow-x-auto">
-            <table className="w-full table-fixed">
+            <table className="w-full min-w-475 table-auto">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-[#3a3a3a]">
                   {COLUMNS.map((col) => (
                     <th
                       key={col.key}
                       onClick={() => handleSort(col.key)}
-                      style={{ width: col.width }}
-                      className={`px-1 py-2 text-right text-[9px] font-semibold text-gray-500 dark:text-gray-400 select-none whitespace-nowrap
+                      className={`px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 select-none whitespace-nowrap
                         ${
                           col.sort !== "none"
                             ? "cursor-pointer hover:text-gray-800 dark:hover:text-gray-200"
                             : ""
                         }
-                        ${col.key === "colorBar" ? "w-[2%]" : ""}`}
+                        ${col.key === "colorBar" ? "w-10" : ""}`}
                     >
                       {col.key === "colorBar" ? (
                         <ColorBarHeaderChip />
                       ) : (
-                        <div className="flex items-center justify-end gap-0.5">
+                        <div className="flex items-center justify-end gap-1 whitespace-nowrap">
                           {col.sort !== "none" && (
                             <SortChevrons
                               active={sort.col === col.key}
                               dir={sort.dir}
                             />
                           )}
-                          <span className="text-[8px] text-center w-full">
+                          <span className="text-xs whitespace-nowrap text-center w-full">
                             {isRtl ? col.label.fa : col.label.en}
                           </span>
                         </div>
@@ -869,52 +862,52 @@ export default function TradingTable() {
                           : "bg-gray-50/50 dark:bg-[#303030]"
                       }`}
                   >
-                    <td className="px-1 py-1.5 text-center">
+                    <td className="px-4 py-3 text-center">
                       <div
-                        className={`w-[2px] h-5 rounded-full mx-auto ${
+                        className={`w-[3px] h-6 rounded-full mx-auto ${
                           tr.profitLoss >= 0 ? "bg-emerald-500" : "bg-rose-500"
                         }`}
                       />
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-gray-700 dark:text-gray-300 font-medium truncate">
+                    <td className="px-4 py-3 text-center text-xs text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
                       {tr.ticket}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[8px] text-gray-500 dark:text-gray-400 truncate">
+                    <td className="px-4 py-3 text-center text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                       {fmtDateTime(tr.registeredAt, lang)}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[8px] text-gray-500 dark:text-gray-400 truncate">
+                    <td className="px-4 py-3 text-center text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                       {fmtDateTime(tr.entryAt, lang)}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-gray-700 dark:text-gray-300 tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300 tabular-nums whitespace-nowrap">
                       {tr.entryPrice.toLocaleString()}
                     </td>
-                    <td className="px-1 py-1.5 text-center">
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
                       <SideBadge side={tr.side} lang={lang} />
                     </td>
-                    <td className="px-1 py-1.5 text-center">
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
                       <SymbolBadge symKey={tr.symbol} lang={lang} />
                     </td>
-                    <td className="px-1 py-1.5 text-center">
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
                       <ResultBadge result={tr.result} lang={lang} />
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-gray-700 dark:text-gray-300 tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300 tabular-nums whitespace-nowrap">
                       {tr.volume}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-rose-500 font-medium tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-rose-500 font-medium tabular-nums whitespace-nowrap">
                       {tr.sl.toLocaleString()}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-emerald-500 font-medium tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-emerald-500 font-medium tabular-nums whitespace-nowrap">
                       {tr.tp.toLocaleString()}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-gray-700 dark:text-gray-300 tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300 tabular-nums whitespace-nowrap">
                       {tr.exitPrice !== null
                         ? tr.exitPrice.toLocaleString()
                         : "—"}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[8px] text-gray-500 dark:text-gray-400 truncate">
+                    <td className="px-4 py-3 text-center text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                       {fmtDateTime(tr.exitAt, lang)}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] font-semibold truncate">
+                    <td className="px-4 py-3 text-center text-sm font-semibold whitespace-nowrap">
                       <span
                         className={
                           tr.profitLoss >= 0
@@ -926,26 +919,26 @@ export default function TradingTable() {
                         {tr.profitLoss}
                       </span>
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-gray-500 dark:text-gray-400 tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 tabular-nums whitespace-nowrap">
                       {tr.commission}
                     </td>
-                    <td className="px-1 py-1.5 text-center text-[9px] text-gray-500 dark:text-gray-400 tabular-nums truncate">
+                    <td className="px-4 py-3 text-center text-sm text-gray-500 dark:text-gray-400 tabular-nums whitespace-nowrap">
                       {tr.swap}
                     </td>
-                    <td className="px-1 py-1.5 text-center">
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
                       {tr.isNewsTrade ? (
-                        <span className="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[7px] font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
-                          <Newspaper size={8} />
+                        <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold bg-indigo-500/15 text-indigo-400 border border-indigo-500/30">
+                          <Newspaper size={12} />
                           {isRtl ? "بله" : "Yes"}
                         </span>
                       ) : (
-                        <span className="text-[8px] text-gray-400 dark:text-gray-600">
+                        <span className="text-xs text-gray-400 dark:text-gray-600">
                           {isRtl ? "خیر" : "No"}
                         </span>
                       )}
                     </td>
                     <td
-                      className="px-1 py-1.5 text-center text-[8px] text-gray-600 dark:text-gray-300 truncate"
+                      className="px-4 py-3 text-center text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap"
                       title={tr.comment || "—"}
                     >
                       {tr.comment || "—"}

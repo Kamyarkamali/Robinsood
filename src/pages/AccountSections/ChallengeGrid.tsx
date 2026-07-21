@@ -23,9 +23,6 @@ export default function ChallengeGrid() {
 
   return (
     <div className="flex flex-col justify-start w-full max-w-350 mx-auto">
-      <h1 className="md:text-2xl text-md font-bold px-4 mb-4 mt-4">
-        {t("labels.parametr2")}
-      </h1>
       <div className="flex items-center gap-3 px-4 mb-4 mt-3 ">
         <button
           id="today1"

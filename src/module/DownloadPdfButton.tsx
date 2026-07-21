@@ -23,7 +23,7 @@ const DownloadPdfButton = () => {
       disabled={loading}
       className="
           group
-          mt-5
+          mt-11
           md:mt-0
           flex items-center gap-2
         cursor-pointer
@@ -65,7 +65,7 @@ const DownloadPdfButton = () => {
       ) : (
         <>
           <HiOutlineDocumentArrowDown className="text-[15px] md:text-xl" />
-          <span className="text-[11px] md:text-sm">
+          <span className="text-[11px] hidden md:block md:text-sm">
             {lang === "fa" ? " دانلود PDF" : "Download Pdf"}
           </span>
         </>

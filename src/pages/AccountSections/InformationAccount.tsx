@@ -9,18 +9,13 @@ import { MdOutlineShowChart } from "react-icons/md";
 import { TbChartHistogram } from "react-icons/tb";
 import { PiChartLineDown } from "react-icons/pi";
 import { IoTimeOutline } from "react-icons/io5";
-import { useTranslation } from "react-i18next";
 import i18next from "i18next";
 import { cardInner, cardOuter } from "../../styles/buttonStyles";
 import CircleIcon from "../../icons/CircleIcon";
 
 function InformationAccount() {
-  const { t } = useTranslation();
   return (
     <>
-      <h1 className="md:text-2xl text-md font-bold px-4 mb-4 mt-4">
-        {t("labels.parametr5")}
-      </h1>
       <div className="w-full flex flex-wrap items-center justify-center gap-6 p-4">
         <div className={cardOuter}>
           <div className={cardInner}>

@@ -4,7 +4,7 @@ import { behaviorMetrics, performanceMetrics } from "../data/fakeData";
 import UsersIcon from "../icons/UsersIcon";
 import ProfileIcon from "../icons/ProfileIcon";
 import VS from "../assets/images/V.S.png";
-import i18next, { t } from "i18next";
+import i18next from "i18next";
 import CartFacke from "../module/CartFacke";
 import { useMemo, useState } from "react";
 
@@ -118,10 +118,6 @@ export default function VSComparison() {
 
   return (
     <>
-      <h1 className="md:text-2xl text-fmd font-bold px-4 mt-3 mb-3">
-        {t("labels.parametr12")}
-      </h1>
-
       <div
         id="com1"
         className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] w-full max-w-8xl rounded-2xl mt-3 border-4 dark:border-[#3C3C3C] border-gray-300 mx-auto text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"

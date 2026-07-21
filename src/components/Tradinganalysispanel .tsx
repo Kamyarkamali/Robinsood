@@ -8,7 +8,6 @@ import {
   TOTAL,
 } from "../data/fakeData";
 import type { Lang } from "../types/type";
-import { useTranslation } from "react-i18next";
 
 const toFa = (n: number) =>
   n.toString().replace(/\d/g, (d) => "۰۱۲۳۴۵۶۷۸۹"[+d]);
@@ -115,13 +114,9 @@ export default function TradingAnalysisPanel() {
   const lang = i18next.language as Lang;
   const c = COMMENT[lang];
   const mx = numStr(100, lang);
-  const { t } = useTranslation();
 
   return (
     <>
-      <h1 className="md:text-2xl text-md font-bold px-4 mb-4 mt-4">
-        {t("labels.parametr11")}
-      </h1>
       <div id="ai" className="w-full mx-auto mt-3 ">
         <div
           dir={lang === "fa" ? "ltr" : "rtl"}

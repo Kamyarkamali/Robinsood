@@ -482,9 +482,6 @@ export default function TradingChart() {
 
   return (
     <>
-      <h1 className="md:text-2xl text-lg font-bold px-2 mt-4 mb-4">
-        {t("labels.parametr4")}
-      </h1>
       <div
         id="chart4"
         dir={isRtl ? "rtl" : "ltr"}

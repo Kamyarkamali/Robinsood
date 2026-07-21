@@ -142,10 +142,9 @@ export default function Sidebar() {
     setOpen((prev) => !prev);
   }, []);
 
-  // تابع برای کاهش تعداد نوتیفیکیشن بعد از باز کردن
   const handleOpenNotifications = useCallback(() => {
     handleSetModalType("notifications");
-    setNotificationCount(0); // ریست کردن تعداد نوتیفیکیشن
+    setNotificationCount(0);
   }, []);
 
   useEffect(() => {
@@ -204,82 +203,13 @@ export default function Sidebar() {
     [modalType, currentCard, handleCloseModal],
   );
 
-  // const renderButton = (btn: any, isMobileView: boolean = false) => {
-  //   const isNotifications = btn.type === "notifications";
-
-  //   return (
-  //     <button
-  //       key={btn.type}
-  //       type="button"
-  //       title={lang === "fa" ? btn.title.fa : btn.title.en}
-  //       onClick={
-  //         isNotifications
-  //           ? handleOpenNotifications
-  //           : () => handleSetModalType(btn.type)
-  //       }
-  //       className={`
-  //         ${btn.step}
-  //         w-full
-  //         flex
-  //         items-center
-  //         rounded-2xl
-  //         px-5
-  //         gap-2
-  //         py-3
-  //         transition-colors
-  //         duration-200
-  //         cursor-pointer
-  //         dark:text-zinc-300 text-zinc-700
-  //         hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-  //         hover:bg-zinc-800/30
-  //         active:scale-95
-  //         ${
-  //           modalType === btn.type
-  //             ? `
-  //           shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-  //           bg-zinc-800/50
-  //           text-white
-  //           border border-white/5
-  //         `
-  //             : ""
-  //         }
-  //         ${!open && !isMobileView ? "justify-center px-0" : ""}
-  //         ${isMobileView ? "gap-4" : ""}
-  //       `}
-  //     >
-  //       <div className="relative shrink-0">
-  //         <btn.icon size={isMobileView ? 22 : 22} />
-
-  //         {isNotifications && notificationCount > 0 && (
-  //           <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
-  //             {notificationCount}
-  //           </span>
-  //         )}
-  //       </div>
-
-  //       <span
-  //         className={`
-  //           text-[${isMobileView ? "12px" : "11px"}]
-  //           overflow-hidden
-  //           ${isMobileView ? "w-auto" : "w-44"}
-  //           transition-opacity duration-200
-  //           text-start
-  //           ${open || isMobileView ? "block" : "hidden pointer-events-none w-0"}
-  //         `}
-  //       >
-  //         {lang === "fa" ? btn.title.fa : btn.title.en}
-  //       </span>
-  //     </button>
-  //   );
-  // };
-
   if (isMobile) {
     return (
       <>
         <button
           onClick={handleOpenMobile}
           className={`
-            fixed top-4 left-4 z-50
+            fixed top-4 left-14 z-50
             p-2.5 rounded-xl
             bg-[#3B3B3B] text-white
             border border-zinc-800

@@ -6,7 +6,6 @@ import { CiCalendar } from "react-icons/ci";
 import type { NewsEvent, Session } from "../types/interfaces";
 import { NEWS, SESSIONS } from "../data/fakeData";
 import i18next from "i18next";
-import { useTranslation } from "react-i18next";
 
 const IMPACT_COLOR = { High: "#ef4444", Medium: "#f59e0b", Low: "#22c55e" };
 const IMPACT_BG = {
@@ -174,8 +173,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return { left, top, minWidth: tooltipW };
   };
 
-  const { t } = useTranslation();
-
   const { gregorian, shamsi } = getDates(i18next.language);
 
   const hourLabels = isMobile
@@ -190,10 +187,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
   return (
     <>
-      <h1 className="md:text-2xl text-sm font-bold px-2 mt-4 mb-4">
-        {t("labels.parametr10")}
-      </h1>
-
       <div
         id="tabale1"
         ref={rootRef}
