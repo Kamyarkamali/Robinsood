@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import {
   BsCheckCircleFill,
   BsCircle,
@@ -34,7 +35,6 @@ interface TableViewProps {
 const TableView: React.FC<TableViewProps> = ({
   accounts,
   selectedAccountNumber = null,
-  onSelectAccount,
 }) => {
   const lang = i18next.language;
 
@@ -54,7 +54,6 @@ const TableView: React.FC<TableViewProps> = ({
               className="
                 text-gray-400
                 dark:text-gray-500
-                
                 text-[8px] sm:text-[10px] md:text-xs
                 font-semibold
                 tracking-wider
@@ -108,7 +107,6 @@ const TableView: React.FC<TableViewProps> = ({
                     transition-all
                     duration-200
                     group
-                   
                   "
                 >
                   <td
@@ -307,9 +305,9 @@ const TableView: React.FC<TableViewProps> = ({
                   <td
                     className={`text-center px-1 sm:px-2 border ${cellBorderClass} rounded-2xl rounded-r-none`}
                   >
-                    <button
-                      type="button"
-                      onClick={() => onSelectAccount?.(account.accountNumber)}
+                    {/* لینک به جای دکمه */}
+                    <Link
+                      to={`/account/${account.accountNumber}/details`}
                       className={`
                         inline-flex
                         items-center
@@ -324,6 +322,7 @@ const TableView: React.FC<TableViewProps> = ({
                         border
                         transition-all
                         duration-200
+                        no-underline
                         ${
                           isSelected
                             ? "bg-cyan-500 border-cyan-500 text-white hover:bg-cyan-600"
@@ -339,13 +338,13 @@ const TableView: React.FC<TableViewProps> = ({
                       <span className="hidden sm:inline">
                         {isSelected
                           ? lang === "fa"
-                            ? "انتخاب شد"
-                            : "Selected"
+                            ? "مشاهده"
+                            : "View"
                           : lang === "fa"
-                            ? "انتخاب"
-                            : "Select"}
+                            ? "مشاهده"
+                            : "View"}
                       </span>
-                    </button>
+                    </Link>
                   </td>
                 </tr>
               );
