@@ -27,9 +27,10 @@ export default function DashboardWindows({
       dir="rtl"
       className="
         fixed bottom-2 sm:bottom-4 left-1/2 -translate-x-1/2
-        z-5
+        z-20
         px-2
-        flex justify-center
+        hidden
+        md:flex justify-center
       "
     >
       <div

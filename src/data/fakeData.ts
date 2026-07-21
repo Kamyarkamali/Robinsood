@@ -158,12 +158,6 @@ import type { IconType } from "react-icons/lib";
 
 export const buttonSection = [
   {
-    id: 1,
-    slug: "all-items",
-    en: "show all items",
-    fa: "نمایش همه آیتم ها",
-  },
-  {
     id: 2,
     slug: "challenge-info",
     en: "challenge info",

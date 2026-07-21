@@ -209,10 +209,10 @@ export default function Sidebar() {
         <button
           onClick={handleOpenMobile}
           className={`
-            fixed top-4 left-14 z-50
+            fixed top-2 left-5 z-50
             p-2.5 rounded-xl
-            bg-[#3B3B3B] text-white
             border border-zinc-800
+            backdrop-blur-3xl
             cursor-pointer
             shadow-lg
             transition-opacity duration-200
