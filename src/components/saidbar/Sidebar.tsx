@@ -4,7 +4,6 @@ import i18next from "i18next";
 
 import BtnSaidbar from "../ui/BtnSaidbar";
 import ProfileSidbar from "./ProfileSidbar";
-import UserMenu from "../../module/UserMenu";
 import type { ModalType } from "../../types/type";
 import PassAccountModalContent from "../modals/PassModal";
 import SupportModalContent from "../modals/SupportModal";
@@ -18,14 +17,25 @@ import {
   HiOutlineUserGroup,
   HiOutlineUserCircle,
   HiOutlineBell,
+  HiOutlineHome,
+  HiOutlineInformationCircle,
+  HiOutlineQuestionMarkCircle,
+  HiOutlineUsers,
 } from "react-icons/hi2";
 import { Link } from "react-router-dom";
 import ChallengeAccountsModal from "../../pages/AllAccounts";
 import NotificationsModal from "../modals/NotificationsModal";
 
 const MemoizedProfileSidbar = memo(ProfileSidbar);
-const MemoizedUserMenu = memo(UserMenu);
 const MemoizedModal = memo(Modal);
+
+const Divider = () => (
+  <div className="relative my-2">
+    <div className="absolute inset-0 flex items-center">
+      <div className="w-full border-t border-zinc-700 p-1"></div>
+    </div>
+  </div>
+);
 
 function debounce<T extends (...args: any[]) => any>(
   func: T,
@@ -106,7 +116,6 @@ export default function Sidebar() {
           en: "Education & Guide",
         },
       },
-
       {
         type: "notifications" as const,
         step: "step-notifications",
@@ -258,79 +267,116 @@ export default function Sidebar() {
 
           <MemoizedProfileSidbar open={true} setOpen={handleToggleSidebar} />
 
-          <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
-            <Link
-              id="home2"
-              to="/accounts"
-              onClick={(e) => {
-                e.preventDefault();
-                setIsModalOpen(true);
-                handleCloseMobile();
-              }}
-              className="w-full flex items-center gap-4 rounded-2xl px-5 py-3 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
-            >
-              <HiOutlineUserCircle size={22} className="shrink-0" />
-              <span className="overflow-hidden text-[12px] font-normal text-start">
-                {lang === "fa" ? " اکانت های من" : "MyAccounts"}
-              </span>
-            </Link>
+          <nav className="flex-1 overflow-y-auto mt-6 [contain:layout_style] space-y-1">
+            {/* بخش اول: دسترسی سریع */}
+            <div className="space-y-1">
+              <p className="text-[10px] text-zinc-500 px-5 py-1">
+                {lang === "fa" ? "دسترسی سریع" : "Quick Access"}
+              </p>
 
-            <button
-              onClick={() => {
-                handleOpenNotifications();
-                handleCloseMobile();
-              }}
-              className="w-full flex items-center gap-4 rounded-2xl px-5 py-3 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
-            >
-              <div className="relative shrink-0">
-                <HiOutlineBell size={22} />
-                {notificationCount > 0 && (
-                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
-                    {notificationCount}
-                  </span>
-                )}
-              </div>
-              <span className="overflow-hidden text-[12px] font-normal text-start">
-                {lang === "fa" ? "اطلاعیه ها" : "notifications"}
-              </span>
-            </button>
+              <Link
+                to="/dashboard"
+                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+              >
+                <HiOutlineHome size={22} className="shrink-0" />
+                <span className="overflow-hidden text-[12px] font-normal text-start">
+                  {lang === "fa" ? "صفحه اصلی" : "Home"}
+                </span>
+              </Link>
 
-            {cards.map((card) => (
-              <button
-                key={card.type}
-                type="button"
-                title={lang === "fa" ? card.title.fa : card.title.en}
-                onClick={() => {
-                  handleSetModalType(card.type);
+              <Link
+                id="home2"
+                to="/accounts"
+                onClick={(e) => {
+                  e.preventDefault();
+                  setIsModalOpen(true);
                   handleCloseMobile();
                 }}
-                className={`
-                  ${card.step}
-                  w-full
-                  flex
-                  items-center
-                  gap-4
-                  rounded-2xl
-                  px-5
-                  py-3
-                  transition-colors
-                  duration-200
-                  min-w-0
-                  text-zinc-300
-                  cursor-pointer
-                  hover:bg-zinc-800/30
-                  active:scale-95
-                `}
+                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
               >
-                <card.icon size={22} className="shrink-0" />
+                <HiOutlineUserCircle size={22} className="shrink-0" />
                 <span className="overflow-hidden text-[12px] font-normal text-start">
-                  {lang === "fa" ? card.title.fa : card.title.en}
+                  {lang === "fa" ? "اکانت های من" : "My Accounts"}
+                </span>
+              </Link>
+
+              <button
+                onClick={() => {
+                  handleOpenNotifications();
+                  handleCloseMobile();
+                }}
+                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+              >
+                <div className="relative shrink-0">
+                  <HiOutlineBell size={22} />
+                  {notificationCount > 0 && (
+                    <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-[8px] font-bold text-white">
+                      {notificationCount}
+                    </span>
+                  )}
+                </div>
+                <span className="overflow-hidden text-[12px] font-normal text-start">
+                  {lang === "fa" ? "اطلاعیه ها" : "Notifications"}
                 </span>
               </button>
-            ))}
+            </div>
+
+            <Divider />
+
+            <div className="space-y-1">
+              <p className="text-[10px] text-zinc-500 px-5 py-1">
+                {lang === "fa" ? "پشتیبانی و آموزش" : "Support & Education"}
+              </p>
+
+              {cards.map((card) => {
+                if (card.type === "notifications") return null;
+                return (
+                  <button
+                    key={card.type}
+                    onClick={() => {
+                      handleSetModalType(card.type);
+                      handleCloseMobile();
+                    }}
+                    className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+                  >
+                    <card.icon size={22} className="shrink-0" />
+                    <span className="overflow-hidden text-[12px] font-normal text-start">
+                      {lang === "fa" ? card.title.fa : card.title.en}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+
+            <Divider />
+
+            <div className="space-y-1">
+              <p className="text-[10px] dark:text-zinc-500 px-5 py-1">
+                {lang === "fa" ? "درباره رابین سود" : "About RobinSood"}
+              </p>
+
+              <button className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95">
+                <HiOutlineInformationCircle size={22} className="shrink-0" />
+                <span className="overflow-hidden text-[12px] font-normal text-start">
+                  {lang === "fa" ? "درباره ما" : "About Us"}
+                </span>
+              </button>
+              <button className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95">
+                <HiOutlineQuestionMarkCircle size={22} className="shrink-0" />
+                <span className="overflow-hidden text-[12px] font-normal text-start">
+                  {lang === "fa" ? "سوالات متداول" : "FAQ"}
+                </span>
+              </button>
+              <button className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95">
+                <HiOutlineUsers size={22} className="shrink-0" />
+                <span className="overflow-hidden text-[12px] font-normal text-start">
+                  {lang === "fa" ? "تماس با ما" : "Contact Us"}
+                </span>
+              </button>
+            </div>
           </nav>
 
-          <MemoizedUserMenu isSidebarOpen={true} />
+          {/* <MemoizedUserMenu isSidebarOpen={true} /> */}
         </aside>
 
         {modalNode}
@@ -381,8 +427,49 @@ export default function Sidebar() {
           <BtnSaidbar open={open} setOpen={handleToggleSidebar} />
         </div>
 
-        <nav className="space-y-2 flex-1 overflow-y-auto mt-12 [contain:layout_style]">
-          <div className="flex flex-col items-center justify-center">
+        <nav className="flex-1 overflow-y-auto mt-12 [contain:layout_style] space-y-1">
+          <div className="space-y-1">
+            <p
+              className={`text-[10px] font-semibold text-zinc-500 dark:text-white px-5 py-1 ${!open ? "hidden" : ""}`}
+            >
+              {lang === "fa" ? "دسترسی سریع" : "Quick Access"}
+            </p>
+
+            <Link
+              to="/dashboard"
+              className={`
+                w-full
+                flex
+                items-center
+                rounded-2xl
+                px-5
+                gap-2
+                py-2.5
+                transition-colors
+                duration-200
+                cursor-pointer
+                dark:text-zinc-300 text-zinc-700
+                hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                hover:bg-zinc-800/30
+                active:scale-95
+                ${!open ? "justify-center px-0" : ""}
+              `}
+            >
+              <HiOutlineHome size={22} className="shrink-0" />
+              <span
+                className={`
+                  text-[11px]
+                  overflow-hidden
+                  w-44
+                  transition-opacity duration-200
+                  text-start
+                  ${open ? "block" : "hidden pointer-events-none w-0"}
+                `}
+              >
+                {lang === "fa" ? "صفحه اصلی" : "Home"}
+              </span>
+            </Link>
+
             <Link
               id="home2"
               to="/accounts"
@@ -395,10 +482,9 @@ export default function Sidebar() {
                 flex
                 items-center
                 rounded-2xl
-                text-[12px]
                 px-5
                 gap-2
-                py-3
+                py-2.5
                 transition-colors
                 duration-200
                 cursor-pointer
@@ -420,7 +506,7 @@ export default function Sidebar() {
                   ${open ? "block" : "hidden pointer-events-none w-0"}
                 `}
               >
-                {lang === "fa" ? " اکانت های من" : "MyAccounts"}
+                {lang === "fa" ? "اکانت های من" : "My Accounts"}
               </span>
             </Link>
 
@@ -431,10 +517,9 @@ export default function Sidebar() {
                 flex
                 items-center
                 rounded-2xl
-                text-[12px]
                 px-5
                 gap-2
-                py-3
+                py-2.5
                 transition-colors
                 duration-200
                 cursor-pointer
@@ -473,26 +558,92 @@ export default function Sidebar() {
                   ${open ? "block" : "hidden pointer-events-none w-0"}
                 `}
               >
-                {lang === "fa" ? "اطلاعیه ها" : "notifications"}
+                {lang === "fa" ? "اطلاعیه ها" : "Notifications"}
               </span>
             </button>
           </div>
 
-          {cards.map((card) => (
+          <Divider />
+
+          {/* بخش دوم: پشتیبانی و آموزش */}
+          <div className="space-y-1">
+            <p
+              className={`text-[10px] font-semibold text-zinc-500 dark:text-white px-5 py-1 ${!open ? "hidden" : ""}`}
+            >
+              {lang === "fa" ? "پشتیبانی و آموزش" : "Support & Education"}
+            </p>
+
+            {cards.map((card) => {
+              if (card.type === "notifications") return null;
+              return (
+                <button
+                  key={card.type}
+                  onClick={() => handleSetModalType(card.type)}
+                  className={`
+                    w-full
+                    flex
+                    items-center
+                    rounded-2xl
+                    px-5
+                    gap-2
+                    py-2.5
+                    transition-colors
+                    duration-200
+                    cursor-pointer
+                    dark:text-zinc-300 text-zinc-700
+                    hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                    hover:bg-zinc-800/30
+                    active:scale-95
+                    ${
+                      modalType === card.type
+                        ? `
+                      shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                      bg-zinc-800/50
+                      text-white
+                      border border-white/5
+                    `
+                        : ""
+                    }
+                    ${!open ? "justify-center px-0" : ""}
+                  `}
+                >
+                  <card.icon size={22} className="shrink-0" />
+                  <span
+                    className={`
+                      text-[11px]
+                      overflow-hidden
+                      w-44
+                      transition-opacity duration-200
+                      text-start
+                      ${open ? "block" : "hidden pointer-events-none w-0"}
+                    `}
+                  >
+                    {lang === "fa" ? card.title.fa : card.title.en}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+
+          <Divider />
+
+          {/* بخش سوم: درباره رابین سود */}
+          <div className="space-y-1">
+            <p
+              className={`text-[10px] font-semibold text-zinc-500 dark:text-white px-5 py-1 ${!open ? "hidden" : ""}`}
+            >
+              {lang === "fa" ? "درباره رابین سود" : "About RobinSood"}
+            </p>
+
             <button
-              key={card.type}
-              type="button"
-              title={lang === "fa" ? card.title.fa : card.title.en}
-              onClick={() => handleSetModalType(card.type)}
               className={`
-                ${card.step}
                 w-full
                 flex
                 items-center
                 rounded-2xl
                 px-5
                 gap-2
-                py-3
+                py-2.5
                 transition-colors
                 duration-200
                 cursor-pointer
@@ -500,21 +651,10 @@ export default function Sidebar() {
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
                 hover:bg-zinc-800/30
                 active:scale-95
-                ${
-                  modalType === card.type
-                    ? `
-                  shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                  bg-zinc-800/50
-                  text-white
-                  border border-white/5
-                `
-                    : ""
-                }
                 ${!open ? "justify-center px-0" : ""}
               `}
             >
-              <card.icon size={22} className="shrink-0" />
-
+              <HiOutlineInformationCircle size={22} className="shrink-0" />
               <span
                 className={`
                   text-[11px]
@@ -525,13 +665,81 @@ export default function Sidebar() {
                   ${open ? "block" : "hidden pointer-events-none w-0"}
                 `}
               >
-                {lang === "fa" ? card.title.fa : card.title.en}
+                {lang === "fa" ? "درباره ما" : "About Us"}
               </span>
             </button>
-          ))}
+
+            <button
+              className={`
+                w-full
+                flex
+                items-center
+                rounded-2xl
+                px-5
+                gap-2
+                py-2.5
+                transition-colors
+                duration-200
+                cursor-pointer
+                dark:text-zinc-300 text-zinc-700
+                hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                hover:bg-zinc-800/30
+                active:scale-95
+                ${!open ? "justify-center px-0" : ""}
+              `}
+            >
+              <HiOutlineQuestionMarkCircle size={22} className="shrink-0" />
+              <span
+                className={`
+                  text-[11px]
+                  overflow-hidden
+                  w-44
+                  transition-opacity duration-200
+                  text-start
+                  ${open ? "block" : "hidden pointer-events-none w-0"}
+                `}
+              >
+                {lang === "fa" ? "سوالات متداول" : "FAQ"}
+              </span>
+            </button>
+
+            <button
+              className={`
+                w-full
+                flex
+                items-center
+                rounded-2xl
+                px-5
+                gap-2
+                py-2.5
+                transition-colors
+                duration-200
+                cursor-pointer
+                dark:text-zinc-300 text-zinc-700
+                hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
+                hover:bg-zinc-800/30
+                active:scale-95
+                ${!open ? "justify-center px-0" : ""}
+              `}
+            >
+              <HiOutlineUsers size={22} className="shrink-0" />
+              <span
+                className={`
+                  text-[11px]
+                  overflow-hidden
+                  w-44
+                  transition-opacity duration-200
+                  text-start
+                  ${open ? "block" : "hidden pointer-events-none w-0"}
+                `}
+              >
+                {lang === "fa" ? "تماس با ما" : "Contact Us"}
+              </span>
+            </button>
+          </div>
         </nav>
 
-        <MemoizedUserMenu isSidebarOpen={open} />
+        {/* <MemoizedUserMenu isSidebarOpen={open} /> */}
 
         {modalNode}
       </aside>

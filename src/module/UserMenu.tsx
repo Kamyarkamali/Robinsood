@@ -1,11 +1,5 @@
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
-import {
-  FiChevronDown,
-  FiEdit2,
-  FiX,
-  FiSettings,
-  FiHome,
-} from "react-icons/fi";
+import { FiChevronDown, FiEdit2, FiX, FiSettings } from "react-icons/fi";
 import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -14,8 +8,6 @@ import { avatarData } from "../data/fakeData";
 import i18next from "i18next";
 import { useTheme } from "../hooks/useTheme";
 import { useUser } from "../hooks/useUser";
-import { Link } from "react-router-dom";
-import { HiOutlineChartBar } from "react-icons/hi2";
 
 interface UserMenuProps {
   isSidebarOpen?: boolean;
@@ -75,11 +67,20 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
   }, [avatarModal, open]);
 
   const changeTheme = useCallback(
-    (t: "dark" | "light") => {
+    (t: "dark" | "light" | "system") => {
       if (t === "dark") {
         setDark();
       } else if (t === "light") {
         setLight();
+      } else if (t === "system") {
+        const systemPrefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        if (systemPrefersDark) {
+          setDark();
+        } else {
+          setLight();
+        }
       }
     },
     [setDark, setLight],
@@ -140,82 +141,82 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
           {i18next.language === "fa" ? "تم" : "Theme"}
         </span>
 
-        <div className="relative shrink-0">
-          <input
-            type="checkbox"
-            id="theme-toggle"
-            checked={isDark}
-            onChange={(e) => changeTheme(e.target.checked ? "dark" : "light")}
-            className="opacity-0 absolute -top-full invisible"
-          />
-
-          <label
-            htmlFor="theme-toggle"
-            className={`
-            block w-14 h-7 relative rounded-full cursor-pointer
-            transition-colors duration-200 ease-in-out
-            ${isDark ? "bg-[#303C42]" : "bg-[#ddd]"}
-          `}
-          >
-            <motion.div
-              className="absolute top-[3px] w-[22px] h-[22px] rounded-full bg-white shadow-md"
-              animate={{ left: isDark ? "31px" : "3px" }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            />
-
-            <div className="absolute top-[5px] left-[5px] pointer-events-none">
-              <svg width="18" height="18" viewBox="0 0 64 64">
-                <circle
-                  cx="32"
-                  cy="32"
-                  r="17"
-                  fill={isDark ? "#212529" : "#ffc700"}
-                />
-                {[5, 11, 53, 59].map((y, i) => (
-                  <line
-                    key={i}
-                    x1={i < 2 ? "32" : i === 2 ? "59" : "11"}
-                    x2={i < 2 ? "32" : i === 2 ? "53" : "5"}
-                    y1={i < 2 ? y : "32"}
-                    y2={i < 2 ? (i === 0 ? 11 : 59) : "32"}
-                    stroke={isDark ? "#212529" : "#ffc700"}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                ))}
-                {[
-                  [51.09, 12.91, 46.85, 17.15],
-                  [17.15, 46.85, 12.91, 51.09],
-                  [51.09, 51.09, 46.85, 46.85],
-                  [17.15, 17.15, 12.91, 12.91],
-                ].map((coords, i) => (
-                  <line
-                    key={i + 4}
-                    x1={coords[0]}
-                    x2={coords[2]}
-                    y1={coords[1]}
-                    y2={coords[3]}
-                    stroke={isDark ? "#212529" : "#ffc700"}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                  />
-                ))}
-              </svg>
-            </div>
-
-            <div className="absolute top-1 right-1 pointer-events-none">
-              <svg height="20" width="20" viewBox="0 0 512 512">
-                <path
-                  d="M343.1,315c-1.8,0.1-3.5,0.1-5.3,0.1c-29.1,0-56.5-11.3-77.1-31.9c-20.6-20.6-31.9-48-31.9-77.1c0-16.6,3.7-32.6,10.6-47.1c3.1-6.4,6.8-12.5,11.1-18.2c-7.6,0.8-14.9,2.4-22,4.6c-46.8,14.8-80.7,58.5-80.7,110.2c0,63.8,51.7,115.5,115.5,115.5c35.3,0,66.8-15.8,88-40.7c4.8-5.7,9.2-11.9,12.8-18.5C357.3,313.6,350.3,314.7,343.1,315z"
-                  fill={isDark ? "#ffc700" : "#212529"}
-                />
-              </svg>
-            </div>
-          </label>
+        <div className="flex gap-1">
+          {["light", "dark", "system"].map((theme) => (
+            <motion.button
+              key={theme}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => changeTheme(theme as "light" | "dark" | "system")}
+              className={`
+                text-[10px] px-2 cursor-pointer py-0.5 rounded-lg
+                transition-colors duration-150
+                ${
+                  (theme === "dark" && isDark) ||
+                  (theme === "light" && !isDark) ||
+                  (theme === "system" && false)
+                    ? resolvedTheme === "dark"
+                      ? "bg-green-500/20 text-green-400"
+                      : "bg-green-500/10 text-green-600"
+                    : styles.textSecondary
+                }
+                relative overflow-hidden
+              `}
+            >
+              {i18next.language === "fa"
+                ? theme === "light"
+                  ? "روشن"
+                  : theme === "dark"
+                    ? "تاریک"
+                    : "سیستم"
+                : theme === "light"
+                  ? "Light"
+                  : theme === "dark"
+                    ? "Dark"
+                    : "System"}
+            </motion.button>
+          ))}
         </div>
       </div>
     ),
-    [isDark, styles, changeTheme],
+    [isDark, styles, changeTheme, resolvedTheme],
+  );
+
+  const LangToggle = useMemo(
+    () => (
+      <div className="flex items-center justify-between gap-2 flex-1">
+        <span
+          className={`text-[10px] ${styles.textSecondary} whitespace-nowrap`}
+        >
+          {i18next.language === "fa" ? "زبان" : "Language"}
+        </span>
+        <div className="flex gap-1">
+          {["fa", "en"].map((l) => (
+            <motion.button
+              key={l}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => changeLang(l as Lang)}
+              className={`
+                text-[10px] px-2 cursor-pointer py-0.5 rounded-lg
+                transition-colors duration-150
+                ${
+                  i18next.language === l
+                    ? resolvedTheme === "dark"
+                      ? "bg-green-500/20 text-green-400"
+                      : "bg-green-500/10 text-green-600"
+                    : styles.textSecondary
+                }
+                relative overflow-hidden
+              `}
+            >
+              {l === "fa" ? "فارسی" : "English"}
+            </motion.button>
+          ))}
+        </div>
+      </div>
+    ),
+    [i18next.language, resolvedTheme, styles, changeLang],
   );
 
   return (
@@ -225,14 +226,14 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
         whileHover={{ scale: isSidebarOpen ? 1.02 : 1 }}
         whileTap={{ scale: isSidebarOpen ? 0.98 : 1 }}
         className={`
-  flex items-center gap-1.5 sm:gap-2 cursor-pointer
-  justify-center
-  px-1.5 sm:px-2 py-1 rounded-full
-  transition-all duration-200
-  backdrop-blur-lg
-  w-full  
-  ${!isSidebarOpen && "opacity-50 cursor-not-allowed"}
-`}
+          flex items-center gap-1.5 sm:gap-2 cursor-pointer
+          justify-center
+          px-1.5 sm:px-2 py-1 rounded-full
+          transition-all duration-200
+          backdrop-blur-lg
+          w-full  
+          ${!isSidebarOpen && "opacity-50 cursor-not-allowed"}
+        `}
         title={!isSidebarOpen ? "سایدبار را باز کنید" : ""}
       >
         <motion.div
@@ -243,123 +244,46 @@ export default function UserMenu({ isSidebarOpen = true }: UserMenuProps) {
           }}
           transition={{ duration: 0.25 }}
           className={`
-flex
-items-center
-justify-center
-w-full
-transition-all
-duration-300
-${isSidebarOpen ? "flex-row" : "flex-col"}
-`}
+            flex
+            items-center
+            justify-center
+            w-full
+            transition-all
+            duration-300
+            ${isSidebarOpen ? "flex-row" : "flex-col"}
+          `}
         >
-          {/* صفحه اصلی */}
-          <Link
-            to="/"
-            className={`
-flex
-items-center
-justify-center
-rounded-xl
-backdrop-blur-xl
-${styles.border}
-${styles.text}
-transition-all
-duration-300
-cursor-pointer
-
-${
-  isSidebarOpen
-    ? "px-2.5 py-1.5 gap-1.5 min-w-20.5 text-[9px] lg:text-[10px]"
-    : "w-10 h-10 p-0"
-}
-`}
-          >
-            <FiHome size={isSidebarOpen ? 13 : 18} />
-            <span
-              className={`
-overflow-hidden
-whitespace-nowrap
-transition-all
-duration-300
-
-${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
-`}
-            >
-              {lang === "fa" ? "صفحه اصلی" : "Home"}
-            </span>
-          </Link>
-
-          {/* پلتفرم */}
-          <Link
-            to="/platform"
-            className={`
-flex
-items-center
-justify-center
-rounded-xl
-${styles.border}
-${styles.text}
-transition-all
-duration-300
-cursor-pointer
-
-
-${
-  isSidebarOpen
-    ? "px-2.5 py-1.5 gap-1.5 min-w-20.5 text-[9px] lg:text-[10px]"
-    : "w-10 h-10 p-0"
-}
-`}
-          >
-            <HiOutlineChartBar size={isSidebarOpen ? 13 : 18} />
-            <span
-              className={`
-overflow-hidden
-whitespace-nowrap
-transition-all
-duration-300
-
-${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
-`}
-            >
-              {lang === "fa" ? "پلتفرم" : "Platform"}
-            </span>
-          </Link>
-
-          {/* تنظیمات */}
+          {/* فقط دکمه تنظیمات */}
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={toggleDropdown}
             className={`
-flex
-items-center
-justify-center
-rounded-xl
-backdrop-blur-xl
-${styles.border}
-${styles.text}
-transition-all
-duration-300
-
-
-${
-  isSidebarOpen
-    ? "py-1.5 gap-0.5 min-w-20.5 text-[9px] lg:text-[10px]"
-    : "w-10 h-10 p-0"
-}
-`}
+              flex
+              items-center
+              justify-center
+              rounded-xl
+              backdrop-blur-xl
+              ${styles.border}
+              ${styles.text}
+              transition-all
+              duration-300
+              ${
+                isSidebarOpen
+                  ? "py-1.5 gap-0.5 min-w-20.5 text-[9px] lg:text-[10px]"
+                  : "w-10 h-10 p-0"
+              }
+            `}
           >
             <FiSettings size={isSidebarOpen ? 13 : 18} />
 
             <span
               className={`
-overflow-hidden
-whitespace-nowrap
-transition-all
-duration-300
-
-${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
-`}
+                overflow-hidden
+                whitespace-nowrap
+                transition-all
+                duration-300
+                ${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
+              `}
             >
               {lang === "fa" ? "تنظیمات" : "Settings"}
             </span>
@@ -390,64 +314,30 @@ ${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
               damping: 22,
             }}
             className={`
-          fixed
-          left-0
-          bottom-10
-            right-0
-          w-full
-          max-w-sm
-          rounded-3xl
-          ${styles.dropdownBg}
-          border ${styles.border}
-          backdrop-blur-2xl
-          shadow-2xl
-
-        `}
+              fixed
+              left-0
+              bottom-10
+              right-0
+              w-full
+              max-w-sm
+              rounded-3xl
+              ${styles.dropdownBg}
+              border ${styles.border}
+              backdrop-blur-2xl
+              shadow-2xl
+            `}
           >
+            {/* انتخاب زبان */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.08 }}
               className="p-2 sm:p-3 border-b border-white/10"
             >
-              <div className="flex items-center justify-between gap-2">
-                <p className={`text-[10px] ${styles.textSecondary}`}>
-                  {i18next.language === "fa" ? "زبان" : "Language"}
-                </p>
-                <div className="flex gap-1">
-                  {["fa", "en"].map((l) => (
-                    <motion.button
-                      key={l}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => changeLang(l as Lang)}
-                      className={`
-                        text-[10px] px-1.5 sm:px-2 cursor-pointer py-0.5 rounded-lg
-                        transition-colors duration-150
-                        ${
-                          i18next.language === l
-                            ? resolvedTheme === "dark"
-                              ? "bg-green-500/20 text-green-400"
-                              : "bg-green-500/10 text-green-600"
-                            : styles.textSecondary
-                        }
-                        relative overflow-hidden
-                      `}
-                    >
-                      {i18next.language === l && (
-                        <motion.div
-                          layoutId="langActive"
-                          className="absolute inset-0 bg-green-500/10 rounded-lg"
-                          transition={{ type: "spring", duration: 0.3 }}
-                        />
-                      )}
-                      <span className="relative z-10">{l.toUpperCase()}</span>
-                    </motion.button>
-                  ))}
-                </div>
-              </div>
+              {LangToggle}
             </motion.div>
 
+            {/* انتخاب تم */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -457,6 +347,7 @@ ${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
               {ThemeToggle}
             </motion.div>
 
+            {/* ویرایش آواتار */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -485,6 +376,7 @@ ${isSidebarOpen ? "opacity-100 max-w-20" : "opacity-0 max-w-0"}
         )}
       </AnimatePresence>
 
+      {/* مودال انتخاب آواتار */}
       <AnimatePresence mode="wait">
         {avatarModal && (
           <motion.div
