@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import * as Dialog from "@radix-ui/react-dialog";
 import * as Slider from "@radix-ui/react-slider";
+import i18next from "i18next";
 
 export interface ChartCustomSettings {
   colors: {
@@ -222,7 +223,9 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      رنگ ثانویه
+                      {i18next.language === "fa"
+                        ? " دراداون کل"
+                        : "Total Drawdown"}
                     </label>
                     <input
                       type="color"

@@ -58,7 +58,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
       dir="ltr"
       className="
         mx-auto mb-5
-        flex w-full max-w-326.5
+        flex w-full max-w-430.5
         items-center justify-between
         rounded-2xl
         md:border md:border-white/15
@@ -113,12 +113,14 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               flex items-center justify-center
              md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
+             
+
               ${
-                prevRoute
+                nextRoute
                   ? "bg-white/10 hover:bg-white/20 text-white cursor-pointer"
                   : "bg-white/5 text-white/20 cursor-not-allowed"
               }
-              ${isHoveringPrev && prevRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
+              ${isHoveringNext && nextRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
             `}
             title={lang === "fa" ? "صفحه قبلی" : "Previous"}
           >
@@ -162,11 +164,11 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
               ${
-                nextRoute
+                prevRoute
                   ? "bg-white/10 hover:bg-white/20 text-white cursor-pointer"
                   : "bg-white/5 text-white/20 cursor-not-allowed"
               }
-              ${isHoveringNext && nextRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
+              ${isHoveringPrev && prevRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
             `}
             title={lang === "fa" ? "صفحه بعدی" : "Next"}
           >

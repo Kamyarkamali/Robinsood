@@ -13,24 +13,12 @@ const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
       dir={isFa ? "rtl" : "ltr"}
       className="
         w-full
+        max-w-7xl
         mt-3
         rounded-2xl sm:rounded-[30px]
         p-4 sm:p-5 md:p-6
       "
     >
-      <div
-        dir={isFa ? "ltr" : "rtl"}
-        className={`flex flex-col gap-1 mb-3 ${
-          isFa ? "items-end" : "items-start"
-        }`}
-      >
-        <p
-          className={`${isFa ? "text-right" : "text-left"} w-full text-md sm:text-xl dark:text-white font-bold`}
-        >
-          {isFa ? "دسته بندی ها" : "Categories"}
-        </p>
-      </div>
-
       <div
         className="
           grid
@@ -49,7 +37,6 @@ const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
           return (
             <Link
               to={`/account/${item.slug}`}
-              // onClick={() => setActiveComponent(item?.components)}
               key={item.id}
               className={`
                 ${

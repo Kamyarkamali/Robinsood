@@ -241,14 +241,14 @@ export const challengeCards: ChallengeCard[] = [
           fa: "درادون مجاز روزانه",
           en: "Maximum Daily Drawdown",
         },
-        value: "$1,008.18 (5%)",
+        value: "$1.008.18 (5%)",
       },
       {
         label: {
           fa: "درادون - اکوییتی = فاصله",
           en: "Distance = Equity - Drawdown",
         },
-        value: "$10000 - $1023.50 = $23.50",
+        value: "$10.000 - $1023.50 = $23.50",
       },
     ],
   },
@@ -288,7 +288,7 @@ export const challengeCards: ChallengeCard[] = [
           fa: "درادون - اکوییتی = فاصله",
           en: "Distance = Equity - Drawdown",
         },
-        value: "$190.18 = $1070.18 - $190.18",
+        value: "$190.18 - $1070.18 = $190.18",
       },
     ],
   },
@@ -645,12 +645,17 @@ export const progressCardsData: Progres[] = [
     currentValue: 2,
     targetValue: 5,
     currentLabel: {
-      fa: "تعداد روز معاملاتی شما",
+      fa: " روزهای معاملاتی کل",
+      en: "Total Trading Days",
+    },
+    currentValue2: 7,
+    currentLabel2: {
+      fa: "روز معاملاتی قابل قبول",
       en: "Your Trading Days",
     },
 
     targetLabel: {
-      fa: "تعداد روز مورد نیاز",
+      fa: "روز معاملاتی کل",
       en: "Required Trading Days",
     },
     unit: "day",
@@ -813,8 +818,8 @@ export const avgWinLoss: AvgWinLossData = {
 
 export const tradeWin: TradeWinData = {
   percent: "66.66",
-  winLabel: "$ 8",
-  lossLabel: "-$ 4",
+  winLabel: "$ +8",
+  lossLabel: "$ -4",
 };
 
 export const accountTrend: AccountTrendData = {
@@ -1280,21 +1285,31 @@ export const areaDataMaxLoss = [
 ];
 
 export const candlestickData = [
-  { t: "1", open: 30, close: 45, high: 50, low: 25 },
-  { t: "2", open: 45, close: 35, high: 48, low: 30 },
-  { t: "3", open: 35, close: 55, high: 60, low: 32 },
-  { t: "4", open: 55, close: 42, high: 58, low: 38 },
-  { t: "5", open: 42, close: 62, high: 65, low: 40 },
-  { t: "6", open: 62, close: 50, high: 65, low: 45 },
-  { t: "7", open: 50, close: 38, high: 52, low: 35 },
-  { t: "8", open: 38, close: 58, high: 62, low: 36 },
-  { t: "9", open: 58, close: 45, high: 60, low: 40 },
-  { t: "10", open: 45, close: 35, high: 48, low: 30 },
-  { t: "11", open: 35, close: 52, high: 55, low: 32 },
-  { t: "12", open: 52, close: 40, high: 55, low: 36 },
-  { t: "13", open: 40, close: 60, high: 63, low: 38 },
-  { t: "14", open: 60, close: 48, high: 62, low: 44 },
-  { t: "15", open: 48, close: 36, high: 50, low: 32 },
+  { t: "10:00", open: 45, close: 52, high: 55, low: 42 },
+  { t: "10:05", open: 52, close: 48, high: 54, low: 46 },
+  { t: "10:10", open: 48, close: 56, high: 58, low: 45 },
+  { t: "10:15", open: 56, close: 53, high: 57, low: 50 },
+  { t: "10:20", open: 53, close: 58, high: 60, low: 51 },
+  { t: "10:25", open: 58, close: 62, high: 64, low: 56 },
+  { t: "10:30", open: 62, close: 59, high: 63, low: 57 },
+  { t: "10:35", open: 59, close: 64, high: 66, low: 57 },
+  { t: "10:40", open: 64, close: 60, high: 65, low: 58 },
+  { t: "10:45", open: 60, close: 55, high: 61, low: 53 },
+  { t: "10:50", open: 55, close: 50, high: 56, low: 48 },
+  { t: "10:55", open: 50, close: 54, high: 56, low: 48 },
+  { t: "11:00", open: 54, close: 58, high: 60, low: 52 },
+  { t: "11:05", open: 58, close: 62, high: 64, low: 56 },
+  { t: "11:10", open: 62, close: 65, high: 67, low: 60 },
+  { t: "11:15", open: 65, close: 61, high: 66, low: 59 },
+  { t: "11:20", open: 61, close: 57, high: 62, low: 55 },
+  { t: "11:25", open: 57, close: 60, high: 62, low: 55 },
+  { t: "11:30", open: 60, close: 64, high: 66, low: 58 },
+  { t: "11:35", open: 64, close: 68, high: 70, low: 62 },
+  { t: "11:40", open: 68, close: 65, high: 69, low: 63 },
+  { t: "11:45", open: 65, close: 70, high: 72, low: 63 },
+  { t: "11:50", open: 70, close: 75, high: 77, low: 68 },
+  { t: "11:55", open: 75, close: 72, high: 76, low: 70 },
+  { t: "12:00", open: 72, close: 78, high: 80, low: 70 },
 ];
 
 export const defaultSettings: ChartCustomSettings = {
@@ -1869,7 +1884,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۱", en: "Tue 2025/09/23" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۰۱", en: "2025/09/23" },
       time: "۱۷:۲۵",
       news: { fa: "شاخص فروش اتومبیل آمریکا", en: "US Auto Sales Index" },
       impact: "red",
@@ -1879,7 +1895,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "EUR",
       flag: er,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۱", en: "Tue 2025/09/23" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۰۱", en: "2025/09/23" },
       time: "۱۸:۰۰",
       news: { fa: "نرخ تورم منطقه یورو", en: "Eurozone Inflation Rate" },
       impact: "red",
@@ -1889,7 +1906,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "GBP",
       flag: brit,
-      day: { fa: "چهارشنبه ۱۴۰۴/۰۷/۰۳", en: "Wed 2025/09/24" },
+      day: { fa: "چهارشنبه", en: "Wed" },
+      date: { fa: "۱۴۰۴/۰۷/۰۳", en: "2025/09/24" },
       time: "۱۴:۳۰",
       news: { fa: "نرخ بهره بانک انگلستان", en: "Bank of England Rate" },
       impact: "yellow",
@@ -1899,7 +1917,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "JPY",
       flag: jp,
-      day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۰۴", en: "Thu 2025/09/25" },
+      day: { fa: "پنج‌شنبه", en: "Thu" },
+      date: { fa: "۱۴۰۴/۰۷/۰۴", en: "2025/09/25" },
       time: "۰۵:۳۰",
       news: { fa: "اشتغال‌زایی ژاپن", en: "Japan Employment" },
       impact: "blue",
@@ -1909,7 +1928,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "جمعه ۱۴۰۴/۰۷/۰۵", en: "Fri 2025/09/26" },
+      day: { fa: "جمعه", en: "Fri" },
+      date: { fa: "۱۴۰۴/۰۷/۰۵", en: "2025/09/26" },
       time: "۱۶:۳۰",
       news: { fa: "شاخص مسکن آمریکا", en: "US Housing Index" },
       impact: "yellow",
@@ -1919,7 +1939,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "CAD",
       flag: ca,
-      day: { fa: "جمعه ۱۴۰۴/۰۷/۰۵", en: "Fri 2025/09/26" },
+      day: { fa: "جمعه", en: "Fri" },
+      date: { fa: "۱۴۰۴/۰۷/۰۵", en: "2025/09/26" },
       time: "۱۶:۳۰",
       news: { fa: "اشتغال کانادا", en: "Canada Employment" },
       impact: "red",
@@ -1931,7 +1952,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "دوشنبه ۱۴۰۴/۰۷/۰۸", en: "Mon 2025/09/29" },
+      day: { fa: "دوشنبه", en: "Mon" },
+      date: { fa: "۱۴۰۴/۰۷/۰۸", en: "2025/09/29" },
       time: "۱۵:۴۵",
       news: { fa: "داده‌های تولیدی ISM آمریکا", en: "US ISM Manufacturing" },
       impact: "blue",
@@ -1941,7 +1963,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "EUR",
       flag: er,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۹", en: "Tue 2025/09/30" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۰۹", en: "2025/09/30" },
       time: "۱۲:۰۰",
       news: { fa: "نرخ بیکاری آلمان", en: "Germany Unemployment Rate" },
       impact: "yellow",
@@ -1951,7 +1974,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "GBP",
       flag: brit,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۰۹", en: "Tue 2025/09/30" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۰۹", en: "2025/09/30" },
       time: "۱۱:۳۰",
       news: { fa: "تولید ناخالص داخلی انگلستان", en: "UK GDP" },
       impact: "red",
@@ -1961,7 +1985,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "AUD",
       flag: "🇦🇺",
-      day: { fa: "چهارشنبه ۱۴۰۴/۰۷/۱۰", en: "Wed 2025/10/01" },
+      day: { fa: "چهارشنبه", en: "Wed" },
+      date: { fa: "۱۴۰۴/۰۷/۱۰", en: "2025/10/01" },
       time: "۰۳:۳۰",
       news: { fa: "تصمیم نرخ بهره استرالیا", en: "Australia Rate Decision" },
       impact: "red",
@@ -1971,7 +1996,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "JPY",
       flag: jp,
-      day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۱۱", en: "Thu 2025/10/02" },
+      day: { fa: "پنج‌شنبه", en: "Thu" },
+      date: { fa: "۱۴۰۴/۰۷/۱۱", en: "2025/10/02" },
       time: "۰۶:۰۰",
       news: { fa: "اعتماد مصرف‌کننده ژاپن", en: "Japan Consumer Confidence" },
       impact: "blue",
@@ -1981,7 +2007,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "جمعه ۱۴۰۴/۰۷/۱۲", en: "Fri 2025/10/03" },
+      day: { fa: "جمعه", en: "Fri" },
+      date: { fa: "۱۴۰۴/۰۷/۱۲", en: "2025/10/03" },
       time: "۱۶:۳۰",
       news: { fa: "نرخ اشتغال غیرکشاورزی", en: "US Non-Farm Payrolls" },
       impact: "red",
@@ -1991,7 +2018,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "CHF",
       flag: "🇨🇭",
-      day: { fa: "جمعه ۱۴۰۴/۰۷/۱۲", en: "Fri 2025/10/03" },
+      day: { fa: "جمعه", en: "Fri" },
+      date: { fa: "۱۴۰۴/۰۷/۱۲", en: "2025/10/03" },
       time: "۰۹:۳۰",
       news: { fa: "تورم سوئیس", en: "Switzerland Inflation" },
       impact: "yellow",
@@ -2003,7 +2031,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "دوشنبه ۱۴۰۴/۰۷/۱۵", en: "Mon 2025/10/06" },
+      day: { fa: "دوشنبه", en: "Mon" },
+      date: { fa: "۱۴۰۴/۰۷/۱۵", en: "2025/10/06" },
       time: "۱۶:۰۰",
       news: { fa: "سخنرانی رئیس فدرال رزرو", en: "Fed Chair Speech" },
       impact: "red",
@@ -2013,7 +2042,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "EUR",
       flag: er,
-      day: { fa: "دوشنبه ۱۴۰۴/۰۷/۱۵", en: "Mon 2025/10/06" },
+      day: { fa: "دوشنبه", en: "Mon" },
+      date: { fa: "۱۴۰۴/۰۷/۱۵", en: "2025/10/06" },
       time: "۱۰:۳۰",
       news: { fa: "تولید صنعتی اروپا", en: "EU Industrial Production" },
       impact: "yellow",
@@ -2023,7 +2053,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "GBP",
       flag: brit,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۱۶", en: "Tue 2025/10/07" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۱۶", en: "2025/10/07" },
       time: "۰۸:۳۰",
       news: { fa: "شاخص قیمت مصرف‌کننده UK", en: "UK CPI" },
       impact: "red",
@@ -2033,7 +2064,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "CAD",
       flag: ca,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۱۶", en: "Tue 2025/10/07" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۱۶", en: "2025/10/07" },
       time: "۱۶:۳۰",
       news: { fa: "تورم کانادا", en: "Canada CPI" },
       impact: "blue",
@@ -2043,7 +2075,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "AUD",
       flag: "🇦🇺",
-      day: { fa: "چهارشنبه ۱۴۰۴/۰۷/۱۷", en: "Wed 2025/10/08" },
+      day: { fa: "چهارشنبه", en: "Wed" },
+      date: { fa: "۱۴۰۴/۰۷/۱۷", en: "2025/10/08" },
       time: "۰۳:۰۰",
       news: { fa: "شاخص دستمزد استرالیا", en: "Australia Wage Index" },
       impact: "yellow",
@@ -2053,7 +2086,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۱۸", en: "Thu 2025/10/09" },
+      day: { fa: "پنج‌شنبه", en: "Thu" },
+      date: { fa: "۱۴۰۴/۰۷/۱۸", en: "2025/10/09" },
       time: "۱۶:۳۰",
       news: { fa: "درخواست بیکاری آمریکا", en: "US Jobless Claims" },
       impact: "blue",
@@ -2065,7 +2099,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "JPY",
       flag: jp,
-      day: { fa: "دوشنبه ۱۴۰۴/۰۷/۲۲", en: "Mon 2025/10/13" },
+      day: { fa: "دوشنبه", en: "Mon" },
+      date: { fa: "۱۴۰۴/۰۷/۲۲", en: "2025/10/13" },
       time: "۰۳:۳۰",
       news: { fa: "صادرات ژاپن", en: "Japan Exports" },
       impact: "yellow",
@@ -2075,7 +2110,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "EUR",
       flag: er,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۲۳", en: "Tue 2025/10/14" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۲۳", en: "2025/10/14" },
       time: "۱۱:۰۰",
       news: { fa: "احساسات اقتصادی ZEW آلمان", en: "Germany ZEW Sentiment" },
       impact: "blue",
@@ -2085,7 +2121,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "سه‌شنبه ۱۴۰۴/۰۷/۲۳", en: "Tue 2025/10/14" },
+      day: { fa: "سه‌شنبه", en: "Tue" },
+      date: { fa: "۱۴۰۴/۰۷/۲۳", en: "2025/10/14" },
       time: "۱۴:۳۰",
       news: { fa: "شاخص قیمت تولیدکننده آمریکا", en: "US PPI" },
       impact: "yellow",
@@ -2095,7 +2132,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "GBP",
       flag: brit,
-      day: { fa: "چهارشنبه ۱۴۰۴/۰۷/۲۴", en: "Wed 2025/10/15" },
+      day: { fa: "چهارشنبه", en: "Wed" },
+      date: { fa: "۱۴۰۴/۰۷/۲۴", en: "2025/10/15" },
       time: "۰۸:۳۰",
       news: { fa: "حساب جاری انگلستان", en: "UK Current Account" },
       impact: "blue",
@@ -2105,7 +2143,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "USD",
       flag: usflag,
-      day: { fa: "پنج‌شنبه ۱۴۰۴/۰۷/۲۵", en: "Thu 2025/10/16" },
+      day: { fa: "پنج‌شنبه", en: "Thu" },
+      date: { fa: "۱۴۰۴/۰۷/۲۵", en: "2025/10/16" },
       time: "۱۶:۳۰",
       news: { fa: "فروش خرده‌فروشی آمریکا", en: "US Retail Sales" },
       impact: "red",
@@ -2115,7 +2154,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "CHF",
       flag: "🇨🇭",
-      day: { fa: "جمعه ۱۴۰۴/۰۷/۲۶", en: "Fri 2025/10/17" },
+      day: { fa: "جمعه", en: "Fri" },
+      date: { fa: "۱۴۰۴/۰۷/۲۶", en: "2025/10/17" },
       time: "۰۹:۰۰",
       news: { fa: "اشتغال سوئیس", en: "Switzerland Employment" },
       impact: "yellow",
@@ -2125,7 +2165,8 @@ export const ALL_DATA: Record<Week, NewsItem[]> = {
     {
       symbol: "CAD",
       flag: ca,
-      day: { fa: "جمعه ۱۴۰۴/۰۷/۲۶", en: "Fri 2025/10/17" },
+      day: { fa: "جمعه", en: "Fri" },
+      date: { fa: "۱۴۰۴/۰۷/۲۶", en: "2025/10/17" },
       time: "۱۶:۳۰",
       news: { fa: "تولید ناخالص داخلی ماهانه", en: "Canada Monthly GDP" },
       impact: "red",

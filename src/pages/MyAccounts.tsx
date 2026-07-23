@@ -4,6 +4,7 @@ import CardAccounts from "./CardAccounts";
 import CardComponent from "./CardComponent";
 import { createAppTour } from "../components/tour/appTour";
 import DashboardCards from "../components/modals/DashboardCards";
+import AtAGlance from "../components/AtAGlance";
 
 function MyAccounts() {
   const handleStartTour = () => {
@@ -20,6 +21,9 @@ function MyAccounts() {
     <div>
       <section className="hidden md:block">
         <TradingCover />
+      </section>
+      <section className="mt-5">
+        <AtAGlance />
       </section>
       <section id="home1" className="mt-5">
         <CardAccounts />

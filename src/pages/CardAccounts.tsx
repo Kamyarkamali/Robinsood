@@ -67,11 +67,7 @@ function CardAccounts() {
   return (
     <>
       <section className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-800 dark:text-white">
-            {lang === "fa" ? "اکانت های من" : "My Accounts"}
-          </h2>
-
+        <div className="flex items-center w-full justify-end">
           <Link
             id="home2"
             to="/accounts"

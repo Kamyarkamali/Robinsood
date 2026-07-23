@@ -151,8 +151,13 @@ export interface Progres {
   };
   badgeType: "success" | "danger";
   currentValue: number;
+  currentValue2?: number;
   targetValue: number;
   currentLabel: {
+    fa: string;
+    en: string;
+  };
+  currentLabel2?: {
     fa: string;
     en: string;
   };

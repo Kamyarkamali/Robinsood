@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { X, Search, Grid3x3, LayoutList } from "lucide-react";
 import { cards } from "../../data/fakeData";
+import { motion } from "framer-motion";
 
 interface CategoriesModalProps {
   isOpen: boolean;
@@ -19,10 +20,13 @@ export default function CategoriesModal({
   const [searchTerm, setSearchTerm] = useState("");
   const [viewMode, setViewMode] = useState<"grid" | "list">("list");
   const [hoveredId, setHoveredId] = useState<number | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
+      // فوکوس خودکار رو کاملاً حذف کردیم
+      // inputRef.current?.focus(); // این خط رو کامنت کردیم
     } else {
       document.body.style.overflow = "unset";
     }
@@ -83,11 +87,12 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
           <div className="w-12 h-1 rounded-full bg-white/20" />
         </div>
 
-        <div className="sticky top-0 z-10 px-4 md:px-6 pt-4 pb-3">
+        <div className="sticky top-0 z-10 px-4 md:px-6 pt-4 pb-3 bg-[#353535]/95 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 relative">
-              <Search className="absolute left-3 top-1/2  -translate-y-1/2 w-4 h-4 text-white/40" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
               <input
+                ref={inputRef}
                 type="text"
                 placeholder={
                   isFa ? "جستجوی دسته‌بندی..." : "Search categories..."
@@ -95,7 +100,7 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 className="
-                placeholder:text-sm
+                  placeholder:text-sm
                   w-full pl-10 pr-4 py-2.5
                   bg-white/5 border border-white/10
                   rounded-xl
@@ -103,7 +108,6 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                   focus:outline-none focus:border-violet-500/50
                   transition-all duration-200
                 "
-                autoFocus
               />
             </div>
 
@@ -159,15 +163,18 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
               }
             `}
           >
-            {filteredCards.map((item) => {
+            {filteredCards.map((item, index) => {
               const Icon = item.icon;
               const isHovered = hoveredId === item.id;
               const label = isFa ? item.fa : item.en;
               const desc = isFa ? item.descFa : item.descEn;
 
               return (
-                <div
+                <motion.div
                   key={item.id}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: index * 0.05, duration: 0.3 }}
                   onClick={() => handleCardClick(item.slug)}
                   onMouseEnter={() => setHoveredId(item.id)}
                   onMouseLeave={() => setHoveredId(null)}
@@ -181,6 +188,9 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                     hover:shadow-[0_0_40px_rgba(139,92,246,0.1)]
                     ${viewMode === "list" ? "flex items-center gap-4 p-4" : "p-4 flex flex-col items-center text-center"}
                   `}
+                  whileHover={{ y: -4 }}
+                  // @ts-ignore
+                  transition={{ type: "spring", stiffness: 300, damping: 20 }}
                 >
                   <div
                     className={`
@@ -207,7 +217,7 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                       ${viewMode === "list" ? "shrink-0" : "mt-3"}
                     `}
                   >
-                    <div
+                    <motion.div
                       className={`
                         relative flex items-center justify-center
                         w-12 h-12 rounded-2xl
@@ -215,6 +225,15 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                         transition-all duration-300
                         ${isHovered ? "scale-110 rotate-6" : ""}
                       `}
+                      animate={{
+                        scale: [1, 1.1, 1],
+                        rotate: [0, 5, -5, 0],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
                     >
                       <Icon
                         className={`
@@ -226,16 +245,41 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                       />
 
                       {isHovered && (
-                        <div
+                        <motion.div
                           className={`
                             absolute inset-0 rounded-2xl
                             ${item.color.replace("text-", "bg-")}
                             opacity-10 blur-xl scale-150
-                            animate-pulse
                           `}
+                          animate={{
+                            scale: [1.5, 2, 1.5],
+                            opacity: [0.1, 0.2, 0.1],
+                          }}
+                          transition={{
+                            duration: 0.8,
+                            repeat: Infinity,
+                            ease: "easeInOut",
+                          }}
                         />
                       )}
-                    </div>
+                    </motion.div>
+
+                    {/* افکت چشمک زن برای آیکون‌ها */}
+                    <motion.div
+                      className="absolute inset-0 rounded-2xl"
+                      animate={{
+                        boxShadow: [
+                          "0 0 0px rgba(139, 92, 246, 0)",
+                          "0 0 20px rgba(139, 92, 246, 0.2)",
+                          "0 0 0px rgba(139, 92, 246, 0)",
+                        ],
+                      }}
+                      transition={{
+                        duration: 1.2,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                    />
                   </div>
 
                   <div
@@ -257,12 +301,24 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                     </p>
                   </div>
 
-                  <div
+                  <motion.div
                     className={`
                       ${viewMode === "list" ? "shrink-0" : "mt-1"}
                       transition-all duration-300
                       ${isHovered ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-2"}
                     `}
+                    animate={
+                      isHovered
+                        ? {
+                            scale: [1, 1.2, 1],
+                          }
+                        : {}
+                    }
+                    transition={{
+                      duration: 0.6,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
                   >
                     <div className="w-6 h-6 rounded-full bg-violet-500/20 flex items-center justify-center">
                       <svg
@@ -279,8 +335,8 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
                         />
                       </svg>
                     </div>
-                  </div>
-                </div>
+                  </motion.div>
+                </motion.div>
               );
             })}
           </div>

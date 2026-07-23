@@ -20,6 +20,7 @@ export interface CandleDataPoint {
   close: number;
   high: number;
   low: number;
+  v?: number;
 }
 
 export interface DonutAsset {

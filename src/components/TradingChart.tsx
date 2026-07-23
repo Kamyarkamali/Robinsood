@@ -21,7 +21,6 @@ import i18next from "i18next";
 
 type TimeFrame =
   | "1min"
-  | "1min+"
   | "5min"
   | "10min"
   | "30min"
@@ -52,11 +51,9 @@ interface DataPoint {
   fullDate?: Date;
 }
 
-// توابع کمکی برای محور X
 function getTimeStep(tf: TimeFrame): number {
   const steps: Record<TimeFrame, number> = {
     "1min": 60 * 1000,
-    "1min+": 60 * 1000,
     "5min": 5 * 60 * 1000,
     "10min": 10 * 60 * 1000,
     "30min": 30 * 60 * 1000,
@@ -71,7 +68,6 @@ function getTimeStep(tf: TimeFrame): number {
 function getTickCount(tf: TimeFrame): number {
   const counts: Record<TimeFrame, number> = {
     "1min": 12,
-    "1min+": 10,
     "5min": 8,
     "10min": 6,
     "30min": 5,
@@ -104,7 +100,6 @@ function formatTimeByFrame(
 
   switch (tf) {
     case "1min":
-    case "1min+":
     case "5min":
     case "10min":
     case "30min":
@@ -123,46 +118,57 @@ function formatTimeByFrame(
 function generateData(tf: TimeFrame): DataPoint[] {
   const seed = tf.length * 7 + tf.charCodeAt(0);
 
-  const pointsPerTimeFrame: Record<TimeFrame, number> = {
-    "1min": 200,
-    "1min+": 180,
-    "5min": 150,
-    "10min": 120,
-    "30min": 100,
-    "1h": 80,
-    "4h": 60,
-    "12h": 40,
-    "1day": 30,
-  };
-
-  const count = pointsPerTimeFrame[tf] || 200;
+  // تعداد نقاط ثابت برای همه تایم‌فریم‌ها
+  const COUNT = 200; // ← ثابت
   const pts: DataPoint[] = [];
   let balance: number = 400;
   const timeStep = getTimeStep(tf);
 
-  const now = new Date();
-  now.setHours(0, 0, 0, 0);
+  // شروع از تاریخ امروز - 30 روز
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - 30);
+  startDate.setHours(9, 30, 0, 0);
 
-  for (let i = 0; i < count; i++) {
-    const drift = (i / count) * 620 + 380;
+  for (let i = 0; i < COUNT; i++) {
+    const date = new Date(startDate.getTime() + i * timeStep);
+
+    // شبیه‌سازی حرکات قیمت با نویز بیشتر برای دقیقه‌ها
+    const noise = tf.includes("min") ? 0.5 : 0.2;
+    const drift = (i / COUNT) * 620 + 380;
     balance = Math.max(
       280,
-      drift + Math.sin(i * 0.3 + seed) * 30 + Math.sin(i * 0.07 + seed) * 50,
+      drift +
+        Math.sin(i * 0.3 + seed) * 30 * noise +
+        Math.sin(i * 0.07 + seed) * 50 * noise +
+        (tf.includes("min") ? (Math.random() - 0.5) * 20 : 0),
     );
-    const equity = Math.max(260, balance + Math.sin(i * 0.4 + seed + 1) * 25);
-    const open = equity,
-      close = equity + Math.sin(i * 0.9 + seed) * 18;
-    const high =
-      Math.max(open, close) + Math.abs(Math.sin(i * 1.3 + seed)) * 15;
-    const low = Math.min(open, close) - Math.abs(Math.sin(i * 1.7 + seed)) * 15;
 
-    const date = new Date(now.getTime() - (count - i) * timeStep);
-    const h = String(date.getHours()).padStart(2, "0");
-    const m = String(date.getMinutes()).padStart(2, "0");
+    const equity = Math.max(260, balance + Math.sin(i * 0.4 + seed + 1) * 25);
+    const open = equity;
+    const close = equity + Math.sin(i * 0.9 + seed) * 18 * noise;
+    const high =
+      Math.max(open, close) + Math.abs(Math.sin(i * 1.3 + seed)) * 15 * noise;
+    const low =
+      Math.min(open, close) - Math.abs(Math.sin(i * 1.7 + seed)) * 15 * noise;
+
+    // فرمت زمان بر اساس تایم‌فریم
+    let timeString = "";
+    if (tf === "1day") {
+      const day = String(date.getDate()).padStart(2, "0");
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      timeString = `${month}/${day}`;
+    } else if (tf === "1h" || tf === "4h" || tf === "12h") {
+      const h = String(date.getHours()).padStart(2, "0");
+      timeString = `${h}:00`;
+    } else {
+      const h = String(date.getHours()).padStart(2, "0");
+      const m = String(date.getMinutes()).padStart(2, "0");
+      timeString = `${h}:${m}`;
+    }
 
     pts.push({
       index: i,
-      time: `${h}:${m}`,
+      time: timeString,
       fullDate: date,
       target: 960 + Math.sin(i * 0.1 + seed) * 10,
       dailyDrawdown: 500 + Math.sin(i * 0.15 + seed) * 8,
@@ -263,41 +269,176 @@ const CandleBar = ({
 
 const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
-  const fullTime = label;
+
+  const fullDate = payload[0]?.payload?.fullDate;
+  const timeLabel = label || "";
+
+  let dateString = "";
+  let timeString = timeLabel;
+
+  if (fullDate) {
+    const date = new Date(fullDate);
+    if (isRtl) {
+      const year = date.getFullYear();
+      const month = String(date.getMonth() + 1).padStart(2, "0");
+      const day = String(date.getDate()).padStart(2, "0");
+      dateString = `${year}/${month}/${day}`;
+      const hours = String(date.getHours()).padStart(2, "0");
+      const minutes = String(date.getMinutes()).padStart(2, "0");
+      timeString = `${hours}:${minutes}`;
+    } else {
+      dateString = date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      timeString = date.toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    }
+  }
+
+  const equityPayload = payload.find((p: any) => p.dataKey === "equity");
+  const equityData = equityPayload?.payload;
+
+  let equityOpen = equityData?.equityOpen || 0;
+  let equityHigh = equityData?.equityHigh || 0;
+  let equityLow = equityData?.equityLow || 0;
+  let equityClose = equityData?.equityClose || 0;
+
+  const ensureFiveDigits = (num: number): number => {
+    if (num < 10000) {
+      return 10000 + (num % 90000);
+    }
+    if (num > 99999) {
+      return 10000 + (num % 90000);
+    }
+    return num;
+  };
+
+  equityOpen = ensureFiveDigits(equityOpen);
+  equityHigh = ensureFiveDigits(equityHigh);
+  equityLow = ensureFiveDigits(equityLow);
+  equityClose = ensureFiveDigits(equityClose);
+
+  const formatNumber = (num: number): string => {
+    return Math.round(num).toLocaleString("en-US");
+  };
 
   return (
     <div
-      className={`bg-[#1a1230] flex flex-col items-center gap-1 backdrop-blur-2xl dark:bg-[#1a1230] border border-[#3b1f7a] rounded-xl px-2 py-1.5 text-[9px] sm:text-[13px] shadow-2xl max-w-40 sm:max-w-50 ${
-        isRtl ? "text-right" : "text-left"
-      }`}
+      className={`
+        bg-gradient-to-br from-[#1a1230] to-[#2a1a4a] 
+        flex flex-col gap-1 
+        backdrop-blur-2xl 
+        border border-[#4a2a7a]/50 
+        rounded-xl sm:rounded-2xl 
+        px-2 sm:px-4 py-2 sm:py-3 
+        shadow-2xl shadow-purple-900/20 
+        max-w-[200px] xs:max-w-[240px] sm:max-w-64 md:max-w-72 
+        ${isRtl ? "text-right" : "text-left"}
+        transition-all duration-200
+      `}
       style={{
         backgroundColor: settings?.colors?.background || "#1a1230",
-        borderColor: settings?.colors?.primary || "#3b1f7a",
+        borderColor: settings?.colors?.primary || "#4a2a7a",
       }}
     >
-      <p
-        className="text-[#a78bfa] font-bold mb-0.5 text-[9px] sm:text-[11px]"
-        style={{ color: settings?.colors?.secondary || "#a78bfa" }}
-      >
-        {fullTime}
-      </p>
-      {payload
-        .filter((p: any) => p.dataKey !== "equity")
-        .map((p: any) => (
-          <p
-            key={p.dataKey}
-            style={{
-              color: p.stroke || p.color || settings?.colors?.text || "#a0a0c0",
-            }}
-            className="leading-tight text-[8px] sm:text-[10px]"
-          >
-            {p.name}: <strong>{Number(p.value).toFixed(2)}</strong>
-          </p>
-        ))}
+      <div className="flex flex-col items-center gap-0.5 pb-1 border-b border-purple-500/20">
+        <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[12px]">
+          {dateString}
+        </p>
+        <p className="text-[#8b8baa] font-medium text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+          {timeString}
+        </p>
+      </div>
+
+      <div className="space-y-0.5 py-1">
+        {payload
+          .filter((p: any) => p.dataKey !== "equity")
+          .map((p: any) => (
+            <div
+              key={p.dataKey}
+              className="flex justify-between items-center gap-2 sm:gap-4 px-0.5 sm:px-1 rounded-lg hover:bg-white/5 transition-colors"
+              style={{
+                color:
+                  p.stroke || p.color || settings?.colors?.text || "#a0a0c0",
+              }}
+            >
+              <span className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium truncate">
+                {p.name}
+              </span>
+              <strong className="text-white font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
+                {Number(p.value).toFixed(2)}
+              </strong>
+            </div>
+          ))}
+      </div>
+
+      {equityData && (
+        <>
+          <div className="relative my-0.5 sm:my-1">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-purple-500/20"></div>
+            </div>
+            <div className="relative flex justify-center">
+              <span className="bg-[#1a1230] px-2 sm:px-3 text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 whitespace-nowrap">
+                {isRtl ? "📊 اکوییتی" : "📊 Equity"}
+              </span>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 gap-1 xs:gap-1.5 sm:gap-2">
+            <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10 hover:border-purple-500/30 transition-all">
+              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
+                  {isRtl ? "باز شدن" : "Open"}
+                </span>
+                <strong className="text-blue-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+                  {formatNumber(equityOpen)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10 hover:border-purple-500/30 transition-all">
+              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
+                  {isRtl ? "بسته شدن" : "Close"}
+                </span>
+                <strong className="text-purple-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+                  {formatNumber(equityClose)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="bg-green-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-green-500/10 hover:border-green-500/30 transition-all">
+              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
+                  {isRtl ? "بیشترین" : "High"}
+                </span>
+                <strong className="text-green-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+                  {formatNumber(equityHigh)}
+                </strong>
+              </div>
+            </div>
+
+            <div className="bg-red-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-red-500/10 hover:border-red-500/30 transition-all">
+              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
+                  {isRtl ? "کمترین" : "Low"}
+                </span>
+                <strong className="text-red-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+                  {formatNumber(equityLow)}
+                </strong>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
-
 const IconBtn = ({
   onClick,
   active,
@@ -326,7 +467,6 @@ const IconBtn = ({
 
 const TIME_FRAMES: TimeFrame[] = [
   "1min",
-  "1min+",
   "5min",
   "10min",
   "30min",
@@ -560,7 +700,7 @@ export default function TradingChart() {
           <div
             id="chart2"
             dir={i18next.language === "fa" ? "ltr" : "rtl"}
-            className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 py-1.5 sm:p-3 rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${
+            className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 p-0.5 sm:p-1  rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${
               isRtl ? "flex-row-reverse" : ""
             }`}
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
@@ -649,8 +789,8 @@ export default function TradingChart() {
 
                 {settings.display.showGrid && (
                   <CartesianGrid
-                    strokeDasharray="3 6"
-                    stroke={settings.colors.grid}
+                    strokeDasharray="3 3"
+                    stroke="#ffffff"
                     strokeOpacity={0.25}
                     strokeWidth={1}
                     vertical={true}
@@ -675,6 +815,7 @@ export default function TradingChart() {
                     }}
                     axisLine={{ stroke: settings.colors.grid }}
                     tickLine={false}
+                    tickMargin={17}
                     tickFormatter={(value) => {
                       const dataIndex = visibleData.findIndex(
                         (d) => d.time === value,
@@ -697,9 +838,9 @@ export default function TradingChart() {
                     fill: "#ffffff",
                     fontSize: window.innerWidth < 480 ? 9 : 11,
                   }}
-                  axisLine={false}
+                  axisLine={{ stroke: "#ffffff", strokeWidth: 1.5 }}
                   tickLine={false}
-                  tickMargin={window.innerWidth < 480 ? 5 : 20}
+                  tickMargin={window.innerWidth < 480 ? 5 : 30}
                   width={window.innerWidth < 480 ? 35 : 10}
                   tickFormatter={(v) => {
                     if (v >= 1000) return (v / 1000).toFixed(0) + "k";

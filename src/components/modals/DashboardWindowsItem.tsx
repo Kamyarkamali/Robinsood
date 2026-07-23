@@ -1,22 +1,33 @@
 import { Link, useLocation } from "react-router-dom";
-import { cards } from "../../data/fakeData";
-import type { ComponentState } from "../../types/interfaces";
 import { useTranslation } from "react-i18next";
+import { HiOutlineHome } from "react-icons/hi";
+import { FaChartLine } from "react-icons/fa";
 
-export default function DashboardWindows({
-  setActiveComponent,
-}: ComponentState) {
+export default function DashboardWindowsItem() {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
   const location = useLocation();
 
-  const handleSetActive = (component: string) => {
-    if (typeof setActiveComponent === "function") {
-      setActiveComponent(component);
-    } else {
-      console.warn("setActiveComponent is not a function");
-    }
-  };
+  const navigationItems = [
+    {
+      id: "home",
+      slug: "dashboard",
+      fa: "صفحه اصلی",
+      en: "Home",
+      icon: HiOutlineHome,
+      color: "text-cyan-400",
+      path: "/",
+    },
+    {
+      id: "platform",
+      slug: "platform",
+      fa: "پلتفرم",
+      en: "Platform",
+      icon: FaChartLine,
+      color: "text-[#F7931A]",
+      path: "/platform",
+    },
+  ];
 
   const isActive = (slug: string) => {
     return location.pathname.includes(slug);
@@ -26,7 +37,7 @@ export default function DashboardWindows({
     <div
       dir="rtl"
       className="
-        fixed bottom-2 sm:bottom-4 -translate-x-170
+        fixed bottom-2 sm:bottom-4 -translate-x-7/2
         z-20
         px-2
         hidden
@@ -47,13 +58,13 @@ export default function DashboardWindows({
           shadow-[0_10px_40px_rgba(0,0,0,0.3)]
         "
       >
-        {cards.map((item) => {
+        {navigationItems.map((item) => {
           const Icon = item.icon;
           const active = isActive(item.slug);
 
           return (
             <Link
-              to={`/account/${item?.slug}`}
+              to={item.path}
               key={item.id}
               className="relative group shrink-0"
             >
@@ -71,7 +82,6 @@ export default function DashboardWindows({
               </div>
 
               <button
-                onClick={() => handleSetActive(item.components)}
                 className={`
                   relative flex items-center cursor-pointer justify-center
                   w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12

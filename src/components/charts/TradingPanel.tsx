@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { AreaCard } from "./AreaCard";
+import { CandleCard } from "./CandleCard";
 import { ChartModal } from "./ChartModal";
 import { DonutChart } from "./DonutChart";
 import { cardConfigs, DEFAULT_DONUT_DATA } from "./constants";
@@ -51,8 +52,7 @@ const TradingPanel: React.FC = () => {
               grid-cols-1
               sm:grid-cols-2
               lg:grid-cols-3
-              auto-rows-[120px] sm:auto-rows-[140px] lg:auto-rows-[160px]
-              gap-22 sm:gap-10 md:gap-4 lg:gap-5
+              gap-4 sm:gap-5 md:gap-4 lg:gap-5
               border-4
               dark:border-[#3A3A3A]
               border-gray-400
@@ -60,11 +60,24 @@ const TradingPanel: React.FC = () => {
               p-3 sm:p-5 md:p-7 lg:p-9
               rounded-xl sm:rounded-2xl lg:rounded-[25px]
               transition-colors
-              overflow-hidden
             "
           >
             {cardConfigs.map((cfg) => {
               const title = getCardTitle(cfg.id);
+
+              if (cfg.id === "tradeCount") {
+                return (
+                  <CandleCard
+                    key={cfg.id}
+                    cfg={cfg}
+                    title={title}
+                    value={cfg.value}
+                    valueColor={cfg.valueColor || "#4ade80"}
+                    lang={lang}
+                    onCardClick={() => handleCardClick(cfg)}
+                  />
+                );
+              }
 
               return (
                 <AreaCard

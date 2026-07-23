@@ -306,7 +306,11 @@ const Popover: React.FC<PopoverProps> = ({ account, children, lang }) => {
                   hover:shadow-cyan-500/25
                 "
               >
-                <span>{lang === "fa" ? "مشاهده جزئیات" : "View Details"}</span>
+                <span>
+                  {lang === "fa"
+                    ? "مشاهده انالیز این پنل"
+                    : "View the analysis of this panel"}
+                </span>
                 <HiOutlineArrowLeft size={18} />
               </div>
             </div>

@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "react-router-dom";
 import {
   BsCheckCircleFill,
-  BsCircle,
   BsHourglassSplit,
   BsXCircleFill,
 } from "react-icons/bs";
@@ -330,18 +329,13 @@ const TableView: React.FC<TableViewProps> = ({
                         }
                       `}
                     >
-                      {isSelected ? (
-                        <BsCheckCircleFill className="text-[7px] sm:text-[9px] md:text-sm" />
-                      ) : (
-                        <BsCircle className="text-[7px] sm:text-[9px] md:text-sm" />
-                      )}
                       <span className="hidden sm:inline">
                         {isSelected
                           ? lang === "fa"
-                            ? "مشاهده"
+                            ? "ورود به پنل"
                             : "View"
                           : lang === "fa"
-                            ? "مشاهده"
+                            ? "ورود به پنل آناالیز"
                             : "View"}
                       </span>
                     </Link>

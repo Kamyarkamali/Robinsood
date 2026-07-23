@@ -8,10 +8,86 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  ComposedChart,
+  Bar,
 } from "recharts";
 import { AreaTooltip } from "./Tooltips";
 import type { CandleDataPoint, ChartModalProps } from "./typesChart";
 import i18next from "i18next";
+
+interface ModalCandleBarProps {
+  x?: number;
+  width?: number;
+  payload?: {
+    open?: number;
+    close?: number;
+    high?: number;
+    low?: number;
+    v?: number;
+    t?: string | number;
+  };
+  yDomain?: [number, number];
+  background?: {
+    y: number;
+    height: number;
+  };
+}
+
+const ModalCandleBar: React.FC<ModalCandleBarProps> = ({
+  x = 0,
+  width = 10,
+  payload,
+  yDomain = [0, 100],
+  background,
+}) => {
+  if (!payload || !background) return null;
+
+  const { open = 50, close = 50, high = 50, low = 50 } = payload;
+  const isBullish = close >= open;
+  const candleColor = isBullish ? "#4ade80" : "#ef4444";
+  const cx = x + width / 2;
+  const bw = Math.max(4, Math.min(width * 0.7, 16));
+
+  const [dMin, dMax] = yDomain;
+  const range = dMax - dMin || 1;
+
+  const { y: bgY, height: bgHeight } = background;
+
+  const toY = (v: number) => bgY + bgHeight - ((v - dMin) / range) * bgHeight;
+
+  const oy = toY(open);
+  const cy = toY(close);
+  const hy = toY(high);
+  const ly = toY(low);
+
+  const bodyHeight = Math.max(2, Math.abs(cy - oy));
+  const bodyY = Math.min(oy, cy);
+
+  return (
+    <g>
+      <line
+        x1={cx}
+        y1={hy}
+        x2={cx}
+        y2={ly}
+        stroke={candleColor}
+        strokeWidth={1.5}
+        strokeLinecap="round"
+      />
+      <rect
+        x={cx - bw / 2}
+        y={bodyY}
+        width={bw}
+        height={bodyHeight}
+        fill={candleColor}
+        rx={2}
+        stroke={candleColor}
+        strokeWidth={0.5}
+        opacity={0.9}
+      />
+    </g>
+  );
+};
 
 export const ChartModal: React.FC<ChartModalProps> = ({
   isOpen,
@@ -36,82 +112,157 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   };
 
   const renderChart = () => {
-    if (cfg.chartType === "candlestick") {
+    if (cfg.id === "tradeCount") {
       const data = cfg.data.map((d: CandleDataPoint) => ({
         t: d.t,
-        v: d.close ?? 0,
+        open: d.open || d.v || 50,
+        close: d.close || d.v || 50,
+        high: d.high || d.v || 50,
+        low: d.low || d.v || 50,
       }));
 
-      const lastValue = data.length > 0 ? data[data.length - 1].v : 0;
-      const prevValue = data.length > 1 ? data[data.length - 2].v : 0;
-      const isUp = lastValue >= prevValue;
-      const strokeColor = isUp ? "#4ade80" : "#ef4444";
-      const gradId = `modal-candle-grad-${cfg.id}`;
+      let max = -Infinity;
+      data.forEach((d: any) => {
+        if (d.high > max) max = d.high;
+      });
+      const padding = max * 0.05;
+      const yDomain: [number, number] = [0, Math.ceil(max + padding)];
 
       return (
         <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={data}>
-            <defs>
-              <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor={strokeColor} stopOpacity={0.35} />
-                <stop offset="100%" stopColor={strokeColor} stopOpacity={0} />
-              </linearGradient>
-            </defs>
+          <ComposedChart
+            data={data}
+            margin={{ top: 30, right: 40, left: 40, bottom: 40 }}
+          >
+            <XAxis
+              dataKey="t"
+              stroke={isDark ? "#fff" : "#666"}
+              tick={{ fill: isDark ? "#fff" : "#666", fontSize: 11 }}
+              tickMargin={10}
+              label={{
+                value: i18next.language === "fa" ? "زمان" : "Time",
+                position: "bottom",
+                offset: 25,
+                style: {
+                  fill: isDark ? "#a78bfa" : "#7c3aed",
+                  fontSize: 13,
+                  fontWeight: 600,
+                },
+              }}
+            />
 
-            <XAxis dataKey="t" stroke={isDark ? "#fff" : "#666"} />
-            <YAxis tickMargin={24} stroke={isDark ? "#fff" : "#666"} />
+            <YAxis
+              domain={yDomain}
+              tickMargin={24}
+              stroke={isDark ? "#fff" : "#666"}
+              tick={{ fill: isDark ? "#fff" : "#666", fontSize: 11 }}
+              label={{
+                value: i18next.language === "fa" ? "مقدار" : "Value",
+                angle: -90,
+                position: "left",
+                offset: 15,
+                style: {
+                  fill: isDark ? "#a78bfa" : "#7c3aed",
+                  fontSize: 13,
+                  fontWeight: 600,
+                },
+              }}
+            />
 
             <Tooltip
-              content={(props) => (
+              content={(props: any) => (
                 <AreaTooltip
                   active={props.active}
                   payload={props.payload}
                   label={String(props.label)}
                   lang={lang}
+                  // @ts-ignore
+                  chartType="candlestick"
                 />
               )}
             />
 
-            <Area
-              type="monotone"
-              dataKey="v"
-              stroke={strokeColor}
-              strokeWidth={2.5}
-              fill={`url(#${gradId})`}
-              dot={false}
-              activeDot={{
-                r: 5,
-                fill: strokeColor,
-                stroke: "#fff",
-                strokeWidth: 2,
+            <Bar
+              dataKey="close"
+              background={{ fill: "transparent" }}
+              shape={(props: any) => {
+                const { x, width, payload, background } = props;
+                return (
+                  <ModalCandleBar
+                    x={x}
+                    width={width}
+                    payload={payload}
+                    yDomain={yDomain}
+                    background={background}
+                  />
+                );
               }}
             />
-          </AreaChart>
+          </ComposedChart>
         </ResponsiveContainer>
       );
     }
 
+    // بقیه کارت‌ها => Area
     const gradId = `modal-grad-${cfg.id}`;
 
     return (
       <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={cfg.data}>
+        <AreaChart
+          data={cfg.data}
+          margin={{ top: 30, right: 40, left: 40, bottom: 40 }}
+        >
           <defs>
             <linearGradient id={gradId} x1="0" y1="0" x2="0" y2="1">
               <stop
                 offset="0%"
-                stopColor={cfg.strokeColor}
+                stopColor={cfg.strokeColor || "#4ade80"}
                 stopOpacity={isDark ? 0.35 : 0.2}
               />
-              <stop offset="100%" stopColor={cfg.strokeColor} stopOpacity={0} />
+              <stop
+                offset="100%"
+                stopColor={cfg.strokeColor || "#4ade80"}
+                stopOpacity={0}
+              />
             </linearGradient>
           </defs>
 
-          <XAxis dataKey="t" stroke={isDark ? "#fff" : "#666"} />
-          <YAxis tickMargin={24} stroke={isDark ? "#fff" : "#666"} />
+          <XAxis
+            dataKey="t"
+            stroke={isDark ? "#fff" : "#666"}
+            tick={{ fill: isDark ? "#fff" : "#666", fontSize: 11 }}
+            tickMargin={10}
+            label={{
+              value: i18next.language === "fa" ? "زمان" : "Time",
+              position: "bottom",
+              offset: 25,
+              style: {
+                fill: isDark ? "#a78bfa" : "#7c3aed",
+                fontSize: 13,
+                fontWeight: 600,
+              },
+            }}
+          />
+
+          <YAxis
+            tickMargin={24}
+            stroke={isDark ? "#fff" : "#666"}
+            tick={{ fill: isDark ? "#fff" : "#666", fontSize: 11 }}
+            label={{
+              value: i18next.language === "fa" ? "مقدار" : "Value",
+              angle: -90,
+              position: "left",
+              offset: 15,
+              style: {
+                fill: isDark ? "#a78bfa" : "#7c3aed",
+                fontSize: 13,
+                fontWeight: 600,
+              },
+            }}
+          />
 
           <Tooltip
-            content={(props) => (
+            content={(props: any) => (
               <AreaTooltip
                 active={props.active}
                 payload={props.payload}
@@ -124,13 +275,13 @@ export const ChartModal: React.FC<ChartModalProps> = ({
           <Area
             type="monotone"
             dataKey="v"
-            stroke={cfg.strokeColor}
+            stroke={cfg.strokeColor || "#4ade80"}
             strokeWidth={2.5}
             fill={`url(#${gradId})`}
             dot={false}
             activeDot={{
               r: 5,
-              fill: cfg.strokeColor,
+              fill: cfg.strokeColor || "#4ade80",
               stroke: "#fff",
               strokeWidth: 2,
             }}

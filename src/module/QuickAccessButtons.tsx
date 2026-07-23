@@ -56,7 +56,7 @@ export function QuickAccessButtons({
   ];
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
+    <div className="flex items-center gap-1.5">
       {buttons.map((btn) => (
         <button
           key={btn.key}

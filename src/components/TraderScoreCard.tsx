@@ -180,10 +180,10 @@ function RadarChart({ win, profitFactor, avgWinLoss }: RadarProps) {
   return (
     <div className="relative w-full max-w-[260px] sm:max-w-[320px] md:max-w-[380px] lg:max-w-[430px] xl:max-w-[460px] mx-auto flex items-center justify-center">
       <svg
-        viewBox="-40 -40 280 280"
+        viewBox="-30 -30 260 260"
         width="100%"
         height="100%"
-        className="aspect-square"
+        className="w-full h-full max-h-[220px] sm:max-h-[260px] md:max-h-[300px] lg:max-h-[240px]"
         onMouseLeave={() => setHovered(null)}
       >
         <defs>
@@ -361,7 +361,7 @@ function GaugeItem({
   color: "green" | "red";
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-1 sm:gap-2 md:gap-3 p-5 lg:p-0 ">
+    <div className="flex flex-col  items-center justify-center gap-1 sm:gap-2 md:gap-3 p-5 lg:p-0 ">
       <span className="text-[11px] xs:text-[12px] sm:text-[13px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
         {label}
       </span>
@@ -443,13 +443,10 @@ export default function TraderScoreCard() {
             bg-white
             dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
             rounded-2xl
-            xs:rounded-2xl
-            sm:rounded-3xl
-            border
-            sm:border-2
-            lg:border-4
-            border-gray-200
-            dark:border-[#303030]
+           
+            border-4
+        dark:border-[#3C3C3C]
+        border-gray-300
             p-2
             xs:p-3
             sm:p-4
@@ -460,14 +457,18 @@ export default function TraderScoreCard() {
             duration-300
           "
           >
-            <div className="flex flex-col gap-4 h-full justify-between ">
+            <div
+              className="flex flex-col  border-4
+        dark:border-[#3C3C3C]
+        border-gray-300 rounded-2xl gap-4 h-full justify-between "
+            >
               <div
                 id="detailse15"
                 className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
     rounded-2xl border-4 border-gray-200 dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
               >
-                <div className="grid grid-cols-2 step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                <div className="grid grid-cols-2  step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
                   {gauges.map((g) => (
                     <GaugeItem
                       key={g.key}
@@ -483,11 +484,13 @@ export default function TraderScoreCard() {
         </div>
         <div
           id="detailse16"
-          className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
-    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
+          className="bg-white  border-4
+        dark:border-[#3C3C3C]
+        border-gray-300 dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+    rounded-2xl 
     p-4 md:p-6 shadow-lg"
         >
-          <div className="grid step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid  step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             <StatItem
               label={t("score.bestSymbol")}
               value={d.stats.bestSymbol}

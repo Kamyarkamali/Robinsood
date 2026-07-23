@@ -3,6 +3,8 @@ import { GrLanguage } from "react-icons/gr";
 import { CiCircleAlert } from "react-icons/ci";
 import { IoMdTime } from "react-icons/io";
 import { CiCalendar } from "react-icons/ci";
+import { FiEye, FiEyeOff, FiFilter, FiX } from "react-icons/fi";
+import { MdExpandMore, MdExpandLess } from "react-icons/md";
 import type { NewsEvent, Session } from "../types/interfaces";
 import { NEWS, SESSIONS } from "../data/fakeData";
 import i18next from "i18next";
@@ -76,11 +78,16 @@ interface TooltipState {
 
 export default function TradingSessionsMap({ lang = "fa" }) {
   const [cur, setCur] = useState(getIranHour());
-  const [active] = useState<Set<string>>(new Set(SESSIONS.map((s) => s.id)));
+  const [activeSessions, setActiveSessions] = useState<string[]>(
+    SESSIONS.map((s) => s.id),
+  );
   const [tooltip, setTooltip] = useState<TooltipState | null>(null);
   const [hoveredLine, setHoveredLine] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [isTablet, setIsTablet] = useState<boolean>(false);
+  const [showNewsFilter, setShowNewsFilter] = useState<boolean>(false);
+  const [newsFilterImpact, setNewsFilterImpact] = useState<string>("all");
+  const [newsFilterSearch, setNewsFilterSearch] = useState<string>("");
   const rootRef = useRef<HTMLDivElement>(null);
   const isRtl = lang === "fa";
 
@@ -99,10 +106,54 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return () => window.removeEventListener("resize", check);
   }, []);
 
+  const toggleSession = (sessionId: string) => {
+    setActiveSessions((prev) => {
+      if (prev.includes(sessionId)) {
+        return prev.filter((id) => id !== sessionId);
+      } else {
+        return [...prev, sessionId];
+      }
+    });
+  };
+
+  const toggleAllSessions = () => {
+    if (activeSessions.length === SESSIONS.length) {
+      setActiveSessions([]);
+    } else {
+      setActiveSessions(SESSIONS.map((s) => s.id));
+    }
+  };
+
+  const getFilteredNews = () => {
+    let filtered = [...NEWS];
+
+    if (newsFilterImpact !== "all") {
+      filtered = filtered.filter((n) => n.impact === newsFilterImpact);
+    }
+
+    if (newsFilterSearch.trim()) {
+      const search = newsFilterSearch.toLowerCase().trim();
+      filtered = filtered.filter(
+        (n) =>
+          n.en.toLowerCase().includes(search) ||
+          n.fa.includes(search) ||
+          n.pairs.toLowerCase().includes(search),
+      );
+    }
+
+    return filtered;
+  };
+
+  const resetNewsFilter = () => {
+    setNewsFilterImpact("all");
+    setNewsFilterSearch("");
+  };
+
   const barH = isMobile ? BAR_H_MOBILE : BAR_H_DESKTOP;
   const mapH = isMobile ? 240 : isTablet ? 320 : 420;
 
-  const sorted = [...NEWS].sort((a, b) => {
+  const filteredNews = getFilteredNews();
+  const sorted = [...filteredNews].sort((a, b) => {
     const ap = a.time < cur,
       bp = b.time < cur;
     if (ap && !bp) return 1;
@@ -112,7 +163,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
   const rowMap: Record<string, number> = {};
   {
-    const ascending = [...NEWS].sort((a, b) => a.time - b.time);
+    const ascending = [...filteredNews].sort((a, b) => a.time - b.time);
     const lastRowTime: [number, number] = [-Infinity, -Infinity];
     ascending.forEach((n) => {
       let row = 0;
@@ -122,14 +173,14 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     });
   }
 
-  const upcoming = [...NEWS]
+  const upcoming = [...filteredNews]
     .filter((n) => n.time >= cur)
     .sort((a, b) => a.time - b.time);
   const nextUpId =
     upcoming.length > 0
       ? upcoming[0].id
-      : NEWS.length > 0
-        ? [...NEWS].sort((a, b) => a.time - b.time)[0].id
+      : filteredNews.length > 0
+        ? [...filteredNews].sort((a, b) => a.time - b.time)[0].id
         : null;
 
   const handleTooltip = (
@@ -185,6 +236,13 @@ export default function TradingSessionsMap({ lang = "fa" }) {
   const newsAreaRowGap = isMobile ? 34 : 46;
   const newsAreaHeight = isMobile ? 100 : 138;
 
+  const impactOptions = [
+    { value: "all", label: i18next.language === "fa" ? "همه" : "All" },
+    { value: "High", label: i18next.language === "fa" ? "بالا" : "High" },
+    { value: "Medium", label: i18next.language === "fa" ? "متوسط" : "Medium" },
+    { value: "Low", label: i18next.language === "fa" ? "پایین" : "Low" },
+  ];
+
   return (
     <>
       <div
@@ -199,10 +257,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           }
         }}
       >
-        {/* Header - Improved for mobile */}
-        <div className="relative flex items-start px-3 mt-4 sm:px-5 pt-4 pb-2">
-          {/* Left section - hidden on mobile */}
-          <div className="hidden sm:flex sm:flex-col">
+        <div className="relative flex flex-wrap items-start px-3 mt-4 sm:px-5 pt-4 pb-2 gap-3">
+          <div className="hidden sm:flex sm:flex-col flex-1 min-w-[200px]">
             <div className="flex items-center gap-2 text-sm sm:text-lg font-normal">
               <GrLanguage size={isMobile ? 18 : 25} />
               {i18next.language === "fa"
@@ -217,7 +273,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             </div>
           </div>
 
-          {/* Center - Clock (always visible, centered on mobile) */}
           <div
             className={`flex-1 ${isMobile ? "flex justify-center" : "absolute left-1/2 -translate-x-1/2 bottom-3"}`}
           >
@@ -262,9 +317,78 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             </div>
           </div>
 
-          {/* Right section - empty spacer for balance */}
-          <div className="hidden sm:block w-32" />
+          <div className="flex items-center gap-2 ml-auto">
+            <button
+              onClick={() => setShowNewsFilter(!showNewsFilter)}
+              className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 hover:scale-105 bg-[#3C3C3C]/50 border border-[#4A4A4A]"
+            >
+              <FiFilter size={14} />
+              <span className="hidden sm:inline">
+                {i18next.language === "fa" ? "فیلتر اخبار" : "News Filter"}
+              </span>
+              {showNewsFilter ? (
+                <MdExpandLess size={14} />
+              ) : (
+                <MdExpandMore size={14} />
+              )}
+              {(newsFilterImpact !== "all" || newsFilterSearch) && (
+                <span className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse" />
+              )}
+            </button>
+          </div>
         </div>
+
+        {showNewsFilter && (
+          <div className="mx-3 sm:mx-5 mb-3 p-3 rounded-xl bg-[#252525] border border-[#3C3C3C]">
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Search Input */}
+              <div className="flex-1 min-w-[120px] sm:min-w-[200px]">
+                <input
+                  type="text"
+                  placeholder={
+                    i18next.language === "fa"
+                      ? "جستجوی خبر..."
+                      : "Search news..."
+                  }
+                  value={newsFilterSearch}
+                  onChange={(e) => setNewsFilterSearch(e.target.value)}
+                  className="w-full px-3 py-1.5 rounded-lg bg-[#1e1e1e] border border-[#3C3C3C] text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 transition-colors"
+                />
+              </div>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                {impactOptions.map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => setNewsFilterImpact(option.value)}
+                    className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
+                      newsFilterImpact === option.value
+                        ? "bg-indigo-500/30 text-indigo-300 border border-indigo-500/50"
+                        : "bg-[#1e1e1e] text-slate-400 border border-transparent hover:border-[#4A4A4A]"
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+
+              {(newsFilterImpact !== "all" || newsFilterSearch) && (
+                <button
+                  onClick={resetNewsFilter}
+                  className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-red-500/20 text-red-400 border border-red-500/30 hover:bg-red-500/30 transition-all duration-200"
+                >
+                  <FiX size={12} />
+                  {i18next.language === "fa" ? "پاک کردن" : "Clear"}
+                </button>
+              )}
+
+              <span className="text-[10px] text-slate-500">
+                {filteredNews.length}{" "}
+                {i18next.language === "fa" ? "خبر" : "news"}
+              </span>
+            </div>
+          </div>
+        )}
 
         <div className="mx-2 sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
           <div
@@ -453,11 +577,26 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             {hourLabels.map((h) => (
               <div
                 key={h}
-                className="absolute text-[8px] sm:text-[10px] text-slate-200"
+                className="absolute font-medium"
                 style={{
                   top: "50%",
-                  transform: `translateY(-50%) ${isRtl ? "translateX(50%)" : "translateX(-50%)"}`,
-                  [isRtl ? "right" : "left"]: pct(h),
+                  left: pct(h),
+                  textAlign: "center",
+                  color: "#cbd5e1",
+                  textShadow: "0 1px 3px rgba(0,0,0,0.8)",
+                  letterSpacing: "0.3px",
+                  background: "rgba(43, 43, 43, 0.85)",
+                  padding: isMobile ? "1px 4px" : "1px 6px",
+                  borderRadius: "3px",
+                  border: "1px solid rgba(62, 62, 62, 0.3)",
+                  fontSize: isMobile ? "7px" : "10px",
+                  whiteSpace: "nowrap",
+                  userSelect: "none",
+                  backdropFilter: "blur(4px)",
+                  WebkitBackdropFilter: "blur(4px)",
+                  width: "auto",
+                  minWidth: "40px",
+                  maxWidth: "60px",
                 }}
               >
                 {String(h).padStart(2, "0")}:00
@@ -496,7 +635,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               <rect width="1000" height="420" fill="url(#dp2)" />
 
               {SESSIONS.map((s) => {
-                const on = active.has(s.id);
+                const on = activeSessions.includes(s.id);
                 const cx = (s.mapX / 100) * 1000;
                 const cy = (s.mapY / 100) * 420;
                 return (
@@ -662,7 +801,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             ))}
 
             {SESSIONS.map((s) => {
-              if (!active.has(s.id)) return null;
+              if (!activeSessions.includes(s.id)) return null;
               const live = isLive(s, cur);
 
               const drawBar = (sH: number, eH: number, label: boolean) => (
@@ -830,6 +969,94 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             })}
           </div>
         </div>
+
+        {/* Session Filters - Fully Responsive Bottom */}
+        <div className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 pt-3 pb-1 border-t border-[#3C3C3C] mt-2">
+          {/* Toggle All Button */}
+          <button
+            onClick={toggleAllSessions}
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 hover:scale-105"
+            style={{
+              background:
+                activeSessions.length === SESSIONS.length
+                  ? "rgba(99,102,241,0.2)"
+                  : "rgba(239,68,68,0.2)",
+              border: `1px solid ${
+                activeSessions.length === SESSIONS.length
+                  ? "rgba(99,102,241,0.4)"
+                  : "rgba(239,68,68,0.4)"
+              }`,
+              color:
+                activeSessions.length === SESSIONS.length
+                  ? "#818cf8"
+                  : "#f87171",
+            }}
+          >
+            {activeSessions.length === SESSIONS.length ? (
+              <>
+                <FiEyeOff size={isMobile ? 12 : 14} />
+                <span className="hidden xs:inline">
+                  {i18next.language === "fa" ? "مخفی کردن همه" : "Hide All"}
+                </span>
+                <span className="xs:hidden">
+                  {i18next.language === "fa" ? "همه" : "All"}
+                </span>
+              </>
+            ) : (
+              <>
+                <FiEye size={isMobile ? 12 : 14} />
+                <span className="hidden xs:inline">
+                  {i18next.language === "fa" ? "نمایش همه" : "Show All"}
+                </span>
+                <span className="xs:hidden">
+                  {i18next.language === "fa" ? "همه" : "All"}
+                </span>
+              </>
+            )}
+          </button>
+
+          <div className="w-px h-4 sm:h-6 bg-[#3C3C3C]" />
+
+          {/* Individual Session Buttons */}
+          {SESSIONS.map((session) => {
+            const isActive = activeSessions.includes(session.id);
+            return (
+              <button
+                key={session.id}
+                onClick={() => toggleSession(session.id)}
+                className="flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 hover:scale-105"
+                style={{
+                  background: isActive
+                    ? `${session.dot}22`
+                    : "rgba(74,74,74,0.3)",
+                  border: `1px solid ${
+                    isActive ? session.dot : "rgba(74,74,74,0.3)"
+                  }`,
+                  color: isActive ? "#ffffff" : "#6a6a6a",
+                  opacity: isActive ? 1 : 0.5,
+                }}
+              >
+                <img
+                  className="w-3 h-3 sm:w-4 sm:h-4 brightness-0 saturate-100 invert"
+                  src={session.icon}
+                  alt={session.en}
+                />
+                <span className="hidden sm:inline">
+                  {i18next.language === "fa"
+                    ? session.fa.replace("سشن ", "")
+                    : session.en.replace(" Session", "")}
+                </span>
+                <span className="sm:hidden">{session.id.toUpperCase()}</span>
+                {isActive ? (
+                  <FiEye size={isMobile ? 10 : 12} className="opacity-60" />
+                ) : (
+                  <FiEyeOff size={isMobile ? 10 : 12} className="opacity-60" />
+                )}
+              </button>
+            );
+          })}
+        </div>
+
         <div className="flex items-center justify-end w-full font-normal gap-1.5 px-3 sm:px-4 pt-2 text-[9px] sm:text-[10px] text-[#ffffff]">
           <p className="flex items-center gap-2">
             {i18next.language === "fa"
@@ -838,6 +1065,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </p>
           <CiCircleAlert size={isMobile ? 14 : 18} />
         </div>
+
         {tooltip && (
           <div
             className="fixed z-50 pointer-events-none rounded-xl p-2.5 sm:p-3 shadow-xl"

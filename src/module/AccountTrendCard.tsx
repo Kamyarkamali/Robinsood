@@ -22,7 +22,7 @@ function AccountTrendCard() {
         min-h-fit sm:min-h-fit lg:min-h-fit
 
         mx-auto
-        rounded-4xl
+        rounded-2xl
        
         bg-linear-to-br
       "
@@ -49,7 +49,7 @@ function AccountTrendCard() {
             w-full
             font-extrabold tabular-nums
 
-            text-[32px] sm:text-[44px] lg:text-[40px]
+            text-[32px] sm:text-[30px] lg:text-[36px]
 
             bg-linear-to-b
             from-[#34C759]
@@ -71,7 +71,7 @@ function AccountTrendCard() {
 
         <div
           className="
-            lg:w-93.5
+           
             w-full
             bg-linear-to-l
             to-[#37dd6133]

@@ -64,10 +64,10 @@ const DownloadPdfButton = () => {
         </>
       ) : (
         <>
-          <HiOutlineDocumentArrowDown className="text-[15px] md:text-xl" />
           <span className="text-[11px] hidden md:block md:text-sm">
             {lang === "fa" ? " دانلود PDF" : "Download Pdf"}
           </span>
+          <HiOutlineDocumentArrowDown className="text-[15px] md:text-xl" />
         </>
       )}
     </button>

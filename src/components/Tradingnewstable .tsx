@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import { useState, useMemo } from "react";
-import { FILTER_OPTIONS, WEEK_OPTIONS } from "../data/fakeData";
+import { FILTER_OPTIONS } from "../data/fakeData";
 import { useNewsFilter } from "../hooks/useNewsFilter";
 import { DropdownFainalTabale } from "../module/DropdownFainalTabale";
 import { NewsTable } from "../module/NewsTable";
@@ -16,7 +16,6 @@ interface TradingNewsTableProps {
 function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
   const {
     week,
-    setWeek,
     filter,
     setFilter,
     tradeInNews,
@@ -26,7 +25,6 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
     filteredData,
   } = useNewsFilter();
 
-  const [isWeekOpen, setIsWeekOpen] = useState<boolean>(false);
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(false);
   const [dateRange, setDateRange] = useState<{
     start: Date | null;
@@ -95,6 +93,11 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
         bValue = impactOrder[b.impact as keyof typeof impactOrder] || 0;
       }
 
+      if (sortConfig.key === "tradeable") {
+        aValue = a.tradeable ? 1 : 0;
+        bValue = b.tradeable ? 1 : 0;
+      }
+
       if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
@@ -115,47 +118,11 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
       dir={i18next.language === "fa" ? "rtl" : "ltr"}
       className="bg-gray-50 step-test44 rounded-2xl mt-3 border-4
       dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
-        dark:border-[#3C3C3C]
-        border-gray-300 w-full max-w-full mx-auto p-5 transition-colors"
+      dark:border-[#3C3C3C]
+      border-gray-300 w-full max-w-full mx-auto p-3 sm:p-4 md:p-5 transition-colors"
     >
-      <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-        <div className="flex step-test45 items-center gap-3 flex-wrap w-full md:w-auto">
-          <section id="tabale3">
-            <FilterButtons
-              impactFilter={impactFilter}
-              onFilterChange={setImpactFilter}
-              lang={lang}
-            />
-          </section>
-
-          <button
-            id="tabale4"
-            onClick={() => setTradeInNews((v) => !v)}
-            className="flex justify-center w-full sm:w-45 h-15 dark:bg-linear-to-r items-center gap-2 font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] border border-gray-300 dark:border-white/10 rounded-full px-3.5 py-1.5 text-gray-700 dark:text-gray-300 text-[14px] cursor-pointer hover:bg-gray-200 dark:hover:bg-white/10 transition"
-          >
-            {i18next.language === "fa"
-              ? tradeInNews
-                ? "ترید در خبر"
-                : "ترید ممنوع"
-              : tradeInNews
-                ? "Trade in News"
-                : "Trade Banned"}
-            <span
-              className="w-5.5 h-3.5 rounded-full transition-colors"
-              style={{ background: tradeInNews ? "#22c55e" : "#9ca3af" }}
-            />
-          </button>
-        </div>
-
-        <div className="flex flex-wrap step-test46 gap-2 w-full md:w-auto">
-          <DropdownFainalTabale
-            options={WEEK_OPTIONS}
-            selected={week}
-            onSelect={setWeek}
-            lang={lang}
-            isOpen={isWeekOpen}
-            setIsOpen={setIsWeekOpen}
-          />
+      <div className="flex flex-col sm:flex-row flex-wrap items-center justify-end gap-3 mb-4 sm:mb-5">
+        <div className="flex  step-test46 gap-2 w-full sm:w-auto">
           <DropdownFainalTabale
             options={FILTER_OPTIONS}
             selected={filter}
@@ -169,50 +136,110 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
 
       <div
         id="tabale6"
-        className="flex flex-wrap items-center gap-3 mb-4 p-3 bg-white/50 dark:bg-white/5 rounded-xl border border-gray-200/50 dark:border-white/5"
+        className="flex flex-col lg:flex-row flex-wrap items-stretch lg:items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2 sm:p-3 
+          bg-white/50 dark:bg-white/5 
+          rounded-xl border border-gray-200/50 dark:border-white/5"
       >
-        <DateRangePicker
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          showDatePicker={showDatePicker}
-          setShowDatePicker={setShowDatePicker}
-          // lang={lang}
-        />
-        <QuickAccessButtons setDateRange={setDateRange} lang={lang} />
-        {(dateRange.start || dateRange.end) && (
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full lg:w-auto flex-1">
+          <div className="flex-1 min-w-[150px] sm:min-w-[200px]">
+            <div className="flex flex-col md:flex-row items-center gap-3">
+              <DateRangePicker
+                dateRange={dateRange}
+                setDateRange={setDateRange}
+                showDatePicker={showDatePicker}
+                setShowDatePicker={setShowDatePicker}
+              />
+              <div className="flex flex-wrap items-center gap-1 sm:gap-2">
+                <QuickAccessButtons setDateRange={setDateRange} lang={lang} />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-between lg:justify-end gap-2 w-full lg:w-auto">
+          {(dateRange.start || dateRange.end) && (
+            <button
+              onClick={() => {
+                setDateRange({ start: null, end: null });
+                setShowDatePicker(false);
+              }}
+              className="text-[10px] sm:text-xs text-red-500 hover:text-red-600 
+                dark:text-red-400 dark:hover:text-red-300 
+                transition px-2 py-1 whitespace-nowrap"
+            >
+              {lang === "fa" ? "پاک کردن فیلتر" : "Clear Filter"}
+            </button>
+          )}
+
+          <div className="flex flex-col items-center md:flex-row"></div>
+        </div>
+        <div className="flex step-test45 items-center gap-3 flex-wrap w-full sm:w-auto">
           <button
-            onClick={() => {
-              setDateRange({ start: null, end: null });
-              setShowDatePicker(false);
-            }}
-            className="text-xs text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition"
+            id="tabale4"
+            onClick={() => setTradeInNews((v) => !v)}
+            className="flex justify-center items-center gap-2 w-full sm:w-auto px-3 sm:px-3.5 py-2 sm:py-1.5 
+              h-auto sm:h-15 
+              dark:bg-linear-to-r 
+              font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] 
+              border border-gray-300 dark:border-white/10 
+              rounded-full 
+              text-gray-700 dark:text-gray-300 
+              text-[12px] sm:text-[13px] md:text-[14px] 
+              cursor-pointer hover:bg-gray-200 dark:hover:bg-white/10 
+              transition-all duration-200"
           >
-            {lang === "fa" ? "پاک کردن فیلتر" : "Clear Filter"}
+            <span className="whitespace-nowrap">
+              {i18next.language === "fa"
+                ? tradeInNews
+                  ? "ترید در خبر"
+                  : "ترید ممنوع"
+                : tradeInNews
+                  ? "Trade in News"
+                  : "Trade Banned"}
+            </span>
+            <span
+              className="w-4 h-4 sm:w-5.5 sm:h-3.5 rounded-full transition-colors flex-shrink-0"
+              style={{ background: tradeInNews ? "#22c55e" : "#9ca3af" }}
+            />
           </button>
-        )}
+          <section className="flex flex-wrap items-center gap-1" id="tabale3">
+            <FilterButtons
+              impactFilter={impactFilter}
+              onFilterChange={setImpactFilter}
+              lang={lang}
+            />
+          </section>
+        </div>
       </div>
 
       {!week ? (
-        <div className="py-10 text-center text-gray-400 dark:text-gray-600 text-sm">
+        <div className="py-8 sm:py-10 text-center text-gray-400 dark:text-gray-600 text-xs sm:text-sm">
           {i18next.language === "fa"
             ? "یک هفته را انتخاب کنید"
             : "Please select a week"}
         </div>
       ) : (
         <>
-          <NewsTable
-            data={paginatedData}
-            lang={lang}
-            sortConfig={sortConfig}
-            requestSort={requestSort}
-            getSortIcon={getSortIcon}
-          />
+          <div className="overflow-x-auto -mx-2 sm:mx-0">
+            <NewsTable
+              data={paginatedData}
+              lang={lang}
+              sortConfig={sortConfig}
+              requestSort={requestSort}
+              getSortIcon={getSortIcon}
+            />
+          </div>
 
+          {/* Pagination - Fully Responsive */}
           {sortedData.length > 0 && (
-            <div className="flex flex-wrap items-center justify-between gap-3 mt-4 pt-3 border-t border-gray-200 dark:border-white/5">
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-gray-500 dark:text-gray-400">
-                  {lang === "fa" ? "تعداد در صفحه:" : "Rows per page:"}
+            <div
+              className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 mt-4 pt-3 
+              border-t border-gray-200 dark:border-white/5"
+            >
+              {/* Rows per page - Left side */}
+              <div className="flex items-center gap-2 order-2 sm:order-1">
+                <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                  {lang === "fa" ? "تعداد در صفحه:" : "Rows:"}
                 </span>
                 <select
                   value={rowsPerPage}
@@ -220,7 +247,11 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
                     setRowsPerPage(Number(e.target.value));
                     setCurrentPage(1);
                   }}
-                  className="px-2 py-1 text-xs rounded-lg border border-gray-200 dark:border-white/10 bg-white dark:bg-[#2B2B2B] text-gray-700 dark:text-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
+                  className="px-1.5 sm:px-2 py-1 text-[10px] sm:text-xs rounded-lg 
+                    border border-gray-200 dark:border-white/10 
+                    bg-white dark:bg-[#2B2B2B] 
+                    text-gray-700 dark:text-gray-300 
+                    focus:outline-none focus:ring-2 focus:ring-indigo-500/20"
                 >
                   <option value={5}>5</option>
                   <option value={10}>10</option>
@@ -230,23 +261,37 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
                 </select>
               </div>
 
-              <div className="flex items-center gap-2">
+              {/* Page Info - Center */}
+              <div className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 order-1 sm:order-2">
+                {lang === "fa"
+                  ? `نمایش ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} از ${sortedData.length}`
+                  : `Showing ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} of ${sortedData.length}`}
+              </div>
+
+              {/* Pagination Controls - Right side */}
+              <div className="flex items-center gap-1 sm:gap-2 order-3">
                 <button
                   onClick={() => setCurrentPage(1)}
                   disabled={currentPage === 1}
-                  className="px-2 py-1 text-xs rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="px-1.5 sm:px-2 py-1 text-[10px] sm:text-xs rounded-lg 
+                    hover:bg-gray-100 dark:hover:bg-white/5 
+                    disabled:opacity-50 disabled:cursor-not-allowed 
+                    transition"
                 >
                   ⟪
                 </button>
                 <button
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
-                  className="px-2 py-1 text-xs rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="px-1.5 sm:px-2 py-1 text-[10px] sm:text-xs rounded-lg 
+                    hover:bg-gray-100 dark:hover:bg-white/5 
+                    disabled:opacity-50 disabled:cursor-not-allowed 
+                    transition"
                 >
                   ⟨
                 </button>
 
-                <span className="text-xs text-gray-500 dark:text-gray-400">
+                <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                   {lang === "fa"
                     ? `صفحه ${currentPage} از ${totalPages}`
                     : `Page ${currentPage} of ${totalPages}`}
@@ -257,23 +302,23 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
                     setCurrentPage((p) => Math.min(totalPages, p + 1))
                   }
                   disabled={currentPage === totalPages}
-                  className="px-2 py-1 text-xs rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="px-1.5 sm:px-2 py-1 text-[10px] sm:text-xs rounded-lg 
+                    hover:bg-gray-100 dark:hover:bg-white/5 
+                    disabled:opacity-50 disabled:cursor-not-allowed 
+                    transition"
                 >
                   ⟩
                 </button>
                 <button
                   onClick={() => setCurrentPage(totalPages)}
                   disabled={currentPage === totalPages}
-                  className="px-2 py-1 text-xs rounded-lg hover:bg-gray-100 dark:hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  className="px-1.5 sm:px-2 py-1 text-[10px] sm:text-xs rounded-lg 
+                    hover:bg-gray-100 dark:hover:bg-white/5 
+                    disabled:opacity-50 disabled:cursor-not-allowed 
+                    transition"
                 >
                   ⟫
                 </button>
-              </div>
-
-              <div className="text-xs text-gray-400 dark:text-gray-500">
-                {lang === "fa"
-                  ? `نمایش ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} از ${sortedData.length}`
-                  : `Showing ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} of ${sortedData.length}`}
               </div>
             </div>
           )}

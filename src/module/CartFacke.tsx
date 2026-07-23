@@ -2,6 +2,7 @@ import { HiArrowTrendingUp, HiArrowTrendingDown } from "react-icons/hi2";
 import { BsBarChartFill, BsPeopleFill } from "react-icons/bs";
 import { FaExchangeAlt, FaDollarSign } from "react-icons/fa";
 import { useTranslation } from "react-i18next";
+import i18next from "i18next";
 
 export default function CartFacke() {
   const { i18n } = useTranslation();
@@ -53,21 +54,27 @@ export default function CartFacke() {
     "text-2xl sm:text-3xl font-bold text-white tabular-nums mt-2";
 
   return (
-    <div
-      id="com4"
-      dir={isRtl ? "rtl" : "ltr"}
-      className="w-full dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] "
-    >
+    <>
+      <h1 className="text-center font-black text-sm md:text-lg">
+        {i18next.language === "fa"
+          ? "آمار کاربران رابین  سون"
+          : "Robinhood Users Stats"}
+      </h1>
       <div
-        className="
+        id="com4"
+        dir={isRtl ? "rtl" : "ltr"}
+        className="w-full dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] "
+      >
+        <div
+          className="
           rounded-2xl
           border-4 dark:border-[#3C3C3C]
           backdrop-blur-xl
           p-3 sm:p-5 lg:p-6
         "
-      >
-        <div
-          className="
+        >
+          <div
+            className="
             grid
             grid-cols-1
             sm:grid-cols-2
@@ -75,121 +82,122 @@ export default function CartFacke() {
             xl:grid-cols-5
             gap-3 sm:gap-4
           "
-        >
-          {/* Card 1 */}
-          <div className={cardStyle}>
-            <BsBarChartFill size={26} className="text-indigo-400" />
-            <h2 className={valueClass}>18/420</h2>
-            <p className={titleClass}>
-              {isRtl ? "تعداد معاملات باز" : "Total Trades"}
-            </p>
-            <div className="mt-3">
-              <div className={positiveBadge}>
-                <HiArrowTrendingUp />
-                +32%
-              </div>
-            </div>
-          </div>
-
-          {/* Card 2 */}
-          <div className={cardStyle}>
-            <FaExchangeAlt size={26} className="text-cyan-400" />
-
-            <div className="w-full mt-3 space-y-3">
-              <div>
-                <div className="flex justify-between text-[11px] sm:text-xs text-white mb-1">
-                  <span>{isRtl ? "خرید" : "Buy"}</span>
-                  <span className="text-[#2FE38A] font-bold">58%</span>
-                </div>
-                <div className="h-2 rounded-full bg-white/5 overflow-hidden">
-                  <div
-                    className="h-full bg-[#16C784]"
-                    style={{ width: "58%" }}
-                  />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-[11px] sm:text-xs text-white mb-1">
-                  <span>{isRtl ? "فروش" : "Sell"}</span>
-                  <span className="text-[#FF5B6B] font-bold">42%</span>
-                </div>
-                <div className="h-2 rounded-full bg-white/5 overflow-hidden">
-                  <div
-                    className="h-full bg-[#EA3943]"
-                    style={{ width: "42%" }}
-                  />
+          >
+            {/* Card 1 */}
+            <div className={cardStyle}>
+              <BsBarChartFill size={26} className="text-indigo-400" />
+              <h2 className={valueClass}>18.420</h2>
+              <p className={titleClass}>
+                {isRtl ? "تعداد معاملات باز" : "Total Trades"}
+              </p>
+              <div className="mt-3">
+                <div className={positiveBadge}>
+                  <HiArrowTrendingUp />
+                  32% +
                 </div>
               </div>
             </div>
 
-            <p className={titleClass}>
-              {isRtl ? "درصد معاملات باز" : "Open Trades"}
-            </p>
-          </div>
+            {/* Card 2 */}
+            <div className={cardStyle}>
+              <FaExchangeAlt size={26} className="text-cyan-400" />
 
-          {/* Card 3 */}
-          <div className={cardStyle}>
-            <HiArrowTrendingUp size={26} className="text-[#16C784]" />
+              <div className="w-full mt-3 space-y-3">
+                <div>
+                  <div className="flex justify-between text-[11px] sm:text-xs text-white mb-1">
+                    <span>{isRtl ? "خرید" : "Buy"}</span>
+                    <span className="text-[#2FE38A] font-bold">58%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                    <div
+                      className="h-full bg-[#16C784]"
+                      style={{ width: "58%" }}
+                    />
+                  </div>
+                </div>
 
-            <h2
-              className="
+                <div>
+                  <div className="flex justify-between text-[11px] sm:text-xs text-white mb-1">
+                    <span>{isRtl ? "فروش" : "Sell"}</span>
+                    <span className="text-[#FF5B6B] font-bold">42%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-white/5 overflow-hidden">
+                    <div
+                      className="h-full bg-[#EA3943]"
+                      style={{ width: "42%" }}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <p className={titleClass}>
+                {isRtl ? "درصد معاملات باز" : "Open Trades"}
+              </p>
+            </div>
+
+            {/* Card 3 */}
+            <div className={cardStyle}>
+              <HiArrowTrendingUp size={26} className="text-[#16C784]" />
+
+              <h2
+                className="
                 text-2xl sm:text-3xl font-bold mt-2
                 text-transparent bg-gradient-to-r from-[#16C784] to-emerald-300 bg-clip-text
               "
-            >
-              +13.1%
-            </h2>
+              >
+                13.1% $ +
+              </h2>
 
-            <p className={titleClass}>
-              {isRtl ? "میانگین سود/ضرر" : "Average Live P/L"}
-            </p>
+              <p className={titleClass}>
+                {isRtl ? "میانگین سود/ضرر" : "Average Live P/L"}
+              </p>
 
-            <div className="mt-3">
-              <div className={positiveBadge}>
-                <HiArrowTrendingUp />
-                +20%
+              <div className="mt-3">
+                <div className={positiveBadge}>
+                  <HiArrowTrendingUp />
+                  20% +
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 4 */}
-          <div className={cardStyle}>
-            <FaDollarSign size={26} className="text-yellow-400" />
+            {/* Card 4 */}
+            <div className={cardStyle}>
+              <FaDollarSign size={26} className="text-yellow-400" />
 
-            <h2 className={valueClass}>$360</h2>
+              <h2 className={valueClass}>$360</h2>
 
-            <p className={titleClass}>
-              {isRtl ? "میانگین حجم" : "Average Volume"}
-            </p>
+              <p className={titleClass}>
+                {isRtl ? "میانگین حجم" : "Average Volume"}
+              </p>
 
-            <div className="mt-3">
-              <div className={positiveBadge}>
-                <HiArrowTrendingUp />
-                +20%
+              <div className="mt-3">
+                <div className={positiveBadge}>
+                  <HiArrowTrendingUp />
+                  20% +
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* Card 5 */}
-          <div className={cardStyle}>
-            <BsPeopleFill size={26} className="text-pink-400" />
+            {/* Card 5 */}
+            <div className={cardStyle}>
+              <BsPeopleFill size={26} className="text-pink-400" />
 
-            <h2 className={valueClass}>53%</h2>
+              <h2 className={valueClass}>53%</h2>
 
-            <p className={titleClass}>
-              {isRtl ? "کاربران در سود" : "Users in Profit"}
-            </p>
+              <p className={titleClass}>
+                {isRtl ? "کاربران در سود" : "Users in Profit"}
+              </p>
 
-            <div className="mt-3">
-              <div className={negativeBadge}>
-                <HiArrowTrendingDown />
-                -27.2%
+              <div className="mt-3">
+                <div className={negativeBadge}>
+                  <HiArrowTrendingDown />
+                  27.2% -
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

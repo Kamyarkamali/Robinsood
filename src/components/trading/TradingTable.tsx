@@ -6,8 +6,14 @@ import {
   Filter,
   X,
   Newspaper,
+  SlidersHorizontal,
+  BarChart3,
+  Calendar,
+  Hash,
+  Tag,
+  RefreshCw,
 } from "lucide-react";
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import type {
   DateRanges,
@@ -28,6 +34,10 @@ import {
   SYMBOLS,
 } from "../../data/fakeData";
 
+interface ExtendedTrades extends Trades {
+  risk?: string;
+}
+
 function symbolInfo(key: string) {
   return SYMBOLS.find((s) => s.key === key) ?? SYMBOLS[0];
 }
@@ -42,8 +52,8 @@ function randomDateWithin(daysBack: number) {
   return new Date(past).toISOString();
 }
 
-function generateFakeTrades(count: number): Trades[] {
-  const out: Trades[] = [];
+function generateFakeTrades(count: number): ExtendedTrades[] {
+  const out: ExtendedTrades[] = [];
   for (let i = 0; i < count; i++) {
     const symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
     const side: TradeSide = Math.random() > 0.5 ? "buy" : "sell";
@@ -77,6 +87,11 @@ function generateFakeTrades(count: number): Trades[] {
         ).toISOString()
       : null;
 
+    const riskScore = Math.random();
+    let risk = "low";
+    if (riskScore > 0.7) risk = "high";
+    else if (riskScore > 0.4) risk = "medium";
+
     out.push({
       id: i + 1,
       ticket: `TCK-${100000 + i}`,
@@ -105,6 +120,7 @@ function generateFakeTrades(count: number): Trades[] {
         Math.random() > 0.5
           ? ""
           : "معامله طبق استراتژی روند اصلی با مدیریت ریسک مناسب",
+      risk,
     });
   }
   return out;
@@ -122,7 +138,7 @@ function emptyFilters(): Filters {
   return { symbol: "all", side: "all", result: "all", numeric, dates };
 }
 
-function matchesFilters(trade: Trades, f: Filters): boolean {
+function matchesFilters(trade: ExtendedTrades, f: Filters): boolean {
   if (f.symbol !== "all" && trade.symbol !== f.symbol) return false;
   if (f.side !== "all" && trade.side !== f.side) return false;
   if (f.result !== "all" && trade.result !== f.result) return false;
@@ -152,7 +168,10 @@ interface SortState {
   dir: "asc" | "desc";
 }
 
-function sortTrades(trades: Trades[], sort: SortState): Trades[] {
+function sortTrades(
+  trades: ExtendedTrades[],
+  sort: SortState,
+): ExtendedTrades[] {
   if (!sort.col) return trades;
   const colDef = COLUMNS.find((c) => c.key === sort.col);
   if (!colDef || colDef.sort === "none") return trades;
@@ -161,7 +180,6 @@ function sortTrades(trades: Trades[], sort: SortState): Trades[] {
   arr.sort((a, b) => {
     const av = (a as any)[sort.col as string];
     const bv = (b as any)[sort.col as string];
-
     let cmp = 0;
     if (colDef.sort === "number") {
       cmp = (av ?? -Infinity) - (bv ?? -Infinity);
@@ -249,6 +267,34 @@ function ResultBadge({ result, lang }: { result: TradeResult; lang: string }) {
   );
 }
 
+function RiskBadge({ risk, lang }: { risk: string; lang: string }) {
+  const map = {
+    low: {
+      fa: "کم",
+      en: "Low",
+      cls: "bg-emerald-500/15 text-emerald-400 border-emerald-500/30",
+    },
+    medium: {
+      fa: "متوسط",
+      en: "Medium",
+      cls: "bg-yellow-500/15 text-yellow-400 border-yellow-500/30",
+    },
+    high: {
+      fa: "بالا",
+      en: "High",
+      cls: "bg-rose-500/15 text-rose-400 border-rose-500/30",
+    },
+  };
+  const m = map[risk as keyof typeof map] || map.low;
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-bold whitespace-nowrap border ${m.cls}`}
+    >
+      {lang === "fa" ? m.fa : m.en}
+    </span>
+  );
+}
+
 function ColorBarHeaderChip() {
   return (
     <div className="flex w-5 h-4 rounded-sm mx-auto border border-white/10">
@@ -301,7 +347,7 @@ function LinearStat({
   const total = Math.max(1, active + closed + planned);
   const segs = [
     { label: { fa: "باز", en: "Active" }, value: active, color: "#38bdf8" },
-    { label: { fa: "بسته", en: "Closed" }, value: closed, color: "#94a3b8" },
+    { label: { fa: "بسته", en: "Closed" }, value: closed, color: "#52525b" },
     {
       label: { fa: "برنامه‌ریزی", en: "Planned" },
       value: planned,
@@ -334,7 +380,7 @@ function LinearStat({
   );
 }
 
-function TradeCard({ trade, lang }: { trade: Trades; lang: string }) {
+function TradeCard({ trade, lang }: { trade: ExtendedTrades; lang: string }) {
   const isRtl = lang === "fa";
 
   return (
@@ -361,6 +407,7 @@ function TradeCard({ trade, lang }: { trade: Trades; lang: string }) {
       <div className="flex items-center gap-2 mb-3 pr-2 flex-wrap">
         <SideBadge side={trade.side} lang={lang} />
         <ResultBadge result={trade.result} lang={lang} />
+        <RiskBadge risk={trade.risk || "low"} lang={lang} />
         <span
           className={`text-[8px] px-2 py-0.5 rounded-full ${
             trade.status === "active"
@@ -476,20 +523,333 @@ function TradeCard({ trade, lang }: { trade: Trades; lang: string }) {
   );
 }
 
+function FilterModal({
+  isOpen,
+  onClose,
+  filters,
+  setFilters,
+  resetFilters,
+  rowsPerPage,
+  setRowsPerPage,
+  setCurrentPage,
+  isRtl,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  filters: Filters;
+  setFilters: React.Dispatch<React.SetStateAction<Filters>>;
+  resetFilters: () => void;
+  rowsPerPage: number;
+  setRowsPerPage: (v: number) => void;
+  setCurrentPage: (v: number) => void;
+  isRtl: boolean;
+  lang: string;
+}) {
+  const updateNumeric = (key: string, part: "min" | "max", value: string) => {
+    setFilters((f) => ({
+      ...f,
+      numeric: { ...f.numeric, [key]: { ...f.numeric[key], [part]: value } },
+    }));
+  };
+
+  const updateDate = (key: string, part: "from" | "to", value: string) => {
+    setFilters((f) => ({
+      ...f,
+      dates: { ...f.dates, [key]: { ...f.dates[key], [part]: value } },
+    }));
+  };
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (filters.symbol !== "all") count++;
+    if (filters.side !== "all") count++;
+    if (filters.result !== "all") count++;
+
+    for (const key of Object.keys(filters.numeric)) {
+      const range = filters.numeric[key];
+      if (range.min !== "" || range.max !== "") count++;
+    }
+
+    for (const key of Object.keys(filters.dates)) {
+      const range = filters.dates[key];
+      if (range.from !== "" || range.to !== "") count++;
+    }
+
+    return count;
+  }, [filters]);
+
+  if (!isOpen) return null;
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-in fade-in duration-200"
+        onClick={onClose}
+      />
+
+      {/* Modal */}
+      <div
+        className={`fixed inset-4 sm:inset-8 md:inset-10 lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 
+          lg:w-[800px] lg:max-w-[90vw] lg:max-h-[85vh] z-50 
+          bg-white dark:bg-[#2B2B2B] rounded-2xl shadow-2xl border border-gray-200 dark:border-[#3a3a3a]
+          animate-in fade-in zoom-in-95 duration-200
+          flex flex-col overflow-hidden`}
+        dir={isRtl ? "rtl" : "ltr"}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-[#3a3a3a] shrink-0">
+          <div className="flex items-center gap-3">
+            <SlidersHorizontal size={20} className="text-emerald-500" />
+            <h2 className="text-lg font-bold text-gray-800 dark:text-white">
+              {isRtl ? "فیلتر پیشرفته" : "Advanced Filters"}
+            </h2>
+            {activeFilterCount > 0 && (
+              <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-500 border border-emerald-500/30">
+                {activeFilterCount} {isRtl ? "فعال" : "active"}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-gray-100 dark:hover:bg-[#3a3a3a] rounded-xl transition-colors"
+          >
+            <X size={20} className="text-gray-500 dark:text-gray-400" />
+          </button>
+        </div>
+
+        {/* Body - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
+          {/* Quick Filters */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Tag size={16} className="text-gray-400" />
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                {isRtl ? "فیلترهای سریع" : "Quick Filters"}
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div>
+                <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1.5">
+                  {isRtl ? "نماد" : "Symbol"}
+                </label>
+                <select
+                  value={filters.symbol}
+                  onChange={(e) =>
+                    setFilters((f) => ({ ...f, symbol: e.target.value }))
+                  }
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                >
+                  <option value="all">{isRtl ? "همه" : "All"}</option>
+                  {SYMBOLS.map((s) => (
+                    <option key={s.key} value={s.key}>
+                      {isRtl ? s.label.fa : s.label.en}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1.5">
+                  {isRtl ? "نوع معامله" : "Side"}
+                </label>
+                <select
+                  value={filters.side}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      side: e.target.value as TradeSide | "all",
+                    }))
+                  }
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                >
+                  <option value="all">{isRtl ? "همه" : "All"}</option>
+                  <option value="buy">{isRtl ? "بای" : "Buy"}</option>
+                  <option value="sell">{isRtl ? "سل" : "Sell"}</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1.5">
+                  {isRtl ? "وضعیت" : "Result"}
+                </label>
+                <select
+                  value={filters.result}
+                  onChange={(e) =>
+                    setFilters((f) => ({
+                      ...f,
+                      result: e.target.value as TradeResult | "all",
+                    }))
+                  }
+                  className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                >
+                  <option value="all">{isRtl ? "همه" : "All"}</option>
+                  <option value="profit">{isRtl ? "سود" : "Profit"}</option>
+                  <option value="loss">{isRtl ? "ضرر" : "Loss"}</option>
+                  <option value="pending">
+                    {isRtl ? "پندینگ" : "Pending"}
+                  </option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          {/* Numeric Ranges */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Hash size={16} className="text-gray-400" />
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                {isRtl ? "بازه‌های عددی" : "Numeric Ranges"}
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {NUMERIC_RANGE_FIELDS.map((field) => {
+                const key = field.key as string;
+                const range = filters.numeric[key];
+                return (
+                  <div key={key}>
+                    <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1.5">
+                      {isRtl ? field.label.fa : field.label.en}
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="number"
+                        placeholder={isRtl ? "حداقل" : "Min"}
+                        value={range.min}
+                        onChange={(e) =>
+                          updateNumeric(key, "min", e.target.value)
+                        }
+                        className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                      />
+                      <span className="text-gray-400 text-sm">-</span>
+                      <input
+                        type="number"
+                        placeholder={isRtl ? "حداکثر" : "Max"}
+                        value={range.max}
+                        onChange={(e) =>
+                          updateNumeric(key, "max", e.target.value)
+                        }
+                        className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Date Ranges */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <Calendar size={16} className="text-gray-400" />
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                {isRtl ? "بازه‌های زمانی" : "Date Ranges"}
+              </h3>
+            </div>
+            <div className="grid grid-cols-1 gap-3">
+              {DATE_RANGE_FIELDS.map((field) => {
+                const key = field.key as string;
+                const range = filters.dates[key];
+                return (
+                  <div key={key}>
+                    <label className="text-[11px] text-gray-500 dark:text-gray-400 block mb-1.5">
+                      {isRtl ? field.label.fa : field.label.en}
+                    </label>
+                    <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+                      <input
+                        type="datetime-local"
+                        value={range.from}
+                        onChange={(e) =>
+                          updateDate(key, "from", e.target.value)
+                        }
+                        className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                      />
+                      <span className="text-sm text-gray-400 text-center sm:text-left shrink-0">
+                        {isRtl ? "تا" : "to"}
+                      </span>
+                      <input
+                        type="datetime-local"
+                        value={range.to}
+                        onChange={(e) => updateDate(key, "to", e.target.value)}
+                        className="w-full px-3 py-2 text-sm rounded-xl border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200 focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-colors"
+                      />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Rows per page */}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <BarChart3 size={16} className="text-gray-400" />
+              <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300">
+                {isRtl ? "تعداد ردیف در هر صفحه" : "Rows per page"}
+              </h3>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {[5, 10, 20, 50, 100].map((v) => (
+                <button
+                  key={v}
+                  onClick={() => {
+                    setRowsPerPage(v);
+                    setCurrentPage(0);
+                  }}
+                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
+                    rowsPerPage === v
+                      ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/25"
+                      : "bg-gray-100 dark:bg-[#333] text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#444] border border-gray-200 dark:border-[#4a4a4a]"
+                  }`}
+                >
+                  {v}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-[#3a3a3a] shrink-0 bg-gray-50 dark:bg-[#252525]">
+          <button
+            onClick={resetFilters}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#3a3a3a] transition-colors w-full sm:w-auto justify-center"
+          >
+            <RefreshCw size={16} />
+            {isRtl ? "پاک کردن همه" : "Reset All"}
+          </button>
+          <div className="flex items-center gap-3 w-full sm:w-auto">
+            <button
+              onClick={onClose}
+              className="flex-1 sm:flex-none px-6 py-2 rounded-xl text-sm font-medium text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-[#3a3a3a] transition-colors"
+            >
+              {isRtl ? "انصراف" : "Cancel"}
+            </button>
+            <button
+              onClick={onClose}
+              className="flex-1 sm:flex-none px-6 py-2 rounded-xl text-sm font-bold text-white bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-500/25 transition-all"
+            >
+              {isRtl ? "اعمال فیلتر" : "Apply Filters"}
+            </button>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function TradingTable() {
   const { i18n } = useTranslation();
   const lang = i18n.language;
   const isRtl = lang === "fa";
 
-  const [allTrades] = useState<Trades[]>(() => generateFakeTrades(60));
+  const [allTrades] = useState<ExtendedTrades[]>(() => generateFakeTrades(60));
   const [filters, setFilters] = useState<Filters>(emptyFilters());
   const [sort, setSort] = useState<SortState>({ col: null, dir: "asc" });
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [isMobile, setIsMobile] = useState(false);
-
-  const filterRef = useRef<HTMLDivElement>(null);
+  const [, setIsMobile] = useState(false);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -498,17 +858,7 @@ export default function TradingTable() {
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  useEffect(() => {
-    const handler = (e: MouseEvent) => {
-      if (filterRef.current && !filterRef.current.contains(e.target as Node)) {
-        setIsFilterOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, []);
+  }, [setIsMobile]);
 
   const filteredSorted = useMemo(() => {
     const filtered = allTrades.filter((tr) => matchesFilters(tr, filters));
@@ -536,20 +886,6 @@ export default function TradingTable() {
 
   const resetFilters = () => setFilters(emptyFilters());
 
-  const updateNumeric = (key: string, part: "min" | "max", value: string) => {
-    setFilters((f) => ({
-      ...f,
-      numeric: { ...f.numeric, [key]: { ...f.numeric[key], [part]: value } },
-    }));
-  };
-
-  const updateDate = (key: string, part: "from" | "to", value: string) => {
-    setFilters((f) => ({
-      ...f,
-      dates: { ...f.dates, [key]: { ...f.dates[key], [part]: value } },
-    }));
-  };
-
   const paginationItems = () => {
     const items: (number | string)[] = [];
     const maxVisible = 5;
@@ -568,6 +904,39 @@ export default function TradingTable() {
     }
     return items;
   };
+
+  const activeFilterCount = useMemo(() => {
+    let count = 0;
+    if (filters.symbol !== "all") count++;
+    if (filters.side !== "all") count++;
+    if (filters.result !== "all") count++;
+
+    for (const key of Object.keys(filters.numeric)) {
+      const range = filters.numeric[key];
+      if (range.min !== "" || range.max !== "") count++;
+    }
+
+    for (const key of Object.keys(filters.dates)) {
+      const range = filters.dates[key];
+      if (range.from !== "" || range.to !== "") count++;
+    }
+
+    return count;
+  }, [filters]);
+
+  const tableColumns = useMemo(() => {
+    const resultIndex = COLUMNS.findIndex((c) => c.key === "result");
+    const cols = [...COLUMNS];
+    if (resultIndex !== -1) {
+      cols.splice(resultIndex + 1, 0, {
+        key: "risk" as ColKey,
+        label: { fa: "ریسک", en: "Risk" },
+        sort: "string",
+        width: "5%",
+      });
+    }
+    return cols;
+  }, []);
 
   return (
     <>
@@ -593,226 +962,20 @@ export default function TradingTable() {
               />
             </div>
 
-            <div
-              className="relative shrink-0 w-full lg:w-auto"
-              ref={filterRef}
-              id="trade2"
-            >
+            <div className="shrink-0 w-full lg:w-auto">
               <button
-                onClick={() => setIsFilterOpen((v) => !v)}
-                className="flex items-center justify-center w-full lg:w-auto gap-2 px-4 py-2 rounded-xl border border-gray-300 dark:border-[#4a4a4a] bg-gray-50 dark:bg-[#3a3a3a] text-gray-700 dark:text-gray-200 text-sm hover:bg-gray-100 dark:hover:bg-[#4a4a4a] transition-colors"
+                onClick={() => setIsFilterOpen(true)}
+                className="flex items-center justify-center w-full lg:w-auto gap-2 px-4 py-2 rounded-xl border border-gray-300 dark:border-[#4a4a4a] bg-gray-50 dark:bg-[#3a3a3a] text-gray-700 dark:text-gray-200 text-sm hover:bg-gray-100 dark:hover:bg-[#4a4a4a] transition-colors relative"
               >
                 <Filter size={14} />
                 <span>{isRtl ? "فیلترها" : "Filters"}</span>
-                <ChevronDown
-                  size={14}
-                  className={`transition-transform duration-200 ${
-                    isFilterOpen ? "rotate-180" : ""
-                  }`}
-                />
+                {activeFilterCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 text-[10px] font-bold text-white bg-emerald-500 rounded-full shadow-lg shadow-emerald-500/25">
+                    {activeFilterCount}
+                  </span>
+                )}
+                <ChevronDown size={14} />
               </button>
-
-              {isFilterOpen && (
-                <div
-                  className={`absolute ${
-                    isMobile
-                      ? "left-1/2 -translate-x-1/2 top-full mt-2 w-[95vw]"
-                      : "left-3/2 top-0 -translate-x-1/2 mt-2 w-105"
-                  } max-h-[80vh] overflow-y-auto bg-white dark:bg-[#2B2B2B] rounded-xl shadow-2xl border border-gray-200 dark:border-[#3a3a3a] p-4 z-100`}
-                >
-                  <div className="flex items-center justify-between mb-3 top-0 bg-white dark:bg-[#2B2B2B]  z-10 pb-2 border-b border-gray-100 dark:border-[#3a3a3a]">
-                    <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-200">
-                      {isRtl ? "فیلتر پیشرفته" : "Advanced Filters"}
-                    </h3>
-                    <button
-                      onClick={() => setIsFilterOpen(false)}
-                      className="p-1 hover:bg-gray-100 dark:hover:bg-[#3a3a3a] rounded-lg transition-colors"
-                    >
-                      <X
-                        size={16}
-                        className="text-gray-500 dark:text-gray-400"
-                      />
-                    </button>
-                  </div>
-
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2 mb-4">
-                    <div>
-                      <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">
-                        {isRtl ? "نماد" : "Symbol"}
-                      </label>
-                      <select
-                        value={filters.symbol}
-                        onChange={(e) =>
-                          setFilters((f) => ({ ...f, symbol: e.target.value }))
-                        }
-                        className="w-full px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                      >
-                        <option value="all">{isRtl ? "همه" : "All"}</option>
-                        {SYMBOLS.map((s) => (
-                          <option key={s.key} value={s.key}>
-                            {isRtl ? s.label.fa : s.label.en}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">
-                        {isRtl ? "نوع معامله" : "Side"}
-                      </label>
-                      <select
-                        value={filters.side}
-                        onChange={(e) =>
-                          setFilters((f) => ({
-                            ...f,
-                            side: e.target.value as any,
-                          }))
-                        }
-                        className="w-full px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                      >
-                        <option value="all">{isRtl ? "همه" : "All"}</option>
-                        <option value="buy">{isRtl ? "بای" : "Buy"}</option>
-                        <option value="sell">{isRtl ? "سل" : "Sell"}</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">
-                        {isRtl ? "وضعیت" : "Result"}
-                      </label>
-                      <select
-                        value={filters.result}
-                        onChange={(e) =>
-                          setFilters((f) => ({
-                            ...f,
-                            result: e.target.value as any,
-                          }))
-                        }
-                        className="w-full px-2 py-1.5 text-xs rounded-lg border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                      >
-                        <option value="all">{isRtl ? "همه" : "All"}</option>
-                        <option value="profit">
-                          {isRtl ? "سود" : "Profit"}
-                        </option>
-                        <option value="loss">{isRtl ? "ضرر" : "Loss"}</option>
-                        <option value="pending">
-                          {isRtl ? "پندینگ" : "Pending"}
-                        </option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
-                      {isRtl ? "بازه‌های عددی" : "Numeric Ranges"}
-                    </h4>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {NUMERIC_RANGE_FIELDS.map((field) => {
-                        const key = field.key as string;
-                        const range = filters.numeric[key];
-                        return (
-                          <div key={key} className="col-span-1">
-                            <label className="text-[10px] text-gray-500 dark:text-gray-400 block mb-1">
-                              {isRtl ? field.label.fa : field.label.en}
-                            </label>
-                            <div className="flex items-center gap-1">
-                              <input
-                                type="number"
-                                placeholder={isRtl ? "حداقل" : "Min"}
-                                value={range.min}
-                                onChange={(e) =>
-                                  updateNumeric(key, "min", e.target.value)
-                                }
-                                className="w-full px-2 py-1 text-[11px] rounded-md border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                              />
-                              <input
-                                type="number"
-                                placeholder={isRtl ? "حداکثر" : "Max"}
-                                value={range.max}
-                                onChange={(e) =>
-                                  updateNumeric(key, "max", e.target.value)
-                                }
-                                className="w-full px-2 py-1 text-[11px] rounded-md border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
-                      {isRtl ? "بازه‌های زمانی" : "Date Ranges"}
-                    </h4>
-                    <div className="flex flex-col gap-2">
-                      {DATE_RANGE_FIELDS.map((field) => {
-                        const key = field.key as string;
-                        const range = filters.dates[key];
-                        return (
-                          <div key={key}>
-                            <label className="text-[10px] text-center w-full text-gray-500 dark:text-gray-400 block mb-1">
-                              {isRtl ? field.label.fa : field.label.en}
-                            </label>
-                            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-1">
-                              <input
-                                type="datetime-local"
-                                value={range.from}
-                                onChange={(e) =>
-                                  updateDate(key, "from", e.target.value)
-                                }
-                                className="w-full px-2 py-1 text-[11px] rounded-md border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                              />
-                              <span className="text-[10px] text-gray-400 text-center sm:text-left">
-                                {isRtl ? "تا" : "to"}
-                              </span>
-                              <input
-                                type="datetime-local"
-                                value={range.to}
-                                onChange={(e) =>
-                                  updateDate(key, "to", e.target.value)
-                                }
-                                className="w-full px-2 py-1 text-[11px] rounded-md border border-gray-200 dark:border-[#4a4a4a] bg-white dark:bg-[#333] text-gray-700 dark:text-gray-200"
-                              />
-                            </div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-
-                  <div className="mb-4">
-                    <h4 className="text-[11px] font-semibold text-gray-500 dark:text-gray-400 mb-2">
-                      {isRtl ? "تعداد ردیف در هر صفحه" : "Rows per page"}
-                    </h4>
-                    <div className="flex flex-wrap gap-1.5">
-                      {[5, 10, 20, 50, 100].map((v) => (
-                        <button
-                          key={v}
-                          onClick={() => {
-                            setRowsPerPage(v);
-                            setCurrentPage(0);
-                          }}
-                          className={`px-3 py-1 rounded-lg text-xs transition-colors ${
-                            rowsPerPage === v
-                              ? "bg-emerald-500/15 text-emerald-500 dark:text-emerald-400 font-semibold border border-emerald-500/30"
-                              : "text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-[#4a4a4a] hover:bg-gray-100 dark:hover:bg-[#3a3a3a]"
-                          }`}
-                        >
-                          {v}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  <button
-                    onClick={resetFilters}
-                    className="w-full text-center px-3 py-2 rounded-lg text-xs font-medium text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-[#4a4a4a] hover:bg-gray-100 dark:hover:bg-[#3a3a3a] transition-colors"
-                  >
-                    {isRtl ? "پاک‌کردن فیلترها" : "Reset filters"}
-                  </button>
-                </div>
-              )}
             </div>
           </div>
 
@@ -820,10 +983,10 @@ export default function TradingTable() {
             <table className="w-full min-w-475 table-auto">
               <thead>
                 <tr className="border-b border-gray-200 dark:border-[#3a3a3a]">
-                  {COLUMNS.map((col) => (
+                  {tableColumns.map((col) => (
                     <th
                       key={col.key}
-                      onClick={() => handleSort(col.key)}
+                      onClick={() => handleSort(col.key as ColKey)}
                       className={`px-4 py-3 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 select-none whitespace-nowrap
                         ${
                           col.sort !== "none"
@@ -831,6 +994,7 @@ export default function TradingTable() {
                             : ""
                         }
                         ${col.key === "colorBar" ? "w-10" : ""}`}
+                      style={{ width: col.width || "auto" }}
                     >
                       {col.key === "colorBar" ? (
                         <ColorBarHeaderChip />
@@ -889,6 +1053,9 @@ export default function TradingTable() {
                     </td>
                     <td className="px-4 py-3 text-center whitespace-nowrap">
                       <ResultBadge result={tr.result} lang={lang} />
+                    </td>
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
+                      <RiskBadge risk={tr.risk || "low"} lang={lang} />
                     </td>
                     <td className="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300 tabular-nums whitespace-nowrap">
                       {tr.volume}
@@ -949,7 +1116,7 @@ export default function TradingTable() {
                 {paginatedTrades.length === 0 && (
                   <tr>
                     <td
-                      colSpan={COLUMNS.length}
+                      colSpan={tableColumns.length}
                       className="py-14 text-center text-gray-400 dark:text-gray-600 text-sm"
                     >
                       {isRtl ? "داده‌ای یافت نشد" : "No data found"}
@@ -971,7 +1138,6 @@ export default function TradingTable() {
             )}
           </div>
 
-          {/* صفحه‌بندی / Pagination */}
           {totalPages > 1 && (
             <div
               id="trade3"
@@ -1047,6 +1213,20 @@ export default function TradingTable() {
           )}
         </div>
       </div>
+
+      {/* Filter Modal */}
+      <FilterModal
+        isOpen={isFilterOpen}
+        onClose={() => setIsFilterOpen(false)}
+        filters={filters}
+        setFilters={setFilters}
+        resetFilters={resetFilters}
+        rowsPerPage={rowsPerPage}
+        setRowsPerPage={setRowsPerPage}
+        setCurrentPage={setCurrentPage}
+        isRtl={isRtl}
+        lang={lang}
+      />
     </>
   );
 }

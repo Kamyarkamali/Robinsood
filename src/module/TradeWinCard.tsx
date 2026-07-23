@@ -42,11 +42,11 @@ function TradeWinCard() {
         <div className="relative flex items-center justify-center flex-1">
           <div className="relative w-30 sm:w-35 lg:w-[160px]">
             <div className="absolute -top-2 -right-3">
-              <Pill tone="green">{tradeWin.winLabel}</Pill>
+              <Pill tone="red">{tradeWin.lossLabel}</Pill>
             </div>
 
             <div className="absolute -top-2 -left-5">
-              <Pill tone="red">{tradeWin.lossLabel}</Pill>
+              <Pill tone="green">{tradeWin.winLabel}</Pill>
             </div>
 
             <QuarterGauge percent={tradeWin.percent} />

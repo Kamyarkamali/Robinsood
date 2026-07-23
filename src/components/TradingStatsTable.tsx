@@ -42,7 +42,7 @@ const StatsTable = ({
   const isRtl = i18n.language === "fa";
 
   return (
-    <div className="rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 flex flex-col h-full">
+    <div className="rounded-lg overflow-hidden flex flex-col h-full">
       {hasHeader && title && (
         <div className="px-4 py-3 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-[#2B2B2B]">
           <span className={`text-sm block text-center font-bold ${TEXT_MAIN}`}>
@@ -120,12 +120,12 @@ export default function TradingStatsTable() {
         />
 
         <StatsTable
+          title={t("labaleTabale.labale1")}
           data={middleData}
           valueKey={isRtl ? "valueFa" : "valueEn"}
           valueColorKey="valueColor"
           labelKeyFa="labelFa"
           labelKeyEn="labelEn"
-          hasHeader={false}
         />
 
         <StatsTable

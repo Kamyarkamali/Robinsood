@@ -201,7 +201,8 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15 }}
             >
-              {avatarName}
+              {/* {avatarName} */}
+              {lang === "fa" ? " هومن حریقی" : "Homan Harighi"}
             </motion.p>
           )}
         </motion.div>

@@ -17,6 +17,34 @@ function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
       dir="ltr"
       className="bg-[#f8fafc] shadow-xl dark:shadow-none dark:bg-[#353535] w-full border-4 dark:border-[#3A3A3A] border-gray-300 rounded-2xl p-3 sm:p-4 md:p-5 mb-4 flex-1"
     >
+      <div dir="rtl" className="flex items-center justify-between w-full">
+        {/* Users */}
+
+        <div className="flex flex-col items-center">
+          <ProfileIcon />
+
+          <span className="text-gray-400 font-bold md:block hidden">
+            {i18n.language === "fa" ? "شما" : "You"}
+          </span>
+        </div>
+
+        <div
+          className={`flex flex-col items-center flex-1 ${
+            isRtl ? "order-3" : "order-1"
+          }`}
+        >
+          <UsersIcon />
+
+          <span className="text-gray-400 text-sm whitespace-nowrap font-bold md:block hidden">
+            {i18n.language === "fa" ? "کاربران رابین سود" : "Robin Users"}
+          </span>
+        </div>
+
+        <div className="flex-4 flex items-center justify-center">
+          <img src={VS} className="w-10 sm:w-10 object-contain" alt="VS" />
+        </div>
+      </div>
+
       <div
         className={`mb-3 sm:mb-4 md:mb-5 ${isRtl ? "text-right" : "text-left"}`}
       >
@@ -24,7 +52,6 @@ function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
           {title}
         </p>
       </div>
-
       <div className="flex flex-col gap-3 sm:gap-4 md:gap-5">
         {rows.map((row) => (
           <MetricRow key={row.id} row={row} />
@@ -80,16 +107,16 @@ function MetricRow({ row }: { row: MetricRow }) {
 
 export default function VSComparison() {
   const { i18n } = useTranslation();
-  const isRtl = i18n.language === "fa";
 
   const [comparisonType, setComparisonType] = useState<
-    "all" | "challenge" | "real"
+    "all" | "challenge" | "real" | "self"
   >("all");
 
   const comparisonTabs = [
     { id: "all", fa: "همه کاربران", en: "All Users" },
     { id: "challenge", fa: "کاربران این چالش", en: "Challenge Users" },
     { id: "real", fa: "کاربران ریل", en: "Real Users" },
+    { id: "self", fa: "مقایسه با خود", en: "Compare with Self" },
   ];
 
   const scaleMetrics = (data: MetricRow[], factor: number) =>
@@ -99,18 +126,34 @@ export default function VSComparison() {
       leftBar: Math.min(Math.floor(item.leftBar * factor), 100),
     }));
 
+  // تابع برای تولید داده‌های "مقایسه با خود"
+  const getSelfMetrics = (data: MetricRow[]) => {
+    return data.map((item) => ({
+      ...item,
+      leftValue: Math.floor(item.leftValue * 0.9), // 90% از خودت
+      leftBar: Math.min(Math.floor(item.leftBar * 0.9), 100),
+      rightValue: Math.floor(item.rightValue * 1.1), // 110% از خودت
+      rightBar: Math.min(Math.floor(item.rightBar * 1.1), 100),
+    }));
+  };
+
   const currentPerformanceMetrics = useMemo(() => {
     if (comparisonType === "all") return performanceMetrics;
     if (comparisonType === "challenge")
       return scaleMetrics(performanceMetrics, 0.8);
-    return scaleMetrics(performanceMetrics, 1.15);
+    if (comparisonType === "real")
+      return scaleMetrics(performanceMetrics, 1.15);
+    if (comparisonType === "self") return getSelfMetrics(performanceMetrics);
+    return performanceMetrics;
   }, [comparisonType]);
 
   const currentBehaviorMetrics = useMemo(() => {
     if (comparisonType === "all") return behaviorMetrics;
     if (comparisonType === "challenge")
       return scaleMetrics(behaviorMetrics, 0.8);
-    return scaleMetrics(behaviorMetrics, 1.15);
+    if (comparisonType === "real") return scaleMetrics(behaviorMetrics, 1.15);
+    if (comparisonType === "self") return getSelfMetrics(behaviorMetrics);
+    return behaviorMetrics;
   }, [comparisonType]);
 
   return (
@@ -120,41 +163,16 @@ export default function VSComparison() {
         className="dark:bg-linear-to-b w-full max-w-8xl rounded-2xl mt-3 text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"
       >
         <div className="w-full max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-4">
-          <div className="flex items-center justify-between w-full">
-            {/* Users */}
-            <div
-              className={`flex flex-col items-center flex-1 ${
-                isRtl ? "order-3" : "order-1"
-              }`}
-            >
-              <UsersIcon />
-
-              <span className="text-gray-400 font-bold md:block hidden">
-                {i18n.language === "fa" ? "کاربران رابین سود" : "Robin Users"}
-              </span>
-            </div>
-
-            <ProfileIcon />
-
-            <span className="text-gray-400 font-bold md:block hidden">
-              {i18n.language === "fa" ? "شما" : "You"}
-            </span>
-
-            <div className="flex-4 flex items-center justify-center">
-              <img src={VS} className="w-10 sm:w-10 object-contain" alt="VS" />
-            </div>
-          </div>
-
           <div
             id="com2"
             className="w-full flex justify-center sticky top-2 z-20"
           >
-            <div className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-3 gap-1 shadow-xl">
+            <div className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 shadow-xl">
               {comparisonTabs.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => setComparisonType(item.id as any)}
-                  className={`px-4 py-3 rounded-2xl text-sm font-normal transition-all duration-300 ${
+                  className={`px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-normal transition-all duration-300 whitespace-nowrap ${
                     comparisonType === item.id
                       ? "bg-linear-to-r from-[#6D28D9] to-[#9333EA] text-white shadow-lg"
                       : "text-gray-400 hover:text-white hover:bg-[#313131]"

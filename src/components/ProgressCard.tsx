@@ -143,7 +143,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2 sm:gap-3 text-center mt-auto">
+      <div className="grid grid-cols-4 gap-2 sm:gap-3 text-center mt-auto">
         <div
           className="
             flex flex-col items-center justify-center gap-0.5 sm:gap-1
@@ -157,7 +157,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
           <span className="text-[#98E400] font-bold text-xs sm:text-sm lg:text-base">
             {data?.bestegor?.value}
           </span>
-          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] sm:text-xs lg:text-sm">
+          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] whitespace-nowrap">
             {i18n.language === "fa" ? data.bestegor?.fa : data.bestegor?.en}
           </span>
         </div>
@@ -185,7 +185,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             {statValue(data.targetValue)}
           </span>
 
-          <span className="dark:text-gray-300 text-gray-500 text-[10px] sm:text-xs lg:text-sm">
+          <span className="dark:text-gray-300 text-gray-500 text-[10px] whitespace-nowrap">
             {i18n.language === "fa" ? data.targetLabel.fa : data.targetLabel.en}
           </span>
 
@@ -216,10 +216,46 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
               lg:text-lg
             "
           >
+            7
+          </span>
+
+          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] whitespace-nowrap">
+            {i18n.language === "fa"
+              ? "روز معاملاتی قابل قبول"
+              : "	Valid Trading Day"}
+          </span>
+
+          {data.currentPercent !== undefined && (
+            <span className="dark:text-[#99A1AF] text-gray-400 text-[8px] sm:text-[10px]">
+              ({data.currentPercent}٪)
+            </span>
+          )}
+        </div>
+
+        <div
+          className="
+            flex flex-col items-center justify-center gap-0.5 sm:gap-1
+            p-1.5 sm:p-2 lg:p-3
+            rounded-xl
+            transition-all
+            duration-300
+            min-h-15 sm:min-h-17.5
+          "
+        >
+          <span
+            className="
+              dark:text-white
+              text-gray-700
+              font-bold
+              text-sm
+              sm:text-base
+              lg:text-lg
+            "
+          >
             {statValue(data.currentValue)}
           </span>
 
-          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] sm:text-xs lg:text-sm">
+          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] whitespace-nowrap">
             {i18n.language === "fa"
               ? data.currentLabel.fa
               : data.currentLabel.en}
