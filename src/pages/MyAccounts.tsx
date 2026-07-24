@@ -22,11 +22,11 @@ function MyAccounts() {
       <section className="hidden md:block">
         <TradingCover />
       </section>
+      <section id="home1" className="mt-5 pr-4 pl-4">
+        <CardAccounts />
+      </section>
       <section className="mt-5">
         <AtAGlance />
-      </section>
-      <section id="home1" className="mt-5">
-        <CardAccounts />
       </section>
       <section id="home3" className="mt-5">
         <CardComponent onStartTour={handleStartTour} />

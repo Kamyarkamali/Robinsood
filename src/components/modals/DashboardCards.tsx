@@ -13,7 +13,7 @@ const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
       dir={isFa ? "rtl" : "ltr"}
       className="
         w-full
-        max-w-7xl
+        max-w-8xl
         mt-3
         rounded-2xl sm:rounded-[30px]
         p-4 sm:p-5 md:p-6
@@ -25,9 +25,9 @@ const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
           grid-cols-2
           sm:grid-cols-2
           md:grid-cols-3
-          lg:grid-cols-4
+          lg:grid-cols-5
           xl:grid-cols-5
-          2xl:grid-cols-8
+          2xl:grid-cols-5
           gap-3 md:gap-4
         "
       >

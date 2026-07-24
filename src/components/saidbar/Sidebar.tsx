@@ -548,7 +548,7 @@ export default function Sidebar() {
               </p>
 
               <Link
-                to="/dashboard"
+                to="/"
                 className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
               >
                 <HiOutlineHome size={22} className="shrink-0" />
@@ -703,7 +703,7 @@ export default function Sidebar() {
             </p>
 
             <Link
-              to="/dashboard"
+              to="/"
               className={`
                 w-full
                 flex
