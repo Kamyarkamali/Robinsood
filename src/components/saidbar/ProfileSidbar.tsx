@@ -180,20 +180,27 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
           transition={{ duration: 0.3 }}
         >
           <motion.div
-            className="flex items-center gap-1.5"
+            className="flex items-center gap-0.5"
             initial={{ y: -5, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
-            <motion.span
+            {/* <motion.span
               className="w-1.5 h-1.5 bg-green-400 rounded-full"
               animate={{ scale: [1, 1.5, 1] }}
               transition={{ duration: 1.5, repeat: Infinity }}
-            />
-            <p className="text-[10px] sm:text-[11px] text-green-400 font-medium">
-              {lang === "fa" ? "آنلاین" : "Online"}
-            </p>
+            /> */}
+            {avatarName ? (
+              <p className="text-[10px] sm:text-[11px] text-cyan-400 font-medium">
+                {avatarName}
+              </p>
+            ) : (
+              <p className="text-[10px] sm:text-[11px] text-zinc-400 font-medium">
+                {lang === "fa" ? "بدون نام" : "No name"}
+              </p>
+            )}
           </motion.div>
+
           {avatarName && (
             <motion.p
               className="text-[10px] sm:text-[11px] text-cyan-400 font-medium truncate max-w-[120px]"
@@ -201,8 +208,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15 }}
             >
-              {/* {avatarName} */}
-              {lang === "fa" ? " هومن حریقی" : "Homan Harighi"}
+              {lang === "fa" ? "هومن حریقی" : "Homan Harighi"}
             </motion.p>
           )}
         </motion.div>

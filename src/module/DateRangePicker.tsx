@@ -135,7 +135,7 @@ export function DateRangePicker({
     <div className="relative w-full sm:w-auto">
       <button
         onClick={() => setShowDatePicker(!showDatePicker)}
-        className="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#2B2B2B] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-200 w-full sm:w-auto min-w-[180px] justify-center"
+        className="flex items-center gap-2 px-3 py-2 text-xs sm:text-sm rounded-xl border border-gray-200 dark:border-white/10 bg-white dark:bg-[#2B2B2B] text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-white/5 transition-all duration-200 w-full md:p-2 sm:w-auto min-w-[180px] justify-center"
       >
         <svg
           className="w-4 h-4 shrink-0"

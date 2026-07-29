@@ -105,24 +105,17 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
       <div className="flex items-center gap-4 mt-11 md:mt-0">
         <div className="relative">
           <button
-            onClick={() => prevRoute && handleNavigate(prevRoute.path)}
-            disabled={!prevRoute}
-            onMouseEnter={() => setIsHoveringPrev(true)}
-            onMouseLeave={() => setIsHoveringPrev(false)}
+            onClick={() => nextRoute && handleNavigate(nextRoute.path)}
+            onMouseEnter={() => setIsHoveringNext(true)}
+            onMouseLeave={() => setIsHoveringNext(false)}
             className={`
               flex items-center justify-center
-             md:w-10 w-8 h-8 md:h-10 rounded-full
+              md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
-             
-
-              ${
-                nextRoute
-                  ? "bg-white/10 hover:bg-white/20 text-white cursor-pointer"
-                  : "bg-white/5 text-white/20 cursor-not-allowed"
-              }
-              ${isHoveringNext && nextRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
+              ${"bg-white/10 hover:bg-white/20 text-white cursor-pointer"}
+              ${isHoveringPrev && prevRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
             `}
-            title={lang === "fa" ? "صفحه قبلی" : "Previous"}
+            title={lang === "fa" ? "صفحه بعدی" : "Next"}
           >
             {lang === "fa" ? (
               <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
@@ -130,6 +123,19 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
             )}
           </button>
+
+          {nextRoute && isHoveringNext && (
+            <div
+              className="
+              absolute -top-10 left-1/2 -translate-x-1/2
+              bg-black/90 text-white text-xs px-2 py-1 rounded
+              whitespace-nowrap
+              pointer-events-none
+            "
+            >
+              {lang === "fa" ? nextRoute.title.fa : nextRoute.title.en}
+            </div>
+          )}
 
           {prevRoute && isHoveringPrev && (
             <div
@@ -155,22 +161,23 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
 
         <div className="relative">
           <button
-            onClick={() => nextRoute && handleNavigate(nextRoute.path)}
-            disabled={!nextRoute}
-            onMouseEnter={() => setIsHoveringNext(true)}
-            onMouseLeave={() => setIsHoveringNext(false)}
+            onClick={() => prevRoute && handleNavigate(prevRoute.path)}
+            onMouseEnter={() => setIsHoveringPrev(true)}
+            onMouseLeave={() => setIsHoveringPrev(false)}
             className={`
               flex items-center justify-center
-              md:w-10 w-8 h-8 md:h-10 rounded-full
+             md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
+             
+
               ${
-                prevRoute
+                nextRoute
                   ? "bg-white/10 hover:bg-white/20 text-white cursor-pointer"
                   : "bg-white/5 text-white/20 cursor-not-allowed"
               }
-              ${isHoveringPrev && prevRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
+              ${isHoveringNext && nextRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
             `}
-            title={lang === "fa" ? "صفحه بعدی" : "Next"}
+            title={lang === "fa" ? "صفحه قبلی" : "Previous"}
           >
             {lang === "fa" ? (
               <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
@@ -178,19 +185,6 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
             )}
           </button>
-
-          {nextRoute && isHoveringNext && (
-            <div
-              className="
-              absolute -top-10 left-1/2 -translate-x-1/2
-              bg-black/90 text-white text-xs px-2 py-1 rounded
-              whitespace-nowrap
-              pointer-events-none
-            "
-            >
-              {lang === "fa" ? nextRoute.title.fa : nextRoute.title.en}
-            </div>
-          )}
         </div>
       </div>
 

@@ -178,7 +178,7 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
             id="tabale4"
             onClick={() => setTradeInNews((v) => !v)}
             className="flex justify-center items-center gap-2 w-full sm:w-auto px-3 sm:px-3.5 py-2 sm:py-1.5 
-              h-auto sm:h-15 
+              h-auto sm:h-12 
               dark:bg-linear-to-r 
               font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] 
               border border-gray-300 dark:border-white/10 
@@ -198,7 +198,7 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
                   : "Trade Banned"}
             </span>
             <span
-              className="w-4 h-4 sm:w-5.5 sm:h-3.5 rounded-full transition-colors flex-shrink-0"
+              className="w-4 h-4 sm:w-5.5 sm:h-2.5 rounded-full transition-colors shrink-0"
               style={{ background: tradeInNews ? "#22c55e" : "#9ca3af" }}
             />
           </button>
@@ -230,13 +230,11 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
             />
           </div>
 
-          {/* Pagination - Fully Responsive */}
           {sortedData.length > 0 && (
             <div
               className="flex flex-col sm:flex-row flex-wrap items-center justify-between gap-3 mt-4 pt-3 
               border-t border-gray-200 dark:border-white/5"
             >
-              {/* Rows per page - Left side */}
               <div className="flex items-center gap-2 order-2 sm:order-1">
                 <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
                   {lang === "fa" ? "تعداد در صفحه:" : "Rows:"}
@@ -261,14 +259,12 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
                 </select>
               </div>
 
-              {/* Page Info - Center */}
               <div className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 order-1 sm:order-2">
                 {lang === "fa"
                   ? `نمایش ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} از ${sortedData.length}`
                   : `Showing ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} of ${sortedData.length}`}
               </div>
 
-              {/* Pagination Controls - Right side */}
               <div className="flex items-center gap-1 sm:gap-2 order-3">
                 <button
                   onClick={() => setCurrentPage(1)}

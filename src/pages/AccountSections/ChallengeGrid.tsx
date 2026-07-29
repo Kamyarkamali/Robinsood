@@ -27,10 +27,8 @@ export default function ChallengeGrid() {
   const persianTime = "۲۲:۴۸";
 
   return (
-    <div className="flex flex-col justify-start w-full max-w-350 mx-auto">
-      {/* هدر با دکمه‌ها و تاریخ وسط - ریسپانسیو */}
+    <div className="flex flex-col justify-start w-full max-w-350 mx-auto min-h-screen py-4">
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 mb-4 mt-3">
-        {/* دکمه‌های سمت چپ */}
         <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
           <button
             id="today1"
@@ -106,7 +104,7 @@ export default function ChallengeGrid() {
 
       <div
         id="today3"
-        className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 w-full place-items-center"
+        className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 w-full place-items-center flex-1 min-h-[500px]"
       >
         {challengeCards
           .filter((card) => {
@@ -118,6 +116,8 @@ export default function ChallengeGrid() {
             <ChallengeCardComponent key={card.id} card={card} />
           ))}
       </div>
+
+      <div className="h-12 sm:h-16 lg:h-20"></div>
     </div>
   );
 }

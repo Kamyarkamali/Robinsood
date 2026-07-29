@@ -25,7 +25,7 @@ export function FilterButtons({
   onFilterChange,
 }: FilterButtonsProps) {
   return (
-    <div className="flex items-center  gap-3 flex-wrap dark:bg-linear-to-t h-15 dark:from-[#282828] dark:to-[#2f2f2f] p-3 rounded-[1024px] w-full sm:w-auto justify-center sm:justify-start">
+    <div className="flex items-center  gap-3 flex-wrap dark:bg-linear-to-t h-fit dark:from-[#282828] dark:to-[#2f2f2f] p-3 rounded-[1024px] w-full sm:w-auto justify-center sm:justify-start">
       {FILTER_OPTIONS.map((item) => {
         const isActive = impactFilter === item.impact;
         return (

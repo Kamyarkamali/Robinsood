@@ -59,13 +59,13 @@ const DownloadPdfButton = () => {
               "
           />
           <span className="text-[11px] md:text-sm">
-            {lang === "fa" ? " در حال ساخت PDF..." : "Create Pdf File..."}
+            {lang === "fa" ? " در حال ساخت..." : "Create Pdf File..."}
           </span>
         </>
       ) : (
         <>
           <span className="text-[11px] hidden md:block md:text-sm">
-            {lang === "fa" ? " دانلود PDF" : "Download Pdf"}
+            {lang === "fa" ? " دانلود " : "Download "}
           </span>
           <HiOutlineDocumentArrowDown className="text-[15px] md:text-xl" />
         </>
