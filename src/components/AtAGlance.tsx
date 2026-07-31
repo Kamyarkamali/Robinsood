@@ -8,6 +8,7 @@ import {
 import i18next from "i18next";
 import { HiOutlineWallet } from "react-icons/hi2";
 import { Link } from "react-router-dom";
+import { useNumberFormatter } from "../helpers/numberFormatter";
 
 interface CardData {
   id: number;
@@ -15,9 +16,9 @@ interface CardData {
     fa: string;
     en: string;
   };
-  value: string;
-  subValue?: string;
-  change?: string;
+  value: number;
+  subValue?: number;
+  change?: number;
   isPositive?: boolean;
   icon?: React.ReactNode;
 }
@@ -35,10 +36,14 @@ const BlinkingNumber = ({
   value,
   className,
   isPositive = true,
+  lang,
+  formatter,
 }: {
-  value: string;
+  value: string | number;
   className?: string;
   isPositive?: boolean;
+  lang: string;
+  formatter: any;
 }) => {
   const [isVisible, setIsVisible] = useState(true);
 
@@ -49,6 +54,17 @@ const BlinkingNumber = ({
 
     return () => clearInterval(interval);
   }, []);
+
+  const displayValue = useMemo(() => {
+    if (typeof value === "number") {
+      if (lang === "fa") {
+        return formatter.formatWithComma(value);
+      } else {
+        return formatter.formatWithComma(value);
+      }
+    }
+    return value;
+  }, [value, lang, formatter]);
 
   return (
     <motion.span
@@ -65,7 +81,7 @@ const BlinkingNumber = ({
         ease: "easeInOut",
       }}
     >
-      {value}
+      {displayValue}
     </motion.span>
   );
 };
@@ -91,6 +107,7 @@ const GlowingCard = ({ children, className = "", delay = 0 }: any) => {
 
 export default function AtAGlance() {
   const lang = i18next.language;
+  const formatter = useNumberFormatter();
 
   const cardsData: CardData[] = useMemo(
     () => [
@@ -100,8 +117,9 @@ export default function AtAGlance() {
           fa: "بالانس",
           en: "Balance",
         },
-        value: "۱۲.۴۵۰.۰۰۰ $+",
-        subValue: "۳.۴۵۰.۰۰ +$",
+        value: 12450000,
+        subValue: 3450000,
+        change: -3.4,
         icon: <HiOutlineWallet className="w-5 h-5 text-cyan-400" />,
       },
       {
@@ -110,8 +128,9 @@ export default function AtAGlance() {
           fa: "اکوییتی",
           en: "Equity",
         },
-        value: "۴.۲۸۰.۵۰ +$",
-        change: "۲.۴% +",
+        value: 4280500,
+        subValue: 3450000,
+        change: 2.4,
         isPositive: true,
         icon: <HiOutlineChartBar className="w-5 h-5 text-indigo-400" />,
       },
@@ -124,15 +143,15 @@ export default function AtAGlance() {
       daily: {
         fa: "درادون روزانه",
         en: "Daily Drawdown",
-        value: "۲.۴% -",
-        max: "۵%",
+        value: -2.4,
+        max: 5,
         isPositive: false,
       },
       total: {
         fa: "درادون کل",
         en: "Total Drawdown",
-        value: "۸.۷% -",
-        max: "۱۰%",
+        value: -8.7,
+        max: 10,
         isPositive: false,
       },
     }),
@@ -153,6 +172,14 @@ export default function AtAGlance() {
 
   const getText = (item: { fa: string; en: string }) => {
     return lang === "fa" ? item.fa : item.en;
+  };
+
+  const formatNumber = (num: number): string => {
+    if (lang === "fa") {
+      return formatter.formatWithComma(num);
+    } else {
+      return formatter.formatWithComma(num);
+    }
   };
 
   const targetPercentage = Math.min(
@@ -179,36 +206,49 @@ export default function AtAGlance() {
                     {getText(card.title)}
                   </span>
                 </div>
-                {card.change && (
+                {card.change !== undefined && (
                   <motion.span
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.3, type: "spring" }}
                     className={`text-xs font-bold px-2.5 py-1 rounded-full ${
-                      card.isPositive
+                      card.change > 0
                         ? "text-green-400 bg-green-400/10 border border-green-400/20"
                         : "text-red-400 bg-red-400/10 border border-red-400/20"
                     }`}
                   >
-                    {card.change}
+                    {card.change > 0 ? "+" : ""}
+                    {formatNumber(Math.abs(card.change))}%
                   </motion.span>
                 )}
               </div>
 
               <div className="mt-4 flex-1 flex flex-col justify-end">
-                <BlinkingNumber
-                  value={card.value}
-                  className="text-2xl font-bold tracking-wider"
-                  isPositive={true}
-                />
-                {card.subValue && (
+                <motion.div className="flex items-center gap-1">
+                  <BlinkingNumber
+                    value={card.value}
+                    className="text-2xl font-bold tracking-wider"
+                    isPositive={true}
+                    lang={lang}
+                    formatter={formatter}
+                  />
+                  <BlinkingNumber
+                    value="+ $"
+                    className="text-2xl font-bold tracking-wider"
+                    isPositive={true}
+                    lang={lang}
+                    formatter={formatter}
+                  />
+                </motion.div>
+                {card.subValue !== undefined && (
                   <motion.p
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
                     className="text-xs text-zinc-400 mt-1.5"
                   >
-                    {card.subValue}
+                    {formatNumber(card.subValue)}
+                    {card.subValue > 0 ? "+" : ""}
                   </motion.p>
                 )}
               </div>
@@ -230,11 +270,11 @@ export default function AtAGlance() {
               className="flex items-center gap-2 bg-cyan-500/10 px-3 py-1 rounded-full border border-cyan-500/20"
             >
               <span className="text-xs text-cyan-400 font-bold">
-                {targetData.current}%
+                {formatNumber(targetData.current)}%
               </span>
               <span className="text-xs text-zinc-500">/</span>
               <span className="text-xs text-zinc-400">
-                {targetData.target}%
+                {formatNumber(targetData.target)}%
               </span>
             </motion.div>
           </div>
@@ -295,7 +335,8 @@ export default function AtAGlance() {
             >
               <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 animate-pulse" />
               <span className="text-[10px] text-cyan-400 font-medium">
-                {lang === "fa" ? "پیشرفت" : "Progress"} (% {targetData.current})
+                {lang === "fa" ? "پیشرفت" : "Progress"} (%{" "}
+                {formatNumber(targetData.current)})
               </span>
             </motion.div>
             <motion.div
@@ -306,8 +347,8 @@ export default function AtAGlance() {
             >
               <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-rose-400 to-red-500" />
               <span className="text-[10px] text-rose-400 font-medium">
-                {lang === "fa" ? "باقیمانده" : "Remaining"} ( %{" "}
-                {remainingPercentage})
+                {lang === "fa" ? "باقیمانده" : "Remaining"} (%{" "}
+                {formatNumber(remainingPercentage)})
               </span>
             </motion.div>
           </div>
@@ -333,38 +374,39 @@ export default function AtAGlance() {
                     ease: "easeInOut",
                   }}
                 >
-                  {!item.isPositive ? (
+                  {item.value < 0 ? (
                     <HiOutlineArrowDown className="w-3.5 h-3.5 text-rose-400" />
                   ) : (
                     <HiOutlineArrowUp className="w-3.5 h-3.5 text-green-400" />
                   )}
                   <BlinkingNumber
-                    value={item.value}
+                    value={formatNumber(Math.abs(item.value)) + "%"}
                     className="text-sm font-bold"
-                    isPositive={item.isPositive}
+                    isPositive={item.value > 0}
+                    lang={lang}
+                    formatter={formatter}
                   />
                 </motion.div>
               </div>
 
               <div className="mt-3 flex items-center justify-between flex-1">
                 <span className="text-[10px] text-zinc-500">
-                  {lang === "fa" ? "حداکثر مجاز" : "Max Allowed"}: {item.max}
+                  {lang === "fa" ? "حداکثر مجاز" : "Max Allowed"}:{" "}
+                  {formatNumber(item.max)}%
                 </span>
                 <div className="w-24 h-2 bg-zinc-800/50 rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     animate={{
-                      width: `${
-                        (parseFloat(item.value) / parseFloat(item.max)) * 100
-                      }%`,
+                      width: `${(Math.abs(item.value) / item.max) * 100}%`,
                     }}
                     transition={{ duration: 1, delay: 0.5 }}
                     className={`h-full rounded-full ${
-                      !item.isPositive
+                      item.value < 0
                         ? "bg-gradient-to-r from-rose-500 to-red-500"
                         : "bg-gradient-to-r from-green-500 to-emerald-500"
                     } shadow-lg ${
-                      !item.isPositive
+                      item.value < 0
                         ? "shadow-rose-500/30"
                         : "shadow-green-500/30"
                     }`}
@@ -379,7 +421,7 @@ export default function AtAGlance() {
         to={"/account/today-parameters"}
         className={`${lang === "fa" ? "md:text-left" : "md:text-right"} text-center block text-[12px] text-gray-400`}
       >
-        {lang === "fa" ? "مشاهده جزئیات بیشتر" : "See All Detailse"}
+        {lang === "fa" ? "مشاهده جزئیات بیشتر" : "See All Details"}
       </Link>
     </div>
   );
