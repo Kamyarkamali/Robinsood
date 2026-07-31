@@ -1,14 +1,10 @@
-import type { Lang } from "../types/type";
+import i18next from "i18next";
 
 interface QuickAccessButtonsProps {
   setDateRange: (range: { start: Date | null; end: Date | null }) => void;
-  lang: Lang;
 }
 
-export function QuickAccessButtons({
-  setDateRange,
-  lang,
-}: QuickAccessButtonsProps) {
+export function QuickAccessButtons({ setDateRange }: QuickAccessButtonsProps) {
   const getDateRange = (type: string) => {
     const today = new Date();
     const start = new Date(today);
@@ -54,6 +50,8 @@ export function QuickAccessButtons({
     { key: "thisWeek", label: { fa: "این هفته", en: "This Week" } },
     { key: "nextWeek", label: { fa: "هفته آینده", en: "Next Week" } },
   ];
+
+  const lang = i18next.language;
 
   return (
     <div className="flex items-center gap-1.5">

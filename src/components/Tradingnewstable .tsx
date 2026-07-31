@@ -4,16 +4,11 @@ import { FILTER_OPTIONS } from "../data/fakeData";
 import { useNewsFilter } from "../hooks/useNewsFilter";
 import { DropdownFainalTabale } from "../module/DropdownFainalTabale";
 import { NewsTable } from "../module/NewsTable";
-import type { Lang } from "../types/type";
 import { FilterButtons } from "./common/FilterButtonsFainalTabal";
 import { DateRangePicker } from "../module/DateRangePicker";
 import { QuickAccessButtons } from "../module/QuickAccessButtons";
 
-interface TradingNewsTableProps {
-  lang?: Lang;
-}
-
-function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
+function TradingNewsTable() {
   const {
     week,
     filter,
@@ -35,6 +30,8 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
   });
   const [showDatePicker, setShowDatePicker] = useState<boolean>(false);
 
+  const lang = i18next.language;
+
   const [sortConfig, setSortConfig] = useState<{
     key: string;
     direction: "asc" | "desc" | null;
@@ -42,6 +39,40 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
+
+  const tradeButtonText = {
+    fa: tradeInNews ? "ترید در خبر" : "ترید ممنوع",
+    en: tradeInNews ? "Trade in News" : "Trade Banned",
+  };
+
+  const clearButtonText = {
+    fa: "🗑️ پاک کردن",
+    en: "🗑️ Clear",
+  };
+
+  const noWeekText = {
+    fa: "یک هفته را انتخاب کنید",
+    en: "Please select a week",
+  };
+
+  const rowsPerPageText = {
+    fa: "تعداد در صفحه:",
+    en: "Rows:",
+  };
+
+  const pageInfoText = (start: number, end: number, total: number) => {
+    return {
+      fa: `نمایش ${start} - ${end} از ${total}`,
+      en: `Showing ${start} - ${end} of ${total}`,
+    };
+  };
+
+  const pageNumberText = (current: number, total: number) => {
+    return {
+      fa: `صفحه ${current} از ${total}`,
+      en: `Page ${current} of ${total}`,
+    };
+  };
 
   const requestSort = (key: string) => {
     let direction: "asc" | "desc" | null = "asc";
@@ -121,108 +152,104 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
       dark:border-[#3C3C3C]
       border-gray-300 w-full max-w-full mx-auto p-3 sm:p-4 md:p-5 transition-colors"
     >
-      <div className="flex flex-col sm:flex-row flex-wrap items-center justify-end gap-3 mb-4 sm:mb-5">
-        <div className="flex  step-test46 gap-2 w-full sm:w-auto">
+      <div
+        id="tabale6"
+        className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2 sm:p-3 
+          bg-white/50 dark:bg-white/5 
+          rounded-xl border border-gray-200/50 dark:border-white/5"
+      >
+        <div className="w-full lg:w-auto lg:flex-1 min-w-[180px]">
+          <DateRangePicker
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            showDatePicker={showDatePicker}
+            setShowDatePicker={setShowDatePicker}
+          />
+        </div>
+
+        <div className="flex flex-wrap items-center gap-1">
+          <QuickAccessButtons setDateRange={setDateRange} />
+        </div>
+
+        {(dateRange.start || dateRange.end) && (
+          <button
+            onClick={() => {
+              setDateRange({ start: null, end: null });
+              setShowDatePicker(false);
+            }}
+            className="h-12 px-3 sm:px-4 text-[12px] sm:text-[13px] 
+              text-red-500 hover:text-red-600 
+              dark:text-red-400 dark:hover:text-red-300 
+              transition whitespace-nowrap
+              bg-gray-100 dark:bg-[#282828]
+              border border-gray-300 dark:border-white/10 
+              rounded-full
+              hover:bg-gray-200 dark:hover:bg-white/10
+              flex items-center justify-center
+              w-full sm:w-auto lg:flex-1 min-w-[100px] lg:min-w-[120px]"
+          >
+            {lang === "fa" ? clearButtonText.fa : clearButtonText.en}
+          </button>
+        )}
+
+        <div className="w-full lg:w-auto lg:flex-1 step-test46 min-w-[150px]">
           <DropdownFainalTabale
             options={FILTER_OPTIONS}
             selected={filter}
             onSelect={setFilter}
+            // @ts-ignore
             lang={lang}
             isOpen={isFilterOpen}
             setIsOpen={setIsFilterOpen}
           />
         </div>
-      </div>
 
-      <div
-        id="tabale6"
-        className="flex flex-col lg:flex-row flex-wrap items-stretch lg:items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2 sm:p-3 
-          bg-white/50 dark:bg-white/5 
-          rounded-xl border border-gray-200/50 dark:border-white/5"
-      >
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:gap-3 w-full lg:w-auto flex-1">
-          <div className="flex-1 min-w-[150px] sm:min-w-[200px]">
-            <div className="flex flex-col md:flex-row items-center gap-3">
-              <DateRangePicker
-                dateRange={dateRange}
-                setDateRange={setDateRange}
-                showDatePicker={showDatePicker}
-                setShowDatePicker={setShowDatePicker}
-              />
-              <div className="flex flex-wrap items-center gap-1 sm:gap-2">
-                <QuickAccessButtons setDateRange={setDateRange} lang={lang} />
-              </div>
-            </div>
-          </div>
-        </div>
+        <button
+          id="tabale4"
+          onClick={() => setTradeInNews((v) => !v)}
+          className="flex justify-center items-center gap-2 px-3 sm:px-4 py-2 
+            h-12 
+            dark:bg-linear-to-r 
+            font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] 
+            border border-gray-300 dark:border-white/10 
+            rounded-full 
+            text-gray-700 dark:text-gray-300 
+            text-[12px] sm:text-[13px] md:text-[14px] 
+            cursor-pointer hover:bg-gray-200 dark:hover:bg-white/10 
+            transition-all duration-200
+            whitespace-nowrap
+            w-full sm:w-auto lg:flex-1 min-w-[120px] lg:min-w-[140px]"
+        >
+          <span className="whitespace-nowrap">
+            {lang === "fa" ? tradeButtonText.fa : tradeButtonText.en}
+          </span>
+          <span
+            className="w-4 h-4 sm:w-5.5 sm:h-2.5 rounded-full transition-colors shrink-0"
+            style={{ background: tradeInNews ? "#22c55e" : "#9ca3af" }}
+          />
+        </button>
 
-        <div className="flex flex-wrap items-center justify-between lg:justify-end gap-2 w-full lg:w-auto">
-          {(dateRange.start || dateRange.end) && (
-            <button
-              onClick={() => {
-                setDateRange({ start: null, end: null });
-                setShowDatePicker(false);
-              }}
-              className="text-[10px] sm:text-xs text-red-500 hover:text-red-600 
-                dark:text-red-400 dark:hover:text-red-300 
-                transition px-2 py-1 whitespace-nowrap"
-            >
-              {lang === "fa" ? "پاک کردن فیلتر" : "Clear Filter"}
-            </button>
-          )}
-
-          <div className="flex flex-col items-center md:flex-row"></div>
-        </div>
-        <div className="flex step-test45 items-center gap-3 flex-wrap w-full sm:w-auto">
-          <button
-            id="tabale4"
-            onClick={() => setTradeInNews((v) => !v)}
-            className="flex justify-center items-center gap-2 w-full sm:w-auto px-3 sm:px-3.5 py-2 sm:py-1.5 
-              h-auto sm:h-12 
-              dark:bg-linear-to-r 
-              font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] 
-              border border-gray-300 dark:border-white/10 
-              rounded-full 
-              text-gray-700 dark:text-gray-300 
-              text-[12px] sm:text-[13px] md:text-[14px] 
-              cursor-pointer hover:bg-gray-200 dark:hover:bg-white/10 
-              transition-all duration-200"
-          >
-            <span className="whitespace-nowrap">
-              {i18next.language === "fa"
-                ? tradeInNews
-                  ? "ترید در خبر"
-                  : "ترید ممنوع"
-                : tradeInNews
-                  ? "Trade in News"
-                  : "Trade Banned"}
-            </span>
-            <span
-              className="w-4 h-4 sm:w-5.5 sm:h-2.5 rounded-full transition-colors shrink-0"
-              style={{ background: tradeInNews ? "#22c55e" : "#9ca3af" }}
-            />
-          </button>
-          <section className="flex flex-wrap items-center gap-1" id="tabale3">
-            <FilterButtons
-              impactFilter={impactFilter}
-              onFilterChange={setImpactFilter}
-              lang={lang}
-            />
-          </section>
-        </div>
+        <section
+          className="flex flex-wrap items-center gap-1 w-full sm:w-auto lg:flex-1"
+          id="tabale3"
+        >
+          <FilterButtons
+            impactFilter={impactFilter}
+            onFilterChange={setImpactFilter}
+          />
+        </section>
       </div>
 
       {!week ? (
         <div className="py-8 sm:py-10 text-center text-gray-400 dark:text-gray-600 text-xs sm:text-sm">
-          {i18next.language === "fa"
-            ? "یک هفته را انتخاب کنید"
-            : "Please select a week"}
+          {lang === "fa" ? noWeekText.fa : noWeekText.en}
         </div>
       ) : (
         <>
           <div className="overflow-x-auto -mx-2 sm:mx-0">
             <NewsTable
               data={paginatedData}
+              // @ts-ignore
               lang={lang}
               sortConfig={sortConfig}
               requestSort={requestSort}
@@ -237,7 +264,7 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
             >
               <div className="flex items-center gap-2 order-2 sm:order-1">
                 <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                  {lang === "fa" ? "تعداد در صفحه:" : "Rows:"}
+                  {lang === "fa" ? rowsPerPageText.fa : rowsPerPageText.en}
                 </span>
                 <select
                   value={rowsPerPage}
@@ -260,9 +287,15 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
               </div>
 
               <div className="text-[10px] sm:text-xs text-gray-400 dark:text-gray-500 order-1 sm:order-2">
-                {lang === "fa"
-                  ? `نمایش ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} از ${sortedData.length}`
-                  : `Showing ${(currentPage - 1) * rowsPerPage + 1} - ${Math.min(currentPage * rowsPerPage, sortedData.length)} of ${sortedData.length}`}
+                {(() => {
+                  const start = (currentPage - 1) * rowsPerPage + 1;
+                  const end = Math.min(
+                    currentPage * rowsPerPage,
+                    sortedData.length,
+                  );
+                  const info = pageInfoText(start, end, sortedData.length);
+                  return lang === "fa" ? info.fa : info.en;
+                })()}
               </div>
 
               <div className="flex items-center gap-1 sm:gap-2 order-3">
@@ -288,9 +321,10 @@ function TradingNewsTable({ lang = "fa" }: TradingNewsTableProps) {
                 </button>
 
                 <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">
-                  {lang === "fa"
-                    ? `صفحه ${currentPage} از ${totalPages}`
-                    : `Page ${currentPage} of ${totalPages}`}
+                  {(() => {
+                    const pageText = pageNumberText(currentPage, totalPages);
+                    return lang === "fa" ? pageText.fa : pageText.en;
+                  })()}
                 </span>
 
                 <button

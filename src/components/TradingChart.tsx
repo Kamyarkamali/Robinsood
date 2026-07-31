@@ -208,7 +208,7 @@ function computeDomain(
   return [Math.floor(min - pad), Math.ceil(max + pad)];
 }
 
-function niceTicks([dMin, dMax]: [number, number], count = 4): number[] {
+function niceTicks([dMin, dMax]: [number, number], count = 6): number[] {
   const range = dMax - dMin;
   if (range === 0) return [dMin];
 
@@ -724,7 +724,6 @@ export default function TradingChart() {
           </div>
         </div>
 
-        {/* چارت */}
         <div className="flex-1 min-h-0">
           <div
             ref={wrapRef}
@@ -760,17 +759,17 @@ export default function TradingChart() {
                   <linearGradient id="balanceGrad" x1="0" y1="0" x2="0" y2="1">
                     <stop
                       offset="0%"
-                      stopColor={settings.colors.primary}
+                      stopColor={settings.colors.balanceLine}
                       stopOpacity={0.4}
                     />
                     <stop
                       offset="70%"
-                      stopColor={settings.colors.primary}
+                      stopColor={settings.colors.balanceLine}
                       stopOpacity={0.1}
                     />
                     <stop
                       offset="100%"
-                      stopColor={settings.colors.primary}
+                      stopColor={settings.colors.balanceLine}
                       stopOpacity={0}
                     />
                   </linearGradient>
@@ -781,12 +780,48 @@ export default function TradingChart() {
                     x2="1"
                     y2="0"
                   >
-                    <stop offset="0%" stopColor={settings.colors.primary} />
-                    <stop offset="50%" stopColor={settings.colors.secondary} />
-                    <stop offset="100%" stopColor={settings.colors.accent} />
+                    <stop offset="0%" stopColor={settings.colors.balanceLine} />
+                    <stop
+                      offset="50%"
+                      stopColor={settings.colors.balanceLine}
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor={settings.colors.balanceLine}
+                    />
                   </linearGradient>
                 </defs>
-
+                // و در بخش Area:
+                {settings.display.showAreas && activeSeries.balance && (
+                  <Area
+                    dataKey="balance"
+                    name={t("chart.balance")}
+                    stroke={settings.colors.balanceLine}
+                    strokeWidth={Math.min(
+                      settings.lineWidths.main,
+                      window.innerWidth < 480
+                        ? 1.2
+                        : window.innerWidth < 640
+                          ? 1.5
+                          : settings.lineWidths.main,
+                    )}
+                    fill="url(#balanceGrad)"
+                    dot={false}
+                    activeDot={{
+                      r: window.innerWidth < 480 ? 2 : 4,
+                      fill: settings.colors.balanceLine,
+                      stroke: settings.colors.balanceLine,
+                      strokeWidth: 2,
+                    }}
+                    style={
+                      settings.effects.glow
+                        ? {
+                            filter: `drop-shadow(0 0 5px ${settings.colors.balanceLine}66)`,
+                          }
+                        : {}
+                    }
+                  />
+                )}
                 {settings.display.showGrid && (
                   <CartesianGrid
                     strokeDasharray="3 3"
@@ -795,9 +830,12 @@ export default function TradingChart() {
                     strokeWidth={1}
                     vertical={true}
                     horizontal={true}
+                    horizontalPoints={yTicks.map((tick) => {
+                      const [min, max] = yDomain;
+                      return ((tick - min) / (max - min)) * 230;
+                    })}
                   />
                 )}
-
                 {settings.axis.showXAxis && (
                   <XAxis
                     dataKey="time"
@@ -830,7 +868,6 @@ export default function TradingChart() {
                     }}
                   />
                 )}
-
                 <YAxis
                   domain={yDomain}
                   ticks={yTicks}
@@ -848,13 +885,11 @@ export default function TradingChart() {
                   }}
                   orientation={isRtl ? "left" : "right"}
                 />
-
                 {settings.display.showTooltip && (
                   <Tooltip
                     content={<ChartTooltip isRtl={isRtl} settings={settings} />}
                   />
                 )}
-
                 {settings.display.showAreas && activeSeries.balance && (
                   <Area
                     dataKey="balance"
@@ -883,7 +918,6 @@ export default function TradingChart() {
                     }
                   />
                 )}
-
                 {activeSeries.target && (
                   <Line
                     dataKey="target"
@@ -906,7 +940,6 @@ export default function TradingChart() {
                     }
                   />
                 )}
-
                 {activeSeries.dailyDrawdown && (
                   <Line
                     dataKey="dailyDrawdown"
@@ -924,7 +957,6 @@ export default function TradingChart() {
                     strokeDasharray="5 3"
                   />
                 )}
-
                 {activeSeries.totalDrawdown && (
                   <Line
                     dataKey="totalDrawdown"
@@ -942,7 +974,6 @@ export default function TradingChart() {
                     strokeDasharray="5 3"
                   />
                 )}
-
                 {settings.display.showCandles && activeSeries.equity && (
                   <Bar
                     dataKey="equity"

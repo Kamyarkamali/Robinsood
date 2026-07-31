@@ -126,13 +126,12 @@ export default function VSComparison() {
       leftBar: Math.min(Math.floor(item.leftBar * factor), 100),
     }));
 
-  // تابع برای تولید داده‌های "مقایسه با خود"
   const getSelfMetrics = (data: MetricRow[]) => {
     return data.map((item) => ({
       ...item,
-      leftValue: Math.floor(item.leftValue * 0.9), // 90% از خودت
+      leftValue: Math.floor(item.leftValue * 0.9),
       leftBar: Math.min(Math.floor(item.leftBar * 0.9), 100),
-      rightValue: Math.floor(item.rightValue * 1.1), // 110% از خودت
+      rightValue: Math.floor(item.rightValue * 1.1),
       rightBar: Math.min(Math.floor(item.rightBar * 1.1), 100),
     }));
   };
@@ -163,10 +162,7 @@ export default function VSComparison() {
         className="dark:bg-linear-to-b w-full max-w-8xl rounded-2xl mt-3 text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"
       >
         <div className="w-full max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-4">
-          <div
-            id="com2"
-            className="w-full flex justify-center sticky top-2 z-20"
-          >
+          <div id="com2" className="w-full flex justify-center">
             <div className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 shadow-xl">
               {comparisonTabs.map((item) => (
                 <button

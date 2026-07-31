@@ -112,7 +112,7 @@ const Popover: React.FC<PopoverProps> = ({ account, children, lang }) => {
   }, [isMobile, isOpen]);
 
   return (
-    <div className="relative" ref={triggerRef}>
+    <div className={` relative`} ref={triggerRef}>
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

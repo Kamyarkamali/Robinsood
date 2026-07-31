@@ -25,37 +25,28 @@ export function FilterButtons({
   onFilterChange,
 }: FilterButtonsProps) {
   return (
-    <div className="flex items-center  gap-3 flex-wrap dark:bg-linear-to-t h-fit dark:from-[#282828] dark:to-[#2f2f2f] p-3 rounded-[1024px] w-full sm:w-auto justify-center sm:justify-start">
+    <div className="flex items-center gap-1 justify-center sm:gap-1.5 flex-nowrap h-12 px-2 sm:px-3 bg-gray-100 dark:bg-[#282828] border border-gray-300 dark:border-white/10 rounded-full w-full overflow-hidden min-w-[120px]">
       {FILTER_OPTIONS.map((item) => {
         const isActive = impactFilter === item.impact;
         return (
           <button
             key={item.color}
             onClick={() => onFilterChange(isActive ? null : item.impact)}
-            className={`flex items-center gap-1.5 text-xs transition-all cursor-pointer rounded-full px-2.5 py-1 ${
+            className={`flex items-center gap-1 sm:gap-1.5 text-[10px] sm:text-[11px] transition-all cursor-pointer rounded-full px-1.5 sm:px-2 py-0.5 h-7 sm:h-8 shrink-0 ${
               isActive
                 ? "bg-gray-200 dark:bg-white/10 ring-1 ring-gray-400 dark:ring-white/20"
                 : "hover:bg-gray-200 dark:hover:bg-white/5"
             }`}
           >
             <span
-              className={`w-2 h-2 rounded-full transition-all ${isActive ? "scale-125" : ""}`}
+              className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full transition-all shrink-0 ${isActive ? "scale-125" : ""}`}
               style={{ background: item.color }}
             />
-            <span
-              className={
-                isActive
-                  ? "text-gray-900 dark:text-white"
-                  : "text-gray-600 dark:text-gray-400"
-              }
-            >
+            <span className="whitespace-nowrap text-[10px] sm:text-xs">
               {i18next.language === "fa" ? item?.label?.fa : item?.label?.en}
             </span>
             {isActive && (
-              <span
-                title={i18next.language === "fa" ? "لفو فیلتر" : "Cancel filer"}
-                className="text-[8px] cursor-pointer text-gray-500 dark:text-gray-400 ml-0.5"
-              >
+              <span className="text-[7px] sm:text-[8px] cursor-pointer text-gray-500 dark:text-gray-400 shrink-0">
                 ✕
               </span>
             )}
@@ -64,11 +55,10 @@ export function FilterButtons({
       })}
       {impactFilter && (
         <button
-          title={i18next.language === "fa" ? "لفو فیلتر" : "Cancel filer"}
           onClick={() => onFilterChange(null)}
-          className="text-[10px] text-gray-500 cursor-pointer dark:text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 transition underline-offset-2 hover:underline"
+          className="text-[9px] sm:text-[10px] text-red-500 cursor-pointer hover:text-red-600 transition whitespace-nowrap px-1 shrink-0"
         >
-          {i18next.language === "fa" ? "لغو فیلتر" : "Clear filter"}
+          ✕
         </button>
       )}
     </div>

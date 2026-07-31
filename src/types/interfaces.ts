@@ -435,7 +435,7 @@ export interface NewsItem {
 export interface FilterButtonsProps {
   impactFilter: Impact | null;
   onFilterChange: (impact: Impact | null) => void;
-  lang: Lang;
+  lang?: Lang;
 }
 
 export interface BiLabels {

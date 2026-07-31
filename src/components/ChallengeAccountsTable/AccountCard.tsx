@@ -1,12 +1,12 @@
 import React from "react";
 import {
   BsCheckCircleFill,
-  BsCircle,
   BsHourglassSplit,
   BsXCircleFill,
 } from "react-icons/bs";
 import type { Account, StatusConfigMap } from "../../types/interfaces";
 import i18next from "i18next";
+import { Link } from "react-router-dom";
 
 const statusConfig: StatusConfigMap = {
   approved: {
@@ -34,7 +34,6 @@ interface AccountCardProps {
 const AccountCard: React.FC<AccountCardProps> = ({
   account,
   isSelected = false,
-  onSelect,
 }) => {
   const statusItem = statusConfig[account.tableStatus];
   const Icon = statusItem.icon;
@@ -147,44 +146,26 @@ const AccountCard: React.FC<AccountCardProps> = ({
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => onSelect?.(account.accountNumber)}
+      <Link
+        to={`/account/${account.accountNumber}/details`}
         className={`
-          mt-3
-          w-full
-          inline-flex
-          items-center
-          justify-center
-          gap-1.5
-          px-3
-          py-1.5
-          rounded-xl
-          text-[10px]
-          font-bold
-          transition-all
-          duration-200
-          border
-          ${
-            isSelected
-              ? "bg-cyan-500 border-cyan-500 text-white hover:bg-cyan-600"
-              : "bg-transparent border-gray-300 dark:border-white/10 text-gray-500 dark:text-gray-400 hover:border-cyan-500 hover:text-cyan-600"
-          }
-        `}
+                        px-2 sm:px-2.5 md:px-3
+                        py-1 sm:py-1.5
+                        rounded-lg sm:rounded-xl
+                        text-[7px] sm:text-[8px] md:text-xs
+                        font-bold
+                        block
+                        transition-all
+                        duration-200
+                        text-center
+                        border mt-4
+                        border-cyan-400
+                        no-underline
+                       
+                      `}
       >
-        {isSelected ? (
-          <BsCheckCircleFill className="text-[10px]" />
-        ) : (
-          <BsCircle className="text-[10px]" />
-        )}
-        {isSelected
-          ? lang === "fa"
-            ? "انتخاب شد"
-            : "Selected"
-          : lang === "fa"
-            ? "انتخاب"
-            : "Select"}
-      </button>
+        <span>ورود به پنل آنالیز</span>
+      </Link>
     </div>
   );
 };

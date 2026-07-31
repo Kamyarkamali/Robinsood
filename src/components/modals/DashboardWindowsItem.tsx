@@ -36,13 +36,14 @@ export default function DashboardWindowsItem() {
   return (
     <div
       dir="rtl"
-      className="
-        fixed bottom-2 sm:bottom-4 -translate-x-7/2
+      className={`
+        ${isFa ? "-translate-x-144" : "translate-x-144"}
+        fixed bottom-2 sm:bottom-4 
         z-20
         px-2
         hidden
         md:flex justify-center
-      "
+      `}
     >
       <div
         className="

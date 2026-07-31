@@ -7,6 +7,7 @@ import {
 } from "react-icons/hi";
 import i18next from "i18next";
 import { HiOutlineWallet } from "react-icons/hi2";
+import { Link } from "react-router-dom";
 
 interface CardData {
   id: number;
@@ -374,6 +375,12 @@ export default function AtAGlance() {
           </GlowingCard>
         ))}
       </div>
+      <Link
+        to={"/account/today-parameters"}
+        className={`${lang === "fa" ? "md:text-left" : "md:text-right"} text-center block text-[12px] text-gray-400`}
+      >
+        {lang === "fa" ? "مشاهده جزئیات بیشتر" : "See All Detailse"}
+      </Link>
     </div>
   );
 }

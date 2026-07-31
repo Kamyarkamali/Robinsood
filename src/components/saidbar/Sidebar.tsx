@@ -266,7 +266,6 @@ export default function Sidebar() {
               </motion.div>
             </motion.div>
 
-            {/* وسط - لوگو و نام سایت */}
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -335,7 +334,6 @@ export default function Sidebar() {
               </div>
             </motion.div>
 
-            {/* سمت راست - نوتیفیکیشن + منو */}
             <div className="flex items-center gap-2">
               <motion.button
                 onClick={handleOpenNotifications}
@@ -670,7 +668,8 @@ export default function Sidebar() {
           flex flex-col
           min-h-screen
           sticky top-0
-          ${open ? "w-65" : "w-24"}
+         ${open && lang ? (lang === "en" ? "w-65" : lang ? "w-65" : "w-24") : "w-24"}
+
         `}
         role="navigation"
         aria-label="Sidebar navigation"
@@ -681,13 +680,13 @@ export default function Sidebar() {
           className={`
             absolute top-28 transition-transform duration-300 [will-change:transform]
             ${
-              lang === "fa"
+              lang === "en"
                 ? open
+                  ? "translate-x-55"
+                  : "translate-x-14"
+                : open
                   ? "-translate-x-55"
                   : "-translate-x-14"
-                : open
-                  ? "translate-x-63"
-                  : "translate-x-14"
             }
           `}
         >

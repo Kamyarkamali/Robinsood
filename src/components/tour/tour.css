@@ -1,0 +1,491 @@
+/* tour.css */
+
+/* ===== پاپ‌اور اصلی ===== */
+.tour-popover {
+  border: none !important;
+  border-radius: 20px !important;
+  overflow: hidden !important;
+  width: 440px !important;
+  max-width: 92vw !important;
+  box-shadow: 0 24px 60px -14px rgba(0, 0, 0, 0.5) !important;
+  font-family: inherit !important;
+  padding: 0 !important;
+  animation: tourPopIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  z-index: 100000 !important;
+}
+
+@keyframes tourPopIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ===== تم تیره ===== */
+.tour-dark {
+  --tour-bg: #0f172a;
+  --tour-fg: #e2e8f0;
+  --tour-muted: #94a3b8;
+  --tour-border: #1e293b;
+  --tour-accent: #6366f1;
+  --tour-accent-fg: #ffffff;
+  --tour-btn-secondary-bg: #1e293b;
+  --tour-btn-secondary-fg: #cbd5e1;
+  --tour-card-bg: #1e293b;
+}
+
+.tour-dark.tour-popover {
+  background: var(--tour-bg) !important;
+  border: 1px solid var(--tour-border) !important;
+}
+
+/* ===== تم روشن ===== */
+.tour-light {
+  --tour-bg: #ffffff;
+  --tour-fg: #0f172a;
+  --tour-muted: #64748b;
+  --tour-border: #e2e8f0;
+  --tour-accent: #4f46e5;
+  --tour-accent-fg: #ffffff;
+  --tour-btn-secondary-bg: #f1f5f9;
+  --tour-btn-secondary-fg: #334155;
+  --tour-card-bg: #f8fafc;
+}
+
+.tour-light.tour-popover {
+  background: var(--tour-bg) !important;
+  border: 1px solid var(--tour-border) !important;
+}
+
+/* ===== RTL ===== */
+.tour-rtl {
+  direction: rtl !important;
+  text-align: right !important;
+}
+
+.tour-ltr {
+  direction: ltr !important;
+  text-align: left !important;
+}
+
+/* ===== عنوان ===== */
+.tour-popover .driver-popover-title {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: var(--tour-fg) !important;
+  padding: 20px 24px 0 !important;
+  margin: 0 !important;
+  line-height: 1.4 !important;
+  letter-spacing: -0.3px !important;
+}
+
+/* ===== مدیا ===== */
+.tour-media {
+  position: relative !important;
+  width: 100% !important;
+  aspect-ratio: 16 / 9 !important;
+  overflow: hidden !important;
+  background: var(--tour-border) !important;
+  margin: 0 -24px 16px -24px !important;
+  width: calc(100% + 48px) !important;
+}
+
+.tour-media img,
+.tour-media video {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+.tour-media video {
+  background: #000 !important;
+}
+
+/* ===== اوورلی روی ویدیو ===== */
+.tour-media-overlay {
+  position: absolute !important;
+  inset: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  background: rgba(0, 0, 0, 0.15) !important;
+  opacity: 0 !important;
+  transition: opacity 0.3s ease !important;
+  pointer-events: none !important;
+}
+
+.tour-media:hover .tour-media-overlay {
+  opacity: 1 !important;
+}
+
+.tour-media-play {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #0f172a !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+  transition: transform 0.3s ease !important;
+}
+
+.tour-media:hover .tour-media-play {
+  transform: scale(1.1) !important;
+}
+
+/* ===== بج مدیا ===== */
+.tour-media-badge {
+  position: absolute !important;
+  bottom: 12px !important;
+  right: 12px !important;
+  padding: 4px 14px !important;
+  border-radius: 20px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  color: white !important;
+  backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  z-index: 2 !important;
+}
+
+.tour-rtl .tour-media-badge {
+  right: auto !important;
+  left: 12px !important;
+}
+
+/* ===== بدنه ===== */
+.tour-body {
+  padding: 0 24px 16px 24px !important;
+}
+
+.tour-desc-text {
+  font-size: 14px !important;
+  line-height: 1.8 !important;
+  color: var(--tour-muted) !important;
+  margin: 0 !important;
+}
+
+/* ===== فوتر ===== */
+.tour-popover .driver-popover-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  padding: 14px 24px 20px !important;
+  border-top: 1px solid var(--tour-border) !important;
+  margin: 0 !important;
+}
+
+.tour-footer-custom {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  width: 100% !important;
+}
+
+/* ===== تکست پیشرفت ===== */
+.driver-popover-progress-text {
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  color: var(--tour-muted) !important;
+  white-space: nowrap !important;
+}
+
+/* ===== دکمه‌ها ===== */
+.driver-popover-navigation-btns {
+  display: flex !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+
+.tour-popover button.driver-popover-next-btn,
+.tour-popover button.driver-popover-prev-btn {
+  border: none !important;
+  cursor: pointer !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  border-radius: 10px !important;
+  padding: 9px 20px !important;
+  transition: all 0.25s ease !important;
+  font-family: inherit !important;
+  user-select: none !important;
+  min-width: 72px !important;
+}
+
+.tour-popover button.driver-popover-next-btn:active,
+.tour-popover button.driver-popover-prev-btn:active {
+  transform: scale(0.95) !important;
+}
+
+/* دکمه بعدی */
+.tour-popover button.driver-popover-next-btn {
+  background: var(--tour-accent) !important;
+  color: var(--tour-accent-fg) !important;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3) !important;
+}
+
+.tour-popover button.driver-popover-next-btn:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4) !important;
+}
+
+/* دکمه قبلی */
+.tour-popover button.driver-popover-prev-btn {
+  background: var(--tour-btn-secondary-bg) !important;
+  color: var(--tour-btn-secondary-fg) !important;
+}
+
+.tour-popover button.driver-popover-prev-btn:hover:not(:disabled) {
+  transform: translateY(-2px) !important;
+  opacity: 0.85 !important;
+}
+
+.tour-popover button.driver-popover-prev-btn:disabled {
+  opacity: 0.3 !important;
+  cursor: not-allowed !important;
+  transform: none !important;
+}
+
+/* ===== دکمه بستن ===== */
+.tour-popover .driver-popover-close-btn {
+  position: absolute !important;
+  top: 12px !important;
+  right: 12px !important;
+  width: 32px !important;
+  height: 32px !important;
+  border: none !important;
+  border-radius: 50% !important;
+  background: rgba(0, 0, 0, 0.05) !important;
+  color: var(--tour-muted) !important;
+  font-size: 18px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.3s ease !important;
+  z-index: 10 !important;
+}
+
+.tour-rtl .tour-popover .driver-popover-close-btn {
+  right: auto !important;
+  left: 12px !important;
+}
+
+.tour-popover .driver-popover-close-btn:hover {
+  background: rgba(239, 68, 68, 0.1) !important;
+  color: #ef4444 !important;
+  transform: rotate(90deg) !important;
+}
+
+/* ===== هایلایت المنت ===== */
+.driver-highlighted-element {
+  box-shadow: 0 0 0 4px var(--tour-accent, #6366f1) !important;
+  border-radius: 10px !important;
+  animation: tourPulse 2.5s ease-in-out infinite !important;
+  z-index: 99999 !important;
+}
+
+@keyframes tourPulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 4px var(--tour-accent, #6366f1) !important;
+  }
+  50% {
+    box-shadow: 0 0 0 12px rgba(99, 102, 241, 0.15) !important;
+  }
+}
+
+/* ===== فلش‌ها ===== */
+.tour-popover .driver-popover-arrow-side-top {
+  border-top-color: var(--tour-bg) !important;
+}
+.tour-popover .driver-popover-arrow-side-bottom {
+  border-bottom-color: var(--tour-bg) !important;
+}
+.tour-popover .driver-popover-arrow-side-left {
+  border-left-color: var(--tour-bg) !important;
+}
+.tour-popover .driver-popover-arrow-side-right {
+  border-right-color: var(--tour-bg) !important;
+}
+
+/* ===== ریسپانسیو ===== */
+
+/* تبلت و موبایل بزرگ */
+@media (max-width: 768px) {
+  .tour-popover {
+    width: 420px !important;
+    max-width: 90vw !important;
+    border-radius: 18px !important;
+  }
+
+  .tour-popover .driver-popover-title {
+    font-size: 16px !important;
+    padding: 18px 20px 0 !important;
+  }
+
+  .tour-media {
+    margin: 0 -20px 14px -20px !important;
+    width: calc(100% + 40px) !important;
+  }
+
+  .tour-body {
+    padding: 0 20px 14px 20px !important;
+  }
+
+  .tour-desc-text {
+    font-size: 13.5px !important;
+  }
+
+  .tour-popover .driver-popover-footer {
+    padding: 12px 20px 18px !important;
+    flex-wrap: wrap !important;
+  }
+
+  .tour-footer-custom {
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+  }
+}
+
+/* موبایل */
+@media (max-width: 480px) {
+  .tour-popover {
+    width: 92vw !important;
+    max-width: 92vw !important;
+    border-radius: 16px !important;
+    margin: 0 4vw !important;
+  }
+
+  .tour-popover .driver-popover-title {
+    font-size: 15px !important;
+    padding: 16px 16px 0 !important;
+  }
+
+  .tour-media {
+    margin: 0 -16px 12px -16px !important;
+    width: calc(100% + 32px) !important;
+    aspect-ratio: 16 / 10 !important;
+  }
+
+  .tour-media-overlay {
+    opacity: 1 !important;
+  }
+
+  .tour-media-play {
+    width: 44px !important;
+    height: 44px !important;
+    font-size: 18px !important;
+  }
+
+  .tour-media-badge {
+    font-size: 10px !important;
+    padding: 3px 10px !important;
+    bottom: 8px !important;
+    right: 8px !important;
+  }
+
+  .tour-body {
+    padding: 0 16px 12px 16px !important;
+  }
+
+  .tour-desc-text {
+    font-size: 13px !important;
+    line-height: 1.6 !important;
+  }
+
+  .tour-popover .driver-popover-footer {
+    padding: 10px 16px 16px !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+
+  .tour-footer-custom {
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100% !important;
+  }
+
+  .driver-popover-progress-text {
+    font-size: 11px !important;
+    order: -1 !important;
+  }
+
+  .driver-popover-navigation-btns {
+    width: 100% !important;
+    justify-content: stretch !important;
+  }
+
+  .tour-popover button.driver-popover-next-btn,
+  .tour-popover button.driver-popover-prev-btn {
+    flex: 1 !important;
+    text-align: center !important;
+    justify-content: center !important;
+    padding: 10px 12px !important;
+    font-size: 12px !important;
+    min-width: 0 !important;
+  }
+
+  .tour-popover .driver-popover-close-btn {
+    top: 8px !important;
+    right: 8px !important;
+    width: 28px !important;
+    height: 28px !important;
+    font-size: 14px !important;
+  }
+
+  .tour-rtl .tour-popover .driver-popover-close-btn {
+    right: auto !important;
+    left: 8px !important;
+  }
+
+  .tour-rtl .tour-media-badge {
+    right: auto !important;
+    left: 8px !important;
+  }
+}
+
+/* موبایل خیلی کوچک */
+@media (max-width: 360px) {
+  .tour-popover {
+    border-radius: 14px !important;
+  }
+
+  .tour-popover .driver-popover-title {
+    font-size: 14px !important;
+    padding: 14px 12px 0 !important;
+  }
+
+  .tour-media {
+    margin: 0 -12px 10px -12px !important;
+    width: calc(100% + 24px) !important;
+  }
+
+  .tour-body {
+    padding: 0 12px 10px 12px !important;
+  }
+
+  .tour-desc-text {
+    font-size: 12px !important;
+  }
+
+  .tour-popover .driver-popover-footer {
+    padding: 8px 12px 14px !important;
+  }
+
+  .tour-popover button.driver-popover-next-btn,
+  .tour-popover button.driver-popover-prev-btn {
+    font-size: 11px !important;
+    padding: 8px 8px !important;
+  }
+}

@@ -25,6 +25,7 @@ export interface ChartCustomSettings {
     background: string;
     candleUp: string;
     candleDown: string;
+    balanceLine: string;
   };
   lineWidths: {
     main: number;
@@ -39,21 +40,18 @@ export interface ChartCustomSettings {
     showCandles: boolean;
     showAreas: boolean;
   };
-  // اندازه‌ها
   sizes: {
     chartHeight: number;
     fontSize: number;
     barSize: number;
     padding: number;
   };
-  // افکت‌ها
   effects: {
     shadow: boolean;
     glow: boolean;
     animation: boolean;
     smooth: boolean;
   };
-  // محورها
   axis: {
     showXAxis: boolean;
     showYAxis: boolean;
@@ -72,6 +70,7 @@ const defaultSettings: ChartCustomSettings = {
     background: "transparent",
     candleUp: "#a855f7",
     candleDown: "#5b21b6",
+    balanceLine: "#7c3aed",
   },
   lineWidths: {
     main: 2.2,
@@ -102,7 +101,7 @@ const defaultSettings: ChartCustomSettings = {
     showXAxis: true,
     showYAxis: true,
     gridLines: true,
-    tickCount: 4,
+    tickCount: 6,
   },
 };
 
@@ -152,13 +151,89 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
     if (onReset) onReset();
   };
 
+  const lang = i18next.language === "fa";
+
+  const t = {
+    title: lang ? "تنظیمات پیشرفته چارت" : "Advanced Chart Settings",
+    reset: lang ? "بازنشانی" : "Reset",
+    apply: lang ? "اعمال و بستن" : "Apply & Close",
+    saveInfo: lang
+      ? "تنظیمات به صورت خودکار در مرورگر ذخیره می‌شود"
+      : "Settings are automatically saved in your browser",
+
+    tabs: {
+      colors: lang ? "رنگ‌ها" : "Colors",
+      display: lang ? "نمایش" : "Display",
+      lines: lang ? "خطوط" : "Lines",
+      sizes: lang ? "اندازه‌ها" : "Sizes",
+      effects: lang ? "افکت‌ها" : "Effects",
+      axis: lang ? "محورها" : "Axis",
+    },
+
+    colors: {
+      primary: lang ? "درادون روزانه" : "Daily Drawdown",
+      secondary: lang ? "دراداون کل" : "Total Drawdown",
+      accent: lang ? "رنگ موجودی" : "Balance Color",
+      grid: lang ? "رنگ گرید" : "Grid Color",
+      candleUp: lang ? "کندل صعودی" : "Bullish Candle",
+      candleDown: lang ? "کندل نزولی" : "Bearish Candle",
+      balanceLine: lang ? "رنگ خط موجودی" : "Balance Line Color",
+    },
+
+    display: {
+      grid: lang ? "گرید" : "Grid",
+      gridDesc: lang ? "نمایش خطوط گرید" : "Show grid lines",
+      legend: lang ? "راهنما" : "Legend",
+      legendDesc: lang ? "نمایش راهنمای پایین چارت" : "Show chart legend",
+      tooltip: lang ? "تولتیپ" : "Tooltip",
+      tooltipDesc: lang ? "نمایش اطلاعات هاور" : "Show hover information",
+      labels: lang ? "برچسب‌ها" : "Labels",
+      labelsDesc: lang ? "نمایش برچسب‌های محورها" : "Show axis labels",
+      candles: lang ? "کندل‌ها" : "Candles",
+      candlesDesc: lang ? "نمایش کندل‌های قیمت" : "Show price candles",
+      areas: lang ? "ناحیه" : "Area",
+      areasDesc: lang ? "نمایش ناحیه زیر نمودار" : "Show area under chart",
+    },
+
+    lines: {
+      main: lang ? "ضخامت خط اصلی" : "Main Line Width",
+      secondary: lang ? "ضخامت خط ثانویه" : "Secondary Line Width",
+      grid: lang ? "ضخامت گرید" : "Grid Width",
+    },
+
+    sizes: {
+      chartHeight: lang ? "ارتفاع چارت" : "Chart Height",
+      fontSize: lang ? "اندازه فونت" : "Font Size",
+      barSize: lang ? "اندازه کندل‌ها" : "Candle Size",
+    },
+
+    effects: {
+      shadow: lang ? "سایه" : "Shadow",
+      shadowDesc: lang ? "سایه زیر نمودار" : "Shadow under chart",
+      glow: lang ? "درخشش" : "Glow",
+      glowDesc: lang ? "درخشش خطوط" : "Line glow effect",
+      animation: lang ? "انیمیشن" : "Animation",
+      animationDesc: lang ? "انیمیشن ورودی" : "Entry animation",
+      smooth: lang ? "نرم" : "Smooth",
+      smoothDesc: lang ? "خطوط نرم و صاف" : "Smooth lines",
+    },
+
+    axis: {
+      xAxis: lang ? "محور X" : "X Axis",
+      xAxisDesc: lang ? "نمایش محور افقی" : "Show horizontal axis",
+      yAxis: lang ? "محور Y" : "Y Axis",
+      yAxisDesc: lang ? "نمایش محور عمودی" : "Show vertical axis",
+      tickCount: lang ? "تعداد تیک‌ها" : "Tick Count",
+    },
+  };
+
   const tabs = [
-    { id: "colors", label: "🎨 رنگ‌ها", icon: Palette },
-    { id: "display", label: "👁️ نمایش", icon: Eye },
-    { id: "lines", label: "📈 خطوط", icon: LineChart },
-    { id: "sizes", label: "📐 اندازه‌ها", icon: Maximize },
-    { id: "effects", label: "✨ افکت‌ها", icon: Sliders },
-    { id: "axis", label: "📊 محورها", icon: Grid },
+    { id: "colors", label: t.tabs.colors, icon: Palette },
+    { id: "display", label: t.tabs.display, icon: Eye },
+    { id: "lines", label: t.tabs.lines, icon: LineChart },
+    { id: "sizes", label: t.tabs.sizes, icon: Maximize },
+    { id: "effects", label: t.tabs.effects, icon: Sliders },
+    { id: "axis", label: t.tabs.axis, icon: Grid },
   ];
 
   return (
@@ -173,9 +248,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                 <div className="p-2 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-lg">
                   <Settings className="w-5 h-5 text-white" />
                 </div>
-                <h2 className="text-xl font-bold dark:text-white">
-                  تنظیمات پیشرفته چارت
-                </h2>
+                <h2 className="text-xl font-bold dark:text-white">{t.title}</h2>
               </div>
               <button
                 onClick={onClose}
@@ -210,7 +283,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      رنگ اصلی
+                      {t.colors.primary}
                     </label>
                     <input
                       type="color"
@@ -223,9 +296,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      {i18next.language === "fa"
-                        ? " دراداون کل"
-                        : "Total Drawdown"}
+                      {t.colors.secondary}
                     </label>
                     <input
                       type="color"
@@ -238,7 +309,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      رنگ خطوط
+                      {t.colors.accent}
                     </label>
                     <input
                       type="color"
@@ -251,7 +322,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      رنگ گرید
+                      {t.colors.grid}
                     </label>
                     <input
                       type="color"
@@ -264,7 +335,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      کندل صعودی
+                      {t.colors.candleUp}
                     </label>
                     <input
                       type="color"
@@ -277,7 +348,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                   </div>
                   <div>
                     <label className="block text-xs font-medium dark:text-gray-300 mb-1">
-                      کندل نزولی
+                      {t.colors.candleDown}
                     </label>
                     <input
                       type="color"
@@ -288,10 +359,24 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-full h-10 rounded cursor-pointer"
                     />
                   </div>
+                  <div className="col-span-2">
+                    <label className="block text-xs font-medium dark:text-gray-300 mb-1">
+                      {t.colors.balanceLine}
+                    </label>
+                    <input
+                      type="color"
+                      value={localSettings.colors.balanceLine}
+                      onChange={(e) =>
+                        handleChange("colors", { balanceLine: e.target.value })
+                      }
+                      className="w-full h-10 rounded cursor-pointer"
+                    />
+                  </div>
                 </div>
               </div>
             )}
 
+            {/* بقیه تب‌ها به همین صورت باقی می‌مانند */}
             {activeTab === "display" && (
               <div className="space-y-3">
                 <div className="grid grid-cols-2 gap-3">
@@ -305,9 +390,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">گرید</div>
+                      <div className="font-medium text-sm">
+                        {t.display.grid}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        نمایش خطوط گرید
+                        {t.display.gridDesc}
                       </div>
                     </div>
                   </label>
@@ -324,9 +411,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">راهنما</div>
+                      <div className="font-medium text-sm">
+                        {t.display.legend}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        نمایش راهنمای پایین چارت
+                        {t.display.legendDesc}
                       </div>
                     </div>
                   </label>
@@ -343,9 +432,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">تولتیپ</div>
+                      <div className="font-medium text-sm">
+                        {t.display.tooltip}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        نمایش اطلاعات هاور
+                        {t.display.tooltipDesc}
                       </div>
                     </div>
                   </label>
@@ -362,9 +453,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">برچسب‌ها</div>
+                      <div className="font-medium text-sm">
+                        {t.display.labels}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        نمایش برچسب‌های محورها
+                        {t.display.labelsDesc}
                       </div>
                     </div>
                   </label>
@@ -381,9 +474,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">کندل‌ها</div>
+                      <div className="font-medium text-sm">
+                        {t.display.candles}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        نمایش کندل‌های قیمت
+                        {t.display.candlesDesc}
                       </div>
                     </div>
                   </label>
@@ -398,9 +493,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">ناحیه</div>
+                      <div className="font-medium text-sm">
+                        {t.display.areas}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        نمایش ناحیه زیر نمودار
+                        {t.display.areasDesc}
                       </div>
                     </div>
                   </label>
@@ -412,7 +509,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    ضخامت خط اصلی: {localSettings.lineWidths.main}px
+                    {t.lines.main}: {localSettings.lineWidths.main}px
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -433,7 +530,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    ضخامت خط ثانویه: {localSettings.lineWidths.secondary}px
+                    {t.lines.secondary}: {localSettings.lineWidths.secondary}px
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -454,7 +551,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    ضخامت گرید: {localSettings.lineWidths.grid}px
+                    {t.lines.grid}: {localSettings.lineWidths.grid}px
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -479,7 +576,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    ارتفاع چارت: {localSettings.sizes.chartHeight}px
+                    {t.sizes.chartHeight}: {localSettings.sizes.chartHeight}px
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -500,7 +597,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    اندازه فونت: {localSettings.sizes.fontSize}px
+                    {t.sizes.fontSize}: {localSettings.sizes.fontSize}px
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -521,7 +618,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    اندازه کندل‌ها: {localSettings.sizes.barSize}px
+                    {t.sizes.barSize}: {localSettings.sizes.barSize}px
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -555,9 +652,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">سایه</div>
+                      <div className="font-medium text-sm">
+                        {t.effects.shadow}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        سایه زیر نمودار
+                        {t.effects.shadowDesc}
                       </div>
                     </div>
                   </label>
@@ -572,8 +671,12 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">درخشش</div>
-                      <div className="text-xs text-gray-400">درخشش خطوط</div>
+                      <div className="font-medium text-sm">
+                        {t.effects.glow}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {t.effects.glowDesc}
+                      </div>
                     </div>
                   </label>
 
@@ -587,8 +690,12 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">انیمیشن</div>
-                      <div className="text-xs text-gray-400">انیمیشن ورودی</div>
+                      <div className="font-medium text-sm">
+                        {t.effects.animation}
+                      </div>
+                      <div className="text-xs text-gray-400">
+                        {t.effects.animationDesc}
+                      </div>
                     </div>
                   </label>
 
@@ -602,9 +709,11 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">نرم</div>
+                      <div className="font-medium text-sm">
+                        {t.effects.smooth}
+                      </div>
                       <div className="text-xs text-gray-400">
-                        خطوط نرم و صاف
+                        {t.effects.smoothDesc}
                       </div>
                     </div>
                   </label>
@@ -625,9 +734,9 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">محور X</div>
+                      <div className="font-medium text-sm">{t.axis.xAxis}</div>
                       <div className="text-xs text-gray-400">
-                        نمایش محور افقی
+                        {t.axis.xAxisDesc}
                       </div>
                     </div>
                   </label>
@@ -642,9 +751,9 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
                       className="w-4 h-4 rounded border-gray-300 text-purple-500 focus:ring-purple-500"
                     />
                     <div>
-                      <div className="font-medium text-sm">محور Y</div>
+                      <div className="font-medium text-sm">{t.axis.yAxis}</div>
                       <div className="text-xs text-gray-400">
-                        نمایش محور عمودی
+                        {t.axis.yAxisDesc}
                       </div>
                     </div>
                   </label>
@@ -652,7 +761,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
 
                 <div>
                   <label className="block text-sm font-medium dark:text-gray-300 mb-2">
-                    تعداد تیک‌ها: {localSettings.axis.tickCount}
+                    {t.axis.tickCount}: {localSettings.axis.tickCount}
                   </label>
                   <Slider.Root
                     className="relative flex items-center w-full h-5"
@@ -673,25 +782,26 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
               </div>
             )}
 
+            {/* دکمه‌های پایین */}
             <div className="flex gap-3 pt-4 border-t border-gray-200 dark:border-[#2a1a4a]">
               <button
                 onClick={handleReset}
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gray-200 dark:bg-[#2a1a4a] hover:bg-gray-300 dark:hover:bg-[#3a2a5a] rounded-lg font-medium dark:text-white transition-colors"
               >
                 <RotateCcw className="w-4 h-4" />
-                بازنشانی
+                {t.reset}
               </button>
               <button
                 onClick={onClose}
                 className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white font-medium rounded-lg transition-all shadow-lg hover:shadow-xl"
               >
                 <Save className="w-4 h-4" />
-                اعمال و بستن
+                {t.apply}
               </button>
             </div>
 
             <div className="text-center text-xs text-gray-400 dark:text-gray-500">
-              تنظیمات به صورت خودکار در مرورگر ذخیره می‌شود
+              {t.saveInfo}
             </div>
           </div>
         </Dialog.Content>

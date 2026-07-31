@@ -45,7 +45,8 @@ export const tourSteps: TourStep[] = [
     id: "challenge-info-1",
     scope: "challenge-info",
     order: 1,
-
+    // @ts-ignore
+    media: { type: "image", src: "/tour/challenge-info-1.png" },
     element: ".step-title",
 
     side: "bottom",

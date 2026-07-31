@@ -110,7 +110,7 @@ const TableView: React.FC<TableViewProps> = ({
                 >
                   <td
                     className={`
-                      rounded-r-3xl
+                      ${lang === "fa" ? "rounded-r-3xl" : "rounded-l-3xl"}
                       border
                       ${cellBorderClass}
                       px-2 sm:px-3 md:px-4
@@ -304,7 +304,6 @@ const TableView: React.FC<TableViewProps> = ({
                   <td
                     className={`text-center px-1 sm:px-2 border ${cellBorderClass} rounded-2xl rounded-r-none`}
                   >
-                    {/* لینک به جای دکمه */}
                     <Link
                       to={`/account/${account.accountNumber}/details`}
                       className={`

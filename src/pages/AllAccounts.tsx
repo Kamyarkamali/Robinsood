@@ -28,7 +28,6 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
   const [viewMode, setViewMode] = useState<ViewMode>("card");
   const [isMobile, setIsMobile] = useState<boolean>(true);
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  // NEW: track which account is currently selected
   const [selectedAccountNumber, setSelectedAccountNumber] = useState<
     string | null
   >(null);

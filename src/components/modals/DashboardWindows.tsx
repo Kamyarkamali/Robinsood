@@ -25,13 +25,14 @@ export default function DashboardWindows({
   return (
     <div
       dir="rtl"
-      className="
-        fixed bottom-2 sm:bottom-4 -translate-x-170
+      className={`
+        fixed bottom-2 sm:bottom-4 
+        ${isFa ? "-translate-x-180" : "translate-x-180"}
         z-20
         px-2
         hidden
         md:flex justify-center
-      "
+      `}
     >
       <div
         className="

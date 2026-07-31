@@ -125,3 +125,49 @@ export interface ChallengeAccount {
   icon: ChallengeIconType;
   isActive: boolean;
 }
+
+export type TourScope =
+  | "news-status"
+  | "challenge-info"
+  | "today-parameters"
+  | "evaluation-parameters"
+  | "drawdown-chart"
+  | "account-statistics"
+  | "calendar-analysis"
+  | "home"
+  | "challengeModal"
+  | "trades"
+  | "comparison"
+  | "ai-trading";
+
+export interface TourMedia {
+  type: "image" | "video" | "none";
+  url?: string;
+  alt?: string;
+}
+
+export interface TourStep {
+  id: string;
+  scope: TourScope;
+  element: string;
+  order?: number;
+  enabled?: boolean;
+  side?: "top" | "bottom" | "left" | "right" | "over";
+  title: Record<Lang, string>;
+  description: Record<Lang, string>;
+
+  media?: {
+    type: "image" | "video";
+    src: string;
+    poster?: string;
+  };
+}
+
+export interface TourContentItem {
+  fa: { title: string; desc: string };
+  en: { title: string; desc: string };
+}
+
+export interface TourContent {
+  [key: string]: TourContentItem;
+}

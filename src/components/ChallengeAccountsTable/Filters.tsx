@@ -89,7 +89,8 @@ const Filters: React.FC<FiltersProps> = ({
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder={lang === "fa" ? "جستوجوی اکانت" : "Search Account"}
-          className="
+          className={`
+            ${lang === "en" && "placeholder:p-3"}
           w-full
           rounded-2xl
           border
@@ -99,7 +100,6 @@ const Filters: React.FC<FiltersProps> = ({
           text-xs sm:text-sm
           text-gray-700
           dark:text-white
-
           pr-11
           py-3
           outline-none
@@ -112,7 +112,7 @@ const Filters: React.FC<FiltersProps> = ({
 
           focus:ring-1
           focus:ring-blue-500/30
-          "
+          `}
         />
       </div>
 

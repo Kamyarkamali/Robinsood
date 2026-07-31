@@ -85,140 +85,151 @@ function CardAccounts() {
           {fakeChallengeAccounts.slice(0, displayCount).map((account) => {
             // @ts-ignore
             const status = statusConfig[account.cardStatus];
+            const isActive = active === account.id;
 
-            return (
-              <Popover key={account.id} account={account} lang={lang}>
+            const cardContent = (
+              <div
+                onClick={() => setActive(account.id)}
+                className={`
+                  relative
+                  ${isActive ? "border-green-400" : status.border}
+                  overflow-hidden
+                  rounded-2xl
+                  border
+                  ${account}
+                  bg-white
+                  dark:bg-[#2B2B2B]
+                  transition-all
+                  duration-300
+                  hover:-translate-y-0.5
+                  hover:shadow-lg
+                  cursor-pointer
+                `}
+              >
                 <div
-                  onClick={() => setActive(account.id)}
                   className={`
-                    relative
-                    ${active === account.id ? "border-green-400" : status.border}
-                    overflow-hidden
-                    rounded-2xl
-                    border
-                    ${account}
-                    bg-white
-                    dark:bg-[#2B2B2B]
-                    transition-all
-                    duration-300
-                    hover:-translate-y-0.5
-                    hover:shadow-lg
-                    cursor-pointer
+                    absolute
+                    -left-8
+                    -top-8
+                    w-28
+                    h-28
+                    rounded-full
+                    blur-3xl
+                    ${status.glow}
                   `}
-                >
-                  <div
-                    className={`
-                      absolute
-                      -left-8
-                      -top-8
-                      w-28
-                      h-28
-                      rounded-full
-                      blur-3xl
-                      ${status.glow}
-                    `}
-                  />
+                />
 
-                  <div className="relative flex flex-col xl:flex-row h-full">
-                    <div className="w-full bg-transparent xl:w-25 flex items-center justify-center p-3">
-                      <img
-                        src={account.icon}
-                        alt={
-                          lang === "fa" ? account?.title?.fa : account.title?.en
-                        }
-                        className="w-20 md:w-24 xl:w-28 object-contain"
-                      />
+                <div className="relative flex flex-col xl:flex-row h-full">
+                  <div className="w-full bg-transparent xl:w-25 flex items-center justify-center p-3">
+                    <img
+                      src={account.icon}
+                      alt={
+                        lang === "fa" ? account?.title?.fa : account.title?.en
+                      }
+                      className="w-20 md:w-24 xl:w-28 object-contain"
+                    />
+                  </div>
+
+                  <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col">
+                    <h3 className="text-base xl:text-md font-extrabold text-slate-800 dark:text-white truncate">
+                      {lang === "fa" ? account?.title?.fa : account.title?.en}
+                    </h3>
+
+                    <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
+                      <div>
+                        <p className="text-[10px] text-slate-500 dark:text-zinc-400 mb-1.5">
+                          {lang === "fa" ? "سرمایه" : "Capital"}
+                        </p>
+
+                        <h4
+                          className={`text-sm xl:text-md font-black ${status.text}`}
+                        >
+                          ${account.capital.toLocaleString()}
+                        </h4>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
+                          {lang === "fa" ? "مرحله" : "Step"}
+                        </p>
+
+                        <div
+                          className={`
+                            h-8
+                            xl:h-9
+                            rounded-lg
+                            border
+                            ${status.badge}
+                            flex
+                            items-center
+                            justify-center
+                            gap-1.5
+                            text-xs
+                            shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
+                            dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
+                          `}
+                        >
+                          <FaFlag className="text-md" />
+                          <span className="text-[10px]">
+                            {lang === "fa"
+                              ? account?.stageLabel?.fa
+                              : account?.stageLabel?.en}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
+                          {lang === "fa" ? "وضعیت" : "Status"}
+                        </p>
+
+                        <div
+                          className={`
+                            h-8
+                            xl:h-9
+                            rounded-lg
+                            border
+                            ${status.badge}
+                            flex
+                            items-center
+                            justify-center
+                            gap-1.5
+                            text-[10px]
+                            text-xs
+                            shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
+                            dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
+                          `}
+                        >
+                          <span className="text-xs">{status.icon}</span>
+                          <span>
+                            {lang === "fa"
+                              ? account?.cardStatusLabel?.fa
+                              : account?.cardStatusLabel?.en}
+                          </span>
+                        </div>
+                      </div>
                     </div>
 
-                    <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col">
-                      <h3 className="text-base xl:text-md font-extrabold text-slate-800 dark:text-white truncate">
-                        {lang === "fa" ? account?.title?.fa : account.title?.en}
-                      </h3>
-
-                      <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
-                        <div>
-                          <p className="text-[10px] text-slate-500 dark:text-zinc-400 mb-1.5">
-                            {lang === "fa" ? "سرمایه" : "Capital"}
-                          </p>
-
-                          <h4
-                            className={`text-sm xl:text-md font-black ${status.text}`}
-                          >
-                            ${account.capital.toLocaleString()}
-                          </h4>
-                        </div>
-
-                        <div>
-                          <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
-                            {lang === "fa" ? "مرحله" : "Step"}
-                          </p>
-
-                          <div
-                            className={`
-                              h-8
-                              xl:h-9
-                              rounded-lg
-                              border
-                              ${status.badge}
-                              flex
-                              items-center
-                              justify-center
-                              gap-1.5
-                              text-xs
-                              shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
-                              dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
-                            `}
-                          >
-                            <FaFlag className="text-md" />
-                            <span className="text-[10px]">
-                              {lang === "fa"
-                                ? account?.stageLabel?.fa
-                                : account?.stageLabel?.en}
-                            </span>
-                          </div>
-                        </div>
-
-                        <div>
-                          <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
-                            {lang === "fa" ? "وضعیت" : "Status"}
-                          </p>
-
-                          <div
-                            className={`
-                              h-8
-                              xl:h-9
-                              rounded-lg
-                              border
-                              ${status.badge}
-                              flex
-                              items-center
-                              justify-center
-                              gap-1.5
-                              text-[10px]
-                              text-xs
-                              shadow-[inset_2px_2px_4px_rgba(0,0,0,0.06),inset_-2px_-2px_4px_rgba(255,255,255,0.8)]
-                              dark:shadow-[inset_2px_2px_4px_rgba(0,0,0,.35),inset_-2px_-2px_4px_rgba(255,255,255,.06)]
-                            `}
-                          >
-                            <span className="text-xs">{status.icon}</span>
-                            <span>
-                              {lang === "fa"
-                                ? account?.cardStatusLabel?.fa
-                                : account?.cardStatusLabel?.en}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Footer */}
-                      <div className="mt-auto pt-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between">
-                        <span className="text-slate-400 dark:text-zinc-500 text-xs font-bold">
-                          #{account.id}
-                        </span>
-                      </div>
+                    {/* Footer */}
+                    <div className="mt-auto pt-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between">
+                      <span className="text-slate-400 dark:text-zinc-500 text-xs font-bold">
+                        #{account.id}
+                      </span>
                     </div>
                   </div>
                 </div>
+              </div>
+            );
+
+            // اگر کارت فعال است، بدون Popover برگردان
+            if (isActive) {
+              return <div key={account.id}>{cardContent}</div>;
+            }
+
+            // اگر کارت غیرفعال است، با Popover برگردان
+            return (
+              <Popover key={account.id} account={account} lang={lang}>
+                {cardContent}
               </Popover>
             );
           })}

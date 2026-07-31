@@ -117,10 +117,10 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             `}
             title={lang === "fa" ? "صفحه بعدی" : "Next"}
           >
-            {lang === "fa" ? (
+            {lang ? (
               <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
             ) : (
-              <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
+              <HiOutlineChevronRight className={"w-4 md:w-5 h-4 md:h-5"} />
             )}
           </button>
 
@@ -179,7 +179,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             `}
             title={lang === "fa" ? "صفحه قبلی" : "Previous"}
           >
-            {lang === "fa" ? (
+            {lang ? (
               <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
             ) : (
               <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
