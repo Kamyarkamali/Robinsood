@@ -213,7 +213,7 @@ export default function Sidebar() {
 
   const modalNode = useMemo(
     () => (
-      <div className="z-9999">
+      <div className="z-[9999]">
         <MemoizedModal open={modalType !== null} onClose={handleCloseModal}>
           {currentCard && (
             <div className={currentCard.step}>{currentCard.component}</div>

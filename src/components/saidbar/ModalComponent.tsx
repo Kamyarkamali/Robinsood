@@ -1,63 +1,70 @@
-import React, { useEffect } from "react";
+import { useEffect, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { FiX } from "react-icons/fi";
-import i18next from "i18next";
 
 interface ModalProps {
   open: boolean;
   onClose: () => void;
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ open, onClose, children }) => {
-  const lang = i18next.language;
-
+export default function Modal({ open, onClose, children }: ModalProps) {
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-
-    if (open) {
-      document.body.style.overflow = "hidden";
-      document.addEventListener("keydown", handleEscape);
-    } else {
-      document.body.style.overflow = "unset";
-    }
-
+    if (!open) return;
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = "unset";
-      document.removeEventListener("keydown", handleEscape);
     };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", handleEsc);
+    return () => document.removeEventListener("keydown", handleEsc);
   }, [open, onClose]);
 
-  if (!open) return null;
+  if (typeof document === "undefined") return null;
 
   return createPortal(
-    <div
-      className="fixed inset-0 z-9999 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in"
-      onClick={onClose}
-    >
-      <div
-        className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white dark:bg-[#0A0F1E] rounded-2xl shadow-2xl border border-white/10 animate-scale-up"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={onClose}
-          className={`
-            absolute top-4 z-10 p-2 rounded-full
-            bg-white/10 hover:bg-white/20
-            text-gray-400 hover:text-white
-            transition-all duration-200
-            ${lang === "fa" ? "left-4" : "right-4"}
-          `}
-        >
-          <FiX size={20} />
-        </button>
-        {children}
-      </div>
-    </div>,
+    <AnimatePresence>
+      {open && (
+        <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9998] bg-black/70 backdrop-blur-md"
+            onClick={onClose}
+          />
+          <motion.div
+            initial={{ scale: 0.95, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.95, opacity: 0, y: 20 }}
+            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={onClose}
+          >
+            <div
+              className="w-full max-w-lg max-h-[85vh] overflow-y-auto rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 shadow-2xl shadow-black/50 p-5"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={onClose}
+                className="absolute top-4 right-4 text-zinc-400 hover:text-white transition-colors p-1 hover:bg-zinc-800/20 rounded-lg"
+                aria-label="Close modal"
+              >
+                <FiX size={20} />
+              </button>
+              {children}
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>,
     document.body,
   );
-};
-
-export default Modal;
+}

@@ -116,7 +116,7 @@ function CardComponent({ onStartTour }: CardComponentProps) {
 
   return (
     <>
-      <section className="mt-3">
+      <section className="mt-3 md:pr-5 md:pl-5">
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 lg:gap-6">
           {cards.map((card) => (
             <div
