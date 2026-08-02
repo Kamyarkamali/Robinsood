@@ -167,14 +167,13 @@ export const AreaCard: React.FC<AreaCardProps> = ({
     }));
   }, [cfg.data, isCandlestick, isFa]);
 
-  // اصلاح yDomain - از 0 شروع کن
   const yDomain = useMemo((): [number, number] => {
     if (isCandlestick && chartData.length > 0) {
       let max = -Infinity;
       chartData.forEach((d) => {
         if (d.high !== undefined && d.high > max) max = d.high;
       });
-      const padding = max * 0.08; // 8% پدینگ
+      const padding = max * 0.08;
       return [0, Math.ceil(max + padding)];
     }
     return [0, 100];

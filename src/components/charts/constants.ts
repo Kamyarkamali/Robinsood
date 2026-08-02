@@ -12,7 +12,7 @@ import type { CardConfig, DonutAsset } from "./typesChart";
 export const cardConfigs: CardConfig[] = [
   {
     id: "riskReward",
-    value: "متعادل",
+    value: "+21",
     valueColor: "#4ade80",
     chartType: "area-green",
     data: areaDataRiskReward,

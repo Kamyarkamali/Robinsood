@@ -79,10 +79,8 @@ export const CandleCard: React.FC<CandleCardProps> = ({
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
 
-  // استفاده از داده‌های cfg
   const chartData = useMemo(() => {
     if (!cfg.data || cfg.data.length === 0) {
-      // داده‌های پیش‌فرض
       return [
         { t: "10:00", open: 45, close: 52, high: 55, low: 42 },
         { t: "10:05", open: 52, close: 48, high: 54, low: 46 },
@@ -119,7 +117,6 @@ export const CandleCard: React.FC<CandleCardProps> = ({
         bg-white dark:bg-[#2C2C2C]
       "
     >
-      {/* هدر کارت */}
       <div className="flex justify-between items-start px-4 pt-3 pb-1 z-10">
         <span className="text-white/70 text-sm font-bold leading-snug whitespace-pre-line text-right">
           {isFa ? title.fa : title.en}
@@ -132,7 +129,6 @@ export const CandleCard: React.FC<CandleCardProps> = ({
         </span>
       </div>
 
-      {/* چارت کندلی */}
       <div className="flex-1 relative min-h-0">
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart

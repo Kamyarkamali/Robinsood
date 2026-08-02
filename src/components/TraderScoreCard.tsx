@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import type { RadarProps } from "../types/interfaces";
 import { traderScoreData } from "../data/fakeData";
 import { useState } from "react";
+import i18next from "i18next";
 
 interface GaugeProps {
   value: number;
@@ -337,7 +338,10 @@ function StatItem({
   color?: string;
 }) {
   return (
-    <div className="flex flex-col items-center justify-center gap-4 p-4 md:p-0 sm:gap-2">
+    <div
+      dir={i18next.language === "fa" ? "ltr" : "ltr"}
+      className="flex flex-col items-center justify-center gap-4 p-4 md:p-0 sm:gap-2"
+    >
       <span
         className="text-[13px] sm:text-sm md:text-2xl lg:text-lg bg-[#303030] rounded-xl shadow-2xl px-2 p-3 sm:p-3 font-extrabold tracking-tight leading-none w-full text-center min-w-[50px] sm:min-w-[60px]"
         style={{ color: color ?? "inherit" }}
@@ -422,7 +426,7 @@ export default function TraderScoreCard() {
         mx-auto
         px-1
         xs:px-2
-        sm:px-4
+        sm:px-6
         grid
         grid-cols-1
         lg:grid-cols-[1fr_300px]
@@ -508,7 +512,7 @@ export default function TraderScoreCard() {
             <StatItem
               color="#22c55e"
               label={t("score.totalLots")}
-              value={`+$ لات${d.stats.totalLots}`}
+              value={`+ $${d.stats.totalLots}`}
             />
           </div>
         </div>
@@ -523,7 +527,6 @@ export default function TraderScoreCard() {
           step-test37
           max-w-7xl
           dark:border-[#3C3C3C] border-gray-300 
-          p-2
           xs:p-3
           sm:p-4
           md:p-5

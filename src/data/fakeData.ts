@@ -635,7 +635,7 @@ export const progressCardsData: Progres[] = [
     bestegor: {
       fa: "پارامترهای تایید شده",
       en: "Verified Parameters",
-      value: "4 از 6",
+      value: "4",
     },
     badgeText: {
       fa: "نیاز داری که تایم بیشتری صرف کنی",

@@ -843,10 +843,10 @@ const TradingChartCard: React.FC<Props> = ({
               </span>
 
               <span className="text-[10px] sm:text-[12px] text-gray-500 dark:text-[#bbb] flex items-center gap-0.5 sm:gap-1">
-                <span className="text-green-500 font-semibold">
+                {/* <span className="text-green-500 font-semibold">
                   {data.acceptedDays}
                 </span>
-                <span>از</span>
+                <span>از</span> */}
 
                 <span className="font-medium">{data.requiredDays}</span>
 

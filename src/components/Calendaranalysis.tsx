@@ -1,9 +1,11 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
+import { motion } from "framer-motion";
+import { MdKeyboardArrowDown } from "react-icons/md";
 import type { DateKey, ParamKey, Lang } from "../types/type";
 import { toFa } from "../helpers/helperFunc";
 import { i18n, CDLocalized } from "../data/fakeData";
 import type { DayDatas } from "../types/interfaces";
-import { MdKeyboardArrowDown } from "react-icons/md";
 import FlashIcon from "../icons/FlashIcon";
 import i18next from "i18next";
 
@@ -22,6 +24,7 @@ function Dropdown<T extends string>({
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const isFa = i18next.language === "fa";
 
   useEffect(() => {
     const handler = (e: MouseEvent) => {
@@ -54,15 +57,15 @@ function Dropdown<T extends string>({
 
       {open && (
         <div
-          dir={i18next.language === "fa" ? "ltr" : "rtl"}
-          className="absolute top-[calc(100%+6px)] flex flex-col items-center z-50 min-w-40 sm:min-w-45 rounded-xl border p-1.5
+          dir={isFa ? "rtl" : "ltr"}
+          className="absolute top-[calc(100%+6px)] z-50 min-w-40 sm:min-w-45 rounded-xl border p-1.5
             bg-white dark:bg-[#2B2B2B]
             border-gray-200 dark:border-neutral-700
             shadow-lg dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
-          style={{ left: 0 }}
+          style={{ left: isFa ? "auto" : 0, right: isFa ? 0 : "auto" }}
         >
           <p
-            className={`text-[10px] text-gray-400 dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide ${i18next.language === "fa" ? "text-right" : "text-left"}`}
+            className={`text-[10px] text-gray-400 dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide ${isFa ? "text-right" : "text-left"}`}
           >
             {section}
           </p>
@@ -76,7 +79,7 @@ function Dropdown<T extends string>({
               className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer text-xs font-medium transition-colors
                 hover:bg-gray-50 dark:hover:bg-[#3A3A3A]
                 ${active === item.v ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-700 dark:text-white"}
-                ${i18next.language === "fa" ? "flex-row-reverse" : ""}`}
+                ${isFa ? "flex-row-reverse" : ""}`}
             >
               <span className="whitespace-nowrap">{item.l}</span>
               <span
@@ -90,92 +93,273 @@ function Dropdown<T extends string>({
   );
 }
 
-//@ts-ignore
-function MonthDropdown({
-  active,
-  onSelect,
+function DateFilterModal({
+  isOpen,
+  onClose,
+  monthItems,
+  quarterItems,
+  selectedMonth,
+  selectedQuarter,
+  onSelectMonth,
+  onSelectQuarter,
   lang,
-  dates,
+  year,
+  triggerLabel,
 }: {
-  active: DateKey;
-  onSelect: (v: DateKey) => void;
+  isOpen: boolean;
+  onClose: () => void;
+  monthItems: { v: DateKey; l: string }[];
+  quarterItems: { v: DateKey; l: string }[];
+  selectedMonth: DateKey;
+  selectedQuarter: DateKey;
+  onSelectMonth: (v: DateKey) => void;
+  onSelectQuarter: (v: DateKey) => void;
   lang: Lang;
-  dates: { v: DateKey; l: string }[];
+  year?: string;
+  triggerLabel: string;
 }) {
   const isFa = lang === "fa";
+  const modalRef = useRef<HTMLDivElement>(null);
 
-  const months = dates.filter((d) => {
-    const v = d.v as string;
-    return (
-      v.includes("dec") ||
-      v.includes("nov") ||
-      v.includes("oct") ||
-      v.includes("sep") ||
-      v.includes("aug") ||
-      v.includes("jul") ||
-      v.includes("jun") ||
-      v.includes("may") ||
-      v.includes("apr") ||
-      v.includes("mar") ||
-      v.includes("feb") ||
-      v.includes("jan")
-    );
-  });
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
 
-  const finalMonths = months.length > 0 ? months : dates.slice(0, 3);
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
 
-  const activeMonth = finalMonths.find((m) => m.v === active);
-  const label = activeMonth?.l || (isFa ? "ماه" : "Month");
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    },
+    [onClose],
+  );
 
-  return (
-    <Dropdown
-      label={label}
-      items={finalMonths}
-      active={active}
-      section={isFa ? "ماه‌های سال" : "Months"}
-      onSelect={onSelect}
-    />
+  if (!isOpen) return null;
+
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.6)",
+        backdropFilter: "blur(12px)",
+      }}
+      onClick={handleBackdropClick}
+    >
+      <motion.div
+        ref={modalRef}
+        initial={{ scale: 0.9, opacity: 0, y: 20 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.9, opacity: 0, y: 20 }}
+        transition={{
+          type: "spring",
+          damping: 25,
+          stiffness: 300,
+        }}
+        dir={isFa ? "rtl" : "ltr"}
+        className="relative w-full max-w-lg mx-auto rounded-2xl border p-5 sm:p-6
+          bg-white dark:bg-[#2B2B2B]
+          border-gray-200 dark:border-neutral-700
+          shadow-2xl dark:shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* هدر مودال */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-6 rounded-full bg-indigo-600" />
+            <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white">
+              {isFa ? "انتخاب بازه زمانی" : "Select Time Range"}
+            </h3>
+          </div>
+        </div>
+
+        <div className="flex items-center justify-center mb-4">
+          <span className="px-4 py-1.5 rounded-full border border-gray-300 dark:border-neutral-600 text-xs sm:text-sm font-bold text-gray-700 dark:text-white bg-gray-50 dark:bg-[#3A3A3A]">
+            {triggerLabel}
+          </span>
+        </div>
+
+        {year && (
+          <div className="flex justify-center mb-4">
+            <span className="px-4 py-1 rounded-lg border border-gray-300 dark:border-neutral-600 text-xs sm:text-sm font-bold text-gray-700 dark:text-white bg-gray-50 dark:bg-[#3A3A3A]">
+              {year}
+            </span>
+          </div>
+        )}
+
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
+          {/* بخش فصل‌ها */}
+          <div className="sm:w-36 shrink-0">
+            <p
+              className={`text-[10px] sm:text-[11px] font-bold text-gray-400 dark:text-neutral-500 mb-2.5 ${isFa ? "text-right" : "text-left"}`}
+            >
+              {isFa ? "انتخاب بر اساس فصل" : "Select by Quarter"}
+            </p>
+            <div className="flex flex-row sm:flex-col gap-1.5 overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 -mx-1 px-1 sm:mx-0 sm:px-0">
+              {quarterItems.map((q) => {
+                const active = q.v === selectedQuarter;
+                return (
+                  <button
+                    key={q.v}
+                    onClick={() => {
+                      onSelectQuarter(q.v);
+                      onClose();
+                    }}
+                    className={`px-3 py-2 rounded-full text-[11px] font-medium transition-all whitespace-nowrap text-center shrink-0
+                      ${
+                        active
+                          ? "bg-indigo-600 text-white shadow-[0_0_12px_rgba(79,70,229,0.4)] scale-105"
+                          : "bg-gray-50 dark:bg-[#3A3A3A] text-gray-700 dark:text-neutral-300 hover:bg-gray-100 dark:hover:bg-[#454545] hover:scale-105"
+                      }`}
+                  >
+                    {q.l}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* خط جداکننده */}
+          <div className="hidden sm:block w-px bg-gray-200 dark:bg-neutral-700" />
+          <div className="block sm:hidden h-px bg-gray-200 dark:bg-neutral-700" />
+
+          {/* بخش ماه‌ها */}
+          <div className="flex-1">
+            <p
+              className={`text-[10px] sm:text-[11px] font-bold text-gray-400 dark:text-neutral-500 mb-2.5 ${isFa ? "text-right" : "text-left"}`}
+            >
+              {isFa ? "انتخاب بر اساس ماه" : "Select by Month"}
+            </p>
+            <div className="grid grid-cols-3 gap-1.5">
+              {monthItems.map((m) => {
+                const active = m.v === selectedMonth;
+                return (
+                  <button
+                    key={m.v}
+                    onClick={() => {
+                      onSelectMonth(m.v);
+                      onClose();
+                    }}
+                    className={`px-2 py-2 rounded-xl text-[11px] font-medium transition-all
+                      ${
+                        active
+                          ? "bg-indigo-600 text-white shadow-[0_0_12px_rgba(79,70,229,0.4)] scale-105"
+                          : "bg-gray-50 dark:bg-[#3A3A3A] text-gray-700 dark:text-neutral-300 hover:bg-gray-100 dark:hover:bg-[#454545] hover:scale-105"
+                      }`}
+                  >
+                    {m.l}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        {/* دکمه‌های اکشن */}
+        <div className="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-200 dark:border-neutral-700">
+          <button
+            onClick={onClose}
+            className="px-4 py-1.5 rounded-lg text-xs sm:text-sm font-medium text-gray-600 dark:text-neutral-400 hover:bg-gray-100 dark:hover:bg-[#3A3A3A] transition-colors"
+          >
+            {isFa ? "بستن" : "Close"}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>,
+    document.body,
   );
 }
-//@ts-ignore
-function QuarterDropdown({
-  active,
-  onSelect,
+
+// ========== کامپوننت اصلی DateFilterDropdown ==========
+
+function DateFilterDropdown({
+  monthItems,
+  quarterItems,
+  selectedMonth,
+  selectedQuarter,
+  onSelectMonth,
+  onSelectQuarter,
   lang,
-  dates,
+  year,
 }: {
-  active: DateKey;
-  onSelect: (v: DateKey) => void;
+  monthItems: { v: DateKey; l: string }[];
+  quarterItems: { v: DateKey; l: string }[];
+  selectedMonth: DateKey;
+  selectedQuarter: DateKey;
+  onSelectMonth: (v: DateKey) => void;
+  onSelectQuarter: (v: DateKey) => void;
   lang: Lang;
-  dates: { v: DateKey; l: string }[];
+  year?: string;
 }) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const isFa = lang === "fa";
 
-  const quarters = dates.filter((d) => {
-    const v = d.v as string;
-    return (
-      v.includes("q1") ||
-      v.includes("q2") ||
-      v.includes("q3") ||
-      v.includes("q4")
-    );
-  });
-
-  const finalQuarters = quarters.length > 0 ? quarters : dates.slice(3);
-
-  const activeQuarter = finalQuarters.find((q) => q.v === active);
-  const label = activeQuarter?.l || (isFa ? "کوارتر" : "Quarter");
+  const activeMonthLabel = monthItems.find((m) => m.v === selectedMonth)?.l;
+  const activeQuarterLabel = quarterItems.find(
+    (q) => q.v === selectedQuarter,
+  )?.l;
+  const triggerLabel =
+    activeMonthLabel ||
+    activeQuarterLabel ||
+    (isFa ? "بازه زمانی" : "Time Range");
 
   return (
-    <Dropdown
-      label={label}
-      items={finalQuarters}
-      active={active}
-      section={isFa ? "کوارترهای سال" : "Quarters"}
-      onSelect={onSelect}
-    />
+    <>
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border text-xs sm:text-sm font-normal transition-all
+          border-gray-300 dark:border-neutral-700
+          bg-white dark:bg-[#3A3A3A]
+          text-gray-700 dark:text-white
+          hover:border-gray-400 dark:hover:border-neutral-500
+          cursor-pointer whitespace-nowrap
+          hover:scale-105 active:scale-95
+          transition-transform`}
+      >
+        <span className="text-xs text-gray-400 dark:text-neutral-400">
+          <MdKeyboardArrowDown />
+        </span>
+        <span className="whitespace-nowrap">{triggerLabel}</span>
+      </button>
+
+      <DateFilterModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        monthItems={monthItems}
+        quarterItems={quarterItems}
+        selectedMonth={selectedMonth}
+        selectedQuarter={selectedQuarter}
+        onSelectMonth={onSelectMonth}
+        onSelectQuarter={onSelectQuarter}
+        lang={lang}
+        year={year}
+        triggerLabel={triggerLabel}
+      />
+    </>
   );
 }
+
+// ========== کامپوننت‌های دیگر (بدون تغییر) ==========
 
 function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
   const r = 33,
@@ -197,8 +381,8 @@ function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
         r={r}
         fill="none"
         stroke="#e5e7eb dark:#2e2e2e"
-        strokeWidth="7"
         className="stroke-gray-200 dark:stroke-[#2e2e2e]"
+        strokeWidth="7"
       />
       {lossArc > gap && (
         <circle
@@ -276,6 +460,8 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
   );
 }
 
+// ========== کامپوننت اصلی ==========
+
 export default function CalendarAnalysis() {
   const [lang, setLang] = useState<Lang>(() => {
     const currentLang = i18next.language;
@@ -304,9 +490,7 @@ export default function CalendarAnalysis() {
   }, []);
 
   const T = i18n[lang];
-
   const cd = CDLocalized[lang][selectedMonth];
-
   const ap = T.params.find((p) => p.v === sp);
 
   const weeks: DayDatas[][] = [];
@@ -347,7 +531,7 @@ export default function CalendarAnalysis() {
   return (
     <div
       id="date1"
-      className="p-2 step-test39 transition-colors "
+      className="p-2 step-test39 transition-colors"
       dir={lang === "fa" ? "rtl" : "ltr"}
     >
       <div
@@ -370,26 +554,19 @@ export default function CalendarAnalysis() {
               onSelect={setSp}
             />
 
-            <Dropdown
-              label={
-                monthItems.find((m) => m.v === selectedMonth)?.l ||
-                (lang === "fa" ? "ماه" : "Month")
+            <DateFilterDropdown
+              monthItems={
+                monthItems.length > 0 ? monthItems : T.dates.slice(0, 3)
               }
-              items={monthItems.length > 0 ? monthItems : T.dates.slice(0, 3)}
-              active={selectedMonth}
-              section={lang === "fa" ? "ماه‌های سال" : "Months"}
-              onSelect={(v) => setSelectedMonth(v as DateKey)}
-            />
-
-            <Dropdown
-              label={
-                quarterItems.find((q) => q.v === selectedQuarter)?.l ||
-                (lang === "fa" ? "کوارتر" : "Quarter")
+              quarterItems={
+                quarterItems.length > 0 ? quarterItems : T.dates.slice(3)
               }
-              items={quarterItems.length > 0 ? quarterItems : T.dates.slice(3)}
-              active={selectedQuarter}
-              section={lang === "fa" ? "کوارترهای سال" : "Quarters"}
-              onSelect={(v) => setSelectedQuarter(v as DateKey)}
+              selectedMonth={selectedMonth}
+              selectedQuarter={selectedQuarter}
+              onSelectMonth={(v) => setSelectedMonth(v)}
+              onSelectQuarter={(v) => setSelectedQuarter(v)}
+              lang={lang}
+              year={cd?.year}
             />
           </div>
 
