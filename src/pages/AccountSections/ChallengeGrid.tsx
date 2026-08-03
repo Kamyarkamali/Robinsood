@@ -31,7 +31,6 @@ export default function ChallengeGrid() {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 mb-4 mt-3">
         <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start">
           <button
-            id="today1"
             onClick={() => toggle("active")}
             className={`
               relative flex items-center step-test11 gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl
@@ -55,7 +54,6 @@ export default function ChallengeGrid() {
           </button>
 
           <button
-            id="today2"
             onClick={() => toggle("inactive")}
             className={`
               relative flex items-center step-test12 gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl
@@ -102,10 +100,7 @@ export default function ChallengeGrid() {
         <div className="hidden lg:block w-[160px]"></div>
       </div>
 
-      <div
-        id="today3"
-        className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 w-full place-items-center flex-1 min-h-[500px]"
-      >
+      <div className="grid grid-cols-2 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4 p-2 sm:p-3 lg:p-4 w-full place-items-center flex-1 min-h-[500px]">
         {challengeCards
           .filter((card) => {
             if (hidden.active && card.status === "active") return false;

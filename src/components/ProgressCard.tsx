@@ -55,6 +55,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
 
   return (
     <div
+      id={data.id}
       className="
         w-full
         min-h-55

@@ -57,7 +57,7 @@ export function DropdownFainalTabale<T extends string>({
   }, [isOpen, setIsOpen]);
 
   return (
-    <div id="tabale5" ref={dropdownRef} className="relative w-full sm:w-auto">
+    <div ref={dropdownRef} className="relative w-full sm:w-auto">
       <button
         dir={i18next.language === "fa" ? "rtl" : "ltr"}
         onClick={() => setIsOpen(!isOpen)}

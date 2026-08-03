@@ -37,11 +37,8 @@ export function NewsTable({
   }
 
   return (
-    <div
-      id="tabale7"
-      className="overflow-x-auto rounded-xl border border-gray-200 dark:border-white/10"
-    >
-      <table className="w-full border-collapse min-w-[900px] md:min-w-0">
+    <div className="overflow-x-auto rounded-xl border border-gray-200 dark:border-white/10">
+      <table className="w-full border-collapse min-w-225 md:min-w-0">
         <thead>
           <tr className="bg-gray-100 dark:bg-[#2B2B2B]">
             {COLUMNS.map((col) => (

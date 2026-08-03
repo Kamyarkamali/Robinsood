@@ -117,12 +117,11 @@ export default function TradingAnalysisPanel() {
 
   return (
     <>
-      <div id="ai" className="w-full mx-auto mt-3 ">
+      <div id="ai1" className="w-full mx-auto mt-3 ">
         <div
           dir={lang === "fa" ? "ltr" : "rtl"}
           className="
           w-full
-          step-test47
           rounded-3xl
           bg-white
           dark:bg-[#2b2b2b]
@@ -139,6 +138,7 @@ export default function TradingAnalysisPanel() {
         >
           <div className="flex-1 bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] rounded-3xl overflow-hidden flex flex-col lg:flex-row">
             <section
+              id="ai3"
               className="
             w-full
             lg:w-[40%]
@@ -156,6 +156,7 @@ export default function TradingAnalysisPanel() {
             </section>
 
             <section
+              id="ai2"
               className="
             w-full
             lg:w-[25%]
@@ -213,6 +214,7 @@ export default function TradingAnalysisPanel() {
             </section>
 
             <section
+              id="ai1"
               className="
             w-full
             lg:w-[35%]

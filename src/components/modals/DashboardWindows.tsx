@@ -2,6 +2,7 @@ import { Link, useLocation } from "react-router-dom";
 import { cards } from "../../data/fakeData";
 import type { ComponentState } from "../../types/interfaces";
 import { useTranslation } from "react-i18next";
+import { useEffect, useState } from "react";
 
 export default function DashboardWindows({
   setActiveComponent,
@@ -9,8 +10,34 @@ export default function DashboardWindows({
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
   const location = useLocation();
+  const [isTourActive, setIsTourActive] = useState(false);
+
+  useEffect(() => {
+    const handleTourStart = () => {
+      setIsTourActive(true);
+      console.log("[Dashboard] Tour started - disabling navigation");
+    };
+
+    const handleTourEnd = () => {
+      setIsTourActive(false);
+      console.log("[Dashboard] Tour ended - enabling navigation");
+    };
+
+    window.addEventListener("tour-started", handleTourStart);
+    window.addEventListener("tour-ended", handleTourEnd);
+
+    return () => {
+      window.removeEventListener("tour-started", handleTourStart);
+      window.removeEventListener("tour-ended", handleTourEnd);
+    };
+  }, []);
 
   const handleSetActive = (component: string) => {
+    if (isTourActive) {
+      console.log("[Tour] Navigation blocked during tour");
+      return;
+    }
+
     if (typeof setActiveComponent === "function") {
       setActiveComponent(component);
     } else {
@@ -32,6 +59,8 @@ export default function DashboardWindows({
         px-2
         hidden
         md:flex justify-center
+        transition-all duration-300
+        ${isTourActive ? "pointer-events-none opacity-30" : "opacity-100"}
       `}
     >
       <div
@@ -57,6 +86,12 @@ export default function DashboardWindows({
               to={`/account/${item?.slug}`}
               key={item.id}
               className="relative group shrink-0"
+              onClick={(e) => {
+                if (isTourActive) {
+                  e.preventDefault();
+                  console.log("[Tour] Link navigation blocked");
+                }
+              }}
             >
               <div
                 className="
@@ -84,7 +119,9 @@ export default function DashboardWindows({
                       ? "bg-violet-500/30 shadow-[0_0_20px_rgba(139,92,246,0.3)] border-2 border-violet-400/50"
                       : "bg-transparent hover:bg-white/5"
                   }
+                  ${isTourActive ? "cursor-not-allowed" : ""}
                 `}
+                disabled={isTourActive}
               >
                 <Icon
                   className={`

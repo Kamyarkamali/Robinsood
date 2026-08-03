@@ -40,19 +40,6 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
     navigate(path);
   };
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "ArrowLeft" && prevRoute) {
-        handleNavigate(prevRoute.path);
-      } else if (e.key === "ArrowRight" && nextRoute) {
-        handleNavigate(nextRoute.path);
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [prevRoute, nextRoute]);
-
   return (
     <nav
       dir="ltr"

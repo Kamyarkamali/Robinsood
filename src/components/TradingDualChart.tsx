@@ -53,6 +53,7 @@ function CustomTooltip({
             className="inline-block h-2.5 w-2.5 rounded-full"
             style={{ background: entry.color }}
           />
+
           <span className="text-gray-300">
             {entry.name === "param1" ? param1Label : param2Label}:
           </span>
@@ -232,20 +233,18 @@ export default function TradingDualChart() {
   const yTick = (v: number) => (isRtl ? toFaNum(v) : String(v));
 
   return (
-    <div id="date4" className="step-test40 mt-3">
+    <div className="mt-3 md:pr-2 md:pl-2">
       <div
         className="mx-auto rounded-2xl border-4
         dark:border-[#3C3C3C]
         border-gray-300 bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] p-4 sm:p-6"
       >
-        <div className="mb-6 flex flex-col gap-3">
-          {/* ردیف اول: دراپ‌داون‌ها */}
+        <div
+          id="analysis4"
+          className="mb-6 flex flex-col md:flex-row justify-center gap-3"
+        >
           <div className="flex flex-wrap items-center justify-center gap-2">
-            {/* دکمه اول */}
-            <div
-              id="date5"
-              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5"
-            >
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5">
               <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 {currentLang === "fa" ? "محور اول:" : "Axis 1:"}
               </span>
@@ -259,10 +258,7 @@ export default function TradingDualChart() {
             </div>
 
             {/* دکمه دوم */}
-            <div
-              id="date6"
-              className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5"
-            >
+            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5">
               <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 {currentLang === "fa" ? "محور دوم:" : "Axis 2:"}
               </span>
@@ -276,8 +272,7 @@ export default function TradingDualChart() {
             </div>
           </div>
 
-          {/* ردیف دوم: دکمه‌های دوره */}
-          <div id="date7" className="flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <div
               className="
                 flex overflow-hidden rounded-2xl border
@@ -311,7 +306,7 @@ export default function TradingDualChart() {
           </div>
         </div>
 
-        <div className="h-72 sm:h-96 w-full">
+        <div id="analysis5" className="h-72 sm:h-96 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={data}

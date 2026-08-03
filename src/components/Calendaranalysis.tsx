@@ -460,8 +460,6 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
   );
 }
 
-// ========== کامپوننت اصلی ==========
-
 export default function CalendarAnalysis() {
   const [lang, setLang] = useState<Lang>(() => {
     const currentLang = i18next.language;
@@ -544,6 +542,7 @@ export default function CalendarAnalysis() {
           className="flex flex-wrap items-start sm:items-center gap-2 sm:gap-4 mb-4 sm:mb-5"
         >
           <div
+            id="analysis1"
             className={`flex flex-wrap gap-2 justify-center sm:${i18next.language === "fa" ? "justify-end" : "justify-start"} w-full sm:gap-2.5`}
           >
             <Dropdown
@@ -566,6 +565,7 @@ export default function CalendarAnalysis() {
               onSelectMonth={(v) => setSelectedMonth(v)}
               onSelectQuarter={(v) => setSelectedQuarter(v)}
               lang={lang}
+              // @ts-ignore
               year={cd?.year}
             />
           </div>
@@ -585,7 +585,10 @@ export default function CalendarAnalysis() {
 
             <div className="hidden sm:block w-px self-stretch min-h-12.5 bg-gray-300 dark:bg-neutral-700" />
 
-            <div className="flex items-center justify-center sm:justify-end gap-3 w-full sm:w-auto">
+            <div
+              id="analysis2"
+              className="flex items-center justify-center sm:justify-end gap-3 w-full sm:w-auto"
+            >
               <StreakDonut wins={cd?.str?.w ?? 0} losses={cd?.str?.l ?? 0} />
               <div className="flex flex-col gap-0.5 min-w-0">
                 <span className="text-[11px] text-center sm:text-[13px] font-bold text-gray-900 dark:text-white">
@@ -617,7 +620,7 @@ export default function CalendarAnalysis() {
 
         <hr className="border-gray-300 dark:border-neutral-700 mb-3 sm:mb-4" />
 
-        <div id="date3" className="overflow-x-auto -mx-2 sm:mx-0">
+        <div id="analysis3" className="overflow-x-auto -mx-2 sm:mx-0">
           <div className="min-w-0 sm:min-w-85 px-2 sm:px-0">
             <div className="grid grid-cols-7 gap-1 sm:gap-2.5 mb-1.5">
               {T.wds.map((w) => (

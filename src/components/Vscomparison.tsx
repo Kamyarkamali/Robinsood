@@ -8,12 +8,21 @@ import i18next from "i18next";
 import CartFacke from "../module/CartFacke";
 import { useMemo, useState } from "react";
 
-function MetricSection({ title, rows }: { title: string; rows: MetricRow[] }) {
+function MetricSection({
+  title,
+  rows,
+  id = "comp2", // پیش‌فرض
+}: {
+  title: string;
+  rows: MetricRow[];
+  id?: string; // اضافه کردن id به props
+}) {
   const { i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
   return (
     <div
+      id={id} // استفاده از id داینامیک
       dir="ltr"
       className="bg-[#f8fafc] shadow-xl dark:shadow-none dark:bg-[#353535] w-full border-4 dark:border-[#3A3A3A] border-gray-300 rounded-2xl p-3 sm:p-4 md:p-5 mb-4 flex-1"
     >
@@ -157,13 +166,13 @@ export default function VSComparison() {
 
   return (
     <>
-      <div
-        id="com1"
-        className="dark:bg-linear-to-b w-full max-w-8xl rounded-2xl mt-3 text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6"
-      >
+      <div className="dark:bg-linear-to-b w-full max-w-8xl rounded-2xl mt-3 text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6">
         <div className="w-full max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-4">
-          <div id="com2" className="w-full flex justify-center">
-            <div className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 shadow-xl">
+          <div className="w-full flex justify-center">
+            <div
+              id="comp1"
+              className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 shadow-xl"
+            >
               {comparisonTabs.map((item) => (
                 <button
                   key={item.id}
@@ -180,9 +189,9 @@ export default function VSComparison() {
             </div>
           </div>
 
-          {/* METRICS */}
-          <div id="com3" className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col lg:flex-row gap-4">
             <MetricSection
+              id="comp2" // بخش اول با id="comp2"
               title={
                 i18n.language === "fa"
                   ? "عملکرد و بازدهی"
@@ -192,6 +201,7 @@ export default function VSComparison() {
             />
 
             <MetricSection
+              id="comp3" // بخش دوم با id="comp3"
               title={
                 i18n.language === "fa" ? "رفتار معاملاتی" : "Trading Behavior"
               }

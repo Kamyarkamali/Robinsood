@@ -86,6 +86,7 @@ export interface ChallengeCard {
     fa: string;
     en: string;
   };
+  element?: string;
   price?: string;
   status: ChallengeStatus;
   iconColor: IconColor;
@@ -119,7 +120,7 @@ export interface ChartDay {
 }
 
 export interface ChartData2 {
-  id: number;
+  id: string;
   title: {
     fa: string;
     en: string;
@@ -135,7 +136,8 @@ export interface ChartData2 {
 }
 
 export interface Progres {
-  id: "profit" | "tradingDay";
+  id: string;
+  element?: string;
   title: {
     fa: string;
     en: string;

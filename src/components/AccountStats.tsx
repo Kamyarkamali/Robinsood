@@ -19,14 +19,14 @@ export default function AccountStats() {
           id="detailse7"
           className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-4 sm:gap-5 order-3 lg:order-1"
         >
-          <section id="detailse8">
+          <section id="account1">
             <ProfitFactorCard />
           </section>
 
-          <section id="detailse9">
+          <section id="account2">
             <AvgWinLossCard />
           </section>
-          <section id="detailse10">
+          <section id="account3">
             <TradeWinCard />
           </section>
         </div>
@@ -35,14 +35,14 @@ export default function AccountStats() {
           id="detailse11"
           className="grid grid-cols-1 gap-4 sm:gap-5 order-2 lg:order-2"
         >
-          <section id="detailse12">
+          <section id="account4">
             <AccountTrendCard />
           </section>
-          <section id="detailse13">
+          <section id="account5">
             <DisciplineScoreCard />
           </section>
         </div>
-        <div id="detailse4" className="order-1 lg:order-3">
+        <div id="account6" className="order-1 lg:order-3">
           <WeeklyReportPanel />
         </div>
       </div>

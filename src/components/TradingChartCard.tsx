@@ -576,6 +576,7 @@ const TradingChartCard: React.FC<Props> = ({
   return (
     <>
       <div
+        id={data.id}
         className={`flex flex-col items-center gap-3 w-full ${isMobile ? "px-1" : ""}`}
       >
         <div

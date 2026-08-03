@@ -6,7 +6,6 @@ import BarIcon from "../icons/BarIcon";
 import ChartUpIcon from "../icons/ChartUpIcon";
 import StatusIcon from "../icons/StatusIcon";
 
-// react icons
 import { TiTick } from "react-icons/ti";
 import { RxCross2 } from "react-icons/rx";
 import React from "react";
@@ -31,6 +30,7 @@ export default function ChallengeCardComponent({ card }: Props) {
   return (
     <>
       <div
+        id={card.id}
         className={`
       flex flex-col
         w-full

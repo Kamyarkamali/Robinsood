@@ -215,7 +215,8 @@ export const buttonSection = [
 
 export const challengeCards: ChallengeCard[] = [
   {
-    id: "6",
+    id: "today1",
+    element: "#today1",
     title: {
       fa: "درادون روزانه",
       en: "Daily Drawdown",
@@ -254,7 +255,8 @@ export const challengeCards: ChallengeCard[] = [
   },
 
   {
-    id: "5",
+    id: "today2",
+    element: "#today2",
     title: {
       fa: "درادون کل",
       en: "Overall Drawdown",
@@ -294,7 +296,8 @@ export const challengeCards: ChallengeCard[] = [
   },
 
   {
-    id: "4",
+    id: "today3",
+    element: "#today3",
     title: {
       fa: "روزهای معاملاتی",
       en: "Trading Days",
@@ -333,7 +336,8 @@ export const challengeCards: ChallengeCard[] = [
   },
 
   {
-    id: "3",
+    id: "today4",
+    element: "#today4",
     title: {
       fa: "لات",
       en: "Lot",
@@ -372,7 +376,8 @@ export const challengeCards: ChallengeCard[] = [
   },
 
   {
-    id: "1",
+    id: "today5",
+    element: "#today5",
     title: {
       fa: "درگیری حساب",
       en: "Account Exposure",
@@ -411,7 +416,8 @@ export const challengeCards: ChallengeCard[] = [
   },
 
   {
-    id: "7",
+    id: "today6",
+    element: "#today6",
     title: {
       fa: "ترید در خبر",
       en: "News Trading",
@@ -453,7 +459,7 @@ export const challengeCards: ChallengeCard[] = [
 
 export const chartsData: ChartData2[] = [
   {
-    id: 1,
+    id: "section3",
     title: {
       fa: "میانگین لات",
       en: "Average lot",
@@ -473,7 +479,7 @@ export const chartsData: ChartData2[] = [
     acceptedDays: 5,
   },
   {
-    id: 2,
+    id: "section4",
     title: { fa: "مجموع لات", en: "Total Lot" },
     unit: "lot",
     days: [
@@ -494,7 +500,7 @@ export const chartsData: ChartData2[] = [
     acceptedDays: 5,
   },
   {
-    id: 3,
+    id: "section5",
     title: {
       fa: "میانگین زمان",
       en: "Average Time",
@@ -526,7 +532,7 @@ export const chartsData: ChartData2[] = [
     acceptedDays: 5,
   },
   {
-    id: 4,
+    id: "section6",
     title: {
       fa: "مجموع زمان",
       en: "Total Time",
@@ -548,7 +554,7 @@ export const chartsData: ChartData2[] = [
     acceptedDays: 5,
   },
   {
-    id: 5,
+    id: "section9",
     title: {
       fa: "میانگین قدرت مطلق",
       en: "Average result",
@@ -570,7 +576,7 @@ export const chartsData: ChartData2[] = [
     acceptedDays: 5,
   },
   {
-    id: 6,
+    id: "section10",
     title: {
       fa: "میانگین قدرمطلق برایند",
       en: "Total absolute result",
@@ -595,7 +601,7 @@ export const chartsData: ChartData2[] = [
 
 export const progressCardsData: Progres[] = [
   {
-    id: "profit",
+    id: "section1",
     title: {
       fa: "سود",
       en: "Profit",
@@ -626,7 +632,7 @@ export const progressCardsData: Progres[] = [
     unit: "currency",
   },
   {
-    id: "tradingDay",
+    id: "section2",
     title: {
       fa: "روز معاملاتی",
       en: "Trading Days",

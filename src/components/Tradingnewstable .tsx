@@ -145,15 +145,14 @@ function TradingNewsTable() {
 
   return (
     <div
-      id="tabale2"
+      id="news5"
       dir={i18next.language === "fa" ? "rtl" : "ltr"}
-      className="bg-gray-50 step-test44 rounded-2xl mt-3 border-4
+      className="bg-gray-50  rounded-2xl mt-3 border-4
       dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
       dark:border-[#3C3C3C]
       border-gray-300 w-full max-w-full mx-auto p-3 sm:p-4 md:p-5 transition-colors"
     >
       <div
-        id="tabale6"
         className="flex flex-wrap items-center gap-2 sm:gap-3 mb-3 sm:mb-4 p-2 sm:p-3 
           bg-white/50 dark:bg-white/5 
           rounded-xl border border-gray-200/50 dark:border-white/5"
@@ -192,7 +191,7 @@ function TradingNewsTable() {
           </button>
         )}
 
-        <div className="w-full lg:w-auto lg:flex-1 step-test46 min-w-[150px]">
+        <div className="w-full lg:w-auto lg:flex-1 min-w-[150px]">
           <DropdownFainalTabale
             options={FILTER_OPTIONS}
             selected={filter}
@@ -205,7 +204,6 @@ function TradingNewsTable() {
         </div>
 
         <button
-          id="tabale4"
           onClick={() => setTradeInNews((v) => !v)}
           className="flex justify-center items-center gap-2 px-3 sm:px-4 py-2 
             h-12 
@@ -229,10 +227,7 @@ function TradingNewsTable() {
           />
         </button>
 
-        <section
-          className="flex flex-wrap items-center gap-1 w-full sm:w-auto lg:flex-1"
-          id="tabale3"
-        >
+        <section className="flex flex-wrap items-center gap-1 w-full sm:w-auto lg:flex-1">
           <FilterButtons
             impactFilter={impactFilter}
             onFilterChange={setImpactFilter}

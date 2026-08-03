@@ -623,7 +623,6 @@ export default function TradingChart() {
   return (
     <>
       <div
-        id="chart4"
         dir={isRtl ? "rtl" : "ltr"}
         className="
         w-full
@@ -646,12 +645,14 @@ export default function TradingChart() {
       >
         <div className="flex flex-col items-start sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-3">
           <div
-            id="chart1"
             className={`flex items-center gap-1 sm:gap-2 flex-wrap ${
               isRtl ? "flex-row-reverse" : ""
             }`}
           >
-            <div className="flex step-test19 bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1">
+            <div
+              id="chart2"
+              className="flex bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1"
+            >
               {(["balance", "profit"] as Mode[]).map((m) => (
                 <p
                   key={m}
@@ -668,7 +669,7 @@ export default function TradingChart() {
               ))}
             </div>
 
-            <div className="flex step-test20 items-center gap-0.5 sm:gap-1">
+            <div id="chart5" className="flex items-center gap-0.5 sm:gap-1">
               <IconBtn
                 onClick={() =>
                   setVisibleCount((v) => Math.min(TOTAL, Math.round(v * 1.4)))
@@ -698,14 +699,16 @@ export default function TradingChart() {
           </div>
 
           <div
-            id="chart2"
             dir={i18next.language === "fa" ? "ltr" : "rtl"}
             className={`flex w-full sm:w-auto items-center step-test21 sm:gap-1 dark:bg-[#454242] px-1.5 p-0.5 sm:p-1  rounded-2xl overflow-x-auto sm:overflow-x-visible sm:flex-wrap ${
               isRtl ? "flex-row-reverse" : ""
             }`}
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            <div className="flex items-center gap-1 sm:gap-2 p-1 justify-center w-full  rounded-2xl">
+            <div
+              id="chart1"
+              className="flex items-center gap-1 sm:gap-2 p-1 justify-center w-full  rounded-2xl"
+            >
               {TIME_FRAMES.map((tf) => (
                 <p
                   key={tf}
@@ -724,7 +727,7 @@ export default function TradingChart() {
           </div>
         </div>
 
-        <div className="flex-1 min-h-0">
+        <div id="chart3" className="flex-1 min-h-0">
           <div
             ref={wrapRef}
             onMouseDown={onMD}
@@ -791,7 +794,7 @@ export default function TradingChart() {
                     />
                   </linearGradient>
                 </defs>
-                // و در بخش Area:
+
                 {settings.display.showAreas && activeSeries.balance && (
                   <Area
                     dataKey="balance"
@@ -885,11 +888,15 @@ export default function TradingChart() {
                   }}
                   orientation={isRtl ? "left" : "right"}
                 />
-                {settings.display.showTooltip && (
-                  <Tooltip
-                    content={<ChartTooltip isRtl={isRtl} settings={settings} />}
-                  />
-                )}
+                <div>
+                  {settings.display.showTooltip && (
+                    <Tooltip
+                      content={
+                        <ChartTooltip isRtl={isRtl} settings={settings} />
+                      }
+                    />
+                  )}
+                </div>
                 {settings.display.showAreas && activeSeries.balance && (
                   <Area
                     dataKey="balance"

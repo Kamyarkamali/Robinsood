@@ -347,7 +347,7 @@ function LinearStat({
   const total = Math.max(1, active + closed + planned);
   const segs = [
     { label: { fa: "باز", en: "Active" }, value: active, color: "#38bdf8" },
-    { label: { fa: "بسته", en: "Closed" }, value: closed, color: "#52525b" },
+    { label: { fa: "بسته", en: "Closed" }, value: closed, color: "#0E7490" },
     {
       label: { fa: "برنامه‌ریزی", en: "Planned" },
       value: planned,
@@ -618,9 +618,7 @@ function FilterModal({
           </button>
         </div>
 
-        {/* Body - Scrollable */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6">
-          {/* Quick Filters */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Tag size={16} className="text-gray-400" />
@@ -941,14 +939,16 @@ export default function TradingTable() {
   return (
     <>
       <div
-        id="trade1"
         dir={isRtl ? "rtl" : "ltr"}
-        className="w-full step-test51 mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
+        className="w-full  mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
         dark:border-[#3C3C3C] border-gray-300"
       >
         <div className="mx-auto rounded-2xl bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] shadow-xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
           <div className="flex flex-col lg:flex-row items-center gap-4 px-4 sm:px-6 py-4">
-            <div className="flex-1 w-full flex items-center justify-center">
+            <div
+              id="trades2"
+              className="flex-1 w-full flex items-center justify-center"
+            >
               <LinearStat
                 active={
                   filteredSorted.filter((t) => t.status === "active").length
@@ -964,6 +964,7 @@ export default function TradingTable() {
 
             <div className="shrink-0 w-full lg:w-auto">
               <button
+                id="trades1"
                 onClick={() => setIsFilterOpen(true)}
                 className="flex items-center justify-center w-full lg:w-auto gap-2 px-4 py-2 rounded-xl border border-gray-300 dark:border-[#4a4a4a] bg-gray-50 dark:bg-[#3a3a3a] text-gray-700 dark:text-gray-200 text-sm hover:bg-gray-100 dark:hover:bg-[#4a4a4a] transition-colors relative"
               >
@@ -981,7 +982,7 @@ export default function TradingTable() {
 
           <div className="hidden md:block overflow-x-auto">
             <table className="w-full min-w-475 table-auto">
-              <thead>
+              <thead id="trades3">
                 <tr className="border-b border-gray-200 dark:border-[#3a3a3a]">
                   {tableColumns.map((col) => (
                     <th
@@ -1140,7 +1141,7 @@ export default function TradingTable() {
 
           {totalPages > 1 && (
             <div
-              id="trade3"
+              id="trades4"
               className="flex flex-col sm:flex-row items-center justify-between px-4 py-3 border-t border-gray-200 dark:border-[#3a3a3a] gap-3 flex-wrap"
             >
               <span className="text-[11px] text-gray-400 dark:text-gray-500 text-center sm:text-left">
