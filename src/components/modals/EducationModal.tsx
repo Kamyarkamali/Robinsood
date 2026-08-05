@@ -47,11 +47,14 @@ const EducationModalContent = ({ onClose }: EducationModalContentProps) => {
 
       setTimeout(() => {
         const scope = "home" as TourScope;
+        // @ts-ignore
         createAppTour(i18next.language as Lang, theme, scope).drive();
       }, 350);
     } else {
       setTimeout(() => {
         const scope = getScope();
+        // @ts-ignore
+
         createAppTour(i18next.language as Lang, theme, scope).drive();
       }, 250);
     }

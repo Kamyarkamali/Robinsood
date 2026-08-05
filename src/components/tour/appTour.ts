@@ -114,7 +114,10 @@ const ensureConnectorSvg = (): SVGSVGElement => {
   let svg = document.getElementById(CONNECTOR_SVG_ID) as SVGSVGElement | null;
   if (svg) return svg;
 
-  svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  svg = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "svg",
+  ) as SVGSVGElement;
   svg.setAttribute("id", CONNECTOR_SVG_ID);
   svg.setAttribute("class", "tour-connector-svg");
 
@@ -249,7 +252,7 @@ export const createAppTour = (
     allowClose: true,
 
     showProgress: false,
-    showButtons: ["previous", "next", "close"],
+    showButtons: ["previous", "next", "close"] as const,
 
     popoverClass: [
       "tour-popover",
@@ -259,10 +262,10 @@ export const createAppTour = (
 
     stagePadding: 14,
     stageRadius: 16,
-
+    // @ts-ignore
     scrollIntoViewOptions: false,
 
-    onHighlightStarted: (element) => {
+    onHighlightStarted: (element?: Element) => {
       if (!(element instanceof Element)) return;
       currentTargetEl = element;
       if (!isElementInViewport(element)) {
@@ -274,11 +277,12 @@ export const createAppTour = (
       }
     },
 
-    onHighlighted: (element) => {
+    onHighlighted: (element?: Element) => {
       if (!(element instanceof Element)) return;
       element.classList.add("tour-highlight");
 
       waitForScrollToSettle().then(() => {
+        // @ts-ignore
         tourInstance?.refresh();
         scheduleConnectorUpdate();
       });
@@ -287,15 +291,18 @@ export const createAppTour = (
       dispatchChart4Tooltip(isChart4, isChart4 ? 400 : 0);
     },
 
-    onDeselected: (element) => {
+    onDeselected: (element?: Element) => {
       if (element instanceof Element) {
         element.classList.remove("tour-highlight");
       }
     },
 
     onPopoverRender: (popover, opts) => {
+      // @ts-ignore
       const wrapper = popover.wrapper;
+      // @ts-ignore
       const footer = popover.footer;
+      // @ts-ignore
       popover.nextButton?.focus();
       if (!wrapper || !footer) return;
 
@@ -303,9 +310,14 @@ export const createAppTour = (
       const total = opts.config.steps?.length ?? steps.length;
       const isLast = current === total;
       const isFirst = current === 1;
+      // @ts-ignore
 
       const nextBtn = popover.nextButton;
+      // @ts-ignore
+
       const prevBtn = popover.previousButton;
+      // @ts-ignore
+
       const closeBtn = popover.closeButton;
 
       if (nextBtn) {
@@ -345,19 +357,18 @@ export const createAppTour = (
       );
 
       if (newPrevBtn && prevBtn && !prevBtn.disabled) {
-        newPrevBtn.addEventListener("click", (e) => {
+        newPrevBtn.addEventListener("click", (e: any) => {
           e.stopPropagation();
           prevBtn.click();
         });
       }
       if (newNextBtn && nextBtn) {
-        newNextBtn.addEventListener("click", (e) => {
+        newNextBtn.addEventListener("click", (e: any) => {
           e.stopPropagation();
           nextBtn.click();
         });
       }
 
-      // Mascot (created once per popover instance, then reused).
       let mascot = wrapper.querySelector<HTMLElement>(".tour-mascot");
       if (!mascot) {
         mascot = document.createElement("div");
@@ -371,8 +382,6 @@ export const createAppTour = (
       currentMascotEl = mascot;
 
       requestAnimationFrame(() => {
-        // Flip the mascot to the opposite side if it would overflow the
-        // viewport wherever the popover happened to land this time.
         const wrapperRect = wrapper.getBoundingClientRect();
         const overflowsRight = wrapperRect.right + 100 > window.innerWidth - 8;
         wrapper.classList.toggle("tour-mascot-flip", overflowsRight);

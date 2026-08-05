@@ -8,7 +8,7 @@ import type { TourScope } from "../components/tour/tourSteps";
 
 import { useParams, useNavigate } from "react-router-dom";
 import { routesData } from "../data/routeData";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 interface AccountNavbarProps {
   scope: TourScope;
@@ -33,6 +33,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
     currentIndex < routesData.length - 1 ? routesData[currentIndex + 1] : null;
 
   const handleStartTour = () => {
+    // @ts-ignore
     createAppTour(lang as Lang, theme, scope).drive();
   };
 

@@ -87,9 +87,6 @@ interface TooltipState {
   elementId: string;
 }
 
-// =============================================
-// کامپوننت فیلتر اخبار
-// =============================================
 const NewsFilters = ({
   lang,
   onFilterChange,
@@ -107,7 +104,6 @@ const NewsFilters = ({
   searchQuery: string;
   totalNews: number;
 }) => {
-  const isRtl = lang === "fa";
   const [isOpen, setIsOpen] = useState(false);
 
   const impactOptions = [
@@ -175,7 +171,6 @@ const NewsFilters = ({
               onClick={() => {
                 onFilterChange(option.value);
                 if (option.value === "all") {
-                  // اگر همه انتخاب شد، فیلتر رو ریست کن
                 }
               }}
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
@@ -1325,7 +1320,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
         )}
 
-        {/* ===== NEWS FILTERS - پایین سمت راست ===== */}
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 px-3 sm:px-4 pt-3 pb-1 border-t border-[#3C3C3C] mt-2">
           <div className="flex items-center gap-2 text-[10px] sm:text-xs text-slate-400">
             <CiCircleAlert
