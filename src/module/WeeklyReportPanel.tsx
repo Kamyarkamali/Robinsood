@@ -96,9 +96,10 @@ function DateSelector({
         value={selectedDate}
         onChange={(e) => onDateChange(e.target.value)}
         className="w-full  dark:bg-linear-to-b
+        bg-[#EEF1F7]
         dark:from-[#353535]
        dark: via-[#2D2D2D]
-       dark: to-[#252525] hover:bg-zinc-800 transition-colors rounded-xl px-4 py-2.5 text-zinc-300 text-xs sm:text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-600"
+       dark: to-[#252525] shadow-md rounded-xl px-4 py-2.5 dark:text-zinc-300 text-[#5B657A] text-xs sm:text-sm appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-zinc-600"
         style={{ direction: isRTL ? "rtl" : "ltr" }}
       >
         {weeks.map((week) => (
@@ -138,9 +139,8 @@ function WeeklyReportPanel() {
   return (
     <CardShell
       dir={i18n.language ? "ltr" : "rtl"}
-      className="flex flex-col h-full border-4
-        dark:border-[#3C3C3C]
-        border-gray-300"
+      className="flex flex-col h-full 
+        dark:border-4 border-2 dark:border-[#3C3C3C] border-[#D6DCE8]"
     >
       <div
         id="detailse5"
@@ -169,14 +169,14 @@ function WeeklyReportPanel() {
             className={`text-xs sm:text-sm step-test24 cursor-pointer font-medium px-3 py-1.5 rounded-full transition-colors ${
               tab === "risk"
                 ? "bg-zinc-700 text-white"
-                : "text-zinc-400 hover:text-zinc-200"
+                : "text-[#5B657A] hover:text-zinc-200"
             }`}
           >
             {isRTL ? "ریسک" : "Risk"}
           </button>
         </div>
 
-        <h3 className="text-zinc-100 text-sm sm:text-base font-semibold order-1">
+        <h3 className="dark:text-zinc-100 text-[#5B657A] text-sm sm:text-base font-semibold order-1">
           {isRTL ? "گزارش هفتگی" : "Weekly Report"}
         </h3>
       </div>
@@ -191,7 +191,7 @@ function WeeklyReportPanel() {
           ? weeklyReport.map((row, index) => (
               <div key={index} className="flex flex-col gap-1.5">
                 <div className="flex items-center justify-between text-xs sm:text-sm gap-2">
-                  <span className="text-zinc-400 truncate">
+                  <span className="dark:text-zinc-400 text-[#5B657A] truncate">
                     $
                     {isRTL
                       ? toPersianDigits(row.amount.toFixed(2))
@@ -203,7 +203,7 @@ function WeeklyReportPanel() {
                     lose)
                   </span>
 
-                  <span className="text-zinc-200 font-medium whitespace-nowrap">
+                  <span className="dark:text-zinc-200 text-[#5B657A] font-medium whitespace-nowrap">
                     {isRTL ? row.day.fa : row.day.en}
                   </span>
                 </div>

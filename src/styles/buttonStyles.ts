@@ -27,8 +27,6 @@ export const cardOuter =
   "rounded-3xl p-3 " +
   "bg-white dark:bg-[#282828] " +
   "border border-[#00000010] dark:border-[#FDFDFD1A] " +
-  // "shadow-[10px_10px_25px_rgba(0,0,0,0.12),-10px_-10px_25px_rgba(255,255,255,0.7)] " +
-  // "dark:shadow-[12px_12px_30px_rgba(0,0,0,0.6),-6px_-6px_12px_rgba(255,255,255,0.05)] " +
   "transition-all duration-300";
 
 //  (نئومورفیسم داخل)

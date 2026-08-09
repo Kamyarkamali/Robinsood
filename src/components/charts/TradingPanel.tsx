@@ -53,9 +53,9 @@ const TradingPanel: React.FC = () => {
               sm:grid-cols-2
               lg:grid-cols-3
               gap-4 sm:gap-5 md:gap-4 lg:gap-5
-              border-4
+              dark:border-4 border-2
               dark:border-[#3A3A3A]
-              border-gray-400
+               border-[#D6DCE8]
               bg-zinc-100 dark:bg-[#4340404d]
               p-3 sm:p-5 md:p-7 lg:p-9
               rounded-xl sm:rounded-2xl lg:rounded-[25px]

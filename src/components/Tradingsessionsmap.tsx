@@ -130,7 +130,7 @@ const NewsFilters = ({
       <div id="news4" className="flex items-center gap-2 w-full">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border border-[#4A4A4A] bg-[#252525] text-slate-300 hover:border-slate-500 hover:bg-[#2a2a2a]"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-300 border border-[#4A4A4A] dark:bg-[#252525] bg-[#EAF0FF] text-[#5B657A] dark:text-slate-300"
         >
           <FiFilter size={14} />
           <span>{lang === "fa" ? "فیلتر" : "Filter"}</span>
@@ -145,12 +145,12 @@ const NewsFilters = ({
             placeholder={lang === "fa" ? "جستجوی خبر..." : "Search news..."}
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full px-3 py-1.5 rounded-lg bg-[#1e1e1e] border border-[#3C3C3C] text-xs sm:text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+            className="w-full px-3 py-1.5 rounded-lg dark:bg-[#1e1e1e] border dark:border-[#3C3C3C] text-xs sm:text-sm text-[#5B657A] dark:text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
           />
           {searchQuery && (
             <button
               onClick={() => onSearchChange("")}
-              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+              className="absolute right-2 top-1/2 -translate-y-1/2 dark:text-slate-500  hover:text-slate-300"
             >
               <FiX size={14} />
             </button>
@@ -164,7 +164,7 @@ const NewsFilters = ({
 
       {/* گزینه‌های فیلتر */}
       {isOpen && (
-        <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-lg bg-[#1a1a1a] border border-[#3C3C3C]">
+        <div className="flex flex-wrap items-center gap-1.5 p-2 bg-[#EAF0FF] rounded-lg dark:bg-[#1a1a1a] border border-[#3C3C3C]">
           {impactOptions.map((option) => (
             <button
               key={option.value}
@@ -176,7 +176,7 @@ const NewsFilters = ({
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
                 filterImpact === option.value
                   ? "bg-blue-500/20 text-blue-300 border border-blue-500/50"
-                  : "text-slate-400 border border-transparent hover:border-[#4A4A4A] hover:bg-[#252525]"
+                  : "text-slate-400 border border-transparent "
               }`}
             >
               <span
@@ -451,7 +451,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
 
           <img
-            className="w-5 h-5 brightness-0 saturate-100 invert flex-shrink-0"
+            className="w-5 h-5 brightness-0 saturate-100 invert shrink-0"
             src={session.icon}
             alt={session.en}
           />
@@ -538,7 +538,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
       <div
         id="tabale1"
         ref={rootRef}
-        className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] step-test43 rounded-2xl border-4
+        className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] step-test43 rounded-2xl             border-[#D6DCE8]
+ border-2 dark:border-4
         dark:border-[#3C3C3C]
         border-gray-300 md:pr-2 md:pl-2 mt-3 text-slate-200 w-full min-h-0 pb-3 overflow-hidden select-none"
         onClick={(e) => {
@@ -552,15 +553,18 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="flex items-center gap-3">
               <IoMdTime className="text-blue-400 w-5 h-5 hidden md:block" />
-              <span className="md:text-3xl font-bold text-white tracking-wider tabular-nums">
+              <span className="md:text-3xl font-bold dark:text-white text-[#5B657A] tracking-wider tabular-nums">
                 {currentTime.timeStr}
               </span>
             </div>
 
             <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm">
               <div className="flex items-center gap-1.5 text-slate-300">
-                <CiCalendar className="text-purple-400 hidden sm:block w-4 h-4" />
-                <span className="font-medium text-xs sm:text-sm" dir="rtl">
+                <CiCalendar className="dark:text-purple-400 text-[#5B657A] hidden sm:block w-4 h-4" />
+                <span
+                  className="font-medium text-[#5B657A] text-xs sm:text-sm"
+                  dir="rtl"
+                >
                   {currentTime.shamsi}
                 </span>
               </div>
@@ -569,7 +573,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
               <div className="flex items-center gap-1.5 text-slate-300">
                 <CiCalendar className="text-blue-400 hidden sm:block w-4 h-4" />
-                <span className="font-medium text-xs sm:text-sm text-slate-400">
+                <span className="font-medium text-xs sm:text-sm text-[#5B657A] dark:text-slate-400">
                   {currentTime.gregorian}
                 </span>
               </div>
@@ -1249,7 +1253,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           >
             <button
               onClick={toggleAllSessions}
-              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#4A4A4A] bg-transparent text-slate-400 hover:text-slate-200 hover:border-slate-500 hover:scale-105 active:scale-95"
+              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#4A4A4A] bg-transparent text-[#5B657A] dark:text-slate-400  hover:border-slate-500 hover:scale-105 active:scale-95"
             >
               {activeSessions.length === SESSIONS.length ? (
                 <span className="flex items-center gap-1.5">
@@ -1270,7 +1274,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 <button
                   key={session.id}
                   onClick={() => toggleSession(session.id)}
-                  className="group flex items-center gap-1 sm:gap-1.5 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#4A4A4A] bg-transparent hover:border-slate-500 hover:scale-105 active:scale-95"
+                  className="group flex items-center gap-1 cursor-pointer sm:gap-1.5 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#4A4A4A] bg-transparent hover:border-slate-500 hover:scale-105 active:scale-95"
                   style={{
                     color: isActive ? "#ffffff" : "#6a6a6a",
                     opacity: isActive ? 1 : 0.5,
@@ -1309,7 +1313,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     )}
                   </span>
 
-                  <span className="transition-all duration-300 group-hover:tracking-wider">
+                  <span className="transition-all text-[#5B657A]  duration-300 group-hover:tracking-wider">
                     {i18next.language === "fa"
                       ? session.fa.replace("سشن ", "")
                       : session.en.replace(" Session", "")}

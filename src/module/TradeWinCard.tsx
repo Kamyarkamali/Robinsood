@@ -7,13 +7,12 @@ import QuarterGauge from "./QuarterGauge";
 function TradeWinCard() {
   return (
     <CardShell
-      className="flex flex-col border-4
-        dark:border-[#3C3C3C]
-        border-gray-300 step-test31 justify-center h-full"
+      className="flex flex-col  dark:border-4 border-2 dark:border-[#3C3C3C] border-[#D6DCE8] 
+         step-test31 justify-center h-full"
     >
       <div className="flex items-start justify-between gap-3 sm:gap-6">
         <div className="flex flex-col items-center gap-4 sm:gap-6 lg:gap-8">
-          <h3 className="dark:text-[#ffffff] text-gray-500 text-sm sm:text-sm lg:text-[17px] font-medium">
+          <h3 className="dark:text-[#ffffff] text-[#5B657A] text-sm sm:text-sm lg:text-[17px] font-medium">
             {t("card8.title1")}
           </h3>
 

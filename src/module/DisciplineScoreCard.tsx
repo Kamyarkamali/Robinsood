@@ -28,15 +28,13 @@ function DisciplineScoreCard() {
         sm:min-h-70
         lg:min-h-75
         p-3 sm:p-4
-        border-4
-        dark:border-[#3C3C3C]
-        border-gray-300
+       dark:border-4 border-2 dark:border-[#3C3C3C] border-[#D6DCE8] 
       "
     >
       <h3
         className={`${
-          i18next.language === "fa" ? "text-right" : "text-left"
-        } w-full text-zinc-200 text-sm sm:text-base font-bold mb-6`}
+          i18next.language === "fa" ? "text-center" : "text-left"
+        } w-full dark:text-zinc-200 text-[#5B657A] text-sm sm:text-base font-normal mb-6`}
       >
         {t("card7.title")}
       </h3>
@@ -95,8 +93,8 @@ function DisciplineScoreCard() {
         </div>
       </div>
 
-      <div className="mt-auto w-full bg-[#223E55] rounded-lg p-3 text-center">
-        <p className="text-white text-[8px] sm:text-[10px] leading-6 text-right">
+      <div className="mt-auto w-full dark:bg-[#223E55] bg-[#D6DCE8] rounded-lg p-3 text-center">
+        <p className="dark:text-white text-[#5B657A] text-[8px] sm:text-[10px] leading-6 text-right">
           {t("card7.title3")}
         </p>
       </div>

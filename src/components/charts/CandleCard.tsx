@@ -110,7 +110,8 @@ export const CandleCard: React.FC<CandleCardProps> = ({
         w-full
         h-[120px] sm:h-[140px] lg:h-[160px]
         rounded-2xl
-        border-4 border-gray-400 dark:border-[#3A3A3A]
+        dark:border-4 border-2             border-[#D6DCE8]
+ dark:border-[#3A3A3A]
         overflow-hidden
         cursor-pointer
         transition-transform duration-300 hover:scale-[1.02]
@@ -118,7 +119,7 @@ export const CandleCard: React.FC<CandleCardProps> = ({
       "
     >
       <div className="flex justify-between items-start px-4 pt-3 pb-1 z-10">
-        <span className="text-white/70 text-sm font-bold leading-snug whitespace-pre-line text-right">
+        <span className="text-[#5B657A] dark:text-white/70 text-sm font-bold leading-snug whitespace-pre-line text-right">
           {isFa ? title.fa : title.en}
         </span>
         <span

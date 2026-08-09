@@ -37,7 +37,7 @@ const MemoizedModal = memo(Modal);
 const Divider = () => (
   <div className="relative my-2">
     <div className="absolute inset-0 flex items-center">
-      <div className="w-full border-t border-zinc-700 p-1"></div>
+      <div className="w-full border-t-2 border-[#EDF1F5] dark:border-zinc-700 p-1"></div>
     </div>
   </div>
 );
@@ -342,7 +342,7 @@ export default function Sidebar() {
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <HiOutlineBell size={20} className="text-white/70" />
+                <HiOutlineBell size={20} className="dark:text-white/70" />
                 {notificationCount > 0 && (
                   <motion.span
                     initial={{ scale: 0 }}
@@ -361,7 +361,10 @@ export default function Sidebar() {
                 whileHover={{ scale: 1.1, rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
               >
-                <FiMenu size={20} className="text-white/70" />
+                <FiMenu
+                  size={20}
+                  className="dark:text-white/70 cursor-pointer"
+                />
               </motion.button>
             </div>
           </div>
@@ -404,7 +407,7 @@ export default function Sidebar() {
                 className="fixed inset-4 z-50 flex items-center justify-center"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="w-full max-w-md rounded-2xl p-5 bg-zinc-900/95 border border-zinc-800 shadow-2xl shadow-black/50 max-h-[85vh] overflow-y-auto">
+                <div className="w-full max-w-md rounded-2xl p-5 dark:bg-zinc-900/95 border border-zinc-800 shadow-2xl shadow-black/50 max-h-[85vh] overflow-y-auto">
                   <div className="flex justify-between items-center mb-4">
                     <div className="flex items-center gap-2">
                       <motion.div
@@ -425,13 +428,13 @@ export default function Sidebar() {
                           />
                         </svg>
                       </motion.div>
-                      <p className="text-sm font-medium text-white">
+                      <p className="text-sm font-medium dark:text-white">
                         {lang === "fa" ? "انتخاب آواتار" : "Select Avatar"}
                       </p>
                     </div>
                     <motion.button
                       onClick={() => setShowAvatarModal(false)}
-                      className="text-zinc-400 hover:text-white transition-colors p-1 hover:bg-zinc-800 rounded-lg"
+                      className="text-zinc-400 hover:text-white transition-colors p-1  rounded-lg"
                       whileHover={{ rotate: 90, scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                     >
@@ -547,7 +550,7 @@ export default function Sidebar() {
 
               <Link
                 to="/"
-                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-[#5B657A] dark:text-zinc-300 cursor-pointer  active:scale-95"
               >
                 <HiOutlineHome size={22} className="shrink-0" />
                 <span className="overflow-hidden text-[12px] font-normal text-start">
@@ -563,10 +566,10 @@ export default function Sidebar() {
                   setIsModalOpen(true);
                   handleCloseMobile();
                 }}
-                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+                className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-[#5B657A] dark:text-zinc-300 cursor-pointer active:scale-95"
               >
                 <HiOutlineUserCircle size={22} className="shrink-0" />
-                <span className="overflow-hidden text-[12px] font-normal text-start">
+                <span className="overflow-hidden text-[12px] font-normal text-start ">
                   {lang === "fa" ? "اکانت های من" : "My Accounts"}
                 </span>
               </Link>
@@ -575,7 +578,7 @@ export default function Sidebar() {
             <Divider />
 
             <div className="space-y-2">
-              <p className="text-[10px] text-zinc-500 px-5 py-1">
+              <p className="text-[10px] dark:text-zinc-500 text-[#5B657A] px-5 py-1">
                 {lang === "fa" ? "پشتیبانی و آموزش" : "Support & Education"}
               </p>
 
@@ -588,7 +591,7 @@ export default function Sidebar() {
                       handleSetModalType(card.type);
                       handleCloseMobile();
                     }}
-                    className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 text-zinc-300 cursor-pointer hover:bg-zinc-800/30 active:scale-95"
+                    className="w-full flex items-center gap-4 rounded-2xl px-5 py-2.5 transition-colors duration-200 min-w-0 dark:text-zinc-300 text-[#5B657A] cursor-pointer active:scale-95"
                   >
                     <card.icon size={22} className="shrink-0" />
                     <span className="overflow-hidden text-[12px] font-normal text-start">
@@ -655,19 +658,20 @@ export default function Sidebar() {
       <aside
         className={`
           relative
-          text-gray-500
           transition-[width]
           duration-300
           ease-in-out
           [will-change:width]
           [contain:layout_style]
-          dark:bg-zinc-900 bg-[#F3F4F6]
+          dark:bg-zinc-900 bg-[#ffffff]
           p-4
-          dark:text-white text-gray-800
-          border-r border-zinc-800
+          dark:text-white text-[#1F2430]
+          border-r dark:border-zinc-800
+          shadow-md dark:shadow-none
           flex flex-col
           min-h-screen
-          sticky top-0
+          
+         top-0
          ${open && lang ? (lang === "en" ? "w-65" : lang ? "w-65" : "w-24") : "w-24"}
 
         `}
@@ -716,7 +720,7 @@ export default function Sidebar() {
                 cursor-pointer
                 dark:text-zinc-300 text-zinc-700
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                hover:bg-zinc-800/30
+                dark:hover:bg-zinc-800/30
                 active:scale-95
                 ${!open ? "justify-center px-0" : ""}
               `}
@@ -756,7 +760,7 @@ export default function Sidebar() {
                 cursor-pointer
                 dark:text-zinc-300 text-zinc-700
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                hover:bg-zinc-800/30
+                dark:hover:bg-zinc-800/30
                 active:scale-95
                 ${!open ? "justify-center px-0" : ""}
               `}
@@ -791,7 +795,7 @@ export default function Sidebar() {
                 cursor-pointer
                 dark:text-zinc-300 text-zinc-700
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                hover:bg-zinc-800/30
+                dark:hover:bg-zinc-800/30
                 active:scale-95
                 ${
                   modalType === "notifications"
@@ -857,7 +861,7 @@ export default function Sidebar() {
                     cursor-pointer
                     dark:text-zinc-300 text-zinc-700
                     hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                    hover:bg-zinc-800/30
+                    dark:hover:bg-zinc-800/30
                     active:scale-95
                     ${
                       modalType === card.type
@@ -912,7 +916,7 @@ export default function Sidebar() {
                 cursor-pointer
                 dark:text-zinc-300 text-zinc-700
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                hover:bg-zinc-800/30
+                dark:hover:bg-zinc-800/30
                 active:scale-95
                 ${!open ? "justify-center px-0" : ""}
               `}
@@ -947,7 +951,7 @@ export default function Sidebar() {
                 cursor-pointer
                 dark:text-zinc-300 text-zinc-700
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                hover:bg-zinc-800/30
+                dark:hover:bg-zinc-800/30
                 active:scale-95
                 ${!open ? "justify-center px-0" : ""}
               `}
@@ -980,7 +984,7 @@ export default function Sidebar() {
                 cursor-pointer
                 dark:text-zinc-300 text-zinc-700
                 hover:shadow-[inset_3px_3px_6px_rgba(0,0,0,0.4),inset_-3px_-3px_6px_rgba(255,255,255,0.05)]
-                hover:bg-zinc-800/30
+                dark:hover:bg-zinc-800/30
                 active:scale-95
                 ${!open ? "justify-center px-0" : ""}
               `}

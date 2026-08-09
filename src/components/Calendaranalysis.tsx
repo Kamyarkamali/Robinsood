@@ -65,7 +65,7 @@ function Dropdown<T extends string>({
           style={{ left: isFa ? "auto" : 0, right: isFa ? 0 : "auto" }}
         >
           <p
-            className={`text-[10px] text-gray-400 dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide ${isFa ? "text-right" : "text-left"}`}
+            className={`text-[10px] text-[#5B657A] dark:text-neutral-500 px-2.5 py-1 font-bold tracking-wide ${isFa ? "text-right" : "text-left"}`}
           >
             {section}
           </p>
@@ -78,7 +78,7 @@ function Dropdown<T extends string>({
               }}
               className={`flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer text-xs font-medium transition-colors
                 hover:bg-gray-50 dark:hover:bg-[#3A3A3A]
-                ${active === item.v ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-gray-700 dark:text-white"}
+                ${active === item.v ? "text-indigo-600 dark:text-indigo-400 font-bold" : "text-[#5B657A] dark:text-white"}
                 ${isFa ? "flex-row-reverse" : ""}`}
             >
               <span className="whitespace-nowrap">{item.l}</span>
@@ -187,7 +187,7 @@ function DateFilterModal({
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 rounded-full bg-indigo-600" />
-            <h3 className="text-sm sm:text-base font-bold text-gray-900 dark:text-white">
+            <h3 className="text-sm sm:text-base font-bold text-[#5B657A] dark:text-white">
               {isFa ? "انتخاب بازه زمانی" : "Select Time Range"}
             </h3>
           </div>
@@ -330,7 +330,7 @@ function DateFilterDropdown({
         className={`flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full border text-xs sm:text-sm font-normal transition-all
           border-gray-300 dark:border-neutral-700
           bg-white dark:bg-[#3A3A3A]
-          text-gray-700 dark:text-white
+          text-[#5B657A] dark:text-white
           hover:border-gray-400 dark:hover:border-neutral-500
           cursor-pointer whitespace-nowrap
           hover:scale-105 active:scale-95
@@ -572,10 +572,10 @@ export default function CalendarAnalysis() {
 
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sm:gap-16 ml-auto w-full sm:w-auto">
             <div className="flex flex-col items-center sm:items-start gap-1 sm:gap-2 min-w-0 w-full sm:w-auto">
-              <span className="text-xs sm:text-[15px] font-bold text-gray-500 dark:text-neutral-400">
+              <span className="text-xs sm:text-[15px] font-bold text-[#5B657A] dark:text-neutral-400">
                 {T.mpdl}
               </span>
-              <span className="text-[11px] sm:text-[13px] text-center w-full text-gray-500 dark:text-neutral-400">
+              <span className="text-[11px] sm:text-[13px] text-center w-full text-[#5B657A] dark:text-neutral-400">
                 {cd?.mpd?.date}
               </span>
               <span className="text-[18px] sm:text-[22px] w-full text-center text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
@@ -591,14 +591,14 @@ export default function CalendarAnalysis() {
             >
               <StreakDonut wins={cd?.str?.w ?? 0} losses={cd?.str?.l ?? 0} />
               <div className="flex flex-col gap-0.5 min-w-0">
-                <span className="text-[11px] text-center sm:text-[13px] font-bold text-gray-900 dark:text-white">
+                <span className="text-[11px] text-center sm:text-[13px] font-bold text-[#5B657A] dark:text-white">
                   {T.stitle}
                 </span>
-                <span className="text-[8px] text-center sm:text-[10px] text-gray-500 dark:text-white truncate">
+                <span className="text-[8px] text-center sm:text-[10px] text-[#5B657A] dark:text-white truncate">
                   {cd?.str?.s} – {cd?.str?.e}
                 </span>
                 <div className="flex items-center gap-1 sm:gap-1.5 mt-1 flex-wrap">
-                  <span className="text-[9px] sm:text-[11px] font-semibold text-gray-700 dark:text-neutral-300 whitespace-nowrap">
+                  <span className="text-[9px] sm:text-[11px] font-semibold text-[#5B657A] dark:text-neutral-300 whitespace-nowrap">
                     {cd?.str?.d} {T.du} – {cd?.str?.t} {T.tu}
                   </span>
                   <span className="text-yellow-400 text-[10px] sm:text-xs">

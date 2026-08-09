@@ -14,9 +14,10 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
         gap-1
         p-1
         rounded-full
-        bg-linear-to-t
-        from-[#282828]
-        to-[#323232]
+        dark:bg-linear-to-t
+        dark:from-[#282828]
+        dark:to-[#323232]
+        bg-[#EDE9FF]
         shadow-lg
         mt-3
       "
@@ -39,8 +40,8 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
 
           ${
             showTabale === "عددی"
-              ? "bg-[#3D3D3D] text-white shadow-md"
-              : "text-[#A8A8A8] hover:text-white"
+              ? "dark:bg-[#3D3D3D] bg-[#beb8dd] dark:text-white shadow-md"
+              : "dark:text-[#A8A8A8]"
           }
         `}
           >
@@ -65,8 +66,8 @@ const ChangeTabale: FC<StateTabale> = ({ showTabale, setShowTabale }) => {
 
           ${
             showTabale === "نمودار"
-              ? "bg-[#3D3D3D] text-white shadow-md"
-              : "text-[#A8A8A8] hover:text-white"
+              ? "dark:bg-[#3D3D3D] bg-[#beb8dd] dark:text-white shadow-md"
+              : "dark:text-[#A8A8A8]"
           }
         `}
           >

@@ -14,11 +14,12 @@ export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
     <div
       id="detailse18"
       className="
-      border-4
+      dark:border-4
+      border-2 border-[#D6DCE8]
         w-full
         h-full
         bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
-       dark:border-[#3A3A3A] border-gray-400
+       dark:border-[#3A3A3A]
         rounded-2xl sm:rounded-2xl
         p-3 sm:p-4 md:p-5
         flex flex-col items-center justify-center
@@ -26,7 +27,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
       "
     >
       {title && (
-        <p className="text-zinc-900 dark:text-white font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 text-center">
+        <p className="text-[#5B657A] dark:text-white font-bold text-sm sm:text-base md:text-lg mb-3 sm:mb-4 text-center">
           {i18next.language === "fa" ? "ارز های معامله شده" : "Traded Assets"}
         </p>
       )}
@@ -61,7 +62,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ data, title }) => {
               className="w-2.5 h-2.5 sm:w-3 sm:h-3 rounded-full shrink-0"
               style={{ background: item.color }}
             />
-            <span className="text-zinc-600 dark:text-white/70 text-[10px] sm:text-xs truncate">
+            <span className="text-[#5B657A] dark:text-white/70 text-[10px] sm:text-xs truncate">
               {item.name}
             </span>
           </div>

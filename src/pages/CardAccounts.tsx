@@ -35,29 +35,29 @@ function CardAccounts() {
 
   const statusConfig = {
     passed: {
-      border: "border-emerald-500/30 dark:border-emerald-500/30",
-      text: "text-emerald-600 dark:text-emerald-400",
+      border: "border-[#D6DCE8] dark:border-emerald-500/30",
+      text: "text-[#5B657A] dark:text-zinc-400",
       glow: "bg-emerald-500/10 dark:bg-emerald-500/10",
       badge:
-        "border-emerald-500/30 bg-emerald-50 text-emerald-600 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400",
+        "border-[#D6DCE8] bg-emerald-50 text-emerald-600 dark:border-emerald-500/30 dark:bg-emerald-500/10 dark:text-emerald-400",
       icon: <BsCheckCircleFill />,
     },
 
     trading: {
-      border: "border-orange-500/30 dark:border-orange-500/30",
-      text: "text-orange-600 dark:text-orange-400",
+      border: "border-[#D6DCE8] dark:border-orange-500/30",
+      text: "text-[#5B657A] dark:text-zinc-400",
       glow: "bg-orange-500/10 dark:bg-orange-500/10",
       badge:
-        "border-orange-500/30 bg-orange-50 text-orange-600 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-400",
+        "border-[#D6DCE8] bg-orange-50 text-orange-600 dark:border-orange-500/30 dark:bg-orange-500/10 dark:text-orange-400",
       icon: <BsHourglassSplit />,
     },
 
     rejected: {
-      border: "border-red-500/30 dark:border-red-500/30",
-      text: "text-red-600 dark:text-red-400",
+      border: "border-[#D6DCE8] dark:border-red-500/30",
+      text: "text-[#5B657A] dark:text-zinc-400",
       glow: "bg-red-500/10 dark:bg-red-500/10",
       badge:
-        "border-red-500/30 bg-red-50 text-red-600 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400",
+        "border-[#D6DCE8] bg-red-50 text-red-600 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400",
       icon: <BsXCircleFill />,
     },
   };
@@ -75,7 +75,7 @@ function CardAccounts() {
               e.preventDefault();
               setIsModalOpen(true);
             }}
-            className="text-cyan-600 dark:text-cyan-400 text-sm hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+            className="text-[#5B657A] dark:text-zinc-400 text-sm hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
           >
             {lang === "fa" ? "سایر اکانت ها" : "Other accounts"}
           </Link>
@@ -95,9 +95,9 @@ function CardAccounts() {
                   ${isActive ? "border-green-400" : status.border}
                   overflow-hidden
                   rounded-2xl
-                  border
+                  border-2
                   ${account}
-                  bg-white
+                  bg-[#ffffff]
                   dark:bg-[#2B2B2B]
                   transition-all
                   duration-300
@@ -131,13 +131,13 @@ function CardAccounts() {
                   </div>
 
                   <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col">
-                    <h3 className="text-base xl:text-md font-extrabold text-slate-800 dark:text-white truncate">
+                    <h3 className="text-base xl:text-md font-extrabold text-[#1F2430] dark:text-white truncate">
                       {lang === "fa" ? account?.title?.fa : account.title?.en}
                     </h3>
 
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                       <div>
-                        <p className="text-[10px] text-slate-500 dark:text-zinc-400 mb-1.5">
+                        <p className="text-[10px] text-[#5B657A] dark:text-zinc-400 mb-1.5">
                           {lang === "fa" ? "سرمایه" : "Capital"}
                         </p>
 
@@ -149,7 +149,7 @@ function CardAccounts() {
                       </div>
 
                       <div>
-                        <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
+                        <p className="text-[10px] text-center text-[#5B657A] dark:text-zinc-400 mb-1.5">
                           {lang === "fa" ? "مرحله" : "Step"}
                         </p>
 
@@ -179,7 +179,7 @@ function CardAccounts() {
                       </div>
 
                       <div>
-                        <p className="text-[10px] text-center text-slate-500 dark:text-zinc-400 mb-1.5">
+                        <p className="text-[10px] text-center text-[#5B657A] dark:text-zinc-400 mb-1.5">
                           {lang === "fa" ? "وضعیت" : "Status"}
                         </p>
 
@@ -211,8 +211,8 @@ function CardAccounts() {
                     </div>
 
                     {/* Footer */}
-                    <div className="mt-auto pt-3 border-t border-slate-200/70 dark:border-white/10 flex items-center justify-between">
-                      <span className="text-slate-400 dark:text-zinc-500 text-xs font-bold">
+                    <div className="mt-auto pt-3 flex items-center justify-between">
+                      <span className="text-[#5B657A] dark:text-zinc-400 text-xs font-bold">
                         #{account.id}
                       </span>
                     </div>

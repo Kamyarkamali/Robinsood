@@ -197,7 +197,7 @@ export const AreaCard: React.FC<AreaCardProps> = ({
           relative flex flex-col
           h-42.5
           rounded-2xl
-          border-4 border-gray-400 dark:border-[#3A3A3A]
+          dark:border-4 border-2 border-gray-400 dark:border-[#3A3A3A]
           overflow-hidden
           cursor-pointer
           transition-transform duration-300 hover:scale-[1.02]
@@ -205,7 +205,7 @@ export const AreaCard: React.FC<AreaCardProps> = ({
         "
       >
         <div className="flex justify-between items-start px-4 pt-3 pb-1 z-10">
-          <span className="text-white/70 text-sm font-bold leading-snug whitespace-pre-line text-right">
+          <span className="dark:text-white/70 text-[#5B657A] text-sm font-bold leading-snug whitespace-pre-line text-right">
             {isFa ? title.fa : title.en}
           </span>
           <span
@@ -296,7 +296,8 @@ export const AreaCard: React.FC<AreaCardProps> = ({
         relative flex flex-col
         h-42.5
         rounded-2xl
-        border-4 border-gray-400 dark:border-[#3A3A3A]
+        dark:border-4 border-2 border-[#D6DCE8]
+ dark:border-[#3A3A3A]
         overflow-hidden
         cursor-pointer
         transition-transform duration-300 hover:scale-[1.02]
@@ -304,7 +305,7 @@ export const AreaCard: React.FC<AreaCardProps> = ({
       "
     >
       <div className="flex justify-between items-start px-4 pt-3 pb-1">
-        <span className="text-white/70 text-sm font-bold leading-snug whitespace-pre-line text-right">
+        <span className="dark:text-white/70 text-[#5B657A] text-sm font-bold leading-snug whitespace-pre-line text-right">
           {isFa ? title.fa : title.en}
         </span>
         <span

@@ -42,10 +42,10 @@ export default function ChallengeCardComponent({ card }: Props) {
         rounded-2xl
         overflow-hidden
         border-[3px]
-        border-gray-200
+        border-[#E3E7D0]
         dark:border-[#373737]
         font-lahzeh
-        bg-white
+        bg-[#ffffff]
          dark:bg-linear-to-b
         dark:from-[#353535]
        dark:via-[#2D2D2D]
@@ -54,23 +54,19 @@ export default function ChallengeCardComponent({ card }: Props) {
         duration-300
         hover:shadow-lg
         hover:scale-[1.02]
+        hover:bg-[#F5F2FF]
         `}
       >
-        <div
-          className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent dark:bg-linear-to-b
-        dark:from-[#353535]
-       dark: via-[#2D2D2D]
-       dark: to-[#252525]"
-        />
+        <div />
 
         <div className="shrink-0 pt-3 px-2">
-          <p className="text-center text-[15px] font-semibold text-gray-600 dark:text-white leading-5 wrap-break-word">
+          <p className="text-center text-[15px] font-bold text-[#1F2430] dark:text-white leading-5 wrap-break-word">
             {i18n.language === "fa" ? card.title.fa : card.title.en}
           </p>
         </div>
 
         <div
-          className="shrink-0 flex justify-center items-center border-2 border-b-0 border-gray-200 dark:border-[#3B3B3B] rounded-t-[23px] mt-2 pt-3  dark:bg-linear-to-b
+          className="shrink-0 flex justify-center items-center border-2 border-b-0 border-[#EDF1F5] dark:border-[#3B3B3B] rounded-t-[23px] mt-2 pt-3  dark:bg-linear-to-b
         dark:from-[#353535]
        dark: via-[#2D2D2D]
        dark: to-[#252525]"
@@ -85,7 +81,7 @@ export default function ChallengeCardComponent({ card }: Props) {
           />
         </div>
 
-        <div className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent via-gray-300 dark:via-gray-600 to-transparent" />
+        <div className="w-4/5 mx-auto h-px bg-linear-to-r from-transparent border-[#EDF1F5] dark:via-gray-600 to-transparent" />
 
         <div
           className="
@@ -142,11 +138,11 @@ export default function ChallengeCardComponent({ card }: Props) {
               <React.Fragment key={i}>
                 {separator}
                 <div className="flex flex-col items-center gap-0.5 w-full">
-                  <span className="dark:text-[#ffffff] text-gray-700 text-center wrap-break-word leading-5 text-xs">
+                  <span className="dark:text-[#ffffff] text-[#1F2430] font-semibold text-center wrap-break-word leading-5 text-xs">
                     {/* @ts-ignore */}
                     {i18n.language === "fa" ? m.label.fa : m.label.en}
                   </span>
-                  <span className="text-[#a59e9e] text-[13px] font-normal text-center break-all">
+                  <span className="text-[#5B657A] dark:text-[#a59e9e] text-[13px] font-medium text-center break-all">
                     {m.value}
                   </span>
                 </div>
@@ -172,15 +168,15 @@ export default function ChallengeCardComponent({ card }: Props) {
           duration-300
           ${
             card.status === "active"
-              ? "text-[#34C759] border-t-[#103a10] dark:border-t-green-900/50 dark:bg-linear-to-r dark:from-green-900/30 dark:to-[#282828] hover:from-green-900/50"
-              : "text-[#FF383C] border-t-[#3a1010] dark:border-t-red-900/50 dark:bg-linear-to-r dark:from-red-900/30 dark:to-[#282828] hover:from-red-900/50"
+              ? "text-[#22B36B] dark:text-white bg-[#E6F8EF] dark:bg-no border-t-[#103a10] dark:bg-green-800"
+              : "text-[#EE5A5A] dark:text-red-500 bg-[#FDEAEA] dark:bg-no border-t-[#3a1010] dark:bg-red-300"
           }
         `}
         >
           {card.status === "active" ? (
-            <TiTick size={20} className="text-[#34C759]" />
+            <TiTick size={20} className="text-[#22B36B] dark:text-white" />
           ) : (
-            <RxCross2 size={20} className="text-[#FF383C]" />
+            <RxCross2 size={20} className="text-[#EE5A5A] dark:text-red-500" />
           )}
           <span>{getStatusText(card.status, i18n.language)}</span>
         </button>

@@ -8,11 +8,10 @@ function ProfitFactorCard() {
   return (
     <CardShell
       className="relative
-        border-4 dark:border-[#3C3C3C] border-gray-300 
          step-test29 flex items-center justify-center h-full rounded-2xl"
     >
       <div className="flex flex-col gap-3 items-start justify-between">
-        <h3 className="font-normal text-center w-full dark:text-[#ffffff] text-gray-500 text-sm md:text-[20px]">
+        <h3 className="font-normal text-center w-full dark:text-[#ffffff] text-[#5B657A] text-sm md:text-[20px]">
           {t("cart5.profit")}
         </h3>
 

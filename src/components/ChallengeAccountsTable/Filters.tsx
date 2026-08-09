@@ -30,13 +30,12 @@ const Filters: React.FC<FiltersProps> = ({
   rounded-2xl
   appearance-none
 
-  bg-[#343434]
+  bg-[#EAF0FF]
   dark:bg-[#343434]
 
   border
-  border-[#444]
-
-  text-white
+  dark:border-[#444]
+  dark:text-white
   placeholder:text-gray-400
 
   px-3

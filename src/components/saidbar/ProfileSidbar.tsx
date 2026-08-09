@@ -113,7 +113,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center gap-3 sm:gap-4 border-b border-zinc-800/50">
+      <div className="flex flex-col items-center justify-center gap-3 sm:gap-4">
         <motion.div
           className="relative group"
           whileHover={open ? { scale: 1.02 } : {}}
@@ -185,17 +185,12 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
-            {/* <motion.span
-              className="w-1.5 h-1.5 bg-green-400 rounded-full"
-              animate={{ scale: [1, 1.5, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            /> */}
             {avatarName ? (
-              <p className="text-[10px] sm:text-[11px] text-cyan-400 font-medium">
+              <p className="text-[10px] sm:text-[11px] text-[#1f2430] dark:text-cyan-400 font-medium">
                 {avatarName}
               </p>
             ) : (
-              <p className="text-[10px] sm:text-[11px] text-zinc-400 font-medium">
+              <p className="text-[10px] sm:text-[11px] text-[#1f2430] dark:text-cyan-400 font-medium">
                 {lang === "fa" ? "بدون نام" : "No name"}
               </p>
             )}
@@ -203,7 +198,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
 
           {avatarName && (
             <motion.p
-              className="text-[10px] sm:text-[11px] text-cyan-400 font-medium truncate max-w-[120px]"
+              className="text-[10px] sm:text-[11px] text-[#1f2430] dark:text-cyan-400 font-medium truncate max-w-[120px]"
               initial={{ y: 5, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.15 }}
@@ -257,7 +252,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                   </span>
                 </div>
 
-                <div className="relative bg-zinc-800/50 rounded-lg p-1 flex gap-1 min-w-[160px] sm:min-w-[180px]">
+                <div className="relative dark:bg-zinc-800/50 border border-blue-300 rounded-lg p-1 flex gap-1 min-w-[160px] sm:min-w-[180px]">
                   <motion.div
                     key={activeIndex}
                     initial={false}
@@ -336,9 +331,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.1 }}
               >
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-zinc-700/20"></div>
-                </div>
+                <div className="absolute inset-0 flex items-center"></div>
               </motion.div>
 
               <motion.div
@@ -358,7 +351,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                     {lang === "fa" ? "زبان" : "Language"}
                   </span>
                 </div>
-                <div className="flex gap-1 bg-zinc-800/30 rounded-lg p-0.5">
+                <div className="flex gap-1 bg-[#7C5CFA] dark:bg-zinc-800/30 rounded-lg p-0.5">
                   {languageOptions.map((l) => (
                     <motion.button
                       key={l.value}
@@ -369,8 +362,8 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                         transition-all duration-200
                         ${
                           i18next.language === l.value
-                            ? "bg-cyan-500/20 text-cyan-400 shadow-sm"
-                            : "text-zinc-400 hover:text-zinc-200 hover:bg-zinc-700/30"
+                            ? "bg-cyan-500/20 text-[#ffffff] shadow-sm"
+                            : "text-[#ffffff] hover:text-zinc-200 "
                         }
                       `}
                       whileHover={{ scale: 1.05 }}

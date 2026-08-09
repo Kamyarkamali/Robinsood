@@ -11,36 +11,31 @@ function InformationAccount() {
   return (
     <>
       <div className="w-full flex flex-col sm:flex-row items-stretch justify-center gap-3 sm:gap-4 p-4 min-h-[calc(100vh-120px)]">
-        <div className={`${cardOuter} w-full sm:flex-1 sm:basis-0 sm:min-w-0`}>
-          <div className={`${cardInner} h-full`}>
+        <div
+          className={`${cardOuter} w-full sm:flex-1 sm:basis-0 sm:min-w-0 border border-[#D6DCE8]`}
+        >
+          <div className={`${cardInner} h-full border border-[#E3E7F0]`}>
             <div className="flex flex-col w-full h-full gap-2.5 font-normal pr-2 pb-1">
               <div className="grid grid-cols-3 sm:grid-cols-3 w-full text-center items-stretch gap-3 sm:gap-4">
-                <div className="flex flex-col items-center justify-center gap-2 py-1.5">
-                  <div className="flex items-center justify-center gap-1 xs:gap-2">
-                    <CircleIcon color="#00A656" />
-                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-normal text-black dark:text-white whitespace-nowrap">
+                <div className="flex flex-col items-center justify-center gap-2 py-1.5 ">
+                  <div className="flex items-center justify-center gap-1 xs:gap-2 ">
+                    <CircleIcon color="#22B36B" />
+                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                       {i18next.language === "fa" ? " بالانس" : "Live Balance"}
                     </p>
-                    {/* <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 rounded-lg xs:rounded-xl flex items-center justify-center shrink-0">
-                      <img
-                        src={wallet}
-                        alt="wallet"
-                        className="w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4.5 sm:h-4.5 object-contain"
-                      />
-                    </div> */}
                   </div>
 
-                  <p className="text-[12px] xs:text-[13px] md:text-[15px] text-[#34C759] font-semibold whitespace-nowrap">
+                  <p className="text-[12px] xs:text-[13px] md:text-[15px] text-[#22B36B] font-semibold whitespace-nowrap">
                     $10256.75
                   </p>
                 </div>
 
                 <div className="flex flex-col justify-center gap-2 py-1.5">
-                  <p className="text-[11px] xs:text-[12px] md:text-[14px] font-normal text-black dark:text-white whitespace-nowrap">
+                  <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                     {i18next.language === "fa" ? "وضعیت" : "Status"}
                   </p>
                   <div className="flex items-center justify-center gap-1 mt-2">
-                    <CircleIcon color="#FF383C" />
+                    <CircleIcon color="#EE5A5A" />
                     <p className="text-[11px] xs:text-[12px] md:text-[11px] font-semibold text-red-500 dark:text-red-600 whitespace-nowrap">
                       {i18next.language === "fa" ? "رد شده" : "Rejected"}
                     </p>
@@ -49,12 +44,9 @@ function InformationAccount() {
 
                 <div className="flex flex-col items-center justify-center gap-2 py-1.5">
                   <div className="flex pt-1 items-center justify-center gap-1.5 xs:gap-2 sm:gap-2.5">
-                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-normal text-black dark:text-white whitespace-nowrap">
+                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                       {i18next.language === "fa" ? "اکوییتی" : "Equity"}
                     </p>
-                    {/* <div className="w-6 h-6 xs:w-7 xs:h-7 sm:w-8 sm:h-8 rounded-lg xs:rounded-xl flex items-center justify-center shrink-0">
-                      <TbChartHistogram className="text-purple-500 w-3.5 h-3.5 xs:w-4 xs:h-4 sm:w-4.5 sm:h-4.5" />
-                    </div> */}
                   </div>
                   <p className="text-[12px] xs:text-[13px] md:text-[15px] font-normal text-gray-500 dark:text-gray-300 whitespace-nowrap">
                     $9318.35
@@ -63,21 +55,21 @@ function InformationAccount() {
 
                 <div className="col-span-3">
                   <div className="flex justify-center px-1 sm:px-3 md:px-5 -mt-1">
-                    <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
+                    <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br bg-[#EEF1F7] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
                       <FiCalendar
                         size={13}
-                        className="text-blue-500 dark:text-blue-400 shrink-0"
+                        className="text-[#4F7CFF] dark:text-blue-400 shrink-0"
                       />
-                      <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-gray-600 dark:text-gray-300 text-center whitespace-normal sm:whitespace-nowrap leading-tight">
+                      <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-[#5B657A] dark:text-gray-300 text-center whitespace-normal sm:whitespace-nowrap leading-tight">
                         {i18next.language === "fa"
                           ? "تاریخ ثبت نام:"
                           : "Registration Date:"}
-                        <span className="text-gray-800 dark:text-white font-medium">
+                        <span className="text-[#5B657A] dark:text-white font-medium">
                           {" "}
                           ۱۴۰۴/۱۰/۲۲
                         </span>{" "}
                         —{" "}
-                        <span className="text-gray-800 dark:text-white font-medium">
+                        <span className="text-[#5B657A] dark:text-white font-medium">
                           18:13:25
                         </span>
                       </p>
@@ -90,28 +82,31 @@ function InformationAccount() {
         </div>
 
         <div
-          className={`${cardOuter} w-full sm:flex-1 sm:basis-0 sm:min-w-0`}
+          className={`${cardOuter} w-full sm:flex-1 sm:basis-0 sm:min-w-0 border border-[#D6DCE8]`}
           id="step-title2"
         >
-          <div dir="ltr" className={`${cardInner} h-full`}>
+          <div
+            dir="ltr"
+            className={`${cardInner} h-full border border-[#E3E7F0]`}
+          >
             <div className="flex flex-col w-full h-full gap-2.5 font-normal">
               <div className="grid grid-cols-3 w-full text-center items-stretch gap-3 sm:gap-4">
                 <div className="flex flex-col items-center justify-center gap-2 py-1.5">
                   <div className="flex items-center justify-center gap-1 xs:gap-2">
                     <CircleIcon color="#00C0E8" />
-                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-normal text-black dark:text-white whitespace-nowrap">
+                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                       {i18next.language === "fa" ? "چالش" : "Challenge"}
                     </p>
                   </div>
-                  <p className="text-[12px] xs:text-[13px] md:text-[15px] font-semibold text-gray-700 dark:text-gray-200 whitespace-nowrap">
+                  <p className="text-[12px] xs:text-[13px] md:text-[15px] font-normal text-gray-700 dark:text-gray-200 whitespace-nowrap">
                     {i18next.language === "fa" ? "رابین هودی" : "Robin Hood"}
                   </p>
                 </div>
 
-                <div className="flex flex-col items-center justify-center gap-2 py-1.5">
+                <div className="flex flex-col items-center justify-center gap-2 py-1.5 ">
                   <div className="flex items-center justify-center gap-1 xs:gap-2">
                     <FiFlag className="text-purple-500 dark:text-purple-400 w-3.5 h-3.5" />
-                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-normal text-black dark:text-white whitespace-nowrap">
+                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                       {i18next.language === "fa" ? "مرحله" : "Phase"}
                     </p>
                   </div>
@@ -120,8 +115,8 @@ function InformationAccount() {
                   </p>
                 </div>
 
-                <div className="flex flex-col items-center justify-center gap-2 py-1.5">
-                  <div className="flex items-center justify-center gap-1 xs:gap-2">
+                <div className="flex flex-col items-center justify-center gap-2 py-1.5 ">
+                  <div className="flex items-center justify-center gap-1 xs:gap-2 ">
                     <div className="w-6 h-6 xs:w-7 xs:h-7 rounded-lg xs:rounded-xl flex items-center justify-center shrink-0">
                       <img
                         src={chaleng}
@@ -129,7 +124,7 @@ function InformationAccount() {
                         className="w-3.5 h-3.5 xs:w-4 xs:h-4 object-contain"
                       />
                     </div>
-                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-normal text-black dark:text-white whitespace-nowrap">
+                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                       {i18next.language === "fa" ? "نوع اکانت" : "Account Type"}
                     </p>
                   </div>
@@ -140,8 +135,8 @@ function InformationAccount() {
 
                 <div className="col-span-3">
                   <div className="flex justify-center px-1 sm:px-3 md:px-5">
-                    <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
-                      <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-gray-600 dark:text-gray-300 text-center whitespace-normal sm:whitespace-nowrap leading-tight">
+                    <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br bg-[#EEF1F7] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
+                      <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-[#D9A441] text-center whitespace-normal sm:whitespace-nowrap leading-tight">
                         {i18next.language === "fa"
                           ? "شما جزو ۵٪ درصد برترین چالش هستید"
                           : "You're in the top 5% of the challenge!"}
@@ -155,10 +150,10 @@ function InformationAccount() {
         </div>
 
         <div
-          className={`${cardOuter} w-full sm:flex-1 sm:basis-0 sm:min-w-0`}
+          className={`${cardOuter} w-full sm:flex-1 sm:basis-0 sm:min-w-0 border border-[#D6DCE8]`}
           id="step-title3"
         >
-          <div className={`${cardInner} h-full`}>
+          <div className={`${cardInner} h-full border border-[#E3E7F0]`}>
             <div className="flex flex-col w-full h-full gap-4 font-normal">
               <div className="flex items-start justify-between w-full px-2 sm:px-3 md:px-5">
                 <div
@@ -173,7 +168,7 @@ function InformationAccount() {
                   }}
                 >
                   <div className="flex items-center justify-center w-full gap-1">
-                    <p className="text-[10px] xs:text-[11px] sm:text-[13px] md:text-[16px] font-normal text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 whitespace-nowrap">
+                    <p className="text-[10px] xs:text-[11px] sm:text-[13px] md:text-[16px] font-semibold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300 whitespace-nowrap">
                       {i18next.language === "fa"
                         ? "شماره اکانت"
                         : "Account Number"}
@@ -191,35 +186,35 @@ function InformationAccount() {
                 <div className="flex flex-col items-center gap-0.5 shrink-0">
                   <div className="flex items-center justify-end gap-1">
                     <CircleIcon color="#00C0E8" />
-                    <p className="text-[10px] xs:text-[11px] sm:text-[13px] md:text-[16px] font-normal text-black dark:text-white whitespace-nowrap">
+                    <p className="text-[10px] xs:text-[11px]  sm:text-[13px] md:text-[16px] font-semibold text-black dark:text-white whitespace-nowrap">
                       {i18next.language === "fa"
                         ? "بالانس اولیه"
                         : "Initial Balance"}
                     </p>
                     <FiActivity size={14} className="text-[#00C0E8] shrink-0" />
                   </div>
-                  <p className="text-[9px] xs:text-[10px] sm:text-[12px] md:text-[15px] text-[#00C0E8] text-right whitespace-nowrap">
+                  <p className="text-[9px] xs:text-[10px] sm:text-[12px] md:text-[15px] text-[#5B657A] text-right whitespace-nowrap">
                     ۱۰,۰۰۰ $
                   </p>
                 </div>
               </div>
 
               <div className="flex justify-center px-1 sm:px-3 md:px-5 mt-4">
-                <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
+                <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br bg-[#EEF1F7] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
                   <FiCalendar
                     size={13}
-                    className="text-blue-500 dark:text-blue-400 shrink-0"
+                    className="text-[#4F7CFF] dark:text-blue-400 shrink-0"
                   />
-                  <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-gray-600 dark:text-gray-300 text-center whitespace-normal sm:whitespace-nowrap leading-tight">
+                  <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-[#5B657A] dark:text-gray-300 text-center whitespace-normal sm:whitespace-nowrap leading-tight">
                     {i18next.language === "fa"
                       ? "تاریخ ثبت نام:"
                       : "Registration Date:"}
-                    <span className="text-gray-800 dark:text-white font-medium">
+                    <span className="text-[#5B657A] dark:text-white font-medium">
                       {" "}
                       ۱۴۰۴/۱۰/۲۲
                     </span>{" "}
                     —{" "}
-                    <span className="text-gray-800 dark:text-white font-medium">
+                    <span className="text-[#5B657A] dark:text-white font-medium">
                       18:13:25
                     </span>
                   </p>

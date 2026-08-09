@@ -840,8 +840,8 @@ export const disciplineScore: DisciplineScoreData = {
   score: 0,
   ranges: [
     { label: "۰ - ۳۰٪", min: 0, max: 30, color: "red" },
-    { label: "۳۰ - ۸۰٪", min: 30, max: 80, color: "orange" },
-    { label: "۸۰ - ۱۰۰٪", min: 80, max: 100, color: "green" },
+    { label: "۳۰ ۸۰٪", min: 30, max: 80, color: "orange" },
+    { label: "- ۸۰ ۱۰۰٪", min: 80, max: 100, color: "green" },
   ],
 };
 

@@ -45,15 +45,16 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
     <nav
       dir="ltr"
       className="
+      bg-[#FAFBFD]
+      border-[#28B5A8]
         mx-auto mb-5
         flex w-full max-w-430.5
         items-center justify-between
         rounded-2xl
-        md:border md:border-white/15
-        md:bg-[#1c1c1c]/70
+        md:border dark:border-white/15
+        dark:bg-[#1c1c1c]/70
         md:backdrop-blur-xl
         px-4 py-3
-        md:shadow-lg md:shadow-black/20
         sm:px-5
       "
     >
@@ -65,12 +66,16 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
           md:mt-0
           flex items-center gap-2
           rounded-xl
-          border border-white/10
+          border dark:border-white/10
+          border-[#E3E7F0]
           bg-white/10
           backdrop-blur-md
           px-4 py-2.5
-          text-sm font-medium
-          text-white
+          text-sm
+          font-normal
+          dark:text-white
+          text-[#6B4DF0]
+          cursor-pointer
           transition-all duration-300
           hover:bg-white/20
           hover:scale-[1.03]
@@ -79,6 +84,8 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
       >
         <HiOutlineAcademicCap
           className="
+          text-[#7C5CFA]
+          dark:text-white
             text-xl
             transition-transform
             duration-300
@@ -100,15 +107,19 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               flex items-center justify-center
               md:w-10 w-8 h-8 md:h-10 rounded-full
               transition-all duration-300
-              ${"bg-white/10 hover:bg-white/20 text-white cursor-pointer"}
+              ${"bg-[#EEF1F7] dark:bg-white/10 dark:hover:bg-white/20 dark:text-white hover:bg-white/20 text-white cursor-pointer"}
               ${isHoveringPrev && prevRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
             `}
             title={lang === "fa" ? "صفحه بعدی" : "Next"}
           >
             {lang ? (
-              <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
+              <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5 text-[#1F2430] dark:text-white" />
             ) : (
-              <HiOutlineChevronRight className={"w-4 md:w-5 h-4 md:h-5"} />
+              <HiOutlineChevronRight
+                className={
+                  "w-4 md:w-5 h-4 md:h-5 text-[#1F2430] dark:text-white"
+                }
+              />
             )}
           </button>
 
@@ -140,7 +151,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
         </div>
 
         <div className="flex items-center gap-4">
-          <h1 className="whitespace-nowrap text-sm md:text-xl font-normal md:font-semibold text-white">
+          <h1 className="whitespace-nowrap text-sm md:text-xl font-normal md:font-semibold font-lahzeh text-[#1F2430] dark:text-white">
             {i18next.language === "fa"
               ? current?.title?.fa
               : current?.title?.en}
@@ -160,17 +171,17 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
 
               ${
                 nextRoute
-                  ? "bg-white/10 hover:bg-white/20 text-white cursor-pointer"
-                  : "bg-white/5 text-white/20 cursor-not-allowed"
+                  ? "bg-[#EEF1F7] dark:bg-white/10 dark:hover:bg-white/20 dark:text-white cursor-pointer"
+                  : "bg-[#EEF1F7] dark:bg-white/10 dark:hover:bg-white/20 dark:text-white cursor-pointer"
               }
               ${isHoveringNext && nextRoute ? "scale-110 shadow-[0_0_20px_rgba(139,92,246,0.2)]" : ""}
             `}
             title={lang === "fa" ? "صفحه قبلی" : "Previous"}
           >
             {lang ? (
-              <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5" />
+              <HiOutlineChevronRight className="w-4 md:w-5 h-4 md:h-5 text-[#1F2430] dark:text-white" />
             ) : (
-              <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5" />
+              <HiOutlineChevronLeft className="w-4 md:w-5 h-4 md:h-5 text-[#1F2430] dark:text-white" />
             )}
           </button>
         </div>

@@ -552,8 +552,6 @@ const TradingChartCard: React.FC<Props> = ({
     }
 
     if (unit === "lot") {
-      // if (value >= 1) return formatDecimal(value);
-      // if (value >= 0.01) return formatDecimal(value * 1000);
       return formatDecimal(value);
     }
 
@@ -583,16 +581,16 @@ const TradingChartCard: React.FC<Props> = ({
           className={`
           w-full p-3 sm:p-4 
           bg-gray-50 dark:bg-[#1a1a2e] dark:bg-linear-to-t dark:from-[#1e1e1e] dark:to-[#2a2a2a] 
-          h-full rounded-[25px] border-4 dark:border-white/10 border-gray-400 
-          flex flex-col items-center shadow-xl
+          h-full rounded-[25px] dark:border-4 border-2 border-[#E3E7F0] dark:border-white/10 
+          flex flex-col items-center 
           ${isMobile ? "border-2 rounded-[14px]" : ""}
         `}
         >
           <div className="w-full flex items-center justify-between mb-2 sm:mb-3">
             <h3
               className={`
-              flex-1 text-center text-gray-700 dark:text-white 
-              ${isMobile ? "text-xs font-medium" : "text-base sm:text-lg font-normal"}
+              flex-1 text-center text-[#1F2430] dark:text-white 
+              ${isMobile ? "text-xs font-medium" : "text-base sm:text-lg font-semibold"}
             `}
             >
               {i18n.language === "fa" ? data?.title?.fa : data?.title?.en}
@@ -693,7 +691,7 @@ const TradingChartCard: React.FC<Props> = ({
                     x={paddingLeft - (isMobile ? 8 : 12)}
                     y={yPositions[i] + (isMobile ? 3 : 5)}
                     textAnchor="end"
-                    fill={isDarkMode ? "#ffff" : "#2B2B2B"}
+                    fill={isDarkMode ? "#5B657A" : "#5B657A"}
                     fontSize={isMobile ? 11 : 15}
                     fontWeight="600"
                   >
@@ -762,7 +760,7 @@ const TradingChartCard: React.FC<Props> = ({
                         textAnchor="middle"
                         fontSize={isMobile ? 10 : 15}
                         fontWeight={isMobile ? "400" : "500"}
-                        fill={isDarkMode ? "#ffff" : "#2B2B2B"}
+                        fill={isDarkMode ? "#5B657A" : "#2B2B2B"}
                       >
                         {i18n.language === "fa"
                           ? day?.label?.fa
@@ -817,33 +815,33 @@ const TradingChartCard: React.FC<Props> = ({
           >
             <div className="flex flex-col gap-1 sm:gap-1.5">
               <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-orange-500/10 text-orange-400 dark:bg-[#2B2B2B]">
-                <span className="text-green-500 text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
+                <span className="text-[#8A93A6] text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
                   <img className="w-3.5 sm:w-4.5" src={chart} alt="chart" />
                   {t("cart1.Average")}
                 </span>
-                <span className="text-green-400 text-[10px] sm:text-[12px] leading-none font-medium">
+                <span className="text-[#8A93A6] text-[10px] sm:text-[12px] leading-none font-medium">
                   {formatValue(data.averageValue, data.unit)}
                 </span>
               </div>
 
               <div className="flex items-center justify-between px-1.5 sm:px-2 py-1 sm:py-1.5 rounded-md bg-green-500/10 text-green-500 dark:bg-[#2B2B2B]">
-                <span className="text-orange-400 text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
+                <span className="text-[#8A93A6] text-[10px] sm:text-[11px] leading-none flex items-center gap-0.5 sm:gap-1">
                   <img className="w-3.5 sm:w-4.5" src={iconAlert} alt="alert" />{" "}
                   {t("cart1.Limit")}
                 </span>
-                <span className="text-orange-400 text-[10px] sm:text-[12px] leading-none font-medium">
+                <span className="text-[#8A93A6] text-[10px] sm:text-[12px] leading-none font-medium">
                   {formatValue(data.maxAllowedValue, data.unit)}
                 </span>
               </div>
             </div>
 
             <div className="flex items-center justify-between px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-gray-100 dark:bg-[#2B2B2B]">
-              <span className="text-[10px] sm:text-[11px] text-gray-600 dark:text-[#aaa] flex items-center gap-0.5 sm:gap-1">
+              <span className="text-[10px] sm:text-[11px] text-[#8A93A6] dark:text-[#aaa] flex items-center gap-0.5 sm:gap-1">
                 <img className="w-3.5 sm:w-4.5" src={tick} alt="Success" />
                 {t("cart1.Trading")}
               </span>
 
-              <span className="text-[10px] sm:text-[12px] text-gray-500 dark:text-[#bbb] flex items-center gap-0.5 sm:gap-1">
+              <span className="text-[10px] sm:text-[12px] text-[#8A93A6] dark:text-[#bbb] flex items-center gap-0.5 sm:gap-1">
                 {/* <span className="text-green-500 font-semibold">
                   {data.acceptedDays}
                 </span>

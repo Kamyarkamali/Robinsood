@@ -4,7 +4,7 @@ import { type FC } from "react";
 import type { ComponentState } from "../../types/interfaces";
 import { Link } from "react-router-dom";
 
-const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
+const DashboardCards: FC<ComponentState> = () => {
   const { i18n } = useTranslation();
   const isFa = i18n.language === "fa";
 
@@ -39,11 +39,6 @@ const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
               to={`/account/${item.slug}`}
               key={item.id}
               className={`
-                ${
-                  activeComponent === item?.components
-                    ? "border border-dashed border-violet-500/70"
-                    : "border border-zinc-700/70"
-                }
                 group
                 relative
                 overflow-hidden
@@ -57,12 +52,14 @@ const DashboardCards: FC<ComponentState> = ({ activeComponent }) => {
                 transition-all
                 duration-300
                 hover:-translate-y-1
-                
+                bg-[#FFFFFF]
+                border
+                border-[#D6DCE8]
+                dark:border-0
                 dark:bg-linear-to-b
                dark: from-[#363636]
                dark: via-[#2D2D2D]
                dark: to-[#242424]
-                shadow-[0_8px_30px_rgba(0,0,0,0.35)]
               `}
             >
               <div className="absolute inset-0 bg-linear-to-b from-white/[0.04] to-transparent opacity-0 group-hover:opacity-100 transition duration-300" />

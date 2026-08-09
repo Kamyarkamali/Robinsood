@@ -12,8 +12,8 @@ export default function CartFacke() {
     w-full
     h-[180px]
     rounded-3xl
-    border-2
-    border border-white/10
+    border-[#D6DCE8]
+    border dark:border-white/10
     bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
     backdrop-blur-xl
     flex flex-col
@@ -51,11 +51,11 @@ export default function CartFacke() {
   const titleClass = "text-[11px] sm:text-xs text-zinc-400 font-medium mt-2";
 
   const valueClass =
-    "text-2xl sm:text-3xl font-bold text-white tabular-nums mt-2";
+    "text-2xl sm:text-3xl font-bold dark:text-white text-[#5B657A] tabular-nums mt-2";
 
   return (
     <>
-      <h1 className="text-center font-black text-sm md:text-lg">
+      <h1 className="text-center text-[#5B657A] dark:text-white font-black text-sm md:text-lg">
         {i18next.language === "fa"
           ? "آمار کاربران رابین  سون"
           : "Robinhood Users Stats"}
@@ -68,7 +68,8 @@ export default function CartFacke() {
         <div
           className="
           rounded-2xl
-          border-4 dark:border-[#3C3C3C]
+    border-[#D6DCE8]
+          dark:border-4 border-2  dark:border-[#3C3C3C]
           backdrop-blur-xl
           p-3 sm:p-5 lg:p-6
         "

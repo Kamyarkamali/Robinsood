@@ -63,12 +63,12 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         flex flex-col
         gap-4
         rounded-2xl
-        border-4
+        dark:border-4
+        border
+        border-[#E3E7F0]
         dark:border-[#3C3C3C]
-        border-gray-300
         dark:bg-[#282828]
         bg-white
-        shadow-sm
         transition-all
         duration-300
       "
@@ -77,7 +77,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
         <h3
           className="
             dark:text-white
-            text-gray-700
+            text-[#1F2430]
             font-semibold
             text-sm
             sm:text-base
@@ -95,8 +95,10 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             rounded-full
             text-[10px]
             sm:text-xs
-            text-white
-            bg-[#383737]
+            text-[#1F2430]
+            dark:text-white
+            dark:bg-[#383737]
+            bg-[#E3E7F0]
           `}
         >
           {i18n.language === "fa" ? data.badgeText.fa : data.badgeText.en}
@@ -108,7 +110,8 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
           className="
             flex-1
             text-center
-            text-[#888]
+            text-[#1F2430]
+            dark:text-[#888]
             font-medium
             text-[11px]
             sm:text-sm
@@ -155,10 +158,10 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             min-h-15 sm:min-h-17.5
           "
         >
-          <span className="text-[#98E400] font-bold text-xs sm:text-sm lg:text-base">
+          <span className="text-[#D9A441] font-semibold text-xs sm:text-sm lg:text-base">
             {data?.bestegor?.value}
           </span>
-          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] whitespace-nowrap">
+          <span className="dark:text-[#99A1AF] text-[#1F2430] text-[10px] whitespace-nowrap">
             {i18n.language === "fa" ? data.bestegor?.fa : data.bestegor?.en}
           </span>
         </div>
@@ -176,8 +179,8 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
           <span
             className="
               dark:text-white
-              text-gray-700
-              font-bold
+              text-[#1F2430]
+              font-semibold
               text-sm
               sm:text-base
               lg:text-lg
@@ -186,12 +189,15 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             {statValue(data.targetValue)}
           </span>
 
-          <span className="dark:text-gray-300 text-gray-500 text-[10px] whitespace-nowrap">
+          <span
+            className="dark:text-gray-300  text-[#1F2430]
+ text-[10px] whitespace-nowrap"
+          >
             {i18n.language === "fa" ? data.targetLabel.fa : data.targetLabel.en}
           </span>
 
           {data.targetPercent !== undefined && (
-            <span className="dark:text-[#99A1AF] text-gray-400 text-[8px] sm:text-[10px]">
+            <span className="dark:text-[#99A1AF] text-[#1F2430] text-[8px] sm:text-[10px]">
               ({data.targetPercent}٪)
             </span>
           )}
@@ -210,8 +216,8 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
           <span
             className="
               dark:text-white
-              text-gray-700
-              font-bold
+              text-[#1F2430]
+              font-semibold
               text-sm
               sm:text-base
               lg:text-lg
@@ -220,14 +226,14 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             7
           </span>
 
-          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] whitespace-nowrap">
+          <span className="dark:text-[#99A1AF] text-[#1F2430] text-[10px] whitespace-nowrap">
             {i18n.language === "fa"
               ? "روز معاملاتی قابل قبول"
               : "	Valid Trading Day"}
           </span>
 
           {data.currentPercent !== undefined && (
-            <span className="dark:text-[#99A1AF] text-gray-400 text-[8px] sm:text-[10px]">
+            <span className="dark:text-[#99A1AF] text-[#1F2430] text-[8px] sm:text-[10px]">
               ({data.currentPercent}٪)
             </span>
           )}
@@ -247,7 +253,7 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             className="
               dark:text-white
               text-gray-700
-              font-bold
+              font-semibold
               text-sm
               sm:text-base
               lg:text-lg
@@ -256,14 +262,14 @@ const ProgressCard: React.FC<Props> = ({ data }) => {
             {statValue(data.currentValue)}
           </span>
 
-          <span className="dark:text-[#99A1AF] text-gray-500 text-[10px] whitespace-nowrap">
+          <span className="dark:text-[#99A1AF] text-[#1F2430] text-[10px] whitespace-nowrap">
             {i18n.language === "fa"
               ? data.currentLabel.fa
               : data.currentLabel.en}
           </span>
 
           {data.currentPercent !== undefined && (
-            <span className="dark:text-[#99A1AF] text-gray-400 text-[8px] sm:text-[10px]">
+            <span className="dark:text-[#99A1AF] text-[#1F2430] text-[8px] sm:text-[10px]">
               ({data.currentPercent}٪)
             </span>
           )}

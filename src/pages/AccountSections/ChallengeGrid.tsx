@@ -34,12 +34,12 @@ export default function ChallengeGrid() {
             onClick={() => toggle("active")}
             className={`
               relative flex items-center step-test11 gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl
-              text-[11px] sm:text-sm font-semibold transition-all duration-300
+              text-[11px] sm:text-sm font-normal transition-all duration-300
               border backdrop-blur-md
               ${
                 hidden.active
                   ? "bg-transparent border-gray-300 text-gray-400 dark:border-gray-600"
-                  : "bg-green-500/10 border-green-500 text-green-500 shadow-md shadow-green-500/20"
+                  : "bg-green-500/10 border-green-500 text-green-500"
               }
               hover:scale-[1.03] active:scale-[0.98]
             `}
@@ -57,12 +57,12 @@ export default function ChallengeGrid() {
             onClick={() => toggle("inactive")}
             className={`
               relative flex items-center step-test12 gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-xl
-              text-[11px] sm:text-sm font-semibold transition-all duration-300
+              text-[11px] sm:text-sm font-normal transition-all duration-300
               border backdrop-blur-md
               ${
                 hidden.inactive
                   ? "bg-transparent border-gray-300 text-gray-400 dark:border-gray-600"
-                  : "bg-red-500/10 border-red-500 text-red-500 shadow-md shadow-red-500/20"
+                  : "bg-red-500/10 border-red-500 text-red-500"
               }
               hover:scale-[1.03] active:scale-[0.98]
             `}
@@ -77,7 +77,7 @@ export default function ChallengeGrid() {
           </button>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-linear-to-br from-[#f0f4ff] to-[#d9dfe8] dark:from-[#2a2a2a] dark:to-[#323232] shadow-sm w-full sm:w-auto justify-center">
+        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-linear-to-br bg-[#EDE9FF] dark:from-[#2a2a2a] dark:to-[#323232] shadow-sm w-full sm:w-auto justify-center">
           <FiCalendar
             size={12}
             className="text-blue-500 dark:text-blue-400 sm:w-3.5 sm:h-3.5"

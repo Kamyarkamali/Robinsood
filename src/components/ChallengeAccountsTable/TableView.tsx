@@ -154,10 +154,10 @@ const TableView: React.FC<TableViewProps> = ({
                             flex-wrap
                           "
                         >
-                          <span className="text-gray-200 mt-1">
+                          <span className="text-[#5B657A] dark:text-gray-200 mt-1">
                             #{account.accountNumber}
                           </span>
-                          <span className="text-gray-200 mt-1">
+                          <span className="text-[#5B657A] dark:text-gray-200 mt-1">
                             ${account.capital}
                           </span>
                         </div>

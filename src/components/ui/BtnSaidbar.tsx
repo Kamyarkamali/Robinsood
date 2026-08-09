@@ -14,7 +14,7 @@ const BtnSaidbar: FC<openState> = ({ open, setOpen }) => {
 
         w-10 h-10
         rounded-full
-        bg-gray-500
+        bg-[#7c5CFA]
         dark:bg-[#202024]
         text-zinc-300
 

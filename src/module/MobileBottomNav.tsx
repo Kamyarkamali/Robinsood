@@ -380,7 +380,11 @@ export default function MobileBottomNav() {
                   onMouseLeave={() => setHoveredIndex(null)}
                   onClick={(e) => handleItemClick(item, e)}
                 >
-                  <div className="flex flex-col items-center pt-1 pb-0.5">
+                  <div
+                    className="flex 
+                  
+                  flex-col items-center pt-1 pb-0.5"
+                  >
                     <div
                       className={`
                         relative flex items-center justify-center
@@ -434,14 +438,14 @@ export default function MobileBottomNav() {
 
                     <span
                       className={`
-                        text-[10px] font-medium mt-1
+                        text-[10px]  font-medium mt-1
                         transition-all duration-200
                         ${
                           active
-                            ? "text-purple-200"
+                            ? "  text-[#5B657A]"
                             : isHovered
-                              ? "text-purple-300"
-                              : "text-white/40"
+                              ? "  text-[#5B657A]"
+                              : "  text-[#5B657A]"
                         }
                       `}
                     >

@@ -151,7 +151,7 @@ const ChallengeAccountsModal: React.FC<ChallengeAccountsModalProps> = ({
             max-h-[90vh]
             rounded-[28px]
             p-3 sm:p-4 md:p-6
-            bg-[#e9edf5]
+            bg-[#ffffff]
             dark:bg-[#2B2B2B]
             shadow-[8px_8px_20px_#c5cad5,-8px_-8px_20px_#fff]
             dark:shadow-[8px_8px_20px_#070b12,-8px_-8px_20px_#273449]

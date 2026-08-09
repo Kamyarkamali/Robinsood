@@ -30,7 +30,8 @@ const DownloadPdfButton = () => {
           rounded-xl
           border border-white/10
 
-          bg-white/10
+          dark:bg-white/10
+          bg-[#7C5CFA]
           backdrop-blur-md
 
           px-4 py-2.5
@@ -40,7 +41,6 @@ const DownloadPdfButton = () => {
 
           transition-all duration-300
 
-          hover:bg-white/20
           hover:scale-[1.03]
 
           max-sm:px-3"

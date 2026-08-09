@@ -193,7 +193,7 @@ export default function AtAGlance() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {cardsData.map((card, index) => (
           <GlowingCard key={card.id} delay={index * 0.1}>
-            <div className="bg-[#38383838] backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 h-full flex flex-col">
+            <div className="dark:bg-[#38383838] bg-[#ffffff] backdrop-blur-xl rounded-2xl p-5 border-2 border-[#D6DCE8]  dark:border-cyan-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 h-full flex flex-col">
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -202,7 +202,7 @@ export default function AtAGlance() {
                   >
                     {card.icon}
                   </motion.div>
-                  <span className="text-xs text-zinc-400 font-medium tracking-wider uppercase">
+                  <span className="text-xs text-[#5B657A] dark:text-zinc-400 font-medium tracking-wider uppercase">
                     {getText(card.title)}
                   </span>
                 </div>
@@ -213,8 +213,8 @@ export default function AtAGlance() {
                     transition={{ delay: 0.3, type: "spring" }}
                     className={`text-xs font-bold px-2.5 py-1 rounded-full ${
                       card.change > 0
-                        ? "text-green-400 bg-green-400/10 border border-green-400/20"
-                        : "text-red-400 bg-red-400/10 border border-red-400/20"
+                        ? "text-[#22B36B] bg-green-400/10 border border-green-400/20"
+                        : "text-[#EE5A5A] bg-red-400/10 border border-red-400/20"
                     }`}
                   >
                     {card.change > 0 ? "+" : ""}
@@ -245,7 +245,7 @@ export default function AtAGlance() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="text-xs text-zinc-400 mt-1.5"
+                    className="text-xs text-[#5B657A] dark:text-zinc-400 mt-1.5"
                   >
                     {formatNumber(card.subValue)}
                     {card.subValue > 0 ? "+" : ""}
@@ -258,9 +258,9 @@ export default function AtAGlance() {
       </div>
 
       <GlowingCard delay={0.2}>
-        <div className="bg-[#38383838] backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-cyan-500/30 transition-all duration-300 h-full">
+        <div className="dark:bg-[#38383838] bg-[#ffffff] backdrop-blur-xl rounded-2xl p-5  border-2 border-[#D6DCE8] dark:border-cyan-500/30 transition-all duration-300 h-full">
           <div className="flex items-center justify-between mb-4">
-            <span className="text-xs text-zinc-400 font-medium tracking-wider uppercase">
+            <span className="text-xs text-[#5B657A] dark:text-zinc-400 font-medium tracking-wider uppercase">
               {getText(targetData.label)}
             </span>
             <motion.div
@@ -272,8 +272,10 @@ export default function AtAGlance() {
               <span className="text-xs text-cyan-400 font-bold">
                 {formatNumber(targetData.current)}%
               </span>
-              <span className="text-xs text-zinc-500">/</span>
-              <span className="text-xs text-zinc-400">
+              <span className="text-xs text-[#5B657A] dark:text-zinc-400">
+                /
+              </span>
+              <span className="text-xs text-[#5B657A] dark:text-zinc-400">
                 {formatNumber(targetData.target)}%
               </span>
             </motion.div>
@@ -313,7 +315,7 @@ export default function AtAGlance() {
                   ease: "easeInOut",
                 }}
               >
-                <div className="w-7 h-7 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 shadow-lg shadow-cyan-500/50 flex items-center justify-center">
+                <div className="w-7 h-7 rounded-full bg-linear-to-r from-cyan-400 to-blue-500 shadow-lg shadow-cyan-500/50 flex items-center justify-center">
                   <div className="w-4 h-4 rounded-full bg-white/90 shadow-inner" />
                 </div>
                 <div className="absolute inset-0 rounded-full bg-cyan-400/30 animate-ping" />
@@ -333,8 +335,8 @@ export default function AtAGlance() {
               transition={{ delay: 0.5 }}
               className="flex items-center gap-2"
             >
-              <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 animate-pulse" />
-              <span className="text-[10px] text-cyan-400 font-medium">
+              <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-cyan-400 to-blue-500 animate-pulse " />
+              <span className="text-[10px] text-[#22B36B] dark:text-zinc-400 font-medium">
                 {lang === "fa" ? "پیشرفت" : "Progress"} (%{" "}
                 {formatNumber(targetData.current)})
               </span>
@@ -346,7 +348,7 @@ export default function AtAGlance() {
               className="flex items-center gap-2"
             >
               <div className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-rose-400 to-red-500" />
-              <span className="text-[10px] text-rose-400 font-medium">
+              <span className="text-[10px] text-[#5B657A] dark:text-[#EE5A5A] font-medium">
                 {lang === "fa" ? "باقیمانده" : "Remaining"} (%{" "}
                 {formatNumber(remainingPercentage)})
               </span>
@@ -358,9 +360,9 @@ export default function AtAGlance() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         {Object.entries(drawdownData).map(([key, item], index) => (
           <GlowingCard key={key} delay={0.3 + index * 0.1}>
-            <div className="bg-[#38383838] backdrop-blur-xl rounded-2xl p-5 border border-white/5 hover:border-rose-500/30 transition-all duration-300 h-full flex flex-col">
+            <div className="dark:bg-[#38383838] bg-[#ffffff] backdrop-blur-xl rounded-2xl p-5 border-2 border-[#D6DCE8] dark:border-cyan-500/30 transition-all duration-300 h-full flex flex-col">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-zinc-400 font-medium tracking-wider uppercase">
+                <span className="text-xs text-[#5B657A] dark:text-zinc-400 font-medium tracking-wider uppercase">
                   {getText(item)}
                 </span>
                 <motion.div
@@ -390,7 +392,7 @@ export default function AtAGlance() {
               </div>
 
               <div className="mt-3 flex items-center justify-between flex-1">
-                <span className="text-[10px] text-zinc-500">
+                <span className="text-[10px] text-[#5B657A] dark:text-zinc-400">
                   {lang === "fa" ? "حداکثر مجاز" : "Max Allowed"}:{" "}
                   {formatNumber(item.max)}%
                 </span>
@@ -419,7 +421,7 @@ export default function AtAGlance() {
       </div>
       <Link
         to={"/account/today-parameters"}
-        className={`${lang === "fa" ? "md:text-left" : "md:text-right"} text-center block text-[12px] text-gray-400`}
+        className={`${lang === "fa" ? "md:text-left" : "md:text-right"} text-center block text-[12px] text-[#5B657A] dark:text-zinc-400`}
       >
         {lang === "fa" ? "مشاهده جزئیات بیشتر" : "See All Details"}
       </Link>

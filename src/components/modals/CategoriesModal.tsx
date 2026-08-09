@@ -25,8 +25,6 @@ export default function CategoriesModal({
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = "hidden";
-      // فوکوس خودکار رو کاملاً حذف کردیم
-      // inputRef.current?.focus(); // این خط رو کامنت کردیم
     } else {
       document.body.style.overflow = "unset";
     }
@@ -70,9 +68,9 @@ export default function CategoriesModal({
           fixed inset-x-0 bottom-0 z-101
           max-h-[92vh] md:max-h-[85vh]
           rounded-t-3xl md:rounded-3xl
-          bg-linear-to-b
-from-[#353535]/95
-to-[#242424]/95
+          dark:bg-linear-to-b
+dark:from-[#353535]/95
+dark:to-[#242424]/95
 backdrop-blur-xl
 border border-white/10
 shadow-[0_20px_60px_rgba(0,0,0,0.5)]
@@ -87,7 +85,7 @@ shadow-[0_20px_60px_rgba(0,0,0,0.5)]
           <div className="w-12 h-1 rounded-full bg-white/20" />
         </div>
 
-        <div className="sticky top-0 z-10 px-4 md:px-6 pt-4 pb-3 bg-[#353535]/95 backdrop-blur-xl">
+        <div className="sticky top-0 z-10 px-4 md:px-6 pt-4 pb-3 dark:bg-[#353535]/95 backdrop-blur-xl">
           <div className="flex items-center justify-between gap-4">
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />

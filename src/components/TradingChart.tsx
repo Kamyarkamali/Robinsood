@@ -630,9 +630,9 @@ export default function TradingChart() {
         max-w-full
         mx-auto
         bg-white
-        border-[#e0d9f5]
+        border-[#EDF1F5]
         rounded-2xl sm:rounded-3xl lg:rounded-4xl
-        border-2 sm:border-3 lg:border-5
+        border-2 sm:border-3 lg:border-2
         bg-linear-to-t
         dark:from-[#282828] dark:to-[#2a2929]
         dark:border-[#353535]
@@ -651,16 +651,16 @@ export default function TradingChart() {
           >
             <div
               id="chart2"
-              className="flex bg-[#f0ecfc] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1"
+              className="flex bg-[#EDE9FF] rounded-xl dark:bg-[#454242] p-0.5 sm:p-1 gap-0.5 sm:gap-1"
             >
               {(["balance", "profit"] as Mode[]).map((m) => (
                 <p
                   key={m}
                   onClick={() => setMode(m)}
-                  className={`px-1.5 sm:px-4 py-0.5 sm:py-1.5 dark:text-[#F1F1F1] text-gray-500 rounded-2xl cursor-pointer font-normal text-[9px] sm:text-[13px] transition-all duration-200 whitespace-nowrap
+                  className={`px-1.5 sm:px-4 py-0.5 sm:py-1.5 dark:text-[#F1F1F1] text-[#8A93A6] rounded-2xl cursor-pointer font-normal text-[9px] sm:text-[13px] transition-all duration-200 whitespace-nowrap
                   ${
                     mode === m
-                      ? "bg-linear-to-b from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-gray-800 shadow-md"
+                      ? "bg-linear-to-b from-[#C4C4C426] to-[#EBEBEB1A] dark:text-white text-[#8A93A6] shadow-md"
                       : "bg-transparent"
                   }`}
                 >
@@ -717,7 +717,7 @@ export default function TradingChart() {
       ${
         timeFrame === tf
           ? "sm:bg-linear-to-b sm:from-purple-100 sm:to-purple-50 sm:dark:from-[#C4C4C426] sm:dark:to-[#EBEBEB1A] text-[#7c3aed] bg-none dark:text-[#c4b5fd] shadow-sm"
-          : "bg-transparent dark:text-[#ffffff] text-gray-500 hover:bg-gray-200 dark:hover:bg-[#3A3A3A]"
+          : "bg-transparent dark:text-[#ffffff] text-[#1F2430] hover:bg-gray-200 dark:hover:bg-[#3A3A3A]"
       }`}
                 >
                   {t(`timeframes.${tf}`)}
@@ -1012,7 +1012,7 @@ export default function TradingChart() {
           </div>
         </div>
 
-        <p className="text-center text-[9px] sm:text-[13px] dark:text-white text-[#c0b8d8] -mt-0.5">
+        <p className="text-center text-[9px] sm:text-[13px] dark:text-white text-[#5B657A] -mt-0.5">
           {isRtl
             ? `اسکرول برای زوم · درگ برای حرکت · ${visibleCount}/${TOTAL} کندل`
             : `scroll to zoom · drag to pan · ${visibleCount}/${TOTAL} bars`}

@@ -7,10 +7,10 @@ function AvgWinLossCard() {
   return (
     <CardShell
       className="flex step-test30 flex-col h-full
-        border-4 dark:border-[#3C3C3C] border-gray-300"
+         dark:border-[#3C3C3C] border-[#D6DCE8] "
     >
       <div className="flex flex-col h-full justify-center py-2 sm:py-3 gap-2">
-        <h3 className="dark:text-white text-gray-500 text-sm sm:text-base font-normal">
+        <h3 className="dark:text-white text-[#5B657A] text-sm sm:text-base font-normal">
           {t("cart6.win")}
         </h3>
 

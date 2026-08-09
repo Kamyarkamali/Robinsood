@@ -343,12 +343,13 @@ function StatItem({
       className="flex flex-col items-center justify-center gap-4 p-4 md:p-0 sm:gap-2"
     >
       <span
-        className="text-[13px] sm:text-sm md:text-2xl lg:text-lg bg-[#303030] rounded-xl shadow-2xl px-2 p-3 sm:p-3 font-extrabold tracking-tight leading-none w-full text-center min-w-[50px] sm:min-w-[60px]"
+        className="text-[13px] sm:text-sm md:text-2xl lg:text-lg dark:bg-[#303030]  bg-[#D6DCE8]
+ rounded-xl shadow-2xl px-2 p-3 sm:p-3 font-extrabold tracking-tight leading-none w-full text-center min-w-[50px] sm:min-w-[60px]"
         style={{ color: color ?? "inherit" }}
       >
         {value}
       </span>
-      <span className="text-[13px]  sm:text-[13px] md:text-2xl lg:text-sm font-normal dark:text-[#ffffff] text-gray-500 text-center px-1">
+      <span className="text-[13px]  sm:text-[13px] md:text-2xl lg:text-sm font-normal dark:text-[#ffffff] text-[#5B657A] text-center px-1">
         {label}
       </span>
     </div>
@@ -366,7 +367,7 @@ function GaugeItem({
 }) {
   return (
     <div className="flex flex-col  items-center justify-center gap-1 sm:gap-2 md:gap-3 p-5 lg:p-0 ">
-      <span className="text-[11px] xs:text-[12px] sm:text-[13px] lg:text-[16px] font-normal dark:text-[#ffffff] text-gray-500 text-center leading-tight">
+      <span className="text-[11px] xs:text-[12px] sm:text-[13px] lg:text-[16px] font-normal dark:text-[#ffffff] text-[#5B657A] text-center leading-tight">
         {label}
       </span>
       <Gauge
@@ -448,28 +449,26 @@ export default function TraderScoreCard() {
             dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
             rounded-2xl
            
-            border-4
+            dark:border-4 border-2             border-[#D6DCE8]
         dark:border-[#3C3C3C]
-        border-gray-300
             p-2
             xs:p-3
             sm:p-4
             md:p-6
-            shadow-lg
-            hover:shadow-xl
             transition-shadow
             duration-300
           "
           >
             <div
-              className="flex flex-col  border-4
+              className="flex flex-col
         dark:border-[#3C3C3C]
         border-gray-300 rounded-2xl gap-4 h-full justify-between "
             >
               <div
                 id="detailse15"
                 className="bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
-    rounded-2xl border-4 border-gray-200 dark:border-[#303030]
+    rounded-2xl dark:border-4 border-3             border-[#D6DCE8]
+ dark:border-[#303030]
     p-4 md:p-6 shadow-lg"
               >
                 <div className="grid grid-cols-2  step-test35 p-3 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
@@ -488,11 +487,12 @@ export default function TraderScoreCard() {
         </div>
         <div
           id="detailse16"
-          className="bg-white  border-4
+          className="bg-white  dark:border-4 border-2 border-[#D6DCE8]
+
         dark:border-[#3C3C3C]
-        border-gray-300 dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
+        dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]
     rounded-2xl 
-    p-4 md:p-6 shadow-lg"
+    p-4 md:p-6"
         >
           <div className="grid  step-test36 grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
             <StatItem
@@ -523,10 +523,12 @@ export default function TraderScoreCard() {
         className="
           bg-white
           dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030]  rounded-2xl
-          border-4
+          dark:border-4
+          border-2
           step-test37
           max-w-7xl
-          dark:border-[#3C3C3C] border-gray-300 
+          dark:border-[#3C3C3C]             border-[#D6DCE8]
+
           xs:p-3
           sm:p-4
           md:p-5
@@ -534,8 +536,6 @@ export default function TraderScoreCard() {
           flex-col
           items-center
           justify-center
-          shadow-lg
-          hover:shadow-xl
           transition-shadow
           duration-300
           gap-0.5

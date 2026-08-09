@@ -87,9 +87,9 @@ export default function SettingsModal({ isOpen, onClose }: SettingsModalProps) {
           fixed inset-x-0 bottom-0 z-101
           max-h-[92vh] md:max-h-[85vh]
           rounded-t-3xl md:rounded-3xl
-           bg-linear-to-b
-from-[#353535]/95
-to-[#242424]/95
+           dark:bg-linear-to-b
+dark:from-[#353535]/95
+dark:to-[#242424]/95
 backdrop-blur-xl
 border border-white/10
 shadow-[0_20px_60px_rgba(0,0,0,0.5)]

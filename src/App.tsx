@@ -38,7 +38,7 @@ function App() {
   if (loading) return <TradeLoader />;
 
   return (
-    <div className="min-h-screen bg-[#F4F6F8] text-black dark:bg-[#202020] dark:text-white transition-colors">
+    <div className="min-h-screen bg-[#F6F8FA] text-black dark:bg-[#202020] dark:text-white transition-colors">
       <HomePage />
     </div>
   );

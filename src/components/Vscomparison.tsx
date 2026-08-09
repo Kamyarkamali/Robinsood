@@ -11,20 +11,21 @@ import { useMemo, useState } from "react";
 function MetricSection({
   title,
   rows,
-  id = "comp2", // پیش‌فرض
+  id = "comp2",
 }: {
   title: string;
   rows: MetricRow[];
-  id?: string; // اضافه کردن id به props
+  id?: string;
 }) {
   const { i18n } = useTranslation();
   const isRtl = i18n.language === "fa";
 
   return (
     <div
-      id={id} // استفاده از id داینامیک
+      id={id}
       dir="ltr"
-      className="bg-[#f8fafc] shadow-xl dark:shadow-none dark:bg-[#353535] w-full border-4 dark:border-[#3A3A3A] border-gray-300 rounded-2xl p-3 sm:p-4 md:p-5 mb-4 flex-1"
+      className="bg-[#f8fafc] shadow-sm dark:shadow-none dark:bg-[#353535] w-full dark:border-4 border-2 border-[#D6DCE8]
+ dark:border-[#3A3A3A] rounded-2xl p-3 sm:p-4 md:p-5 mb-4 flex-1"
     >
       <div dir="rtl" className="flex items-center justify-between w-full">
         {/* Users */}
@@ -32,7 +33,7 @@ function MetricSection({
         <div className="flex flex-col items-center">
           <ProfileIcon />
 
-          <span className="text-gray-400 font-bold md:block hidden">
+          <span className="text-[#5B657A] font-bold md:block hidden">
             {i18n.language === "fa" ? "شما" : "You"}
           </span>
         </div>
@@ -44,7 +45,7 @@ function MetricSection({
         >
           <UsersIcon />
 
-          <span className="text-gray-400 text-sm whitespace-nowrap font-bold md:block hidden">
+          <span className="text-[#5B657A] text-sm whitespace-nowrap font-bold md:block hidden">
             {i18n.language === "fa" ? "کاربران رابین سود" : "Robin Users"}
           </span>
         </div>
@@ -57,7 +58,7 @@ function MetricSection({
       <div
         className={`mb-3 sm:mb-4 md:mb-5 ${isRtl ? "text-right" : "text-left"}`}
       >
-        <p className="text-center text-white text-sm sm:text-base font-semibold">
+        <p className="text-center text-[#5B657A] dark:text-white text-sm sm:text-base font-semibold">
           {title}
         </p>
       </div>
@@ -94,8 +95,8 @@ function MetricRow({ row }: { row: MetricRow }) {
         </div>
 
         <div className="flex justify-center items-center w-full sm:w-auto">
-          <div className="px-3 py-1 rounded-lg bg-[#2f2f2f] dark:bg-[#444] border border-[#555]">
-            <span className="text-[10px] sm:text-[11px] md:text-[12px] text-white whitespace-nowrap">
+          <div className="px-3 py-1 rounded-lg bg-[#EAF0FF] dark:bg-[#444] border dark:border-[#555]">
+            <span className="text-[10px] sm:text-[11px] md:text-[12px] dark:text-white text-[#5B657A] whitespace-nowrap">
               {i18next.language === "fa" ? row.label.fa : row.label.en}
             </span>
           </div>
@@ -177,10 +178,10 @@ export default function VSComparison() {
                 <button
                   key={item.id}
                   onClick={() => setComparisonType(item.id as any)}
-                  className={`px-3 py-2.5 rounded-2xl text-xs sm:text-sm font-normal transition-all duration-300 whitespace-nowrap ${
+                  className={`px-3 py-2.5 cursor-pointer rounded-2xl text-xs sm:text-sm font-normal transition-all duration-300 whitespace-nowrap ${
                     comparisonType === item.id
                       ? "bg-linear-to-r from-[#6D28D9] to-[#9333EA] text-white shadow-lg"
-                      : "text-gray-400 hover:text-white hover:bg-[#313131]"
+                      : "text-[#5B657A]"
                   }`}
                 >
                   {i18n.language === "fa" ? item.fa : item.en}
@@ -191,7 +192,7 @@ export default function VSComparison() {
 
           <div className="flex flex-col lg:flex-row gap-4">
             <MetricSection
-              id="comp2" // بخش اول با id="comp2"
+              id="comp2"
               title={
                 i18n.language === "fa"
                   ? "عملکرد و بازدهی"
@@ -201,7 +202,7 @@ export default function VSComparison() {
             />
 
             <MetricSection
-              id="comp3" // بخش دوم با id="comp3"
+              id="comp3"
               title={
                 i18n.language === "fa" ? "رفتار معاملاتی" : "Trading Behavior"
               }
