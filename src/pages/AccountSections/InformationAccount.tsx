@@ -4,6 +4,7 @@ import { FiActivity, FiFlag } from "react-icons/fi";
 import { FiCalendar } from "react-icons/fi";
 import chaleng from "../../assets/images/chaleng.png";
 import i18next from "i18next";
+import { BsSticky } from "react-icons/bs";
 import { cardInner, cardOuter } from "../../styles/buttonStyles";
 import CircleIcon from "../../icons/CircleIcon";
 
@@ -44,9 +45,12 @@ function InformationAccount() {
 
                 <div className="flex flex-col items-center justify-center gap-2 py-1.5">
                   <div className="flex pt-1 items-center justify-center gap-1.5 xs:gap-2 sm:gap-2.5">
-                    <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
-                      {i18next.language === "fa" ? "اکوییتی" : "Equity"}
-                    </p>
+                    <div className="flex items-center gap-1">
+                      <CircleIcon color="#EE5A5A" />
+                      <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
+                        {i18next.language === "fa" ? "اکوییتی" : "Equity"}
+                      </p>
+                    </div>
                   </div>
                   <p className="text-[12px] xs:text-[13px] md:text-[15px] font-normal text-gray-500 dark:text-gray-300 whitespace-nowrap">
                     $9318.35
@@ -56,14 +60,11 @@ function InformationAccount() {
                 <div className="col-span-3">
                   <div className="flex justify-center px-1 sm:px-3 md:px-5 -mt-1">
                     <div className="flex items-center gap-2 px-2.5 py-1.5 sm:px-3 sm:py-1.5 md:px-4 md:py-2 rounded-xl transition-all duration-300 hover:scale-[1.02] bg-linear-to-br bg-[#EEF1F7] dark:from-[#2a2a2a] dark:to-[#323232] w-full sm:w-auto justify-center">
-                      <FiCalendar
-                        size={13}
-                        className="text-[#4F7CFF] dark:text-blue-400 shrink-0"
-                      />
-                      <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-[#5B657A] dark:text-gray-300 text-center whitespace-normal sm:whitespace-nowrap leading-tight">
+                      <BsSticky size={13} className="text-[#EE5A5A] shrink-0" />
+                      <p className="text-[9px] xs:text-[10px] sm:text-[11px] md:text-[13px] font-normal text-[#EE5A5A] text-center whitespace-normal sm:whitespace-nowrap leading-tight">
                         {i18next.language === "fa"
-                          ? "تاریخ ثبت نام:"
-                          : "Registration Date:"}
+                          ? "گذر از لات مجاز"
+                          : "Allowed lot crossing:"}
                         <span className="text-[#5B657A] dark:text-white font-medium">
                           {" "}
                           ۱۴۰۴/۱۰/۲۲
@@ -93,7 +94,11 @@ function InformationAccount() {
               <div className="grid grid-cols-3 w-full text-center items-stretch gap-3 sm:gap-4">
                 <div className="flex flex-col items-center justify-center gap-2 py-1.5">
                   <div className="flex items-center justify-center gap-1 xs:gap-2">
-                    <CircleIcon color="#00C0E8" />
+                    <img
+                      src={chaleng}
+                      alt="chaleng"
+                      className="w-3.5 h-3.5 xs:w-4 xs:h-4 object-contain"
+                    />
                     <p className="text-[11px] xs:text-[12px] md:text-[14px] font-semibold text-[#1F2430] dark:text-white whitespace-nowrap">
                       {i18next.language === "fa" ? "چالش" : "Challenge"}
                     </p>
@@ -128,6 +133,7 @@ function InformationAccount() {
                       {i18next.language === "fa" ? "نوع اکانت" : "Account Type"}
                     </p>
                   </div>
+
                   <p className="text-[12px] xs:text-[13px] md:text-[15px] font-normal text-gray-500 dark:text-gray-300 whitespace-nowrap">
                     {i18next.language === "fa" ? "چالش" : "Challenge"}
                   </p>

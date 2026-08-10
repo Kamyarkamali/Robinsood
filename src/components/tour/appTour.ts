@@ -8,7 +8,13 @@ import type { Lang } from "../../types/type";
 type Theme = "dark" | "light";
 type DriverInstance = ReturnType<typeof driver>;
 
-type TourStepWithMascot = TourStep & { mascotSrc?: string };
+// mascotSrc: optional custom mascot image per step
+// demoSrc / demoType: optional demo image or video shown at the top of the popover body
+type TourStepWithMascot = TourStep & {
+  mascotSrc?: string;
+  demoSrc?: string;
+  demoType?: "image" | "video";
+};
 
 const CHART4_SELECTOR = "#chart4";
 const IN_VIEW_MARGIN = 90;
@@ -40,8 +46,34 @@ const DEFAULT_MASCOT_SVG = `
 const buildTitleHTML = (step: TourStep, lang: Lang): string =>
   `<span class="tour-header-title">${step.title[lang]}</span>`;
 
-const buildDescriptionHTML = (step: TourStep, lang: Lang): string => `
+const buildDemoHTML = (step: TourStepWithMascot): string => {
+  if (!step.demoSrc) return "";
+
+  if (step.demoType === "video") {
+    return `
+      <div class="tour-demo">
+        <video
+          class="tour-demo-media"
+          src="${step.demoSrc}"
+          autoplay
+          loop
+          muted
+          playsinline
+        ></video>
+      </div>
+    `;
+  }
+
+  return `
+    <div class="tour-demo">
+      <img src="${step.demoSrc}" alt="" class="tour-demo-media" />
+    </div>
+  `;
+};
+
+const buildDescriptionHTML = (step: TourStepWithMascot, lang: Lang): string => `
   <div class="tour-body">
+    ${buildDemoHTML(step)}
     <p class="tour-desc-text">${step.description[lang]}</p>
   </div>
 `;
@@ -49,6 +81,14 @@ const buildDescriptionHTML = (step: TourStep, lang: Lang): string => `
 const LABELS: Record<Lang, { prev: string; next: string; finish: string }> = {
   fa: { prev: "قبلی", next: "بعدی", finish: "تمام" },
   en: { prev: "Previous", next: "Next", finish: "Got it" },
+};
+
+const PERSIAN_DIGITS = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
+
+const toLocalizedDigits = (value: number | string, lang: Lang): string => {
+  const str = String(value);
+  if (lang !== "fa") return str;
+  return str.replace(/[0-9]/g, (d) => PERSIAN_DIGITS[Number(d)]);
 };
 
 const getFilteredRawSteps = (scope: TourScope): TourStepWithMascot[] =>
@@ -335,6 +375,9 @@ export const createAppTour = (
         closeBtn.setAttribute("aria-label", lang === "fa" ? "رد شدن" : "Skip");
       }
 
+      const currentDisplay = toLocalizedDigits(current, lang);
+      const totalDisplay = toLocalizedDigits(total, lang);
+
       footer.innerHTML = `
         <div class="tour-footer">
           <button type="button" class="driver-popover-prev-btn tour-btn tour-btn-prev" ${isFirst ? "disabled" : ""} aria-label="${labels.prev}">
@@ -342,7 +385,7 @@ export const createAppTour = (
               <path d="M15 18l-6-6 6-6"/>
             </svg>
           </button>
-          <span class="tour-step-counter">${current} ${lang === "fa" ? "از" : "of"} ${total}</span>
+          <span class="tour-step-counter">${currentDisplay} ${lang === "fa" ? "از" : "of"} ${totalDisplay}</span>
           <button type="button" class="driver-popover-next-btn tour-btn tour-btn-next">
             <span>${isLast ? labels.finish : labels.next}</span>
           </button>
