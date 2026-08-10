@@ -329,13 +329,13 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   return (
     <div
       className={`
-        bg-gradient-to-br from-[#1a1230] to-[#2a1a4a] 
         flex flex-col gap-1 
         backdrop-blur-2xl 
         border border-[#4a2a7a]/50 
         rounded-xl sm:rounded-2xl 
         px-2 sm:px-4 py-2 sm:py-3 
         shadow-2xl shadow-purple-900/20 
+        
         max-w-[200px] xs:max-w-[240px] sm:max-w-64 md:max-w-72 
         ${isRtl ? "text-right" : "text-left"}
         transition-all duration-200

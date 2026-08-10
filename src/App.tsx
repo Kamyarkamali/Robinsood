@@ -38,7 +38,9 @@ function App() {
   if (loading) return <TradeLoader />;
 
   return (
-    <div className="min-h-screen bg-[#F6F8FA] text-black dark:bg-[#202020] dark:text-white transition-colors">
+    <div
+      className={`${i18n.language === "fa" ? "font-lahzeh" : "Inter"} min-h-screen bg-[#F6F8FA] text-black dark:bg-[#202020] dark:text-white transition-colors`}
+    >
       <HomePage />
     </div>
   );

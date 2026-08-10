@@ -27,10 +27,18 @@
 
 @theme {
   --font-lahzeh: "lahzeh", sans-serif;
+  --font-en: "Inter", sans-serif;
+}
+
+html.font-fa {
+  font-family: var(--font-fa);
+}
+
+html.font-en {
+  font-family: var(--font-en);
 }
 
 body {
-  font-family: "lahzeh", sans-serif;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
