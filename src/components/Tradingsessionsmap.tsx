@@ -9,11 +9,6 @@ import i18next from "i18next";
 import map from "../assets/images/map.png";
 
 const IMPACT_COLOR = { High: "#ef4444", Medium: "#f59e0b", Low: "#22c55e" };
-const IMPACT_BG = {
-  High: "rgba(239,68,68,.18)",
-  Medium: "rgba(245,158,11,.18)",
-  Low: "rgba(34,197,94,.18)",
-};
 
 const BAR_H_DESKTOP = 52;
 const BAR_H_MOBILE = 36;
@@ -43,6 +38,13 @@ function isLive(s: Session, cur: number) {
   return s.end > 24
     ? cur >= s.start || cur < s.end - 24
     : cur >= s.start && cur < s.end;
+}
+
+// checks whether an arbitrary time (not just "now") falls inside a session window
+function isTimeInSession(s: Session, time: number) {
+  return s.end > 24
+    ? time >= s.start || time < s.end - 24
+    : time >= s.start && time < s.end;
 }
 
 function getDates() {
@@ -126,7 +128,7 @@ const NewsFilters = ({
   ];
 
   return (
-    <div className="flex flex-col gap-2 w-full">
+    <div className="flex flex-col gap-2 w-full ">
       <div id="news4" className="flex items-center gap-2 w-full">
         <button
           onClick={() => setIsOpen(!isOpen)}
@@ -162,16 +164,13 @@ const NewsFilters = ({
         </span>
       </div>
 
-      {/* گزینه‌های فیلتر */}
       {isOpen && (
-        <div className="flex flex-wrap items-center gap-1.5 p-2 bg-[#EAF0FF] rounded-lg dark:bg-[#1a1a1a] border border-[#3C3C3C]">
+        <div className="flex flex-wrap items-center gap-1.5 p-2  rounded-lg  border border-[#3C3C3C]">
           {impactOptions.map((option) => (
             <button
               key={option.value}
               onClick={() => {
                 onFilterChange(option.value);
-                if (option.value === "all") {
-                }
               }}
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-medium transition-all duration-200 ${
                 filterImpact === option.value
@@ -353,7 +352,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return { left, top, minWidth: tooltipW };
   };
 
-  const hourLabels = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22];
+  const hourLabels = Array.from({ length: 24 }, (_, i) => i);
 
   const newsAreaBaseTop = isMobile ? 4 : 6;
   const newsAreaRowGap = isMobile ? 34 : 46;
@@ -394,6 +393,17 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return IMPACT_COLOR[impact as keyof typeof IMPACT_COLOR] || "#94a3b8";
   };
 
+  const getTooltipBg = (tt: TooltipState) => {
+    if (tt.type === "current") return "#312e81";
+    const color = getSessionColorByTime(tt.time);
+    return `${color}e6`;
+  };
+
+  const getTooltipBorder = (tt: TooltipState) => {
+    if (tt.type === "current") return "#4f46e5";
+    return getSessionColorByTime(tt.time);
+  };
+
   const SessionCardWithBar = ({ session }: { session: Session }) => {
     const isActive = activeSessions.includes(session.id);
     const live = isLive(session, cur);
@@ -411,12 +421,32 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
     const { startPct, width } = getBarPosition();
 
+    const duration =
+      session.end > 24
+        ? 24 - session.start + (session.end - 24)
+        : session.end - session.start;
+
+    const sessionNews = filteredNews
+      .filter((n) => isTimeInSession(session, n.time))
+      .map((n) => {
+        const rel =
+          session.end > 24
+            ? n.time >= session.start
+              ? n.time - session.start
+              : 24 - session.start + n.time
+            : n.time - session.start;
+        return {
+          news: n,
+          posPct: Math.min(98, Math.max(2, (rel / duration) * 100)),
+        };
+      });
+
     return (
       <div className="flex items-center gap-2 w-full">
         <button
           onClick={() => toggleSession(session.id)}
           className={`
-            shrink-0 w-[72px] rounded-xl
+            shrink-0 w-18 rounded-xl
             flex flex-col items-center justify-center gap-1
             transition-all duration-300 border-2
             ${
@@ -474,50 +504,119 @@ export default function TradingSessionsMap({ lang = "fa" }) {
         </button>
 
         {isActive && (
-          <div className="flex-1 min-w-0 h-[72px] relative overflow-hidden rounded-lg bg-[#1A1A1A] border border-[#3C3C3C]">
-            <div
-              className="absolute inset-0 opacity-20"
-              style={{ background: session.bg }}
-            />
-
-            <div
-              className="absolute top-1/2 -translate-y-1/2 h-[60%] rounded-md transition-all duration-500"
-              style={{
-                left: `${startPct}%`,
-                width: `${Math.max(width, 2)}%`,
-                background: session.bg,
-                border: `1px solid ${session.border}`,
-                boxShadow: live ? `0 0 12px ${session.dot}40` : "none",
-                opacity: live ? 1 : 0.6,
-              }}
-            >
-              <div className="flex items-center gap-1 h-full px-1.5 overflow-hidden">
-                <img
-                  className="w-3 h-3 brightness-0 saturate-100 invert shrink-0"
-                  src={session.icon}
-                  alt={session.en}
-                />
-                <div className="flex-1 min-w-0">
-                  <div
-                    className="text-[7px] font-bold truncate"
-                    style={{ color: session.color }}
-                  >
-                    {i18next.language === "fa" ? session.fa : session.en}
-                  </div>
-                  <div className="text-[6px] text-slate-300/80 font-mono">
-                    {fmt(session.start)}-{fmt(session.end % 24)}
-                  </div>
-                </div>
+          <div className="flex-1 min-w-0 flex flex-col gap-1">
+            <div className="flex items-center gap-1.5 px-0.5">
+              <span className="relative flex h-2 w-2 shrink-0">
                 {live && (
-                  <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse shrink-0" />
+                  <span
+                    className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-60"
+                    style={{ background: session.dot }}
+                  />
                 )}
-              </div>
+                <span
+                  className="relative inline-flex rounded-full h-2 w-2"
+                  style={{
+                    background: session.dot,
+                    boxShadow: `0 0 6px ${session.dot}`,
+                  }}
+                />
+              </span>
+              <span
+                className="text-[10px] font-bold truncate"
+                style={{ color: session.color }}
+              >
+                {i18next.language === "fa" ? session.fa : session.en}
+              </span>
+              <span className="text-[8px] text-slate-400 font-mono ms-auto shrink-0">
+                {fmt(session.start)}-{fmt(session.end % 24)}
+              </span>
             </div>
 
-            <div className="absolute bottom-0.5 left-0 right-0 flex justify-between px-1">
-              <span className="text-[5px] text-slate-500 font-mono">00:00</span>
-              <span className="text-[5px] text-slate-500 font-mono">12:00</span>
-              <span className="text-[5px] text-slate-500 font-mono">24:00</span>
+            <div className="h-[72px] relative overflow-hidden rounded-lg bg-[#1A1A1A] border border-[#3C3C3C]">
+              <div
+                className="absolute inset-0 opacity-20"
+                style={{ background: session.bg }}
+              />
+
+              <div
+                className="absolute top-1/2 -translate-y-1/2 h-[60%] rounded-md transition-all duration-500"
+                style={{
+                  left: `${startPct}%`,
+                  width: `${Math.max(width, 2)}%`,
+                  background: session.bg,
+                  border: `1px solid ${session.border}`,
+                  boxShadow: live ? `0 0 12px ${session.dot}40` : "none",
+                  opacity: live ? 1 : 0.6,
+                }}
+              >
+                <div className="flex items-center gap-1 h-full px-1.5 overflow-hidden">
+                  <img
+                    className="w-3 h-3 brightness-0 saturate-100 invert shrink-0"
+                    src={session.icon}
+                    alt={session.en}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div
+                      className="text-[7px] font-bold truncate"
+                      style={{ color: session.color }}
+                    >
+                      {i18next.language === "fa" ? session.fa : session.en}
+                    </div>
+                    <div className="text-[6px] text-slate-300/80 font-mono">
+                      {fmt(session.start)}-{fmt(session.end % 24)}
+                    </div>
+                  </div>
+                  {live && (
+                    <div className="w-1 h-1 rounded-full bg-green-500 animate-pulse shrink-0" />
+                  )}
+                </div>
+              </div>
+
+              {/* mini news markers so relevant news are visible inside the mobile session box too */}
+              {sessionNews.map(({ news, posPct }) => {
+                const impactColor = getImpactColor(news.impact);
+                const isPastNews = news.time < cur;
+                return (
+                  <button
+                    key={`mini-news-${news.id}`}
+                    type="button"
+                    className="tooltip-trigger absolute top-0.5 w-2 h-2 rounded-full border"
+                    style={{
+                      left: `${posPct}%`,
+                      transform: "translateX(-50%)",
+                      background: impactColor,
+                      borderColor: "#0f0f0f",
+                      opacity: isPastNews ? 0.4 : 1,
+                      boxShadow: isPastNews
+                        ? "none"
+                        : `0 0 6px ${impactColor}80`,
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleTooltip(
+                        e,
+                        "news",
+                        news,
+                        news.time,
+                        i18next.language === "fa" ? news.fa : news.en,
+                        `mobile-news-${news.id}`,
+                      );
+                    }}
+                  />
+                );
+              })}
+
+              <div className="absolute bottom-0.5 left-0 right-0 flex justify-between px-1">
+                <span className="text-[5px] text-slate-500 font-mono">
+                  00:00
+                </span>
+                <span className="text-[5px] text-slate-500 font-mono">
+                  12:00
+                </span>
+                <span className="text-[5px] text-slate-500 font-mono">
+                  24:00
+                </span>
+              </div>
             </div>
           </div>
         )}
@@ -538,8 +637,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
       <div
         id="tabale1"
         ref={rootRef}
-        className="dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] step-test43 rounded-2xl             border-[#D6DCE8]
- border-2 dark:border-4
+        className=" step-test43 rounded-2xl
         dark:border-[#3C3C3C]
         border-gray-300 md:pr-2 md:pl-2 mt-3 text-slate-200 w-full min-h-0 pb-3 overflow-hidden select-none"
         onClick={(e) => {
@@ -548,7 +646,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           }
         }}
       >
-        {/* ===== HEADER ===== */}
         <div id="news1" className="px-4 py-3">
           <div className="flex flex-col items-center justify-center gap-2">
             <div className="flex items-center gap-3">
@@ -581,11 +678,10 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
         </div>
 
-        {/* ===== MAP ===== */}
-        <div className="mx-2 sm:mx-auto border-[#1e2d3d] rounded-xl overflow-hidden relative bg-[#2B2B2B]">
+        <div className="mx-2 sm:mx-auto rounded-xl overflow-hidden relative">
           <div className="hidden md:block">
             <div
-              className="relative border-b border-[#1e2d3d]"
+              className="relative bg-[#EDE9FF] dark:bg-transparent"
               style={{ height: newsAreaHeight, overflow: "visible" }}
             >
               <div
@@ -611,7 +707,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     {i18next.language === "fa" ? "الان" : "Now"}
                   </span>
                   <span
-                    className="font-bold text-indigo-100 tracking-wide"
+                    className="font-bold dark:text-indigo-100 tracking-wide"
                     style={{ fontSize: isMobile ? 10 : 12 }}
                   >
                     {fmt(cur)}
@@ -714,7 +810,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                             />
                             <span
                               style={{ fontSize: 9 }}
-                              className="font-bold tracking-wide"
+                              className="font-bold dark:text-white tracking-wide"
                             >
                               {fmt(n.time)}
                             </span>
@@ -723,12 +819,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                           <>
                             <div className="flex items-center gap-1">
                               <span
-                                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                                className="w-1.5 h-1.5 rounded-full  animate-pulse"
                                 style={{ background: impactColor }}
                               />
                               <span
                                 style={{ fontSize: 9 }}
-                                className="font-medium opacity-80"
+                                className="font-medium text-[#1F2430] dark:text-white opacity-80"
                               >
                                 {isNext
                                   ? i18next.language === "fa"
@@ -741,7 +837,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                             </div>
                             <span
                               style={{ fontSize: 11 }}
-                              className="font-bold tracking-wide"
+                              className="font-bold tracking-wide text-[#1F2430] dark:text-white"
                             >
                               {fmt(n.time)}
                             </span>
@@ -781,13 +877,13 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               {hourLabels.map((h) => (
                 <div
                   key={h}
-                  className="absolute font-medium"
+                  className="absolute font-medium flex"
                   style={{
                     top: "20%",
-                    left: pct(h),
+                    [!isRtl ? "right" : "left"]: h === 24 ? "100%" : pct(h),
+                    transform: isRtl ? "translateX(10%)" : "translateX(-10%)",
                     textAlign: "center",
                     color: "#cbd5e1",
-                    textShadow: "0 1px 3px rgba(0,0,0,0.8)",
                     letterSpacing: "0.3px",
                     background: "rgba(43, 43, 43, 0.85)",
                     padding: isMobile ? "1px 4px" : "1px 6px",
@@ -798,15 +894,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     backdropFilter: "blur(4px)",
                     WebkitBackdropFilter: "blur(4px)",
                     width: "auto",
-                    minWidth: "40px",
-                    maxWidth: "60px",
                   }}
                 >
                   {String(h).padStart(2, "0")}:00
                 </div>
               ))}
             </div>
-
             {!isMobile && (
               <div
                 id="news2"
@@ -819,7 +912,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 }}
                 className="relative overflow-hidden"
               >
-                {/* SVG Map Content - same as before */}
                 <svg
                   className="absolute inset-0 w-full h-full"
                   viewBox="0 0 1000 420"
@@ -849,10 +941,17 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   <rect width="1000" height="420" fill="url(#bgGradient)" />
                   <rect width="1000" height="420" fill="url(#dp2)" />
 
+                  {/* City circles: now anchored to each session's own bar
+                      (based on its time-range midpoint + barTop) instead of
+                      the old fixed mapX/mapY coordinates, so the label +
+                      circle always sit right above that session's box. */}
                   {SESSIONS.map((s) => {
                     const on = activeSessions.includes(s.id);
-                    const cx = (s.mapX / 100) * 1000;
-                    const cy = (s.mapY / 100) * 420;
+                    const mid = ((s.start + s.end) / 2) % 24;
+                    const cx = (mid / 24) * 1000;
+                    const barTopUnits = (s.barTop / 100) * 420;
+                    const cy = Math.max(16, barTopUnits - 14);
+
                     return (
                       <g key={s.id}>
                         {on && (
@@ -884,16 +983,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                         )}
 
                         <text
-                          x={
-                            s.id === "tok" || s.id === "syd" ? cx - 8 : cx + 10
-                          }
-                          y={cy - 18}
+                          x={cx}
+                          y={cy - 16}
                           fontSize="9"
                           fontWeight="normal"
                           fill={on ? "#ffffff" : "#6a6a6a"}
-                          textAnchor={
-                            s.id === "tok" || s.id === "syd" ? "end" : "start"
-                          }
+                          textAnchor="middle"
                           dominantBaseline="middle"
                         >
                           <tspan>
@@ -905,50 +1000,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       </g>
                     );
                   })}
-
-                  {sorted.map((n) => {
-                    const isPast = n.time < cur;
-                    const sessionColor = getSessionColorByTime(n.time);
-                    const cx = (n.time / 24) * 1000;
-                    const cy = isMobile ? 380 : 390;
-
-                    return (
-                      <g key={`news-dot-${n.id}`}>
-                        <circle
-                          cx={cx}
-                          cy={cy}
-                          r={isPast ? 3 : 5}
-                          fill={isPast ? "#4a4a4a" : sessionColor}
-                          opacity={isPast ? 0.3 : 0.9}
-                          style={{
-                            filter: isPast
-                              ? "none"
-                              : `drop-shadow(0 0 8px ${sessionColor})`,
-                            animation: isPast
-                              ? "none"
-                              : "pulse-soft 1.5s ease-in-out infinite",
-                          }}
-                        />
-                        {!isPast && (
-                          <circle
-                            cx={cx}
-                            cy={cy}
-                            r={8}
-                            fill="none"
-                            stroke={sessionColor}
-                            strokeWidth="1"
-                            opacity="0.3"
-                            style={{
-                              animation: "pulse-ring 2s ease-out infinite",
-                            }}
-                          />
-                        )}
-                      </g>
-                    );
-                  })}
                 </svg>
 
-                {/* Current time line */}
                 <div
                   className="absolute top-0 bottom-0 w-px z-10 transition-all duration-300"
                   style={{
@@ -1140,103 +1193,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 })}
               </div>
             )}
-
-            <div
-              className="relative border-t border-[#1e2d3d] px-3"
-              style={{ height: isMobile ? 16 : 20 }}
-            >
-              <div
-                className="absolute w-2 h-2 rounded-full border border-blue-400 bg-blue-400 tooltip-trigger transition-all duration-300"
-                style={{
-                  bottom: isMobile ? 3 : 6,
-                  [isRtl ? "right" : "left"]: `${pctNum(cur)}%`,
-                  transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
-                  cursor: "pointer",
-                  zIndex: 20,
-                  boxShadow:
-                    hoveredLine === "current"
-                      ? "0 0 15px rgba(99,102,241,.8), 0 0 30px rgba(99,102,241,.4)"
-                      : "none",
-                  scale: hoveredLine === "current" ? "1.5" : "1",
-                }}
-                onMouseEnter={(e) =>
-                  handleTooltip(
-                    e,
-                    "current",
-                    null,
-                    cur,
-                    i18next.language === "fa"
-                      ? `زمان فعلی ${fmt(cur)}`
-                      : `Current Time ${fmt(cur)}`,
-                    "current",
-                  )
-                }
-                onMouseLeave={clearTooltip}
-                onTouchStart={(e) => {
-                  e.preventDefault();
-                  handleTooltip(
-                    e,
-                    "current",
-                    null,
-                    cur,
-                    i18next.language === "fa"
-                      ? `زمان فعلی ${fmt(cur)}`
-                      : `Current Time ${fmt(cur)}`,
-                    "current",
-                  );
-                }}
-              />
-
-              {sorted.map((n) => {
-                const isHovered = hoveredLine === `news-${n.id}`;
-                const sessionColor = getSessionColorByTime(n.time);
-
-                return (
-                  <div
-                    key={`tick-${n.id}`}
-                    className="absolute w-2 h-2 rounded-full border tooltip-trigger transition-all duration-300"
-                    style={{
-                      bottom: isMobile ? 3 : 6,
-                      [isRtl ? "right" : "left"]: `${pctNum(n.time)}%`,
-                      transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
-                      cursor: "pointer",
-                      zIndex: 20,
-                      borderColor: sessionColor,
-                      background: sessionColor,
-                      boxShadow: isHovered
-                        ? `0 0 15px ${sessionColor}80, 0 0 30px ${sessionColor}40`
-                        : "none",
-                      scale: isHovered ? "1.5" : "1",
-                    }}
-                    onMouseEnter={(e) =>
-                      handleTooltip(
-                        e,
-                        "tick",
-                        n,
-                        n.time,
-                        i18next.language === "fa" ? n.fa : n.en,
-                        `news-${n.id}`,
-                      )
-                    }
-                    onMouseLeave={clearTooltip}
-                    onTouchStart={(e) => {
-                      e.preventDefault();
-                      handleTooltip(
-                        e,
-                        "tick",
-                        n,
-                        n.time,
-                        i18next.language === "fa" ? n.fa : n.en,
-                        `news-${n.id}`,
-                      );
-                    }}
-                  />
-                );
-              })}
-            </div>
           </div>
 
-          {/* Mobile */}
           <div className="md:hidden">
             <div className="flex flex-col gap-2 p-2">
               {SESSIONS.map((session) => (
@@ -1353,8 +1311,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           <div
             className="fixed z-50 pointer-events-none rounded-xl p-2.5 sm:p-3 shadow-xl"
             style={{
-              background: "#141b2d",
-              border: "1px solid #2d3f5a",
+              background: getTooltipBg(tooltip),
+              border: `1px solid ${getTooltipBorder(tooltip)}`,
               direction: isRtl ? "rtl" : "ltr",
               ...getTooltipStyle(tooltip),
             }}
@@ -1362,12 +1320,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             {tooltip.type === "current" && (
               <>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-blue-400 animate-pulse shrink-0" />
-                  <span className="text-xs sm:text-sm font-bold text-blue-400 truncate">
+                  <div className="w-2 h-2 rounded-full bg-blue-200 animate-pulse shrink-0" />
+                  <span className="text-xs sm:text-sm font-bold text-white truncate">
                     {tooltip.label}
                   </span>
                 </div>
-                <div className="text-[10px] sm:text-xs text-slate-400 mt-1">
+                <div className="text-[10px] sm:text-xs text-indigo-100/80 mt-1">
                   {fmt(tooltip.time)}
                 </div>
               </>
@@ -1383,7 +1341,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       alt="flag"
                     />
                   </span>
-                  <span className="text-xs sm:text-sm font-bold text-slate-100 leading-tight">
+                  <span className="text-xs sm:text-sm font-bold text-white leading-tight">
                     {i18next.language === "fa"
                       ? tooltip.data.fa
                       : tooltip.data.en}
@@ -1394,8 +1352,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     className="inline-flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded"
                     style={{
                       fontSize: isMobile ? 10 : 12,
-                      background: IMPACT_BG[tooltip.data.impact],
-                      color: IMPACT_COLOR[tooltip.data.impact],
+                      background: "rgba(0,0,0,.35)",
+                      color: "#ffffff",
                     }}
                   >
                     <span
@@ -1405,7 +1363,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     {tooltip.data.impact} Impact
                   </span>
                 </div>
-                <div className="flex items-center gap-1 text-[10px] sm:text-xs text-slate-500">
+                <div className="flex items-center gap-1 text-[10px] sm:text-xs text-white/80">
                   <svg
                     width="10"
                     height="10"
@@ -1420,7 +1378,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   </svg>
                   <span className="truncate">{tooltip.data.pairs}</span>
                 </div>
-                <div className="text-[9px] sm:text-[10px] text-slate-500 mt-1">
+                <div className="text-[9px] sm:text-[10px] text-white/70 mt-1">
                   {fmt(tooltip.time)}
                 </div>
               </>
@@ -1429,14 +1387,14 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             {tooltip.type === "tick" && tooltip.data && (
               <>
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse shrink-0" />
-                  <span className="text-xs sm:text-sm font-bold text-purple-400 truncate">
+                  <div className="w-2 h-2 rounded-full bg-white/80 animate-pulse shrink-0" />
+                  <span className="text-xs sm:text-sm font-bold text-white truncate">
                     {i18next.language === "fa"
                       ? tooltip.data.fa
                       : tooltip.data.en}
                   </span>
                 </div>
-                <div className="text-[10px] sm:text-xs text-slate-400 mt-1">
+                <div className="text-[10px] sm:text-xs text-white/80 mt-1">
                   {fmt(tooltip.time)}
                 </div>
               </>

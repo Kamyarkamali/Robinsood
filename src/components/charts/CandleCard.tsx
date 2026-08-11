@@ -148,7 +148,7 @@ export const CandleCard: React.FC<CandleCardProps> = ({
                 if (!data) return null;
 
                 return (
-                  <div className="bg-[#1a1230] border border-purple-500/40 rounded-xl px-3 py-2 text-white text-xs max-w-[180px]">
+                  <div className="backdrop-blur-2xl  rounded-xl px-3 py-2 text-white text-xs max-w-[180px]">
                     <p className="text-purple-300 font-bold text-center mb-1">
                       {label}
                     </p>

@@ -52,15 +52,34 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
         type="button"
         onClick={handleStartTour}
         className="
+          group
+          mt-11
+          md:mt-0
           flex items-center gap-2
-          text-sm md:text-base
-          text-[#1F2430]
-          dark:text-white
-        "
-      >
-        <HiOutlineAcademicCap className="w-5 h-5" />
+        cursor-pointer
+          rounded-xl
+          border border-white/10
 
-        {lang === "fa" ? "آموزش" : "Tutorial"}
+          dark:bg-white/10
+          bg-[#7C5CFA]
+          backdrop-blur-md
+
+          px-4 py-2.5
+
+          text-sm font-medium
+          text-white
+
+          transition-all duration-300
+
+          hover:scale-[1.03]
+
+          max-sm:px-3"
+      >
+        <HiOutlineAcademicCap className="w-5 h-5 text-[15px]" />
+
+        <span className="md:block hidden">
+          {lang === "fa" ? "آموزش" : "Tutorial"}
+        </span>
       </button>
 
       <div className="flex items-center gap-4 mt-11 md:mt-0">

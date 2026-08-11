@@ -86,9 +86,9 @@ function MetricRow({ row }: { row: MetricRow }) {
 
       <div className="flex items-center gap-2 sm:gap-1">
         <div className="w-full sm:w-[45%] flex justify-end">
-          <div className="w-full h-4 sm:h-5 rounded-lg bg-[#3F3F3F] overflow-hidden flex flex-row-reverse">
+          <div className="w-full h-4 sm:h-5 rounded-lg dark:bg-[#3F3F3F] bg-[#726e6e] overflow-hidden flex flex-row-reverse">
             <div
-              className="h-full bg-[#FFCC00] rounded-full transition-all duration-500"
+              className="h-full bg-[#FFCC00] rounded-xl transition-all duration-500"
               style={{ width: `${row.leftBar}%` }}
             />
           </div>
@@ -103,9 +103,9 @@ function MetricRow({ row }: { row: MetricRow }) {
         </div>
 
         <div className="w-full sm:w-[45%]">
-          <div className="w-full h-[18px] sm:h-[24px] rounded-full bg-[#3F3F3F] overflow-hidden">
+          <div className="w-full h-[18px] sm:h-[24px] rounded-full dark:bg-[#3F3F3F] bg-[#726e6e] overflow-hidden">
             <div
-              className="h-full bg-[#7c3aed] transition-all duration-500"
+              className="h-full bg-[#7c3aed] rounded-xl transition-all duration-500"
               style={{ width: `${row.rightBar}%` }}
             />
           </div>

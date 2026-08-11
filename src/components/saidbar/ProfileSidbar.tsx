@@ -180,15 +180,45 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
           transition={{ duration: 0.3 }}
         >
           <motion.div
-            className="flex items-center gap-0.5"
+            className="flex items-center gap-1.5"
             initial={{ y: -5, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.1 }}
           >
             {avatarName ? (
-              <p className="text-[10px] sm:text-[11px] text-[#1f2430] dark:text-cyan-400 font-medium">
-                {avatarName}
-              </p>
+              <div className="flex flex-col items-center gap-1">
+                <span className="flex items-center gap-1">
+                  <span className="relative flex h-2 w-2">
+                    <span
+                      className="
+          absolute inline-flex
+          h-full w-full
+          animate-ping
+          rounded-full
+          bg-[#22B36B]
+          opacity-60
+        "
+                    />
+
+                    <span
+                      className="
+          relative inline-flex
+          h-2 w-2
+          rounded-full
+          bg-[#22B36B]
+          shadow-[0_0_6px_rgba(34,179,107,0.6)]
+        "
+                    />
+                  </span>
+
+                  <span className="text-[9px] sm:text-[10px] font-medium text-[#22B36B]">
+                    {lang === "fa" ? "آنلاین" : "Online"}
+                  </span>
+                </span>
+                <p className="text-[10px] sm:text-[11px] text-[#22B36B]  font-medium">
+                  {avatarName}
+                </p>
+              </div>
             ) : (
               <p className="text-[10px] sm:text-[11px] text-[#1f2430] dark:text-cyan-400 font-medium">
                 {lang === "fa" ? "بدون نام" : "No name"}

@@ -88,7 +88,7 @@ export const DonutTooltip: React.FC<{
   const t = translations[lang] || translations.fa;
 
   return (
-    <div className="bg-[#1a1a2e] border border-white/10 rounded-xl px-3 py-2 text-xs shadow-xl">
+    <div className="backdrop-blur-2xl border border-white/10 rounded-xl px-3 py-2 text-xs shadow-xl">
       <p style={{ color: p.payload.color }} className="font-bold">
         {p?.name}
       </p>
