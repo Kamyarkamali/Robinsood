@@ -41,7 +41,6 @@ export default function ChallengeChart({
     ctx.lineCap = "round";
     ctx.stroke();
 
-    // glow
     //@ts-ignore
     ctx.shadowColor = glowColor;
     ctx.shadowBlur = 8;

@@ -61,14 +61,14 @@ export function DropdownFainalTabale<T extends string>({
       <button
         dir={i18next.language === "fa" ? "rtl" : "ltr"}
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center justify-between sm:justify-center lg:h-12.5 gap-2 w-full text-[10px] lg:text-[11px] font-normal sm:w-auto dark:bg-transparent bg-gray-100 border border-gray-300 dark:border-gray-600 rounded-2xl shadow-lg px-3.5 py-2 text-gray-700 dark:text-white text-sm cursor-pointer transition"
+        className="flex items-center justify-between sm:justify-center lg:h-fit gap-2 w-full text-[10px] lg:text-[11px] font-normal sm:w-auto dark:bg-transparent bg-gray-100 border border-gray-300 dark:border-gray-600 rounded-2xl shadow-lg px-3.5 py-2 text-gray-700 dark:text-white text-sm cursor-pointer transition"
       >
         {icon && (
           <span className="text-gray-500 dark:text-gray-500 text-sm">
             {icon}
           </span>
         )}
-        <span>
+        <span className="text-[8px] font-normal">
           {cur
             ? i18next.language === "fa"
               ? cur.label.fa

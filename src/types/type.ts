@@ -81,6 +81,8 @@ export type ColKey =
   | "commission"
   | "swap"
   | "isNewsTrade"
+  | "riskType"
+  | "riskAmount"
   | "comment";
 
 export type SortType = "number" | "string" | "date" | "boolean" | "none";

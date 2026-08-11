@@ -36,6 +36,8 @@ import {
 
 interface ExtendedTrades extends Trades {
   risk?: string;
+  riskType?: "with_sl" | "with_margin";
+  riskAmount?: number;
 }
 
 function symbolInfo(key: string) {
@@ -92,6 +94,10 @@ function generateFakeTrades(count: number): ExtendedTrades[] {
     if (riskScore > 0.7) risk = "high";
     else if (riskScore > 0.4) risk = "medium";
 
+    const riskType: "with_sl" | "with_margin" =
+      Math.random() > 0.5 ? "with_sl" : "with_margin";
+    const riskAmount = +randomBetween(50, 1500).toFixed(2);
+
     out.push({
       id: i + 1,
       ticket: `TCK-${100000 + i}`,
@@ -121,6 +127,8 @@ function generateFakeTrades(count: number): ExtendedTrades[] {
           ? ""
           : "معامله طبق استراتژی روند اصلی با مدیریت ریسک مناسب",
       risk,
+      riskType,
+      riskAmount,
     });
   }
   return out;
@@ -295,11 +303,66 @@ function RiskBadge({ risk, lang }: { risk: string; lang: string }) {
   );
 }
 
+// ====== کامپوننت نمایش نوع ریسک ======
+function RiskTypeBadge({
+  riskType,
+  lang,
+}: {
+  riskType: "with_sl" | "with_margin";
+  lang: string;
+}) {
+  const isWithSl = riskType === "with_sl";
+  return (
+    <span
+      className={`inline-flex items-center px-2.5 py-1 rounded text-xs font-bold whitespace-nowrap border
+        ${
+          isWithSl
+            ? "bg-blue-500/15 text-blue-400 border-blue-500/30"
+            : "bg-purple-500/15 text-purple-400 border-purple-500/30"
+        }`}
+    >
+      {isWithSl
+        ? lang === "fa"
+          ? "با SL"
+          : "With SL"
+        : lang === "fa"
+          ? "با مارجین"
+          : "With Margin"}
+    </span>
+  );
+}
+
 function ColorBarHeaderChip() {
   return (
-    <div className="flex w-5 h-4 rounded-sm mx-auto border border-white/10">
-      <div className="flex-1 bg-emerald-500" />
-      <div className="flex-1 bg-rose-500" />
+    <div
+      className="
+    flex items-center gap-1
+    mx-auto
+    px-1.5 py-1
+    rounded-full
+    bg-[#2b2b2b]
+    border border-white/[0.06]
+    shadow-[inset_1px_1px_2px_rgba(255,255,255,0.05),
+            inset_-1px_-1px_2px_rgba(0,0,0,0.5)]
+  "
+    >
+      <span
+        className="
+      w-2.5 h-2.5
+      rounded-full
+      bg-emerald-400
+      shadow-[0_0_7px_rgba(52,211,153,0.7)]
+    "
+      />
+
+      <span
+        className="
+      w-2.5 h-2.5
+      rounded-full
+      bg-rose-400
+      shadow-[0_0_7px_rgba(251,113,133,0.6)]
+    "
+      />
     </div>
   );
 }
@@ -408,6 +471,9 @@ function TradeCard({ trade, lang }: { trade: ExtendedTrades; lang: string }) {
         <SideBadge side={trade.side} lang={lang} />
         <ResultBadge result={trade.result} lang={lang} />
         <RiskBadge risk={trade.risk || "low"} lang={lang} />
+        {trade.riskType && (
+          <RiskTypeBadge riskType={trade.riskType} lang={lang} />
+        )}
         <span
           className={`text-[8px] px-2 py-0.5 rounded-full ${
             trade.status === "active"
@@ -446,6 +512,24 @@ function TradeCard({ trade, lang }: { trade: ExtendedTrades; lang: string }) {
           </p>
           <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
             {trade.exitPrice !== null ? trade.exitPrice.toLocaleString() : "—"}
+          </p>
+        </div>
+        <div>
+          <p className="text-[9px] text-gray-400 dark:text-gray-500">
+            {isRtl ? "نوع ریسک" : "Risk Type"}
+          </p>
+          {trade.riskType ? (
+            <RiskTypeBadge riskType={trade.riskType} lang={lang} />
+          ) : (
+            <p className="text-sm text-gray-400">—</p>
+          )}
+        </div>
+        <div>
+          <p className="text-[9px] text-gray-400 dark:text-gray-500">
+            {isRtl ? "میزان ریسک" : "Risk Amount"}
+          </p>
+          <p className="text-sm font-semibold text-gray-700 dark:text-gray-200">
+            ${trade.riskAmount?.toLocaleString() || "—"}
           </p>
         </div>
         <div>
@@ -509,7 +593,7 @@ function TradeCard({ trade, lang }: { trade: ExtendedTrades; lang: string }) {
         </span>
       </div>
 
-      {trade.comment && (
+      {/* {trade.comment && (
         <div className="mt-2 pt-2 border-t border-gray-100 dark:border-[#3a3a3a]/30 pr-2">
           <p className="text-[9px] text-gray-400">
             {isRtl ? "کامنت" : "Comment"}
@@ -518,7 +602,7 @@ function TradeCard({ trade, lang }: { trade: ExtendedTrades; lang: string }) {
             {trade.comment}
           </p>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
@@ -582,13 +666,11 @@ function FilterModal({
 
   return (
     <>
-      {/* Backdrop */}
       <div
         className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 animate-in fade-in duration-200"
         onClick={onClose}
       />
 
-      {/* Modal */}
       <div
         className={`fixed inset-4 sm:inset-8 md:inset-10 lg:inset-auto lg:top-1/2 lg:left-1/2 lg:-translate-x-1/2 lg:-translate-y-1/2 
           lg:w-[800px] lg:max-w-[90vw] lg:max-h-[85vh] z-50 
@@ -597,7 +679,6 @@ function FilterModal({
           flex flex-col overflow-hidden`}
         dir={isRtl ? "rtl" : "ltr"}
       >
-        {/* Header */}
         <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-[#3a3a3a] shrink-0">
           <div className="flex items-center gap-3">
             <SlidersHorizontal size={20} className="text-emerald-500" />
@@ -692,7 +773,6 @@ function FilterModal({
             </div>
           </div>
 
-          {/* Numeric Ranges */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Hash size={16} className="text-gray-400" />
@@ -736,7 +816,6 @@ function FilterModal({
             </div>
           </div>
 
-          {/* Date Ranges */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <Calendar size={16} className="text-gray-400" />
@@ -778,7 +857,6 @@ function FilterModal({
             </div>
           </div>
 
-          {/* Rows per page */}
           <div>
             <div className="flex items-center gap-2 mb-3">
               <BarChart3 size={16} className="text-gray-400" />
@@ -807,7 +885,6 @@ function FilterModal({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-6 py-4 border-t border-gray-200 dark:border-[#3a3a3a] shrink-0 bg-gray-50 dark:bg-[#252525]">
           <button
             onClick={resetFilters}
@@ -922,25 +999,13 @@ export default function TradingTable() {
     return count;
   }, [filters]);
 
-  const tableColumns = useMemo(() => {
-    const resultIndex = COLUMNS.findIndex((c) => c.key === "result");
-    const cols = [...COLUMNS];
-    if (resultIndex !== -1) {
-      cols.splice(resultIndex + 1, 0, {
-        key: "risk" as ColKey,
-        label: { fa: "ریسک", en: "Risk" },
-        sort: "string",
-        width: "5%",
-      });
-    }
-    return cols;
-  }, []);
+  const tableColumns = COLUMNS;
 
   return (
     <>
       <div
         dir={isRtl ? "rtl" : "ltr"}
-        className="w-full  mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
+        className="w-full mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
         dark:border-[#3C3C3C] border-gray-300"
       >
         <div className="mx-auto rounded-2xl bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] shadow-xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
@@ -1055,6 +1120,19 @@ export default function TradingTable() {
                     <td className="px-4 py-3 text-center whitespace-nowrap">
                       <ResultBadge result={tr.result} lang={lang} />
                     </td>
+                    {/* ستون نوع ریسک */}
+                    <td className="px-4 py-3 text-center whitespace-nowrap">
+                      {tr.riskType ? (
+                        <RiskTypeBadge riskType={tr.riskType} lang={lang} />
+                      ) : (
+                        <span className="text-xs text-gray-400">—</span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-center text-sm text-gray-700 dark:text-gray-300 tabular-nums whitespace-nowrap">
+                      {tr.riskAmount
+                        ? `$${tr.riskAmount.toLocaleString()}`
+                        : "—"}
+                    </td>
                     <td className="px-4 py-3 text-center whitespace-nowrap">
                       <RiskBadge risk={tr.risk || "low"} lang={lang} />
                     </td>
@@ -1105,12 +1183,12 @@ export default function TradingTable() {
                         </span>
                       )}
                     </td>
-                    <td
+                    {/* <td
                       className="px-4 py-3 text-center text-xs text-gray-600 dark:text-gray-300 whitespace-nowrap"
                       title={tr.comment || "—"}
                     >
                       {tr.comment || "—"}
-                    </td>
+                    </td> */}
                   </tr>
                 ))}
 
@@ -1215,7 +1293,6 @@ export default function TradingTable() {
         </div>
       </div>
 
-      {/* Filter Modal */}
       <FilterModal
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}

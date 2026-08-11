@@ -206,7 +206,7 @@ function TradingNewsTable() {
         <button
           onClick={() => setTradeInNews((v) => !v)}
           className="flex justify-center items-center gap-2 px-3 sm:px-4 py-2 
-            h-12 
+            h-fit 
             dark:bg-linear-to-r 
             font-normal bg-gray-100 dark:from-[#282828] dark:to-[#2f2f2f] 
             border border-gray-300 dark:border-white/10 

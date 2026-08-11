@@ -9,6 +9,8 @@ import type { DayDatas } from "../types/interfaces";
 import FlashIcon from "../icons/FlashIcon";
 import i18next from "i18next";
 
+type YearKey = "2024" | "2025" | "2026";
+
 function Dropdown<T extends string>({
   label,
   items,
@@ -100,11 +102,11 @@ function DateFilterModal({
   quarterItems,
   selectedMonth,
   selectedQuarter,
+  selectedYear,
   onSelectMonth,
   onSelectQuarter,
+  onSelectYear,
   lang,
-  year,
-  triggerLabel,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -112,14 +114,31 @@ function DateFilterModal({
   quarterItems: { v: DateKey; l: string }[];
   selectedMonth: DateKey;
   selectedQuarter: DateKey;
+  selectedYear: YearKey;
   onSelectMonth: (v: DateKey) => void;
   onSelectQuarter: (v: DateKey) => void;
+  onSelectYear: (v: YearKey) => void;
   lang: Lang;
-  year?: string;
   triggerLabel: string;
 }) {
   const isFa = lang === "fa";
   const modalRef = useRef<HTMLDivElement>(null);
+  const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
+
+  const years: YearKey[] = ["2024", "2025", "2026"];
+
+  const getSortedQuarters = (items: { v: DateKey; l: string }[]) => {
+    const order = ["q4", "q1", "q2", "q3"];
+    return [...items].sort((a, b) => {
+      const aKey = a.v as string;
+      const bKey = b.v as string;
+      const aOrder = order.findIndex((o) => aKey.includes(o));
+      const bOrder = order.findIndex((o) => bKey.includes(o));
+      return aOrder - bOrder;
+    });
+  };
+
+  const sortedQuarterItems = getSortedQuarters(quarterItems);
 
   useEffect(() => {
     if (isOpen) {
@@ -183,7 +202,6 @@ function DateFilterModal({
           shadow-2xl dark:shadow-[0_8px_30px_rgba(0,0,0,0.6)]"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* هدر مودال */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 rounded-full bg-indigo-600" />
@@ -191,24 +209,56 @@ function DateFilterModal({
               {isFa ? "انتخاب بازه زمانی" : "Select Time Range"}
             </h3>
           </div>
+          <button
+            onClick={onClose}
+            className="text-gray-400 hover:text-gray-600 dark:text-neutral-500 dark:hover:text-white transition-colors"
+          >
+            ✕
+          </button>
         </div>
 
-        <div className="flex items-center justify-center mb-4">
-          <span className="px-4 py-1.5 rounded-full border border-gray-300 dark:border-neutral-600 text-xs sm:text-sm font-bold text-gray-700 dark:text-white bg-gray-50 dark:bg-[#3A3A3A]">
-            {triggerLabel}
-          </span>
-        </div>
+        <div className="flex justify-center mb-4">
+          <div className="relative">
+            <button
+              onClick={() => setYearDropdownOpen(!yearDropdownOpen)}
+              className="flex items-center gap-2 px-6 py-2 rounded-lg border border-gray-300 dark:border-neutral-600 text-sm font-bold text-gray-700 dark:text-white bg-gray-50 dark:bg-[#3A3A3A] hover:bg-gray-100 dark:hover:bg-[#454545] transition-all"
+            >
+              <span>{selectedYear}</span>
+              <MdKeyboardArrowDown
+                className={`transition-transform duration-200 ${yearDropdownOpen ? "rotate-180" : ""}`}
+              />
+            </button>
 
-        {year && (
-          <div className="flex justify-center mb-4">
-            <span className="px-4 py-1 rounded-lg border border-gray-300 dark:border-neutral-600 text-xs sm:text-sm font-bold text-gray-700 dark:text-white bg-gray-50 dark:bg-[#3A3A3A]">
-              {year}
-            </span>
+            {yearDropdownOpen && (
+              <div
+                className="absolute top-full left-0 mt-1 z-50 min-w-full rounded-lg border p-1
+                  bg-white dark:bg-[#2B2B2B]
+                  border-gray-200 dark:border-neutral-700
+                  shadow-lg dark:shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
+              >
+                {years.map((y) => (
+                  <button
+                    key={y}
+                    onClick={() => {
+                      onSelectYear(y);
+                      setYearDropdownOpen(false);
+                    }}
+                    className={`block w-full px-4 py-2 text-sm rounded-lg transition-colors text-left
+                      ${
+                        selectedYear === y
+                          ? "bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-bold"
+                          : "text-gray-700 dark:text-white hover:bg-gray-100 dark:hover:bg-[#3A3A3A]"
+                      }`}
+                  >
+                    {y}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
-        )}
+        </div>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
-          {/* بخش فصل‌ها */}
           <div className="sm:w-36 shrink-0">
             <p
               className={`text-[10px] sm:text-[11px] font-bold text-gray-400 dark:text-neutral-500 mb-2.5 ${isFa ? "text-right" : "text-left"}`}
@@ -216,7 +266,7 @@ function DateFilterModal({
               {isFa ? "انتخاب بر اساس فصل" : "Select by Quarter"}
             </p>
             <div className="flex flex-row sm:flex-col gap-1.5 overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 -mx-1 px-1 sm:mx-0 sm:px-0">
-              {quarterItems.map((q) => {
+              {sortedQuarterItems.map((q) => {
                 const active = q.v === selectedQuarter;
                 return (
                   <button
@@ -239,11 +289,9 @@ function DateFilterModal({
             </div>
           </div>
 
-          {/* خط جداکننده */}
           <div className="hidden sm:block w-px bg-gray-200 dark:bg-neutral-700" />
           <div className="block sm:hidden h-px bg-gray-200 dark:bg-neutral-700" />
 
-          {/* بخش ماه‌ها */}
           <div className="flex-1">
             <p
               className={`text-[10px] sm:text-[11px] font-bold text-gray-400 dark:text-neutral-500 mb-2.5 ${isFa ? "text-right" : "text-left"}`}
@@ -275,7 +323,6 @@ function DateFilterModal({
           </div>
         </div>
 
-        {/* دکمه‌های اکشن */}
         <div className="flex justify-end gap-2 mt-5 pt-4 border-t border-gray-200 dark:border-neutral-700">
           <button
             onClick={onClose}
@@ -290,26 +337,26 @@ function DateFilterModal({
   );
 }
 
-// ========== کامپوننت اصلی DateFilterDropdown ==========
-
 function DateFilterDropdown({
   monthItems,
   quarterItems,
   selectedMonth,
   selectedQuarter,
+  selectedYear,
   onSelectMonth,
   onSelectQuarter,
+  onSelectYear,
   lang,
-  year,
 }: {
   monthItems: { v: DateKey; l: string }[];
   quarterItems: { v: DateKey; l: string }[];
   selectedMonth: DateKey;
   selectedQuarter: DateKey;
+  selectedYear: YearKey;
   onSelectMonth: (v: DateKey) => void;
   onSelectQuarter: (v: DateKey) => void;
+  onSelectYear: (v: YearKey) => void;
   lang: Lang;
-  year?: string;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isFa = lang === "fa";
@@ -349,17 +396,16 @@ function DateFilterDropdown({
         quarterItems={quarterItems}
         selectedMonth={selectedMonth}
         selectedQuarter={selectedQuarter}
+        selectedYear={selectedYear}
         onSelectMonth={onSelectMonth}
         onSelectQuarter={onSelectQuarter}
+        onSelectYear={onSelectYear}
         lang={lang}
-        year={year}
         triggerLabel={triggerLabel}
       />
     </>
   );
 }
-
-// ========== کامپوننت‌های دیگر (بدون تغییر) ==========
 
 function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
   const r = 33,
@@ -448,7 +494,7 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
       {has && (
         <div className="flex flex-col gap-0.5 text-center">
           <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
-            {isProfit}
+            {day.p! > 0 && "+"}
             {day.p!}
           </span>
           <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
@@ -469,6 +515,8 @@ export default function CalendarAnalysis() {
   });
 
   const [sp, setSp] = useState<ParamKey>("pnl");
+  const [selectedYear, setSelectedYear] = useState<YearKey>("2025");
+  // مقدار پیش‌فرض: فصل زمستان (q4_24) یا (q1_25)
   const [selectedMonth, setSelectedMonth] = useState<DateKey>("dec24");
   const [selectedQuarter, setSelectedQuarter] = useState<DateKey>("q4_24");
 
@@ -498,33 +546,59 @@ export default function CalendarAnalysis() {
   }
 
   const allDates = T.dates;
+
+  // فیلتر ماه‌ها بر اساس سال انتخاب شده
   const monthItems = allDates.filter((d) => {
     const v = d.v as string;
+    const year = selectedYear.slice(-2); // "25" از "2025"
     return (
-      v.includes("dec") ||
-      v.includes("nov") ||
-      v.includes("oct") ||
-      v.includes("sep") ||
-      v.includes("aug") ||
-      v.includes("jul") ||
-      v.includes("jun") ||
-      v.includes("may") ||
-      v.includes("apr") ||
-      v.includes("mar") ||
-      v.includes("feb") ||
-      v.includes("jan")
+      v.includes(year) &&
+      (v.includes("dec") ||
+        v.includes("nov") ||
+        v.includes("oct") ||
+        v.includes("sep") ||
+        v.includes("aug") ||
+        v.includes("jul") ||
+        v.includes("jun") ||
+        v.includes("may") ||
+        v.includes("apr") ||
+        v.includes("mar") ||
+        v.includes("feb") ||
+        v.includes("jan"))
     );
   });
 
+  // فصل‌ها بر اساس سال انتخاب شده
   const quarterItems = allDates.filter((d) => {
     const v = d.v as string;
+    const year = selectedYear.slice(-2);
     return (
-      v.includes("q1") ||
-      v.includes("q2") ||
-      v.includes("q3") ||
-      v.includes("q4")
+      v.includes(year) &&
+      (v.includes("q1") ||
+        v.includes("q2") ||
+        v.includes("q3") ||
+        v.includes("q4"))
     );
   });
+
+  // اگر ماه یا فصل انتخاب شده با سال جدید همخوانی نداشت، اولین مورد را انتخاب کن
+  useEffect(() => {
+    if (monthItems.length > 0) {
+      const monthExists = monthItems.some((m) => m.v === selectedMonth);
+      if (!monthExists) {
+        setSelectedMonth(monthItems[0].v);
+      }
+    }
+  }, [selectedYear, monthItems]);
+
+  useEffect(() => {
+    if (quarterItems.length > 0) {
+      const quarterExists = quarterItems.some((q) => q.v === selectedQuarter);
+      if (!quarterExists) {
+        setSelectedQuarter(quarterItems[0].v);
+      }
+    }
+  }, [selectedYear, quarterItems]);
 
   return (
     <div
@@ -562,11 +636,11 @@ export default function CalendarAnalysis() {
               }
               selectedMonth={selectedMonth}
               selectedQuarter={selectedQuarter}
+              selectedYear={selectedYear}
               onSelectMonth={(v) => setSelectedMonth(v)}
               onSelectQuarter={(v) => setSelectedQuarter(v)}
+              onSelectYear={(v) => setSelectedYear(v)}
               lang={lang}
-              // @ts-ignore
-              year={cd?.year}
             />
           </div>
 

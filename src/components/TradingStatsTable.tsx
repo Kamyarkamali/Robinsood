@@ -19,6 +19,13 @@ const TEXT_MAIN = "text-gray-900 dark:text-gray-100";
 
 const TEXT_SECONDARY = "text-gray-600 dark:text-gray-400";
 
+const formatValue = (value: string): string => {
+  if (value.startsWith("-")) {
+    return `- $${value.replace("-", "")}`;
+  }
+  return `$${value}`;
+};
+
 const StatsTable = ({
   title,
   data,
@@ -67,7 +74,7 @@ const StatsTable = ({
           <div className="w-full flex items-center justify-center px-3 py-2 gap-3">
             {showValue && (
               <span className={`text-sm font-bold ${vc(row[valueColorKey])}`}>
-                {row[valueKey]}
+                {formatValue(row[valueKey])}
               </span>
             )}
             <span className={`text-xs ${TEXT_SECONDARY}`}>

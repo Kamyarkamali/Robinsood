@@ -117,7 +117,7 @@ export default function TradingAnalysisPanel() {
 
   return (
     <>
-      <div id="ai1" className="w-full mx-auto mt-3 ">
+      <div id="ai1" className="w-full max-w-6xl mx-auto mt-3">
         <div
           dir={lang === "fa" ? "ltr" : "rtl"}
           className="
@@ -168,15 +168,22 @@ export default function TradingAnalysisPanel() {
             dark:border-white/10
           "
             >
-              <div className="space-y-3 sm:space-y-4 md:space-y-5 flex flex-col items-center">
+              <div dir={lang==="fa" ? "rtl" :"ltr"} className="space-y-4 sm:space-y-5 md:space-y-6 flex flex-col items-center">
                 {STATS[lang].map((s, i) => (
                   <div
                     key={i}
-                    className="text-center flex items-center justify-center sm:text-right w-full"
+                    className="text-center flex items-center justify-between w-full max-w-[200px]"
                   >
                     <span
                       className={`
-                    text-[18px] sm:text-[20px] md:text-[23px] font-normal
+                    text-[14px] sm:text-[15px] md:text-[16px] font-normal text-gray-600 dark:text-white/70
+                  `}
+                    >
+                      {s.label}
+                    </span>
+                    <span
+                      className={`
+                    text-[18px] sm:text-[20px] md:text-[22px] font-bold
                     ${
                       i === 0
                         ? "text-[#FFD233] dark:text-[#FFD233]"
@@ -187,26 +194,26 @@ export default function TradingAnalysisPanel() {
                   `}
                     >
                       {numStr(s.value, lang)}
-                      <span className="text-[18px] sm:text-[20px] md:text-[23px] font-normal opacity-70 text-gray-600 dark:text-white">
+                      <span className="text-[14px] sm:text-[15px] md:text-[16px] font-normal opacity-70 text-gray-600 dark:text-white/50">
                         /{mx}
-                      </span>
-                      <span className="font-normal text-center text-[18px] sm:text-[20px] md:text-[23px] text-gray-800 dark:text-white block sm:inline">
-                        {s.label}
                       </span>
                     </span>
                   </div>
                 ))}
               </div>
 
-              <div className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 dark:border-white/10">
-                <div className="flex items-center justify-center">
-                  <span className="text-3xl sm:text-4xl md:text-5xl font-bold text-[#00C8B3] dark:text-[#00C8B3]">
+              <div
+                dir={lang === "fa" ? "rtl" : "ltr"}
+                className="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-gray-200 dark:border-white/10"
+              >
+                <div className="flex items-center justify-between w-full max-w-[200px] mx-auto">
+                  <span className="text-[14px] sm:text-[15px] md:text-[16px] font-normal text-gray-600 dark:text-white/70">
+                    {TOTAL[lang].label}
+                  </span>
+                  <span className="text-xl sm:text-2xl md:text-3xl font-bold text-[#00C8B3] dark:text-[#00C8B3]">
                     {numStr(TOTAL[lang].value, lang)}
-                    <span className="text-base sm:text-lg md:text-xl opacity-70 text-gray-600 dark:text-white">
+                    <span className="text-sm sm:text-base md:text-lg font-normal opacity-70 text-gray-600 dark:text-white/50">
                       /{mx}
-                    </span>
-                    <span className="font-bold ml-2 sm:ml-4 text-base sm:text-lg md:text-xl text-gray-800 dark:text-white">
-                      {TOTAL[lang].label}
                     </span>
                   </span>
                 </div>
@@ -225,7 +232,7 @@ export default function TradingAnalysisPanel() {
           "
             >
               <div className="flex flex-col w-full items-end">
-                <div className="text-right font-normal text-[14px] sm:text-[16px] md:text-[18px] text-gray-700 dark:text-white mb-4 sm:mb-6">
+                <div className="text-right font-normal text-[13px] sm:text-[14px] md:text-[15px] text-gray-600 dark:text-white/70 mb-3 sm:mb-4">
                   {DATE[lang]}
                 </div>
 
@@ -241,11 +248,46 @@ export default function TradingAnalysisPanel() {
                   <p className="text-gray-600 dark:text-white/72 text-[11px] sm:text-[12px] md:text-[13px] leading-[1.8] sm:leading-[2] md:leading-[2.1] font-normal text-justify">
                     {c.body}
                   </p>
-                  <p
-                    className={` ${i18next.language === "fa" ? "text-right" : "text-left"} text-gray-700 dark:text-white/90 text-[13px] sm:text-[14px] md:text-[15px] mt-3 sm:mt-4`}
-                  >
-                    {c.daily}
-                  </p>
+                </div>
+              </div>
+
+              <div
+                dir={lang === "fa" ? "rtl" : "ltr"}
+                className="mt-4 sm:mt-6 pt-3 sm:pt-4 border-t border-gray-200 dark:border-white/10"
+              >
+                <div className="bg-gray-50 dark:bg-[#3A3A3A] rounded-xl p-3 sm:p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] sm:text-[12px] font-medium text-gray-500 dark:text-neutral-400">
+                      {lang === "fa" ? "آخرین آپدیت" : "Last Update"}
+                    </span>
+                    <span className="text-[12px] sm:text-[13px] font-bold text-gray-700 dark:text-white">
+                      {c.daily}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between mt-1">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400 dark:text-neutral-500">
+                      {lang === "fa" ? "تاریخ" : "Date"}
+                    </span>
+                    <span className="text-[11px] sm:text-[12px] text-gray-600 dark:text-white/80">
+                      {DATE[lang]}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between mt-0.5">
+                    <span className="text-[10px] sm:text-[11px] text-gray-400 dark:text-neutral-500">
+                      {lang === "fa" ? "ساعت" : "Time"}
+                    </span>
+                    <span className="text-[11px] sm:text-[12px] text-gray-600 dark:text-white/80">
+                      {new Date().toLocaleTimeString(
+                        lang === "fa" ? "fa-IR" : "en-US",
+                        {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                          second: "2-digit",
+                          hour12: false,
+                        },
+                      )}
+                    </span>
+                  </div>
                 </div>
               </div>
             </section>

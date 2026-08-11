@@ -186,7 +186,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
             transition={{ delay: 0.1 }}
           >
             {avatarName ? (
-              <div className="flex flex-col items-center gap-1">
+              <div className="flex items-center gap-1">
                 <span className="flex items-center gap-1">
                   <span className="relative flex h-2 w-2">
                     <span
@@ -209,10 +209,6 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
           shadow-[0_0_6px_rgba(34,179,107,0.6)]
         "
                     />
-                  </span>
-
-                  <span className="text-[9px] sm:text-[10px] font-medium text-[#22B36B]">
-                    {lang === "fa" ? "آنلاین" : "Online"}
                   </span>
                 </span>
                 <p className="text-[10px] sm:text-[11px] text-[#22B36B]  font-medium">

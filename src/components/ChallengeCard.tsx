@@ -169,7 +169,7 @@ export default function ChallengeCardComponent({ card }: Props) {
           ${
             card.status === "active"
               ? "text-[#22B36B] dark:text-white bg-[#E6F8EF] dark:bg-no border-t-[#103a10] dark:bg-green-800"
-              : "text-[#EE5A5A] dark:text-red-500 bg-[#FDEAEA] dark:bg-no border-t-[#3a1010] dark:bg-red-300"
+              : "text-[#EE5A5A] dark:text-red-500 bg-[#FDEAEA] dark:bg-no border-t-[#3a1010] dark:bg-[#ee5a5a38]"
           }
         `}
         >

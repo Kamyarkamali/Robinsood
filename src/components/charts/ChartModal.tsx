@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
 import {
@@ -89,6 +89,24 @@ const ModalCandleBar: React.FC<ModalCandleBarProps> = ({
   );
 };
 
+// یک ستون OHLC برای نوار بالای چارت کندل‌استیک (استاندارد پلتفرم‌های معاملاتی)
+const OhlcLegendStat: React.FC<{
+  label: string;
+  value: number | string;
+  colorClass: string;
+}> = ({ label, value, colorClass }) => (
+  <div className="flex items-center gap-1">
+    <span className="text-[11px] sm:text-xs font-medium text-gray-400 dark:text-white/40">
+      {label}
+    </span>
+    <span
+      className={`text-[11px] sm:text-xs font-bold tabular-nums ${colorClass}`}
+    >
+      {value}
+    </span>
+  </div>
+);
+
 export const ChartModal: React.FC<ChartModalProps> = ({
   isOpen,
   onClose,
@@ -96,7 +114,31 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   title,
   lang,
 }) => {
-  if (!cfg) return null;
+  // مقدار کندلی که هاور شده (برای نوار OHLC بالای چارت)
+  const [hoveredCandle, setHoveredCandle] = useState<{
+    open: number;
+    close: number;
+    high: number;
+    low: number;
+    t?: string | number;
+  } | null>(null);
+
+  const handleChartMouseMove = useCallback((state: any) => {
+    if (state?.activePayload?.length) {
+      const p = state.activePayload[0].payload;
+      setHoveredCandle({
+        open: p.open,
+        close: p.close,
+        high: p.high,
+        low: p.low,
+        t: p.t,
+      });
+    }
+  }, []);
+
+  const handleChartMouseLeave = useCallback(() => {
+    setHoveredCandle(null);
+  }, []);
 
   const isDark =
     typeof document !== "undefined"
@@ -109,30 +151,59 @@ export const ChartModal: React.FC<ChartModalProps> = ({
     text: isDark ? "text-white" : "text-gray-900",
     muted: isDark ? "text-white/60" : "text-gray-500",
     hover: isDark ? "hover:bg-white/10" : "hover:bg-black/5",
+    legendBar: isDark
+      ? "bg-white/5 border-white/10"
+      : "bg-gray-50 border-gray-200",
   };
 
+  const isCandle = cfg?.id === "tradeCount";
+
+  // داده نرمال‌شده کندل + دامنه Y، فقط وقتی کارت کندل‌استیک باشه
+  const candleData = useMemo(() => {
+    if (!isCandle || !cfg?.data) return [];
+    return cfg.data.map((d: CandleDataPoint) => ({
+      t: d.t,
+      open: d.open ?? d.v ?? 50,
+      close: d.close ?? d.v ?? 50,
+      high: d.high ?? d.v ?? 50,
+      low: d.low ?? d.v ?? 50,
+    }));
+  }, [isCandle, cfg?.data]);
+
+  const candleYDomain = useMemo((): [number, number] => {
+    if (!candleData.length) return [0, 100];
+    let max = -Infinity;
+    candleData.forEach((d: any) => {
+      if (d.high > max) max = d.high;
+    });
+    const padding = max * 0.05;
+    return [0, Math.ceil(max + padding)];
+  }, [candleData]);
+
+  // کندل فعال برای نوار OHLC: هاور شده، وگرنه آخرین کندل
+  const activeCandle = useMemo(() => {
+    if (hoveredCandle) return hoveredCandle;
+    return candleData[candleData.length - 1] || null;
+  }, [hoveredCandle, candleData]);
+
+  const activeChange = useMemo(() => {
+    if (!activeCandle) return null;
+    const diff = activeCandle.close - activeCandle.open;
+    const pct = activeCandle.open !== 0 ? (diff / activeCandle.open) * 100 : 0;
+    return { diff, pct, isUp: diff >= 0 };
+  }, [activeCandle]);
+
+  if (!cfg) return null;
+
   const renderChart = () => {
-    if (cfg.id === "tradeCount") {
-      const data = cfg.data.map((d: CandleDataPoint) => ({
-        t: d.t,
-        open: d.open || d.v || 50,
-        close: d.close || d.v || 50,
-        high: d.high || d.v || 50,
-        low: d.low || d.v || 50,
-      }));
-
-      let max = -Infinity;
-      data.forEach((d: any) => {
-        if (d.high > max) max = d.high;
-      });
-      const padding = max * 0.05;
-      const yDomain: [number, number] = [0, Math.ceil(max + padding)];
-
+    if (isCandle) {
       return (
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
-            data={data}
+            data={candleData}
             margin={{ top: 30, right: 40, left: 40, bottom: 40 }}
+            onMouseMove={handleChartMouseMove}
+            onMouseLeave={handleChartMouseLeave}
           >
             <XAxis
               dataKey="t"
@@ -152,7 +223,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
             />
 
             <YAxis
-              domain={yDomain}
+              domain={candleYDomain}
               tickMargin={24}
               stroke={isDark ? "#fff" : "#666"}
               tick={{ fill: isDark ? "#fff" : "#666", fontSize: 11 }}
@@ -192,7 +263,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
                     x={x}
                     width={width}
                     payload={payload}
-                    yDomain={yDomain}
+                    yDomain={candleYDomain}
                     background={background}
                   />
                 );
@@ -338,6 +409,65 @@ export const ChartModal: React.FC<ChartModalProps> = ({
               <X className={`w-5 h-5 ${theme.text}`} />
             </button>
           </div>
+
+          {/* نوار OHLC — فقط برای چارت کندل‌استیک، استاندارد پلتفرم‌های ترید مثل TradingView */}
+          {isCandle && activeCandle && (
+            <div
+              className={`
+                flex flex-wrap items-center gap-x-4 gap-y-1.5
+                px-5 py-2.5
+                border-b
+                ${theme.legendBar}
+              `}
+              dir="ltr"
+            >
+              <OhlcLegendStat
+                label="O"
+                value={activeCandle.open}
+                colorClass={theme.text}
+              />
+              <OhlcLegendStat
+                label="H"
+                value={activeCandle.high}
+                colorClass="text-[#22c55e] dark:text-[#4ade80]"
+              />
+              <OhlcLegendStat
+                label="L"
+                value={activeCandle.low}
+                colorClass="text-[#ef4444] dark:text-[#f87171]"
+              />
+              <OhlcLegendStat
+                label="C"
+                value={activeCandle.close}
+                colorClass={theme.text}
+              />
+
+              {activeChange && (
+                <span
+                  className={`
+                    text-[11px] sm:text-xs font-bold tabular-nums px-2 py-0.5 rounded-md
+                    ${
+                      activeChange.isUp
+                        ? "text-[#16a34a] bg-[#22c55e]/10 dark:text-[#4ade80] dark:bg-[#4ade80]/10"
+                        : "text-[#dc2626] bg-[#ef4444]/10 dark:text-[#f87171] dark:bg-[#f87171]/10"
+                    }
+                  `}
+                >
+                  {activeChange.isUp ? "+" : ""}
+                  {activeChange.diff.toFixed(2)} ({activeChange.isUp ? "+" : ""}
+                  {activeChange.pct.toFixed(2)}%)
+                </span>
+              )}
+
+              {activeCandle.t !== undefined && (
+                <span
+                  className={`ms-auto text-[10px] sm:text-[11px] ${theme.muted}`}
+                >
+                  {activeCandle.t}
+                </span>
+              )}
+            </div>
+          )}
 
           <div className="flex-1 w-full h-full p-4 min-h-0">
             {renderChart()}

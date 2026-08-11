@@ -691,8 +691,8 @@ const TradingChartCard: React.FC<Props> = ({
                     x={paddingLeft - (isMobile ? 8 : 12)}
                     y={yPositions[i] + (isMobile ? 3 : 5)}
                     textAnchor="end"
-                    fill={isDarkMode ? "#5B657A" : "#5B657A"}
-                    fontSize={isMobile ? 11 : 15}
+                    fill={isDarkMode ? "#ffffff" : "#5B657A"}
+                    fontSize={isMobile ? 13 : 17}
                     fontWeight="600"
                   >
                     {formatAxisTick(val, data.unit)}
@@ -758,9 +758,9 @@ const TradingChartCard: React.FC<Props> = ({
                         x={x + barWidth / 2}
                         y={svgHeight - (isMobile ? 6 : 8)}
                         textAnchor="middle"
-                        fontSize={isMobile ? 10 : 15}
+                        fontSize={isMobile ? 11 : 17}
                         fontWeight={isMobile ? "400" : "500"}
-                        fill={isDarkMode ? "#5B657A" : "#2B2B2B"}
+                        fill={isDarkMode ? "#ffff" : "#2B2B2B"}
                       >
                         {i18n.language === "fa"
                           ? day?.label?.fa

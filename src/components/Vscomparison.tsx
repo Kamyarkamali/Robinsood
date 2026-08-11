@@ -6,7 +6,8 @@ import ProfileIcon from "../icons/ProfileIcon";
 import VS from "../assets/images/V.S.png";
 import i18next from "i18next";
 import CartFacke from "../module/CartFacke";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { MdKeyboardArrowDown } from "react-icons/md";
 
 function MetricSection({
   title,
@@ -28,11 +29,8 @@ function MetricSection({
  dark:border-[#3A3A3A] rounded-2xl p-3 sm:p-4 md:p-5 mb-4 flex-1"
     >
       <div dir="rtl" className="flex items-center justify-between w-full">
-        {/* Users */}
-
         <div className="flex flex-col items-center">
           <ProfileIcon />
-
           <span className="text-[#5B657A] font-bold md:block hidden">
             {i18n.language === "fa" ? "شما" : "You"}
           </span>
@@ -44,13 +42,12 @@ function MetricSection({
           }`}
         >
           <UsersIcon />
-
           <span className="text-[#5B657A] text-sm whitespace-nowrap font-bold md:block hidden">
             {i18n.language === "fa" ? "کاربران رابین سود" : "Robin Users"}
           </span>
         </div>
 
-        <div className="flex-4 flex items-center justify-center">
+        <div className="flex-4 flex items-center justify-center md:mr-4">
           <img src={VS} className="w-10 sm:w-10 object-contain" alt="VS" />
         </div>
       </div>
@@ -78,7 +75,6 @@ function MetricRow({ row }: { row: MetricRow }) {
         <span className="text-[#f5c842] text-xs sm:text-sm font-bold">
           +{row.leftValue}
         </span>
-
         <span className="text-[#a78bfa] text-xs sm:text-sm font-bold">
           {row.rightValue}
         </span>
@@ -117,6 +113,7 @@ function MetricRow({ row }: { row: MetricRow }) {
 
 export default function VSComparison() {
   const { i18n } = useTranslation();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const [comparisonType, setComparisonType] = useState<
     "all" | "challenge" | "real" | "self"
@@ -128,6 +125,9 @@ export default function VSComparison() {
     { id: "real", fa: "کاربران ریل", en: "Real Users" },
     { id: "self", fa: "مقایسه با خود", en: "Compare with Self" },
   ];
+
+  const activeTab = comparisonTabs.find((tab) => tab.id === comparisonType);
+  const activeLabel = i18n.language === "fa" ? activeTab?.fa : activeTab?.en;
 
   const scaleMetrics = (data: MetricRow[], factor: number) =>
     data.map((item) => ({
@@ -165,23 +165,79 @@ export default function VSComparison() {
     return behaviorMetrics;
   }, [comparisonType]);
 
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <>
       <div className="dark:bg-linear-to-b w-full max-w-8xl rounded-2xl mt-3 text-white flex justify-center px-2 sm:px-4 py-4 sm:py-6">
         <div className="w-full max-w-5xl px-2 sm:px-4 py-4 sm:py-6 flex flex-col gap-4">
           <div className="w-full flex justify-center">
+            <div className="w-full lg:hidden">
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="w-full flex items-center justify-between px-4 py-3 rounded-2xl border border-[#3B3B3B] bg-transparent backdrop-blur-3xl text-white text-sm font-medium transition-all hover:border-[#6D28D9]"
+                >
+                  <span>
+                    {activeLabel ||
+                      (i18n.language === "fa" ? "انتخاب کنید" : "Select")}
+                  </span>
+                  <MdKeyboardArrowDown
+                    className={`text-xl transition-transform duration-200 ${
+                      isDropdownOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-2 z-50 bg-[#2B2B2B] border border-[#3B3B3B] rounded-2xl shadow-xl overflow-hidden">
+                    {comparisonTabs.map((item) => (
+                      <button
+                        key={item.id}
+                        onClick={() => {
+                          setComparisonType(item.id as any);
+                          setIsDropdownOpen(false);
+                        }}
+                        className={`w-full px-4 py-3 text-sm text-right transition-all hover:bg-[#3A3A3A]
+                          ${
+                            comparisonType === item.id
+                              ? "bg-[#6D28D9] text-white"
+                              : "text-gray-300"
+                          }
+                        `}
+                      >
+                        {i18n.language === "fa" ? item.fa : item.en}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div
               id="comp1"
-              className="w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-1 shadow-xl"
+              className="hidden lg:flex w-full lg:w-auto bg-transparent border backdrop-blur-3xl border-[#3B3B3B] rounded-2xl p-1 gap-1 shadow-xl"
             >
               {comparisonTabs.map((item) => (
                 <button
                   key={item.id}
                   onClick={() => setComparisonType(item.id as any)}
-                  className={`px-3 py-2.5 cursor-pointer rounded-2xl text-xs sm:text-sm font-normal transition-all duration-300 whitespace-nowrap ${
+                  className={`px-4 py-2.5 cursor-pointer rounded-2xl text-sm font-normal transition-all duration-300 whitespace-nowrap ${
                     comparisonType === item.id
                       ? "bg-linear-to-r from-[#6D28D9] to-[#9333EA] text-white shadow-lg"
-                      : "text-[#5B657A]"
+                      : "text-[#5B657A] hover:text-white"
                   }`}
                 >
                   {i18n.language === "fa" ? item.fa : item.en}

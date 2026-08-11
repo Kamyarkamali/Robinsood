@@ -133,6 +133,8 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               h-4 md:h-5
               text-[#1F2430]
               dark:text-white
+                  text-[15px]
+
               "
               />
             ) : (
@@ -142,6 +144,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
                   h-4 md:h-5
                   text-[#1F2430]
                   dark:text-white
+                  text-[15px]
                 "
               />
             )}
@@ -265,6 +268,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               h-4 md:h-5
               text-[#1F2430]
               dark:text-white
+                  text-[15px]
               "
               />
             ) : (
@@ -274,6 +278,7 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
                   h-4 md:h-5
                   text-[#1F2430]
                   dark:text-white
+                  text-[15px]
                 "
               />
             )}

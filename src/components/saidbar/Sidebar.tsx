@@ -227,7 +227,7 @@ export default function Sidebar() {
   if (isMobile) {
     return (
       <>
-        <div className="fixed top-0 left-0 right-0 z-30 backdrop-blur-2xl border-b border-white/5 px-4 py-3 shadow-lg shadow-purple-500/5">
+        <div className="fixed  top-0 left-0 right-0 z-30 backdrop-blur-2xl border-b border-white/5 px-4 py-3 shadow-lg shadow-purple-500/5">
           <div className="flex items-center justify-between max-w-7xl mx-auto">
             <motion.div
               className="relative cursor-pointer"
@@ -634,13 +634,33 @@ export default function Sidebar() {
             </div>
             <p
               className={`
-                  text-[11px]
-                  overflow-hidden
-                  w-44
-                  transition-opacity duration-200
-                  text-center
-                  ${open ? "block" : "hidden pointer-events-none w-0"}
-                `}
+    text-[11px]
+    overflow-hidden
+    w-44
+    transition-opacity duration-200
+    text-center
+    ${open ? "block" : "hidden pointer-events-none w-0"}
+    py-1.5
+    px-3
+    rounded-full
+    bg-gray-200/50
+    dark:bg-[#2a2a2a]
+    text-gray-500
+    dark:text-gray-400
+    font-medium
+    shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]
+    dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.05)]
+    hover:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.08),inset_-3px_-3px_8px_rgba(255,255,255,0.9)]
+    dark:hover:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.6),inset_-3px_-3px_8px_rgba(255,255,255,0.08)]
+    transition-shadow
+    duration-300
+    select-none
+    mx-auto
+    border
+    border-transparent
+    hover:border-gray-300/30
+    dark:hover:border-white/5
+  `}
             >
               {lang === "fa" ? " ورژن 3.1.1" : "Version 3.1.1"}
             </p>
@@ -668,7 +688,8 @@ export default function Sidebar() {
           dark:text-white text-[#1F2430]
           border-r dark:border-zinc-800
           shadow-md dark:shadow-none
-          flex flex-col
+          
+          lg:flex flex-col
           min-h-screen
           
          top-0
@@ -1005,13 +1026,33 @@ export default function Sidebar() {
             </button>
             <p
               className={`
-                  text-[11px]
-                  overflow-hidden
-                  w-44
-                  transition-opacity duration-200
-                  text-center
-                  ${open ? "block" : "hidden pointer-events-none w-0"}
-                `}
+    text-[11px]
+    overflow-hidden
+    w-44
+    transition-opacity duration-200
+    text-center
+    ${open ? "block" : "hidden pointer-events-none w-0"}
+    py-1.5
+    px-3
+    rounded-full
+    bg-gray-200/50
+    dark:bg-[#2a2a2a]
+    text-gray-500
+    dark:text-gray-400
+    font-medium
+    shadow-[inset_2px_2px_5px_rgba(0,0,0,0.05),inset_-2px_-2px_5px_rgba(255,255,255,0.8)]
+    dark:shadow-[inset_2px_2px_5px_rgba(0,0,0,0.5),inset_-2px_-2px_5px_rgba(255,255,255,0.05)]
+    hover:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.08),inset_-3px_-3px_8px_rgba(255,255,255,0.9)]
+    dark:hover:shadow-[inset_3px_3px_8px_rgba(0,0,0,0.6),inset_-3px_-3px_8px_rgba(255,255,255,0.08)]
+    transition-shadow
+    duration-300
+    select-none
+    mx-auto
+    border
+    border-transparent
+    hover:border-gray-300/30
+    dark:hover:border-white/5
+  `}
             >
               {lang === "fa" ? " ورژن 3.1.1" : "Version 3.1.1"}
             </p>

@@ -5,7 +5,7 @@ import {
   BsHourglassSplit,
   BsXCircleFill,
 } from "react-icons/bs";
-
+import { toast } from "react-hot-toast";
 import { fakeChallengeAccounts } from "../data/fakeData";
 import i18next from "i18next";
 import { useState, useEffect } from "react";
@@ -32,6 +32,7 @@ function CardAccounts() {
   const isMobile = useIsMobile();
   const displayCount = isMobile ? 1 : 3;
   const [active, setActive] = useState<string | null>("1002025415");
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const statusConfig = {
     passed: {
@@ -64,6 +65,85 @@ function CardAccounts() {
 
   const lang = i18next.language;
 
+  // تابع کپی کردن
+  const handleCopyId = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+
+    // کپی کردن در کلیپ‌بورد
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(id)
+        .then(() => {
+          setCopiedId(id);
+          toast.success(
+            lang === "fa" ? `شناسه ${id} کپی شد!` : `ID ${id} copied!`,
+            {
+              duration: 2000,
+              position: "bottom-center",
+              style: {
+                background: "#333",
+                color: "#fff",
+                padding: "10px 20px",
+                borderRadius: "10px",
+              },
+            },
+          );
+
+          setTimeout(() => {
+            setCopiedId(null);
+          }, 2000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy:", err);
+          fallbackCopy(id);
+        });
+    } else {
+      fallbackCopy(id);
+    }
+  };
+
+  const fallbackCopy = (id: string) => {
+    const textArea = document.createElement("textarea");
+    textArea.value = id;
+    textArea.style.position = "fixed";
+    textArea.style.left = "-9999px";
+    textArea.style.top = "-9999px";
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+      const successful = document.execCommand("copy");
+      if (successful) {
+        setCopiedId(id);
+        toast.success(
+          lang === "fa" ? `شناسه ${id} کپی شد!` : `ID ${id} copied!`,
+          {
+            duration: 2000,
+            position: "bottom-center",
+            style: {
+              background: "#333",
+              color: "#fff",
+              padding: "10px 20px",
+              borderRadius: "10px",
+            },
+          },
+        );
+        setTimeout(() => {
+          setCopiedId(null);
+        }, 2000);
+      }
+    } catch (err) {
+      console.error("Fallback copy failed:", err);
+      toast.error(lang === "fa" ? "کپی کردن ناموفق بود" : "Failed to copy", {
+        duration: 2000,
+        position: "bottom-center",
+      });
+    } finally {
+      document.body.removeChild(textArea);
+    }
+  };
+
   return (
     <>
       <section className="space-y-4">
@@ -86,6 +166,7 @@ function CardAccounts() {
             // @ts-ignore
             const status = statusConfig[account.cardStatus];
             const isActive = active === account.id;
+            const isCopied = copiedId === account.id;
 
             const cardContent = (
               <div
@@ -130,19 +211,19 @@ function CardAccounts() {
                     />
                   </div>
 
-                  <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col">
-                    <h3 className="text-base xl:text-md font-extrabold text-[#1F2430] dark:text-white truncate">
+                  <div className="flex-1 p-3 xl:p-4 min-w-0 flex flex-col ">
+                    <h3 className="text-base xl:text-md font-extrabold text-[#1F2430] dark:text-white truncate text-center">
                       {lang === "fa" ? account?.title?.fa : account.title?.en}
                     </h3>
 
                     <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-2">
                       <div>
-                        <p className="text-[10px] text-[#5B657A] dark:text-zinc-400 mb-1.5">
+                        <p className="text-[10px] text-[#5B657A] dark:text-zinc-400 mb-1.5 text-center">
                           {lang === "fa" ? "سرمایه" : "Capital"}
                         </p>
 
                         <h4
-                          className={`text-sm xl:text-md font-black ${status.text}`}
+                          className={`text-sm xl:text-md text-center font-black ${status.text}`}
                         >
                           ${account.capital.toLocaleString()}
                         </h4>
@@ -210,23 +291,73 @@ function CardAccounts() {
                       </div>
                     </div>
 
-                    {/* Footer */}
                     <div className="mt-auto pt-3 flex items-center justify-between">
-                      <span className="text-[#5B657A] dark:text-zinc-400 text-xs font-bold">
-                        #{account.id}
-                      </span>
+                      <div
+                        className="relative group w-full flex items-center justify-center cursor-pointer"
+                        onClick={(e) => handleCopyId(account.id, e)}
+                        title={
+                          lang === "fa" ? "کلیک برای کپی" : "Click to copy"
+                        }
+                      >
+                        <span
+                          className={`
+                          text-[#5B657A] dark:text-zinc-400 text-xs font-bold text-center w-full
+                          transition-all duration-200
+                          group-hover:text-cyan-500 dark:group-hover:text-cyan-400
+                          ${isCopied ? "text-cyan-500 dark:text-cyan-400" : ""}
+                        `}
+                        >
+                          #{account.id}
+                        </span>
+
+                        <svg
+                          className={`
+                            w-3.5 h-3.5 
+                            absolute -right-5
+                            opacity-0 group-hover:opacity-100
+                            transition-all duration-200
+                            text-[#5B657A] dark:text-zinc-400
+                            group-hover:text-cyan-500 dark:group-hover:text-cyan-400
+                            ${isCopied ? "opacity-100 text-cyan-500 dark:text-cyan-400" : ""}
+                          `}
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                          />
+                        </svg>
+
+                        {isCopied && (
+                          <span
+                            className="
+                            absolute -top-6 left-1/2 -translate-x-1/2
+                            text-[8px] font-bold
+                            text-cyan-500 dark:text-cyan-400
+                            bg-white dark:bg-zinc-800
+                            px-2 py-0.5 rounded
+                            shadow-lg
+                            animate-bounce
+                          "
+                          >
+                            {lang === "fa" ? "کپی شد ✓" : "Copied ✓"}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             );
 
-            // اگر کارت فعال است، بدون Popover برگردان
             if (isActive) {
               return <div key={account.id}>{cardContent}</div>;
             }
 
-            // اگر کارت غیرفعال است، با Popover برگردان
             return (
               <Popover key={account.id} account={account} lang={lang}>
                 {cardContent}

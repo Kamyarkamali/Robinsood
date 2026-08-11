@@ -4,10 +4,9 @@ import DashboardLayout from "../layout/DashboardLayout";
 import MyAccounts from "./MyAccounts";
 import AllAccounts from "./AllAccounts";
 import AccountSection from "./AccountSections/AccountSection";
-import DashboardWindows from "../components/modals/DashboardWindows";
 import MobileBottomNav from "../module/MobileBottomNav";
-import DashboardWindowsItem from "../components/modals/DashboardWindowsItem";
 import NotFound from "./NotFound";
+import DashboardBottomNav from "../module/DashboardBottomNav";
 
 function ScrollToTopOnMount() {
   const { pathname } = useLocation();
@@ -41,8 +40,7 @@ function HomePage() {
         </Route>
       </Routes>
       {/* @ts-ignore */}
-      <DashboardWindows />
-      <DashboardWindowsItem />
+      <DashboardBottomNav />
       <MobileBottomNav />
     </>
   );

@@ -1,23 +1,49 @@
 import { useEffect, useState } from "react";
 
-type Theme = "light" | "dark" | "system";
+export type Theme = "light" | "dark" | "system";
 
-function getSystemTheme(): "light" | "dark" {
+type ResolvedTheme = "light" | "dark";
+
+function getSystemTheme(): ResolvedTheme {
+  if (typeof window === "undefined") {
+    return "light";
+  }
+
   return window.matchMedia("(prefers-color-scheme: dark)").matches
     ? "dark"
     : "light";
 }
 
-export function useTheme() {
-  const [theme, setTheme] = useState<Theme>(() => {
-    return (localStorage.getItem("theme") as Theme) || "system";
-  });
+function getStoredTheme(): Theme {
+  if (typeof window === "undefined") {
+    return "system";
+  }
 
-  const resolvedTheme: "light" | "dark" =
-    theme === "system" ? getSystemTheme() : theme;
+  const storedTheme = localStorage.getItem("theme");
+
+  if (
+    storedTheme === "light" ||
+    storedTheme === "dark" ||
+    storedTheme === "system"
+  ) {
+    return storedTheme;
+  }
+
+  return "system";
+}
+
+export function useTheme() {
+  const [theme, setTheme] = useState<Theme>(getStoredTheme);
+
+  const [systemTheme, setSystemTheme] =
+    useState<ResolvedTheme>(getSystemTheme);
+
+  const resolvedTheme: ResolvedTheme =
+    theme === "system" ? systemTheme : theme;
 
   const isDark = resolvedTheme === "dark";
 
+  // اعمال Theme روی html
   useEffect(() => {
     const root = document.documentElement;
 
@@ -30,25 +56,64 @@ export function useTheme() {
     localStorage.setItem("theme", theme);
   }, [theme, resolvedTheme]);
 
+  // گوش دادن به تغییر Theme سیستم
   useEffect(() => {
     const media = window.matchMedia("(prefers-color-scheme: dark)");
 
-    const handler = () => {
-      if (theme === "system") {
-        const systemTheme = media.matches ? "dark" : "light";
+    const handleChange = (event: MediaQueryListEvent) => {
+      const newSystemTheme: ResolvedTheme = event.matches
+        ? "dark"
+        : "light";
 
-        const root = document.documentElement;
-        if (systemTheme === "dark") {
-          root.classList.add("dark");
-        } else {
-          root.classList.remove("dark");
-        }
+      setSystemTheme(newSystemTheme);
+    };
+
+    // مقدار اولیه
+    setSystemTheme(media.matches ? "dark" : "light");
+
+    media.addEventListener("change", handleChange);
+
+    return () => {
+      media.removeEventListener("change", handleChange);
+    };
+  }, []);
+
+  // هماهنگ کردن تغییر Theme بین Tabها
+  useEffect(() => {
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.key !== "theme") return;
+
+      const newTheme = event.newValue;
+
+      if (
+        newTheme === "light" ||
+        newTheme === "dark" ||
+        newTheme === "system"
+      ) {
+        setTheme(newTheme);
+      } else {
+        setTheme("system");
       }
     };
 
-    media.addEventListener("change", handler);
-    return () => media.removeEventListener("change", handler);
-  }, [theme]);
+    window.addEventListener("storage", handleStorageChange);
+
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
+  const setLight = () => {
+    setTheme("light");
+  };
+
+  const setDark = () => {
+    setTheme("dark");
+  };
+
+  const setSystem = () => {
+    setTheme("system");
+  };
 
   const toggleTheme = () => {
     setTheme((prev) => {
@@ -57,10 +122,6 @@ export function useTheme() {
       return "light";
     });
   };
-
-  const setLight = () => setTheme("light");
-  const setDark = () => setTheme("dark");
-  const setSystem = () => setTheme("system");
 
   return {
     theme,

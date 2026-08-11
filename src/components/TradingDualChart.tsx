@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   ComposedChart,
   Bar,
@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import {
-  DATA_MAP,
   FA_DIGITS,
   PARAMETERS_FIRST,
   PARAMETERS_SECOND,
@@ -19,6 +18,64 @@ import {
 import type { Lang, Period } from "../types/type";
 import type { Parameter } from "../types/interfaces";
 import i18next from "i18next";
+
+const generateRealData = (period: Period) => {
+  const now = new Date();
+  const data = [];
+  const count = period === "daily" ? 7 : period === "weekly" ? 4 : 3;
+
+  const weekDays = {
+    fa: ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه", "جمعه"],
+    en: ["Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"],
+  };
+
+  for (let i = 0; i < count; i++) {
+    const date = new Date(now);
+    if (period === "daily") {
+      date.setDate(date.getDate() - (count - 1 - i));
+    } else if (period === "weekly") {
+      date.setDate(date.getDate() - (count - 1 - i) * 7);
+    } else {
+      date.setMonth(date.getMonth() - (count - 1 - i));
+    }
+
+    const dayIndex = date.getDay();
+    const persianDate = `${weekDays.fa[dayIndex]} ${toPersianDate(date)}`;
+    const englishDate = `${weekDays.en[dayIndex]} ${date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}`;
+
+    data.push({
+      date: {
+        fa: persianDate,
+        en: englishDate,
+        faShort: `${weekDays.fa[dayIndex].slice(0, 2)} ${toPersianDateShort(date)}`,
+        enShort: `${weekDays.en[dayIndex].slice(0, 3)} ${date.getDate()}`,
+        faMedium: `${weekDays.fa[dayIndex].slice(0, 3)} ${toPersianDateShort(date)}`,
+        enMedium: `${weekDays.en[dayIndex].slice(0, 3)} ${date.getDate()}`,
+      },
+      param1: Math.floor(Math.random() * 100) + 20,
+      param2: Math.floor(Math.random() * 80) + 10,
+    });
+  }
+  return data;
+};
+
+function toPersianDate(date: Date): string {
+  const year = date.getFullYear() - 621;
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  return `${year}/${String(month).padStart(2, "0")}/${String(day).padStart(2, "0")}`;
+}
+
+function toPersianDateShort(date: Date): string {
+  const day = date.getDate();
+  return `${day}`;
+}
+
+const DATA_MAP = {
+  daily: generateRealData("daily"),
+  weekly: generateRealData("weekly"),
+  monthly: generateRealData("monthly"),
+};
 
 function toFaNum(n: number): string {
   return String(n).replace(/[0-9]/g, (d) => FA_DIGITS[d]);
@@ -33,7 +90,7 @@ function CustomTooltip({
   param2Label,
 }: {
   active?: boolean;
-  payload?: { name: string; value: number; color: string }[];
+  payload?: { name: string; value: number; color: string; dataKey?: string }[];
   label?: string;
   lang: Lang;
   param1Label: string;
@@ -41,27 +98,75 @@ function CustomTooltip({
 }) {
   if (!active || !payload?.length) return null;
 
+  if (payload.length === 1) {
+    const singleItem = payload[0];
+    return (
+      <div
+        className="rounded-xl border border-white/10 backdrop-blur-3xl px-4 py-3 shadow-2xl"
+        style={{ direction: lang === "fa" ? "rtl" : "ltr" }}
+      >
+        <p className="mb-2 text-xs text-gray-400">{label}</p>
+        <div className="flex items-center gap-2 text-sm mb-1.5">
+          <span
+            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+            style={{ background: "#FF2D55" }}
+          />
+          <span className="text-gray-300">{param1Label}:</span>
+          <span className="font-bold text-white">
+            {lang === "fa" ? toFaNum(singleItem.value) : singleItem.value}
+          </span>
+        </div>
+        <div className="flex items-center gap-2 text-sm">
+          <span
+            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+            style={{ background: "#7c6af7" }}
+          />
+          <span className="text-gray-300">{param2Label}:</span>
+          <span className="font-bold text-white">
+            {lang === "fa" ? toFaNum(0) : 0}
+          </span>
+        </div>
+      </div>
+    );
+  }
+
+  const param1Data =
+    payload.find((p) => p.dataKey === "param1" || p.name === "param1") ||
+    payload[0];
+  const param2Data =
+    payload.find((p) => p.dataKey === "param2" || p.name === "param2") ||
+    payload[1];
+
   return (
     <div
       className="rounded-xl border border-white/10 backdrop-blur-3xl px-4 py-3 shadow-2xl"
       style={{ direction: lang === "fa" ? "rtl" : "ltr" }}
     >
       <p className="mb-2 text-xs text-gray-400">{label}</p>
-      {payload.map((entry) => (
-        <div key={entry.name} className="flex items-center gap-2 text-sm">
+      {param1Data && (
+        <div className="flex items-center gap-2 text-sm mb-1.5">
           <span
-            className="inline-block h-2.5 w-2.5 rounded-full"
-            style={{ background: entry.color }}
+            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+            style={{ background: "#7c6af7" }}
           />
-
-          <span className="text-gray-300">
-            {entry.name === "param1" ? param1Label : param2Label}:
-          </span>
+          <span className="text-gray-300">{param1Label}:</span>
           <span className="font-bold text-white">
-            {lang === "fa" ? toFaNum(entry.value) : entry.value}
+            {lang === "fa" ? toFaNum(param1Data.value) : param1Data.value}
           </span>
         </div>
-      ))}
+      )}
+      {param2Data && (
+        <div className="flex items-center gap-2 text-sm">
+          <span
+            className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
+            style={{ background: "#7c6af7" }}
+          />
+          <span className="text-gray-300">{param2Label}:</span>
+          <span className="font-bold text-white">
+            {lang === "fa" ? toFaNum(param2Data.value) : param2Data.value}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
@@ -99,7 +204,6 @@ function ParamDropdown({
         className="
           flex items-center justify-between gap-1
           w-full
-          
           rounded-xl px-3 py-1.5 text-[10px] sm:text-xs font-medium
           border transition-all duration-200
           bg-white/10 text-gray-700 border-gray-200
@@ -163,16 +267,12 @@ function ParamDropdown({
                 dir={lang === "fa" ? "rtl" : "ltr"}
               />
             </div>
-
             <div
               className="
-    overflow-y-auto
-    overflow-x-hidden
-    pr-2
-    scrollbar-thin
-    scrollbar-thumb-gray-400
-    dark:scrollbar-thumb-gray-600
-            max-h-55 p-1"
+                overflow-y-auto overflow-x-hidden pr-2
+                scrollbar-thin scrollbar-thumb-gray-400 dark:scrollbar-thumb-gray-600
+                max-h-55 p-1
+              "
             >
               {filteredOptions.length === 0 ? (
                 <div className="px-3 py-4 text-xs text-center text-gray-500 dark:text-gray-400">
@@ -215,21 +315,47 @@ export default function TradingDualChart() {
   const [period, setPeriod] = useState<Period>("daily");
   const [param1, setParam1] = useState<Parameter>(PARAMETERS_FIRST[0]);
   const [param2, setParam2] = useState<Parameter>(PARAMETERS_SECOND[0]);
+  const [screenSize, setScreenSize] = useState<"sm" | "md" | "lg" | "xl">("lg");
 
   const currentLang = i18next.language as Lang;
+
+  useEffect(() => {
+    const checkScreenSize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setScreenSize("sm");
+      } else if (width < 768) {
+        setScreenSize("md");
+      } else if (width < 1024) {
+        setScreenSize("lg");
+      } else {
+        setScreenSize("xl");
+      }
+    };
+    checkScreenSize();
+    window.addEventListener("resize", checkScreenSize);
+    return () => window.removeEventListener("resize", checkScreenSize);
+  }, []);
+
+  const useShortLabel =
+    screenSize === "sm" || screenSize === "md" || screenSize === "lg";
+  const isMobile = screenSize === "sm" || screenSize === "md";
 
   const data = useMemo(
     () =>
       DATA_MAP[period].map((d) => ({
         label: d.date[currentLang],
+        fullLabel: d.date[currentLang],
+        shortLabel:
+          d.date[`${currentLang}Short` as keyof typeof d.date] ||
+          d.date[currentLang],
         param1: d.param1,
         param2: d.param2,
       })),
     [period, currentLang],
   );
 
-  const isRtl = currentLang === "en";
-
+  const isRtl = currentLang === "fa";
   const yTick = (v: number) => (isRtl ? toFaNum(v) : String(v));
 
   return (
@@ -257,7 +383,6 @@ export default function TradingDualChart() {
               />
             </div>
 
-            {/* دکمه دوم */}
             <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-gray-50/50 dark:bg-white/5 border border-gray-200/50 dark:border-white/5">
               <span className="text-[9px] sm:text-[10px] font-medium text-gray-500 dark:text-gray-400 whitespace-nowrap">
                 {currentLang === "fa" ? "محور دوم:" : "Axis 2:"}
@@ -310,7 +435,12 @@ export default function TradingDualChart() {
           <ResponsiveContainer width="100%" height="100%">
             <ComposedChart
               data={data}
-              margin={{ top: 19, right: 0, left: 0, bottom: 0 }}
+              margin={{
+                top: 19,
+                right: isMobile ? 5 : 0,
+                left: isMobile ? 5 : 0,
+                bottom: isMobile ? 20 : 10,
+              }}
             >
               <CartesianGrid
                 strokeDasharray="4 4"
@@ -320,14 +450,14 @@ export default function TradingDualChart() {
               />
 
               <YAxis
-                width={30}
-                tickMargin={20}
+                width={isMobile ? 25 : 30}
+                tickMargin={isMobile ? 10 : 20}
                 yAxisId="left"
                 orientation={isRtl ? "right" : "left"}
                 tickFormatter={yTick}
                 tick={{
                   fill: "currentColor",
-                  fontSize: 11,
+                  fontSize: isMobile ? 9 : 11,
                   className: "text-gray-700 dark:text-white",
                 }}
                 axisLine={{
@@ -340,21 +470,21 @@ export default function TradingDualChart() {
                   position: "top",
                   offset: 0,
                   fill: "#ff2d55",
-                  fontSize: 22,
-                  dx: isRtl ? -15 : 15,
+                  fontSize: isMobile ? 16 : 22,
+                  dx: isRtl ? -10 : 10,
                   fontWeight: "bold",
                 }}
               />
 
               <YAxis
-                width={30}
+                width={isMobile ? 25 : 30}
                 yAxisId="right"
                 orientation={isRtl ? "left" : "right"}
-                tickMargin={20}
+                tickMargin={isMobile ? 10 : 20}
                 tickFormatter={yTick}
                 tick={{
                   fill: "currentColor",
-                  fontSize: 11,
+                  fontSize: isMobile ? 9 : 11,
                   className: "text-gray-700 dark:text-white",
                 }}
                 axisLine={{
@@ -366,27 +496,39 @@ export default function TradingDualChart() {
                   value: "▲",
                   position: "top",
                   offset: 0,
-                  fontSize: 18,
-                  dx: isRtl ? 15 : -15,
+                  fontSize: isMobile ? 16 : 18,
+                  dx: isRtl ? 10 : -10,
                   fill: "#7c6af7",
                   fontWeight: "bold",
                 }}
               />
 
               <XAxis
-                padding={{ left: 0, right: 0 }}
+                padding={{ left: isMobile ? 5 : 0, right: isMobile ? 5 : 0 }}
                 dataKey="label"
                 reversed={isRtl}
                 tick={{
                   fill: "currentColor",
-                  fontSize: 11,
+                  fontSize: isMobile ? 8 : 11,
                 }}
                 tickLine={false}
                 axisLine={{
                   stroke: "currentColor",
                   className: "text-gray-300 dark:text-white/10",
                 }}
-                tickMargin={10}
+                tickMargin={isMobile ? 15 : 10}
+                angle={isMobile ? -45 : 0}
+                height={isMobile ? 60 : 30}
+                interval={0}
+                tickFormatter={(value, index) => {
+                  const item = data[index];
+                  if (!item) return value;
+                  // تا سایز lg از نسخه کوتاه استفاده کن
+                  if (useShortLabel) {
+                    return item.shortLabel || value;
+                  }
+                  return value;
+                }}
               />
 
               <Tooltip
@@ -403,7 +545,7 @@ export default function TradingDualChart() {
               <Bar
                 yAxisId="left"
                 dataKey="param1"
-                barSize={24}
+                barSize={isMobile ? 16 : 24}
                 radius={[4, 4, 0, 0]}
                 fill="url(#barGrad)"
               />
@@ -412,10 +554,18 @@ export default function TradingDualChart() {
                 yAxisId="right"
                 dataKey="param2"
                 stroke="#6155F5"
-                strokeWidth={2.5}
-                dot={{ r: 3, fill: "#6155F5" }}
-                activeDot={{ r: 6, fill: "#f43f5e" }}
+                strokeWidth={isMobile ? 2 : 2.5}
+                dot={{
+                  r: isMobile ? 2 : 3,
+                  fill: "#6155F5",
+                }}
+                activeDot={{
+                  r: isMobile ? 4 : 6,
+                  fill: "#f43f5e",
+                }}
                 type="monotone"
+                connectNulls={true}
+                isAnimationActive={true}
               />
 
               <defs>

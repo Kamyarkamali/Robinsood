@@ -60,16 +60,11 @@ export default function CartFacke() {
           ? "آمار کاربران رابین  سون"
           : "Robinhood Users Stats"}
       </h1>
-      <div
-        id="comp4"
-        dir={isRtl ? "rtl" : "ltr"}
-        className="w-full dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] "
-      >
+      <div id="comp4" dir={isRtl ? "rtl" : "ltr"}>
         <div
           className="
           rounded-2xl
     border-[#D6DCE8]
-          dark:border-4 border-2  dark:border-[#3C3C3C]
           backdrop-blur-xl
           p-3 sm:p-5 lg:p-6
         "

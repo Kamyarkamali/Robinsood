@@ -928,43 +928,43 @@ export const statsData: StatsRow[] = [
   {
     labelFa: "بهترین معامله (دلار)",
     labelEn: "Best Trade ($)",
-    value: "-۴۸.۶",
+    value: "۴۸.۶ -",
     valueColor: "red",
   },
   {
     labelFa: "بدترین معامله (دلار)",
     labelEn: "Worst Trade ($)",
-    value: "-۵۱.۵۲",
+    value: "۵۱.۵۲ -",
     valueColor: "red",
   },
   {
     labelFa: "میانگین سود (دلار)",
     labelEn: "Avg Win ($)",
-    value: "-۲۵.۱۹",
+    value: "۲۵.۱۹ -",
     valueColor: "red",
   },
   {
     labelFa: "میانگین ضرر (دلار)",
     labelEn: "Avg Loss ($)",
-    value: "-۳۵.۱۳",
+    value: "۳۵.۱۳ -",
     valueColor: "red",
   },
   {
     labelFa: "میانگین سود (پیپ)",
     labelEn: "Avg Win (pip)",
-    value: "-۳۵۱",
+    value: "۳۵۱ -",
     valueColor: "red",
   },
   {
     labelFa: "میانگین ضرر (پیپ)",
     labelEn: "Avg Loss (pip)",
-    value: "-۵۴",
+    value: "۵۴ -",
     valueColor: "red",
   },
   {
     labelFa: "برآیند معاملات (پیپ)",
     labelEn: "Trade Result (pip)",
-    value: "-۵۱۷۰",
+    value: "۵۱۷۰ -",
     valueColor: "red",
   },
   {
@@ -1373,7 +1373,7 @@ export const i18n: Record<
     psec: string;
     dsec: string;
     params: { v: ParamKey; l: string }[];
-    dates: { v: DateKey; l: string }[];
+    dates: { v: any; l: any }[];
     mpdl: string;
     stitle: string;
     du: string;
@@ -1397,8 +1397,10 @@ export const i18n: Record<
       { v: "dec24", l: "دسامبر ۲۰۲۴" },
       { v: "nov24", l: "نوامبر ۲۰۲۴" },
       { v: "oct24", l: "اکتبر ۲۰۲۴" },
-      { v: "q4_24", l: "کوارتر ۴ – ۲۰۲۴" },
-      { v: "q3_24", l: "کوارتر ۳ – ۲۰۲۴" },
+      { v: "Winter", l: "زمستان" },
+      { v: "Spring", l: "بهار" },
+      { v: "Summer", l: "تابستان" },
+      { v: "Autumn", l: "پاییز" },
     ],
     mpdl: "سودآورترین روز",
     stitle: "طولانی‌ترین روزهای متوالی روی سود",
@@ -1430,8 +1432,10 @@ export const i18n: Record<
       { v: "dec24", l: "December 2024" },
       { v: "nov24", l: "November 2024" },
       { v: "oct24", l: "October 2024" },
-      { v: "q4_24", l: "Q4 – 2024" },
-      { v: "q3_24", l: "Q3 – 2024" },
+      { v: "q4_24", l: "Winter" },
+      { v: "q3_24", l: "Spring" },
+      { v: "q3_24", l: "Summer" },
+      { v: "q3_24", l: "Autumn" },
     ],
     mpdl: "Most Profitable Day",
     stitle: "Longest Streak",
@@ -3027,6 +3031,7 @@ export const SYMBOLS: SymbolInfo[] = [
 ];
 
 // ---------------
+// در فایل fakeData.ts
 export const COLUMNS: {
   key: ColKey;
   label: BilingualText;
@@ -3054,7 +3059,7 @@ export const COLUMNS: {
   },
   {
     key: "entryPrice",
-    label: { fa: "قیمت ورود", en: "Entry" },
+    label: { fa: "قیمت ورود", en: "Entry Price" },
     sort: "number",
     width: "5%",
   },
@@ -3076,6 +3081,20 @@ export const COLUMNS: {
     sort: "string",
     width: "5%",
   },
+  // ====== دو ستون ریسک ======
+  {
+    key: "riskType",
+    label: { fa: "نوع ریسک", en: "Risk Type" },
+    sort: "string",
+    width: "8%",
+  },
+  {
+    key: "riskAmount",
+    label: { fa: "میزان ریسک", en: "Risk Amount" },
+    sort: "number",
+    width: "8%",
+  },
+  // ==========================
   {
     key: "volume",
     label: { fa: "حجم", en: "Vol" },
@@ -3092,7 +3111,7 @@ export const COLUMNS: {
   },
   {
     key: "exitAt",
-    label: { fa: "زمان خروج", en: "Exit" },
+    label: { fa: "زمان خروج", en: "Exit Time" },
     sort: "date",
     width: "5%",
   },
