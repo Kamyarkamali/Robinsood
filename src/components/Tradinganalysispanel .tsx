@@ -117,7 +117,10 @@ export default function TradingAnalysisPanel() {
 
   return (
     <>
-      <div id="ai1" className="w-full max-w-8xl mx-auto mt-3">
+      <div
+        id="ai1"
+        className="w-full max-w-8xl mx-auto mt-3 min-h-screen grid place-items-center p-4"
+      >
         <div
           dir={lang === "fa" ? "ltr" : "rtl"}
           className="

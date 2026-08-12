@@ -430,7 +430,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return { left, top, minWidth: tooltipW };
   };
 
-  // 00 تا 24 (شامل خودِ 24:00)
   const hourLabels = Array.from({ length: 25 }, (_, i) => i);
 
   const newsAreaBaseTop = isMobile ? 4 : 6;

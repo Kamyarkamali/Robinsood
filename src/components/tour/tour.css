@@ -12,13 +12,19 @@
   --tour-transition: cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+@font-face {
+  font-family: "lahzeh";
+  src: url("../../assets/fonts/woff2/Lahzeh-FaNum-RegularStretch.woff2")
+    format("woff2");
+}
+
 .driver-popover.tour-popover {
   position: relative;
   max-width: 340px;
   width: 100%;
   border-radius: var(--tour-radius);
-  font-family: "lahzeh", sans-serif;
   padding: 20px 22px 18px !important;
+  font-family: "lahzeh", sans-serif;
 
   background: #100c1a;
   border: 1.5px solid rgba(139, 92, 246, 0.55);
