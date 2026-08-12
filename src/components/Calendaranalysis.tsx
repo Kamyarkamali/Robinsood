@@ -31,11 +31,11 @@ function DayPickerModal({
 }) {
   const isFa = lang === "fa";
   const modalRef = useRef<HTMLDivElement>(null);
-  const [setIsMobile] = useState(window.innerWidth < 640);
+  // @ts-ignore
+  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
   useEffect(() => {
     const handleResize = () => {
-      // @ts-ignore
       setIsMobile(window.innerWidth < 640);
     };
     window.addEventListener("resize", handleResize);
@@ -134,6 +134,7 @@ function DayPickerModal({
           backdrop-blur-sm"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header */}
         <div className="flex items-center justify-between mb-5 sm:mb-7">
           <div className="flex items-center gap-3 sm:gap-4">
             <div className="w-1 h-8 sm:h-10 rounded-full bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500" />
@@ -194,6 +195,7 @@ function DayPickerModal({
               ))}
             </div>
 
+            {/* Days Grid */}
             {weeks.map((week, wi) => (
               <div
                 key={wi}
@@ -251,8 +253,7 @@ function DayPickerModal({
                         <span
                           className={`text-[6px] sm:text-[9px] lg:text-[11px] font-semibold ${textColor} opacity-90 leading-none mt-0.5 sm:mt-1`}
                         >
-                          {day.p! > 0 && "+"}
-                          {day.p!}
+                          {toFa(day.p!)}
                         </span>
                       )}
 
@@ -272,8 +273,8 @@ function DayPickerModal({
                           bg-gray-800 dark:bg-gray-700 text-white text-[6px] sm:text-[8px] px-2 py-1 rounded whitespace-nowrap shadow-lg z-10"
                         >
                           {isFa
-                            ? `${day.p! > 0 ? "سود" : "زیان"}: ${Math.abs(day.p!)}`
-                            : `${isProfit ? "Profit" : "Loss"}: ${Math.abs(day.p!)}`}
+                            ? `${day.p! > 0 ? "سود" : "زیان"}: ${toFa(Math.abs(day.p!))}`
+                            : `${isProfit ? "Profit" : "Loss"}: ${toFa(Math.abs(day.p!))}`}
                           {day.t !== undefined &&
                             ` • ${day.t} ${isFa ? "ترید" : "trades"}`}
                         </div>
@@ -286,7 +287,7 @@ function DayPickerModal({
           </div>
         </div>
 
-        {/* Footer با راهنما */}
+        {/* Footer */}
         <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mt-5 sm:mt-7 pt-4 sm:pt-5 border-t border-gray-200/50 dark:border-neutral-700/50">
           <div className="flex items-center gap-3 sm:gap-4 text-[9px] sm:text-xs text-gray-500 dark:text-neutral-400 flex-wrap justify-center">
             <div className="flex items-center gap-1.5">
@@ -830,15 +831,15 @@ function DayCell({
         {toFa(day.d)}
       </span>
       {has && (
-  <div className="flex flex-col gap-0.5 text-center">
-    <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
-      {toFa(day.p!)}
-    </span>
-    <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
-      {day.t!} {i18next.language === "fa" ? "ترید" : "Trade"}
-    </span>
-  </div>
-)}
+        <div className="flex flex-col gap-0.5 text-center">
+          <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
+            {toFa(day.p!)}
+          </span>
+          <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
+            {day.t!} {i18next.language === "fa" ? "ترید" : "Trade"}
+          </span>
+        </div>
+      )}
     </div>
   );
 }
@@ -860,7 +861,7 @@ export default function CalendarAnalysis() {
   const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
   const [pickerDays, setPickerDays] = useState<DayDatas[]>([]);
   const [pickerTitle, setPickerTitle] = useState("");
-  const [setPickerType] = useState<"month" | "quarter">("month");
+  const [pickerType, setPickerType] = useState<"month" | "quarter">("month");
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -956,12 +957,19 @@ export default function CalendarAnalysis() {
   ) => {
     const data = CDLocalized[lang]?.[key];
     if (data && data.days) {
-      // @ts-ignore
       setPickerType(type);
       setPickerDays(data.days);
       setPickerTitle(label);
       setIsDayPickerOpen(true);
     }
+  };
+
+  // استفاده از pickerType برای نمایش نوع انتخاب شده
+  const getPickerTypeLabel = () => {
+    if (pickerType === "month") {
+      return lang === "fa" ? "ماه" : "Month";
+    }
+    return lang === "fa" ? "فصل" : "Quarter";
   };
 
   return (
@@ -1015,10 +1023,10 @@ export default function CalendarAnalysis() {
                 {T.mpdl}
               </span>
               <span className="text-[11px] sm:text-[13px] text-center w-full text-[#5B657A] dark:text-neutral-400">
+                {cd?.mpd?.date || "-"}
+              </span>
+              <span className="text-[18px] sm:text-[22px] w-full text-center font-black text-green-500 dark:text-green-400 leading-tight">
                 ${cd?.mpd?.pnl ?? 0}
-                <span className="text-[18px] sm:text-[22px] w-full text-center text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
-                  {cd?.mpd?.date || "-"}
-                </span>
               </span>
             </div>
 
@@ -1055,6 +1063,16 @@ export default function CalendarAnalysis() {
               </div>
             </div>
           </div>
+        </div>
+
+        {/* نمایش نوع انتخاب شده */}
+        <div className="mb-3 text-center text-xs text-gray-500 dark:text-gray-400">
+          {isDayPickerOpen && (
+            <span>
+              {lang === "fa" ? "نوع انتخاب: " : "Selected type: "}
+              {getPickerTypeLabel()}
+            </span>
+          )}
         </div>
 
         <hr className="border-gray-300 dark:border-neutral-700 mb-3 sm:mb-4" />
@@ -1102,6 +1120,7 @@ export default function CalendarAnalysis() {
         </div>
       </div>
 
+      {/* Modal انتخاب روز */}
       <DayPickerModal
         isOpen={isDayPickerOpen}
         onClose={() => setIsDayPickerOpen(false)}
