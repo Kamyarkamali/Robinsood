@@ -541,7 +541,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
       >
         <div className="flex items-center gap-3 mb-3">
           <div className="relative shrink-0">
-            <img src={session.icon} className="w-6 h-6 object-contain" alt="" />
             {isActive && live && (
               <div
                 className="absolute inset-0 rounded-full animate-ping"
@@ -568,6 +567,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 <SessionStateBadge state={state} />
               </span>
               <span
+                dir={lang === "fa" ? "ltr" : "rtl"}
                 className="text-xs font-mono"
                 style={{
                   color: isActive ? session.color : COLORS.textDisabled,
@@ -644,7 +644,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
                   <div className="relative flex flex-col items-center">
                     <div
-                      className={`w-px h-4 ${isPastNews ? "opacity-50" : ""}`}
                       style={{
                         background: isPastNews
                           ? COLORS.borderDefault
@@ -675,7 +674,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             })}
           </div>
 
-          {/* 4. Current Time Indicator (Line) — فقط وقتی این سشن الان زنده است */}
           {isActive && live && (
             <div
               className="absolute top-0 h-full w-0.5 z-20 animate-pulse"
@@ -1128,8 +1126,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   <rect width="1000" height="420" fill="url(#bgGradient)" />
                   <rect width="1000" height="420" fill="url(#dp2)" />
 
-                  {/* موقعیت دقیق هر شهر روی نقشه از مختصات mapX/mapY خودِ دیتا می‌آید،
-                      نه از محاسبه‌ی زمانی — یعنی دایره‌ها همیشه سرجای جغرافیایی درست‌شان هستند */}
                   {SESSIONS.map((s) => {
                     const on = activeSessions.includes(s.id);
                     const cx = ((s.mapX ?? 50) / 100) * 1000;
@@ -1378,7 +1374,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             )}
           </div>
 
-          {/* موبایل - کارت‌های جداگانه، ترتیب داینامیک بر اساس سشن جاری */}
           <div className="md:hidden">
             <div className="flex flex-col px-1 py-2">
               {orderedSessions.map((session) => (
@@ -1426,7 +1421,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     opacity: isActive ? 1 : 0.5,
                   }}
                 >
-                  {/* آیکون اختصاصی هر شهر (برج آزادی برای نیویورک و ...) کنار نقطه‌ی رنگی */}
                   <img
                     src={session.icon}
                     className="w-3.5 h-3.5 object-contain shrink-0"

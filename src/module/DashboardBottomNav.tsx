@@ -213,7 +213,7 @@ export default function DashboardBottomNav({
           })}
         </div>
 
-        <div className="w-px h-8 bg-white/10 dark:bg-white/5 shrink-0" />
+        <div className="w-px h-full bg-white dark:bg-white shrink-0" />
 
         <div className="flex items-end gap-2 sm:gap-3">
           {rightNavItems.map((item) => {

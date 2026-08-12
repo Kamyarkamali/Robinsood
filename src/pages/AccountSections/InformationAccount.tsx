@@ -15,15 +15,12 @@ function InformationAccount() {
   return (
     <div className="w-full flex justify-center items-center px-2 sm:px-4 py-4 min-h-[calc(100vh-120px)]">
       <div className="w-full max-w-7xl flex flex-col md:flex-row items-stretch justify-center gap-3 md:gap-4">
-        {/* کارت اول */}
         <div
           className={`${cardOuter} w-full md:flex-1 border border-[#D6DCE8]`}
         >
           <div className={`${cardInner} h-full border border-[#E3E7F0]`}>
             <div className="flex flex-col w-full h-full gap-3 font-normal px-2 py-3">
-              {/* ردیف اول - 3 ستون مساوی */}
               <div className="grid grid-cols-3 w-full gap-2 sm:gap-3">
-                {/* ستون 1: بالانس */}
                 <div className="flex flex-col items-center justify-center gap-1">
                   <div className="flex items-center justify-center gap-1">
                     <CircleIcon color="#22B36B" />
@@ -50,7 +47,6 @@ function InformationAccount() {
                   </p>
                 </div>
 
-                {/* ستون 3: اکوییتی */}
                 <div className="flex flex-col items-center justify-center gap-1">
                   <div className="flex items-center justify-center gap-1">
                     <CircleIcon color="#EE5A5A" />
@@ -59,13 +55,12 @@ function InformationAccount() {
                     </p>
                     <TbGauge className="text-[#EE5A5A] w-3.5 h-3.5" />
                   </div>
-                  <p className="text-[12px] xs:text-[13px] md:text-[14px] font-normal text-[#EE5A5A] whitespace-nowrap">
+                  <p className="text-[12px] xs:text-[13px] font-bold md:text-[14px] text-[#EE5A5A] whitespace-nowrap">
                     $9318.35
                   </p>
                 </div>
               </div>
 
-              {/* ردیف دوم - باکس پایین */}
               <div className="flex justify-center">
                 <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-linear-to-br bg-[#EEF1F7] dark:from-[#2a2a2a] dark:to-[#323232] w-full justify-center">
                   <BsSticky className="text-[#EE5A5A] w-3.5 h-3.5 shrink-0" />
@@ -196,7 +191,6 @@ function InformationAccount() {
                   </p>
                 </div>
 
-                {/* ستون 2: بالانس اولیه */}
                 <div className="flex flex-col items-center justify-center gap-1">
                   <div className="flex items-center justify-center gap-1">
                     <CircleIcon color="#00C0E8" />
@@ -207,7 +201,7 @@ function InformationAccount() {
                     </p>
                     <FiActivity className="text-[#00C0E8] w-3.5 h-3.5" />
                   </div>
-                  <p className="text-[11px] xs:text-[12px] md:text-[13px] font-semibold text-[#5B657A] whitespace-nowrap">
+                  <p className="text-[11px] xs:text-[12px] font-bold md:text-[13px] text-[#00C0E8] whitespace-nowrap">
                     ۱۰,۰۰۰ $
                   </p>
                 </div>
