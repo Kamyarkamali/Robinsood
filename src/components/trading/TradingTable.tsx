@@ -1130,14 +1130,14 @@ export default function TradingTable() {
 
   return (
     <>
+      <div className="px-4 sm:px-6 pt-4">
+        <StatsHeader trades={filteredSorted} lang={lang} />
+      </div>
       <div
         dir={isRtl ? "rtl" : "ltr"}
         className="w-full mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
         dark:border-[#3C3C3C] border-gray-300"
       >
-        <div className="px-4 sm:px-6 pt-4">
-          <StatsHeader trades={filteredSorted} lang={lang} />
-        </div>
         <div className="mx-auto rounded-2xl bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] shadow-xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
           <div className="flex flex-col lg:flex-row items-center gap-4 px-4 sm:px-6 py-4">
             <div
