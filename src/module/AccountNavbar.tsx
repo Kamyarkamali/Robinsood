@@ -5,10 +5,9 @@ import i18next from "i18next";
 import { createAppTour } from "../components/tour/appTour";
 import type { Lang } from "../types/type";
 import type { TourScope } from "../components/tour/tourSteps";
-
 import { useParams, useNavigate } from "react-router-dom";
 import { routesData } from "../data/routeData";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 interface AccountNavbarProps {
   scope: TourScope;
@@ -31,11 +30,24 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
   const current = currentIndex >= 0 ? routesData[currentIndex] : null;
 
   const prevRoute = currentIndex > 0 ? routesData[currentIndex - 1] : null;
-
   const nextRoute =
     currentIndex >= 0 && currentIndex < routesData.length - 1
       ? routesData[currentIndex + 1]
       : null;
+
+  const displayTitle = useMemo(() => {
+    if (!current) return "";
+
+    if (
+      section === "compare" ||
+      section === "comparison" ||
+      section === "compare-users"
+    ) {
+      return lang === "fa" ? "مقایسه با سایرین" : "Compare with others";
+    }
+
+    return lang === "fa" ? current.title.fa : current.title.en;
+  }, [current, lang, section]);
 
   const handleStartTour = () => {
     // @ts-ignore
@@ -47,7 +59,22 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
   };
 
   return (
-    <nav className="flex items-center justify-between pt-4">
+    <nav
+      className="
+      flex 
+      items-center 
+      justify-between 
+      pt-4 
+      p-2 sm:p-3 md:p-4 lg:p-5
+      rounded-xl sm:rounded-2xl md:rounded-3xl
+      md:border-2 
+      border-[#EDF1F5] 
+      dark:border-[#353535]
+      flex-wrap 
+      gap-2 sm:gap-3 md:gap-4
+      w-full
+    "
+    >
       <button
         type="button"
         onClick={handleStartTour}
@@ -56,33 +83,27 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
           mt-11
           md:mt-0
           flex items-center gap-2
-        cursor-pointer
+          cursor-pointer
           rounded-xl
           border border-white/10
-
           dark:bg-white/10
           bg-[#7C5CFA]
           backdrop-blur-md
-
-          px-4 py-2.5
-
-          text-sm font-medium
+          px-3 sm:px-4 py-2 sm:py-2.5
+          text-xs sm:text-sm font-medium
           text-white
-
           transition-all duration-300
-
           hover:scale-[1.03]
-
-          max-sm:px-3"
+          max-sm:px-3
+        "
       >
-        <HiOutlineAcademicCap className="w-5 h-5 text-[15px]" />
-
-        <span className="md:block hidden">
+        <HiOutlineAcademicCap className="w-4 h-4 sm:w-5 sm:h-5" />
+        <span className="hidden sm:block">
           {lang === "fa" ? "آموزش" : "Tutorial"}
         </span>
       </button>
 
-      <div className="flex items-center gap-4 mt-11 md:mt-0">
+      <div className="flex-1 flex items-center justify-center md:ml-22 gap-2 sm:gap-3 md:gap-4 mt-11 md:mt-0">
         <div className="relative">
           <button
             type="button"
@@ -102,8 +123,8 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             }}
             className={`
               flex items-center justify-center
-              md:w-10 w-8
-              h-8 md:h-10
+              w-8 sm:w-9 md:w-10
+              h-8 sm:h-9 md:h-10
               rounded-full
               transition-all duration-300
 
@@ -129,22 +150,17 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             {lang === "fa" ? (
               <HiOutlineChevronRight
                 className="
-              w-4 md:w-5
-              h-4 md:h-5
-              text-[#1F2430]
-              dark:text-white
-                  text-[15px]
-
-              "
+                  w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5
+                  text-[#1F2430]
+                  dark:text-white
+                "
               />
             ) : (
               <HiOutlineChevronLeft
                 className="
-                  w-4 md:w-5
-                  h-4 md:h-5
+                  w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5
                   text-[#1F2430]
                   dark:text-white
-                  text-[15px]
                 "
               />
             )}
@@ -159,25 +175,17 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
                 -translate-x-1/2
                 mb-2
                 z-50
-
-                px-3
-                py-1.5
-
+                px-2 sm:px-3
+                py-1 sm:py-1.5
                 rounded-lg
-
                 bg-[#1F2430]
                 dark:bg-white
-
                 text-white
                 dark:text-[#1F2430]
-
-                text-xs
+                text-[10px] sm:text-xs
                 whitespace-nowrap
-
                 shadow-lg
-
                 pointer-events-none
-
                 animate-in
                 fade-in
                 zoom-in-95
@@ -185,14 +193,12 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               "
             >
               {lang === "fa" ? prevRoute.title.fa : prevRoute.title.en}
-
               <span
                 className="
                   absolute
                   top-full
                   left-1/2
                   -translate-x-1/2
-
                   border-[5px]
                   border-transparent
                   border-t-[#1F2430]
@@ -203,20 +209,18 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
           )}
         </div>
 
-        <div className="flex items-center gap-4">
-          <h1
-            className="
-              whitespace-nowrap
-              text-sm md:text-xl
-              font-normal md:font-semibold
-              font-lahzeh
-              text-[#1F2430]
-              dark:text-white
-            "
-          >
-            {lang === "fa" ? current?.title?.fa : current?.title?.en}
-          </h1>
-        </div>
+        <h1
+          className="
+            whitespace-nowrap
+            text-xs sm:text-sm md:text-lg lg:text-xl
+            font-normal sm:font-medium md:font-semibold
+            font-lahzeh
+            text-[#1F2430]
+            dark:text-white
+          "
+        >
+          {displayTitle}
+        </h1>
 
         <div className="relative">
           <button
@@ -237,8 +241,8 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             }}
             className={`
               flex items-center justify-center
-              md:w-10 w-8
-              h-8 md:h-10
+              w-8 sm:w-9 md:w-10
+              h-8 sm:h-9 md:h-10
               rounded-full
               transition-all duration-300
 
@@ -264,21 +268,17 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
             {lang === "fa" ? (
               <HiOutlineChevronLeft
                 className="
-              w-4 md:w-5
-              h-4 md:h-5
-              text-[#1F2430]
-              dark:text-white
-                  text-[15px]
-              "
+                  w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5
+                  text-[#1F2430]
+                  dark:text-white
+                "
               />
             ) : (
               <HiOutlineChevronRight
                 className="
-                  w-4 md:w-5
-                  h-4 md:h-5
+                  w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5
                   text-[#1F2430]
                   dark:text-white
-                  text-[15px]
                 "
               />
             )}
@@ -293,25 +293,17 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
                 -translate-x-1/2
                 mb-2
                 z-50
-
-                px-3
-                py-1.5
-
+                px-2 sm:px-3
+                py-1 sm:py-1.5
                 rounded-lg
-
                 bg-[#1F2430]
                 dark:bg-white
-
                 text-white
                 dark:text-[#1F2430]
-
-                text-xs
+                text-[10px] sm:text-xs
                 whitespace-nowrap
-
                 shadow-lg
-
                 pointer-events-none
-
                 animate-in
                 fade-in
                 zoom-in-95
@@ -319,14 +311,12 @@ const AccountNavbar = ({ scope }: AccountNavbarProps) => {
               "
             >
               {lang === "fa" ? nextRoute.title.fa : nextRoute.title.en}
-
               <span
                 className="
                   absolute
                   top-full
                   left-1/2
                   -translate-x-1/2
-
                   border-[5px]
                   border-transparent
                   border-t-[#1F2430]

@@ -278,7 +278,7 @@ export default function ProfileSidbar({ open }: ProfileSidbarProps) {
                   </span>
                 </div>
 
-                <div className="relative dark:bg-zinc-800/50 border border-blue-300 rounded-lg p-1 flex gap-1 min-w-[160px] sm:min-w-[180px]">
+                <div className="relative dark:bg-[#2c2b2b] border dark:border-[#353535] border-blue-300 rounded-lg p-1 flex gap-1 min-w-[160px] sm:min-w-[180px]">
                   <motion.div
                     key={activeIndex}
                     initial={false}

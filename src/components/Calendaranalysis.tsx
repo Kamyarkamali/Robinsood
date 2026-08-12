@@ -1,16 +1,326 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import { MdKeyboardArrowDown } from "react-icons/md";
+import { MdKeyboardArrowDown, MdClose } from "react-icons/md";
 import type { DateKey, ParamKey, Lang } from "../types/type";
 import { toFa } from "../helpers/helperFunc";
-import { i18n, CDLocalized } from "../data/fakeData";
+import { i18n } from "../data/fakeData";
+import { CDLocalized } from "../data/calendarData";
 import type { DayDatas } from "../types/interfaces";
 import FlashIcon from "../icons/FlashIcon";
 import i18next from "i18next";
 
 type YearKey = "2024" | "2025" | "2026";
 
+function DayPickerModal({
+  isOpen,
+  onClose,
+  days,
+  selectedDay,
+  onSelectDay,
+  monthName,
+  lang,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  days: DayDatas[];
+  selectedDay: DayDatas | null;
+  onSelectDay: (day: DayDatas) => void;
+  monthName: string;
+  lang: Lang;
+}) {
+  const isFa = lang === "fa";
+  const modalRef = useRef<HTMLDivElement>(null);
+  const [setIsMobile] = useState(window.innerWidth < 640);
+
+  useEffect(() => {
+    const handleResize = () => {
+      // @ts-ignore
+      setIsMobile(window.innerWidth < 640);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    if (isOpen) {
+      document.addEventListener("keydown", handleEscape);
+    }
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [isOpen, onClose]);
+
+  const handleBackdropClick = useCallback(
+    (e: React.MouseEvent) => {
+      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
+        onClose();
+      }
+    },
+    [onClose],
+  );
+
+  if (!isOpen) return null;
+
+  const weeks: DayDatas[][] = [];
+  for (let i = 0; i < days.length; i += 7) {
+    weeks.push(days.slice(i, i + 7));
+  }
+
+  const weekDays = isFa
+    ? ["ش", "ی", "د", "س", "چ", "پ", "ج"]
+    : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+
+  const fullWeekDays = isFa
+    ? ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنج‌شنبه", "جمعه"]
+    : [
+        "Sunday",
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+      ];
+
+  const totalDays = days.length;
+  const profitableDays = days.filter(
+    (d) => d.p !== undefined && d.p > 0,
+  ).length;
+  const lossDays = days.filter((d) => d.p !== undefined && d.p < 0).length;
+  const noTradeDays = days.filter((d) => d.p === undefined).length;
+
+  return createPortal(
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.3 }}
+      className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4"
+      style={{
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(16px)",
+      }}
+      onClick={handleBackdropClick}
+    >
+      <motion.div
+        ref={modalRef}
+        initial={{ scale: 0.92, opacity: 0, y: 30 }}
+        animate={{ scale: 1, opacity: 1, y: 0 }}
+        exit={{ scale: 0.92, opacity: 0, y: 30 }}
+        transition={{
+          type: "spring",
+          damping: 28,
+          stiffness: 350,
+        }}
+        dir={isFa ? "rtl" : "ltr"}
+        className="relative w-full max-w-full sm:max-w-2xl lg:max-w-3xl mx-auto rounded-2xl sm:rounded-3xl border p-3 sm:p-6 lg:p-8
+          bg-white/95 dark:bg-[#1A1A1A]/95
+          border-gray-200/50 dark:border-neutral-700/50
+          shadow-2xl dark:shadow-[0_8px_40px_rgba(0,0,0,0.8)]
+          max-h-[95vh] overflow-y-auto
+          backdrop-blur-sm"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between mb-5 sm:mb-7">
+          <div className="flex items-center gap-3 sm:gap-4">
+            <div className="w-1 h-8 sm:h-10 rounded-full bg-gradient-to-b from-indigo-500 via-purple-500 to-pink-500" />
+            <div>
+              <h3 className="text-base sm:text-xl lg:text-2xl font-bold text-gray-800 dark:text-white">
+                {isFa
+                  ? `📅 انتخاب روز - ${monthName}`
+                  : `📅 Select Day - ${monthName}`}
+              </h3>
+              <p className="text-[10px] sm:text-xs text-gray-400 dark:text-neutral-500 flex items-center gap-2 mt-0.5">
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                  {profitableDays}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                  {lossDays}
+                </span>
+                <span className="inline-flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600" />
+                  {noTradeDays}
+                </span>
+                <span className="text-gray-400">|</span>
+                <span>
+                  {totalDays} {isFa ? "روز" : "days"}
+                </span>
+              </p>
+            </div>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 sm:p-2.5 rounded-full hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-all duration-200 hover:scale-110 group"
+          >
+            <MdClose className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400 group-hover:text-gray-600 dark:text-gray-500 dark:group-hover:text-white transition-colors" />
+          </button>
+        </div>
+
+        {/* Calendar Grid */}
+        <div className="overflow-x-auto -mx-2 sm:mx-0">
+          <div className="min-w-[280px] sm:min-w-[420px] px-2 sm:px-0">
+            {/* Week days header */}
+            <div className="grid grid-cols-7 gap-1 sm:gap-2 mb-3 sm:mb-4">
+              {weekDays.map((w, index) => (
+                <div
+                  key={w}
+                  className="group relative flex items-center justify-center"
+                >
+                  <div className="text-center text-[8px] sm:text-[11px] lg:text-sm font-bold text-gray-400 dark:text-neutral-500 py-1.5 sm:py-2.5 px-1 rounded-lg hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-colors cursor-default w-full">
+                    {w}
+                  </div>
+                  <div
+                    className="absolute -top-7 sm:-top-8 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none
+                    bg-gray-800 dark:bg-gray-700 text-white text-[7px] sm:text-[9px] px-2 py-1 rounded whitespace-nowrap shadow-lg"
+                  >
+                    {fullWeekDays[index]}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {weeks.map((week, wi) => (
+              <div
+                key={wi}
+                className="grid grid-cols-7 gap-1 sm:gap-2 mb-1 sm:mb-2"
+              >
+                {week.map((day, di) => {
+                  const has = day.p !== undefined;
+                  const isProfit = has && day.p! > 0;
+                  const isLoss = has && day.p! < 0;
+                  const isSelected =
+                    selectedDay?.d === day.d && selectedDay?.m === day.m;
+
+                  const bgColor = isProfit
+                    ? "bg-gradient-to-br from-green-400 to-green-600 hover:from-green-500 hover:to-green-700"
+                    : isLoss
+                      ? "bg-gradient-to-br from-red-400 to-red-600 hover:from-red-500 hover:to-red-700"
+                      : "bg-gray-50 dark:bg-[#2A2A2A] hover:bg-gray-100 dark:hover:bg-[#3A3A3A]";
+
+                  const textColor =
+                    isProfit || isLoss
+                      ? "text-white"
+                      : "text-gray-600 dark:text-gray-400";
+
+                  return (
+                    <button
+                      key={`${wi}-${di}`}
+                      onClick={() => {
+                        onSelectDay(day);
+                        onClose();
+                      }}
+                      className={`
+                        relative flex flex-col items-center justify-center
+                        w-full aspect-square
+                        rounded-xl sm:rounded-2xl
+                        transition-all duration-300 ease-out
+                        ${bgColor}
+                        ${
+                          isSelected
+                            ? "ring-2 sm:ring-4 ring-indigo-500 ring-offset-2 sm:ring-offset-4 dark:ring-offset-[#1A1A1A] shadow-xl shadow-indigo-500/30 scale-105"
+                            : "hover:scale-105 hover:shadow-lg"
+                        }
+                        cursor-pointer
+                        min-h-[36px] sm:min-h-[52px] lg:min-h-[72px]
+                        p-1 sm:p-1.5
+                        group
+                      `}
+                    >
+                      <span
+                        className={`text-[11px] sm:text-base lg:text-xl font-bold ${textColor} ${isSelected ? "drop-shadow-md" : ""}`}
+                      >
+                        {toFa(day.d)}
+                      </span>
+
+                      {has && (
+                        <span
+                          className={`text-[6px] sm:text-[9px] lg:text-[11px] font-semibold ${textColor} opacity-90 leading-none mt-0.5 sm:mt-1`}
+                        >
+                          {day.p! > 0 && "+"}
+                          {day.p!}
+                        </span>
+                      )}
+
+                      {day.t !== undefined && day.t > 0 && (
+                        <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 text-[5px] sm:text-[7px] font-bold bg-white/90 dark:bg-[#2A2A2A]/90 text-gray-700 dark:text-white px-1 sm:px-1.5 py-0.5 rounded-full shadow-md">
+                          {day.t}
+                        </span>
+                      )}
+
+                      {isSelected && (
+                        <span className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 w-2.5 h-2.5 sm:w-3.5 sm:h-3.5 bg-indigo-500 rounded-full border-2 border-white dark:border-[#1A1A1A] animate-pulse shadow-lg shadow-indigo-500/50" />
+                      )}
+
+                      {has && (
+                        <div
+                          className="absolute -top-8 sm:-top-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none
+                          bg-gray-800 dark:bg-gray-700 text-white text-[6px] sm:text-[8px] px-2 py-1 rounded whitespace-nowrap shadow-lg z-10"
+                        >
+                          {isFa
+                            ? `${day.p! > 0 ? "سود" : "زیان"}: ${Math.abs(day.p!)}`
+                            : `${isProfit ? "Profit" : "Loss"}: ${Math.abs(day.p!)}`}
+                          {day.t !== undefined &&
+                            ` • ${day.t} ${isFa ? "ترید" : "trades"}`}
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer با راهنما */}
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-4 mt-5 sm:mt-7 pt-4 sm:pt-5 border-t border-gray-200/50 dark:border-neutral-700/50">
+          <div className="flex items-center gap-3 sm:gap-4 text-[9px] sm:text-xs text-gray-500 dark:text-neutral-400 flex-wrap justify-center">
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 sm:w-4 sm:h-4 rounded bg-gradient-to-br from-green-400 to-green-600 shadow-sm" />
+              <span>{isFa ? "سود" : "Profit"}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 sm:w-4 sm:h-4 rounded bg-gradient-to-br from-red-400 to-red-600 shadow-sm" />
+              <span>{isFa ? "زیان" : "Loss"}</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <span className="w-3 h-3 sm:w-4 sm:h-4 rounded bg-gray-100 dark:bg-[#2A2A2A] border border-gray-300 dark:border-neutral-600 shadow-sm" />
+              <span>{isFa ? "بدون معامله" : "No Trade"}</span>
+            </div>
+            <div className="flex items-center gap-1.5 text-indigo-500 dark:text-indigo-400">
+              <span className="w-3 h-3 sm:w-4 sm:h-4 rounded-full border-2 border-indigo-500 shadow-sm shadow-indigo-500/30" />
+              <span>{isFa ? "انتخاب شده" : "Selected"}</span>
+            </div>
+          </div>
+
+          <button
+            onClick={onClose}
+            className="w-full sm:w-auto px-5 sm:px-7 py-2 sm:py-2.5 rounded-xl text-xs sm:text-sm font-medium text-gray-600 dark:text-neutral-300 hover:text-gray-800 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-[#2A2A2A] transition-all border border-gray-200 dark:border-neutral-700 hover:border-gray-300 dark:hover:border-neutral-600"
+          >
+            {isFa ? "✕ بستن" : "✕ Close"}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>,
+    document.body,
+  );
+}
+
+// ==================== Dropdown کامپوننت ====================
 function Dropdown<T extends string>({
   label,
   items,
@@ -95,6 +405,7 @@ function Dropdown<T extends string>({
   );
 }
 
+// ==================== DateFilter Modal ====================
 function DateFilterModal({
   isOpen,
   onClose,
@@ -107,6 +418,7 @@ function DateFilterModal({
   onSelectQuarter,
   onSelectYear,
   lang,
+  onOpenDayPicker,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -120,6 +432,11 @@ function DateFilterModal({
   onSelectYear: (v: YearKey) => void;
   lang: Lang;
   triggerLabel: string;
+  onOpenDayPicker: (
+    type: "month" | "quarter",
+    key: DateKey,
+    label: string,
+  ) => void;
 }) {
   const isFa = lang === "fa";
   const modalRef = useRef<HTMLDivElement>(null);
@@ -128,7 +445,7 @@ function DateFilterModal({
   const years: YearKey[] = ["2024", "2025", "2026"];
 
   const getSortedQuarters = (items: { v: DateKey; l: string }[]) => {
-    const order = ["q4", "q1", "q2", "q3"];
+    const order = ["q1", "q2", "q3", "q4"];
     return [...items].sort((a, b) => {
       const aKey = a.v as string;
       const bKey = b.v as string;
@@ -273,6 +590,7 @@ function DateFilterModal({
                     key={q.v}
                     onClick={() => {
                       onSelectQuarter(q.v);
+                      onOpenDayPicker("quarter", q.v, q.l);
                       onClose();
                     }}
                     className={`px-3 py-2 rounded-full text-[11px] font-medium transition-all whitespace-nowrap text-center shrink-0
@@ -306,6 +624,7 @@ function DateFilterModal({
                     key={m.v}
                     onClick={() => {
                       onSelectMonth(m.v);
+                      onOpenDayPicker("month", m.v, m.l);
                       onClose();
                     }}
                     className={`px-2 py-2 rounded-xl text-[11px] font-medium transition-all
@@ -347,6 +666,7 @@ function DateFilterDropdown({
   onSelectQuarter,
   onSelectYear,
   lang,
+  onOpenDayPicker,
 }: {
   monthItems: { v: DateKey; l: string }[];
   quarterItems: { v: DateKey; l: string }[];
@@ -357,6 +677,11 @@ function DateFilterDropdown({
   onSelectQuarter: (v: DateKey) => void;
   onSelectYear: (v: YearKey) => void;
   lang: Lang;
+  onOpenDayPicker: (
+    type: "month" | "quarter",
+    key: DateKey,
+    label: string,
+  ) => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const isFa = lang === "fa";
@@ -402,6 +727,7 @@ function DateFilterDropdown({
         onSelectYear={onSelectYear}
         lang={lang}
         triggerLabel={triggerLabel}
+        onOpenDayPicker={onOpenDayPicker}
       />
     </>
   );
@@ -462,7 +788,17 @@ function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
   );
 }
 
-function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
+function DayCell({
+  day,
+  isCur,
+  isSelected,
+  onSelect,
+}: {
+  day: DayDatas;
+  isCur: boolean;
+  isSelected: boolean;
+  onSelect: (day: DayDatas) => void;
+}) {
   const has = day.p !== undefined;
   const isProfit = has && day.p! > 0;
   const isLoss = has && day.p! < 0;
@@ -480,28 +816,29 @@ function DayCell({ day, isCur }: { day: DayDatas; isCur: boolean }) {
 
   return (
     <div
+      onClick={() => onSelect(day)}
       className={`md:rounded-[14px] rounded-sm px-1.5 sm:px-3 py-1.5 sm:py-2.5 flex flex-col overflow-hidden transition-all
         w-full min-h-15 sm:min-h-16.25 lg:h-16.25
         ${bg}
+        ${isSelected ? "ring-2 ring-indigo-500 ring-offset-2 dark:ring-offset-[#2C2C2C]" : ""}
+        cursor-pointer hover:scale-105 transition-transform duration-200
       `}
     >
       <span
         className={`text-[10px] sm:text-[11px] font-bold leading-none ${textColor}`}
-        style={{ direction: "ltr" }}
       >
         {toFa(day.d)}
       </span>
       {has && (
-        <div className="flex flex-col gap-0.5 text-center">
-          <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
-            {day.p! > 0 && "+"}
-            {day.p!}
-          </span>
-          <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
-            {day.t!} {i18next.language === "fa" ? "ترید" : "Trade"}
-          </span>
-        </div>
-      )}
+  <div className="flex flex-col gap-0.5 text-center">
+    <span className="text-white font-black text-center leading-tight whitespace-nowrap text-[8px] sm:text-[11px] lg:text-[14px]">
+      {toFa(day.p!)}
+    </span>
+    <span className="text-[7px] text-center sm:text-[9px] leading-none text-white/65">
+      {day.t!} {i18next.language === "fa" ? "ترید" : "Trade"}
+    </span>
+  </div>
+)}
     </div>
   );
 }
@@ -516,9 +853,14 @@ export default function CalendarAnalysis() {
 
   const [sp, setSp] = useState<ParamKey>("pnl");
   const [selectedYear, setSelectedYear] = useState<YearKey>("2025");
-  // مقدار پیش‌فرض: فصل زمستان (q4_24) یا (q1_25)
-  const [selectedMonth, setSelectedMonth] = useState<DateKey>("dec24");
-  const [selectedQuarter, setSelectedQuarter] = useState<DateKey>("q4_24");
+  const [selectedMonth, setSelectedMonth] = useState<DateKey>("jan25");
+  const [selectedQuarter, setSelectedQuarter] = useState<DateKey>("q1_25");
+  const [selectedDay, setSelectedDay] = useState<DayDatas | null>(null);
+
+  const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
+  const [pickerDays, setPickerDays] = useState<DayDatas[]>([]);
+  const [pickerTitle, setPickerTitle] = useState("");
+  const [setPickerType] = useState<"month" | "quarter">("month");
 
   useEffect(() => {
     const handleLanguageChange = () => {
@@ -536,8 +878,19 @@ export default function CalendarAnalysis() {
   }, []);
 
   const T = i18n[lang];
-  const cd = CDLocalized[lang][selectedMonth];
+  const cd = CDLocalized[lang]?.[selectedMonth];
   const ap = T.params.find((p) => p.v === sp);
+
+  useEffect(() => {
+    if (cd && cd.days && cd.days.length > 0) {
+      const dayWithPnl = cd.days.find((d) => d.p !== undefined);
+      if (dayWithPnl) {
+        setSelectedDay(dayWithPnl);
+      } else {
+        setSelectedDay(cd.days[0]);
+      }
+    }
+  }, [cd]);
 
   const weeks: DayDatas[][] = [];
   if (cd && cd.days) {
@@ -547,12 +900,12 @@ export default function CalendarAnalysis() {
 
   const allDates = T.dates;
 
-  // فیلتر ماه‌ها بر اساس سال انتخاب شده
   const monthItems = allDates.filter((d) => {
     const v = d.v as string;
-    const year = selectedYear.slice(-2); // "25" از "2025"
+    const year = selectedYear.slice(-2);
     return (
       v.includes(year) &&
+      !v.includes("q") &&
       (v.includes("dec") ||
         v.includes("nov") ||
         v.includes("oct") ||
@@ -568,20 +921,12 @@ export default function CalendarAnalysis() {
     );
   });
 
-  // فصل‌ها بر اساس سال انتخاب شده
   const quarterItems = allDates.filter((d) => {
     const v = d.v as string;
     const year = selectedYear.slice(-2);
-    return (
-      v.includes(year) &&
-      (v.includes("q1") ||
-        v.includes("q2") ||
-        v.includes("q3") ||
-        v.includes("q4"))
-    );
+    return v.includes(year) && v.includes("q");
   });
 
-  // اگر ماه یا فصل انتخاب شده با سال جدید همخوانی نداشت، اولین مورد را انتخاب کن
   useEffect(() => {
     if (monthItems.length > 0) {
       const monthExists = monthItems.some((m) => m.v === selectedMonth);
@@ -599,6 +944,25 @@ export default function CalendarAnalysis() {
       }
     }
   }, [selectedYear, quarterItems]);
+
+  const handleDaySelect = (day: DayDatas) => {
+    setSelectedDay(day);
+  };
+
+  const handleOpenDayPicker = (
+    type: "month" | "quarter",
+    key: DateKey,
+    label: string,
+  ) => {
+    const data = CDLocalized[lang]?.[key];
+    if (data && data.days) {
+      // @ts-ignore
+      setPickerType(type);
+      setPickerDays(data.days);
+      setPickerTitle(label);
+      setIsDayPickerOpen(true);
+    }
+  };
 
   return (
     <div
@@ -637,10 +1001,11 @@ export default function CalendarAnalysis() {
               selectedMonth={selectedMonth}
               selectedQuarter={selectedQuarter}
               selectedYear={selectedYear}
-              onSelectMonth={(v) => setSelectedMonth(v)}
-              onSelectQuarter={(v) => setSelectedQuarter(v)}
-              onSelectYear={(v) => setSelectedYear(v)}
+              onSelectMonth={setSelectedMonth}
+              onSelectQuarter={setSelectedQuarter}
+              onSelectYear={setSelectedYear}
               lang={lang}
+              onOpenDayPicker={handleOpenDayPicker}
             />
           </div>
 
@@ -650,10 +1015,10 @@ export default function CalendarAnalysis() {
                 {T.mpdl}
               </span>
               <span className="text-[11px] sm:text-[13px] text-center w-full text-[#5B657A] dark:text-neutral-400">
-                {cd?.mpd?.date}
-              </span>
-              <span className="text-[18px] sm:text-[22px] w-full text-center text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
                 ${cd?.mpd?.pnl ?? 0}
+                <span className="text-[18px] sm:text-[22px] w-full text-center text-shadow-sm text-shadow-[#3ADE63] font-black text-green-500 dark:text-green-400 leading-tight tracking-tight">
+                  {cd?.mpd?.date || "-"}
+                </span>
               </span>
             </div>
 
@@ -669,21 +1034,21 @@ export default function CalendarAnalysis() {
                   {T.stitle}
                 </span>
                 <span className="text-[8px] text-center sm:text-[10px] text-[#5B657A] dark:text-white truncate">
-                  {cd?.str?.s} – {cd?.str?.e}
+                  {cd?.str?.s || "-"} – {cd?.str?.e || "-"}
                 </span>
                 <div className="flex items-center gap-1 sm:gap-1.5 mt-1 flex-wrap">
                   <span className="text-[9px] sm:text-[11px] font-semibold text-[#5B657A] dark:text-neutral-300 whitespace-nowrap">
-                    {cd?.str?.d} {T.du} – {cd?.str?.t} {T.tu}
+                    {cd?.str?.d || 0} {T.du} – {cd?.str?.t || 0} {T.tu}
                   </span>
                   <span className="text-yellow-400 text-[10px] sm:text-xs">
                     <FlashIcon />
                   </span>
                   <div className="flex flex-col gap-2">
                     <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 rounded bg-indigo-600 text-white">
-                      {cd?.str?.w}
+                      {cd?.str?.w || 0}
                     </span>
                     <span className="text-[8px] sm:text-[10px] text-center w-[34px] h-[15px] font-bold px-1 sm:px-1.5 rounded bg-red-600 text-white">
-                      {cd?.str?.l}
+                      {cd?.str?.l || 0}
                     </span>
                   </div>
                 </div>
@@ -707,23 +1072,48 @@ export default function CalendarAnalysis() {
               ))}
             </div>
 
-            {weeks.map((week, wi) => (
-              <div
-                key={wi}
-                className="grid grid-cols-7 gap-1 sm:gap-5 mb-1.5 sm:mb-2.5"
-              >
-                {week.map((day, di) => (
-                  <DayCell
-                    key={`${wi}-${di}`}
-                    day={day}
-                    isCur={day.m === cd?.cur}
-                  />
-                ))}
+            {weeks.length > 0 ? (
+              weeks.map((week, wi) => (
+                <div
+                  key={wi}
+                  className="grid grid-cols-7 gap-1 sm:gap-5 mb-1.5 sm:mb-2.5"
+                >
+                  {week.map((day, di) => (
+                    <DayCell
+                      key={`${wi}-${di}`}
+                      day={day}
+                      isCur={day.m === cd?.cur}
+                      isSelected={
+                        selectedDay?.d === day.d && selectedDay?.m === day.m
+                      }
+                      onSelect={handleDaySelect}
+                    />
+                  ))}
+                </div>
+              ))
+            ) : (
+              <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                {lang === "fa"
+                  ? "داده‌ای برای نمایش وجود ندارد"
+                  : "No data to display"}
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
+
+      <DayPickerModal
+        isOpen={isDayPickerOpen}
+        onClose={() => setIsDayPickerOpen(false)}
+        days={pickerDays}
+        selectedDay={selectedDay}
+        onSelectDay={(day) => {
+          setSelectedDay(day);
+          setIsDayPickerOpen(false);
+        }}
+        monthName={pickerTitle}
+        lang={lang}
+      />
     </div>
   );
 }

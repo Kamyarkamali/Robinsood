@@ -117,7 +117,7 @@ export default function TradingAnalysisPanel() {
 
   return (
     <>
-      <div id="ai1" className="w-full max-w-6xl mx-auto mt-3">
+      <div id="ai1" className="w-full max-w-8xl mx-auto mt-3">
         <div
           dir={lang === "fa" ? "ltr" : "rtl"}
           className="
@@ -168,7 +168,10 @@ export default function TradingAnalysisPanel() {
             dark:border-white/10
           "
             >
-              <div dir={lang==="fa" ? "rtl" :"ltr"} className="space-y-4 sm:space-y-5 md:space-y-6 flex flex-col items-center">
+              <div
+                dir={lang === "fa" ? "rtl" : "ltr"}
+                className="space-y-4 sm:space-y-5 md:space-y-6 flex flex-col items-center"
+              >
                 {STATS[lang].map((s, i) => (
                   <div
                     key={i}

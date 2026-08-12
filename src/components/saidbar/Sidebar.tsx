@@ -244,7 +244,6 @@ export default function Sidebar() {
               </div>
               <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-500 rounded-full border-2 border-zinc-900 shadow-lg shadow-green-500/30" />
 
-              {/* آیکون ویرایش کوچک */}
               <motion.div
                 className="absolute -bottom-1 -right-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full p-0.5 border border-zinc-900"
                 whileHover={{ scale: 1.2, rotate: 90 }}
@@ -388,7 +387,6 @@ export default function Sidebar() {
 
         <div className="h-[72px]" />
 
-        {/* مودال ویرایش آواتار برای موبایل */}
         <AnimatePresence>
           {showAvatarModal && (
             <>
@@ -506,7 +504,6 @@ export default function Sidebar() {
           )}
         </AnimatePresence>
 
-        {/* منوی موبایل */}
         {mobileOpen && (
           <div
             className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm animate-fade-in"
@@ -683,7 +680,7 @@ export default function Sidebar() {
           ease-in-out
           [will-change:width]
           [contain:layout_style]
-          dark:bg-zinc-900 bg-[#ffffff]
+          dark:bg-[#2c2b2b] bg-[#ffffff]
           p-4
           dark:text-white text-[#1F2430]
           border-r dark:border-zinc-800

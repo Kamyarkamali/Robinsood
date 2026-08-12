@@ -173,7 +173,7 @@ export const ChartSettingsPanel: React.FC<ChartSettingsPanelProps> = ({
     colors: {
       primary: lang ? "درادون روزانه" : "Daily Drawdown",
       secondary: lang ? "دراداون کل" : "Total Drawdown",
-      accent: lang ? "رنگ موجودی" : "Balance Color",
+      accent: lang ? "-------" : "Balance Color",
       grid: lang ? "رنگ گرید" : "Grid Color",
       candleUp: lang ? "کندل صعودی" : "Bullish Candle",
       candleDown: lang ? "کندل نزولی" : "Bearish Candle",

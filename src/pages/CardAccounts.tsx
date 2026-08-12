@@ -147,20 +147,6 @@ function CardAccounts() {
   return (
     <>
       <section className="space-y-4">
-        <div className="flex items-center w-full justify-end">
-          <Link
-            id="home2"
-            to="/accounts"
-            onClick={(e) => {
-              e.preventDefault();
-              setIsModalOpen(true);
-            }}
-            className="text-[#5B657A] dark:text-zinc-400 text-sm hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
-          >
-            {lang === "fa" ? "سایر اکانت ها" : "Other accounts"}
-          </Link>
-        </div>
-
         <div className="grid grid-cols-1 md:grid-cols-3 2xl:grid-cols-3 gap-4">
           {fakeChallengeAccounts.slice(0, displayCount).map((account) => {
             // @ts-ignore
@@ -366,6 +352,19 @@ function CardAccounts() {
           })}
         </div>
       </section>
+      <div className="flex items-center w-full justify-end mt-3">
+        <Link
+          id="home2"
+          to="/accounts"
+          onClick={(e) => {
+            e.preventDefault();
+            setIsModalOpen(true);
+          }}
+          className="text-[#5B657A] dark:text-zinc-400 text-sm hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors"
+        >
+          {lang === "fa" ? "سایر اکانت ها" : "Other accounts"}
+        </Link>
+      </div>
 
       <ChallengeAccountsModal
         isOpen={isModalOpen}

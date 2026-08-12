@@ -74,11 +74,18 @@ function fmt(h: number) {
   return `${String(hr).padStart(2, "0")}:${String(mn).padStart(2, "0")}`;
 }
 
+// موقعیت روی محور زمان همیشه از چپ(00:00) به راست(24:00) است،
+// صرف‌نظر از راست‌به‌چپ بودن رابط کاربری (RTL فقط برای متن/چیدمان کلی است، نه محور زمان).
 function pct(h: number) {
   return `${((h % 24) / 24) * 100}%`;
 }
 function pctNum(h: number) {
   return ((h % 24) / 24) * 100;
+}
+
+// اختلاف بین دو ساعت را همیشه یک عدد مثبت در بازه‌ی [0,24) برمی‌گرداند
+function normDiff(a: number) {
+  return ((a % 24) + 24) % 24;
 }
 
 function isLive(s: Session, cur: number) {
@@ -91,6 +98,26 @@ function isTimeInSession(s: Session, time: number) {
   return s.end > 24
     ? time >= s.start || time < s.end - 24
     : time >= s.start && time < s.end;
+}
+
+type SessionState = "live" | "upcoming" | "ended";
+
+function getSessionState(s: Session, cur: number): SessionState {
+  if (isLive(s, cur)) return "live";
+  const endMod = s.end % 24;
+  const hoursSinceEnd = normDiff(cur - endMod);
+  const hoursUntilStart = normDiff(s.start - cur);
+  return hoursSinceEnd < hoursUntilStart ? "ended" : "upcoming";
+}
+
+function getSessionSortKey(s: Session, cur: number) {
+  const state = getSessionState(s, cur);
+  const endMod = s.end % 24;
+  const hoursSinceEnd = normDiff(cur - endMod);
+  const hoursUntilStart = normDiff(s.start - cur);
+  if (state === "live") return 0 + normDiff(cur - s.start) / 100;
+  if (state === "upcoming") return 1000 + hoursUntilStart;
+  return 2000 + hoursSinceEnd;
 }
 
 function getDates() {
@@ -363,6 +390,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
         ? [...filteredNews].sort((a, b) => a.time - b.time)[0].id
         : null;
 
+  // ترتیب داینامیک سشن‌ها: سشن جاری بالا، بعد نزدیک‌ترین سشن آینده، در آخر سشن‌های تمام‌شده
+  const orderedSessions = [...SESSIONS].sort(
+    (a, b) => getSessionSortKey(a, cur) - getSessionSortKey(b, cur),
+  );
+
   const handleTooltip = (
     e: React.MouseEvent | React.TouchEvent,
     type: TooltipType,
@@ -404,32 +436,27 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return { left, top, minWidth: tooltipW };
   };
 
-  const hourLabels = Array.from({ length: 24 }, (_, i) => i);
+  // 00 تا 24 (شامل خودِ 24:00)
+  const hourLabels = Array.from({ length: 25 }, (_, i) => i);
 
   const newsAreaBaseTop = isMobile ? 4 : 6;
   const newsAreaRowGap = isMobile ? 34 : 46;
-  const newsAreaHeight = isMobile ? 100 : 138;
+  const newsAreaHeight = isMobile ? 90 : 116;
+
+  const getImpactColor = (impact: string) => {
+    return (
+      IMPACT_COLOR[impact as keyof typeof IMPACT_COLOR] || COLORS.textTertiary
+    );
+  };
 
   const getSessionColorByTime = (time: number) => {
     for (const session of SESSIONS) {
-      let start = session.start;
-      let end = session.end;
-
-      if (end > 24) {
-        if (time >= start || time < end - 24) {
-          return session.dot;
-        }
-      } else {
-        if (time >= start && time < end) {
-          return session.dot;
-        }
-      }
+      if (isTimeInSession(session, time)) return session.dot;
     }
-
     let closest = SESSIONS[0];
     let minDist = Infinity;
     for (const session of SESSIONS) {
-      let dist = Math.min(
+      const dist = Math.min(
         Math.abs(time - session.start),
         Math.abs(time - session.end),
       );
@@ -441,34 +468,87 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     return closest.dot;
   };
 
-  const getImpactColor = (impact: string) => {
-    return (
-      IMPACT_COLOR[impact as keyof typeof IMPACT_COLOR] || COLORS.textTertiary
-    );
-  };
-
   const getTooltipBg = (tt: TooltipState) => {
-    if (tt.type === "current") return COLORS.brandPrimary; // #7C5CFA
+    if (tt.type === "current") return COLORS.brandPrimary;
+    if (tt.type === "news" && tt.data)
+      return `${getImpactColor(tt.data.impact)}e6`;
     const color = getSessionColorByTime(tt.time);
     return `${color}e6`;
   };
 
   const getTooltipBorder = (tt: TooltipState) => {
-    if (tt.type === "current") return COLORS.brandHover; // #6B4DF0
+    if (tt.type === "current") return COLORS.brandHover;
+    if (tt.type === "news" && tt.data) return getImpactColor(tt.data.impact);
     return getSessionColorByTime(tt.time);
   };
 
-  const MobileSessionCard = ({ session }: { session: Session }) => {
+  const SessionStateBadge = ({ state }: { state: SessionState }) => {
+    const map = {
+      live: {
+        fa: "در حال برگزاری",
+        en: "Live",
+        cls: "bg-[#E6F8EF] text-[#22B36B] border-[#22B36B]/30",
+      },
+      upcoming: {
+        fa: "به‌زودی",
+        en: "Upcoming",
+        cls: "bg-[#EAF0FF] text-[#4F7CFF] border-[#4F7CFF]/30",
+      },
+      ended: {
+        fa: "تمام‌شده",
+        en: "Ended",
+        cls: "bg-[#EEF1F7] text-[#8A93A6] border-[#D6DCE8]",
+      },
+    } as const;
+    const m = map[state];
+    return (
+      <span
+        className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[8px] font-bold border ${m.cls} dark:bg-transparent dark:border-[#3C3C3C]`}
+      >
+        {state === "live" && (
+          <span className="w-1.5 h-1.5 rounded-full bg-[#22B36B] animate-pulse" />
+        )}
+        {i18next.language === "fa" ? m.fa : m.en}
+      </span>
+    );
+  };
+
+  const MobileSessionCard = ({
+    session,
+    state,
+  }: {
+    session: Session;
+    state: SessionState;
+  }) => {
     const isActive = activeSessions.includes(session.id);
-    const live = isLive(session, cur);
+    const live = state === "live";
+    const ended = state === "ended";
     const sessionNews = filteredNews.filter((n) =>
       isTimeInSession(session, n.time),
     );
 
+    const duration =
+      session.end > 24
+        ? session.end - 24 - session.start + 24
+        : session.end - session.start;
+    const relCur = live
+      ? cur >= session.start
+        ? cur - session.start
+        : cur + 24 - session.start
+      : 0;
+    const midLabel = fmt((session.start + duration / 2) % 24);
+
     return (
-      <div className="border border-[#E3E7F0] dark:border-[#3C3C3C] rounded-xl p-3 mb-2 bg-white dark:bg-transparent shadow-sm">
+      <div
+        className={`border rounded-xl p-3 mb-2 bg-white dark:bg-transparent shadow-sm transition-all duration-300 ${
+          ended
+            ? "border-[#E3E7F0] dark:border-[#3C3C3C] opacity-60 grayscale-[0.35]"
+            : "border-[#E3E7F0] dark:border-[#3C3C3C]"
+        }`}
+      >
         <div className="flex items-center gap-3 mb-3">
           <div className="relative shrink-0">
+            <img src={session.icon} className="w-6 h-6 object-contain" alt="" />
             {isActive && live && (
               <div
                 className="absolute inset-0 rounded-full animate-ping"
@@ -482,9 +562,9 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
 
           <div className="flex-1 min-w-0">
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between gap-2">
               <span
-                className="text-sm font-bold"
+                className="text-sm font-bold flex items-center gap-1.5"
                 style={{
                   color: isActive ? session.color : COLORS.textDisabled,
                 }}
@@ -492,6 +572,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 {i18next.language === "fa"
                   ? session.fa.replace("سشن ", "")
                   : session.en.replace(" Session", "")}
+                <SessionStateBadge state={state} />
               </span>
               <span
                 className="text-xs font-mono"
@@ -505,34 +586,28 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
         </div>
 
-        {/* Combined Timeline Area */}
+        {/* Combined Timeline Area — فقط بازه‌ی همین سشن */}
         <div className="relative flex flex-col h-[80px] bg-[#F6F8FA] dark:bg-transparent rounded-lg border border-[#EDF1F5] dark:border-[#3C3C3C] overflow-hidden">
           {/* 1. Session Color Bar (Background) */}
           <div
-            className="absolute top-[40%] h-[20px] rounded-full transition-all duration-500 opacity-60"
+            className="absolute top-[40%] left-0 h-[20px] w-full rounded-full transition-all duration-500 opacity-60"
             style={{
-              left: `${pctNum(session.start) * 100}%`,
-              width: `${
-                session.end > 24
-                  ? pctNum(session.end - 24) * 100
-                  : (pctNum(session.end) - pctNum(session.start)) * 100
-              }%`,
               background: session.bg,
               border: `1px solid ${session.border}`,
               opacity: isActive ? 1 : 0.3,
             }}
           />
 
-          {/* 2. Hour Grid & Labels */}
+          {/* 2. Hour Grid & Labels — فقط شروع/میانه/پایان همین سشن */}
           <div className="absolute top-[40%] w-full h-[20px] flex justify-between px-2 z-0">
             <span className="text-[8px] text-[#8A93A6] dark:text-slate-500 font-mono">
-              00:00
+              {fmt(session.start)}
             </span>
             <span className="text-[8px] text-[#8A93A6] dark:text-slate-500 font-mono">
-              12:00
+              {midLabel}
             </span>
             <span className="text-[8px] text-[#8A93A6] dark:text-slate-500 font-mono">
-              24:00
+              {fmt(session.end % 24)}
             </span>
           </div>
 
@@ -544,10 +619,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     ? n.time - session.start
                     : 24 - session.start + n.time
                   : n.time - session.start;
-              const duration =
-                session.end > 24
-                  ? 24 - session.start + (session.end - 24)
-                  : session.end - session.start;
               const posPct = Math.min(98, Math.max(2, (rel / duration) * 100));
               const impactColor = getImpactColor(n.impact);
               const isPastNews = n.time < cur;
@@ -574,12 +645,10 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     );
                   }}
                 >
-                  {/* News Time Label */}
                   <span className="text-[9px] font-bold text-[#5B657A] dark:text-slate-300 mb-1 group-hover:text-[#7C5CFA] transition-colors whitespace-nowrap">
                     {fmt(n.time)}
                   </span>
 
-                  {/* Vertical Line & Dot */}
                   <div className="relative flex flex-col items-center">
                     <div
                       className={`w-px h-4 ${isPastNews ? "opacity-50" : ""}`}
@@ -602,7 +671,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     />
                   </div>
 
-                  {/* Next Indicator (Ping) */}
                   {isNext && (
                     <span className="absolute -top-1 right-1/2 translate-x-1/2 flex h-2.5 w-2.5 z-10">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D9A441] opacity-75" />
@@ -614,14 +682,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             })}
           </div>
 
-          {/* 4. Current Time Indicator (Line) */}
+          {/* 4. Current Time Indicator (Line) — فقط وقتی این سشن الان زنده است */}
           {isActive && live && (
             <div
               className="absolute top-0 h-full w-0.5 z-20 animate-pulse"
               style={{
-                left: `${
-                  ((cur - session.start) / (session.end - session.start)) * 100
-                }%`,
+                left: `${(relCur / duration) * 100}%`,
                 background: COLORS.success,
                 boxShadow: `0 0 12px ${COLORS.success}`,
               }}
@@ -667,6 +733,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                         ? "bg-[#F6F8FA] dark:bg-transparent border-[#E3E7F0] dark:border-[#3C3C3C] opacity-60"
                         : "bg-white dark:bg-[#2a2a2a] border-[#EDF1F5] dark:border-[#4A4A4A] hover:border-[#7C5CFA]"
                   }`}
+                  style={{
+                    boxShadow: !isPast
+                      ? `0 0 0 1px ${impactColor}20 inset`
+                      : "none",
+                  }}
                 >
                   <img
                     className="w-4 h-3 rounded-sm object-cover"
@@ -704,24 +775,17 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             )}
           </div>
 
-          {/* Navigation Controls (Optional helper) */}
           {sessionNews.length > 1 && (
             <div className="flex items-center justify-end gap-2 mt-2">
               <button
                 className="p-1 rounded-full border border-[#E3E7F0] dark:border-[#3C3C3C] hover:bg-[#F6F8FA] dark:hover:bg-[#2a2a2a] transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Logic to scroll or highlight previous news in mobile
-                }}
+                onClick={(e) => e.stopPropagation()}
               >
                 {isRtl ? <FiArrowRight size={12} /> : <FiArrowLeft size={12} />}
               </button>
               <button
                 className="p-1 rounded-full border border-[#E3E7F0] dark:border-[#3C3C3C] hover:bg-[#F6F8FA] dark:hover:bg-[#2a2a2a] transition-colors"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  // Logic to scroll or highlight next news in mobile
-                }}
+                onClick={(e) => e.stopPropagation()}
               >
                 {isRtl ? <FiArrowLeft size={12} /> : <FiArrowRight size={12} />}
               </button>
@@ -767,35 +831,38 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           }
         }}
       >
-        <div id="news1" className="px-4 py-3">
-          <div className="flex flex-col items-center justify-center gap-2">
-            <div className="flex items-center gap-3">
-              <IoMdTime className="text-[#7C5CFA] dark:text-[#7C5CFA] w-5 h-5 hidden md:block" />
-              <span className="md:text-3xl font-bold text-[#1F2430] dark:text-white tracking-wider tabular-nums">
-                {currentTime.timeStr}
-              </span>
-            </div>
-
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm">
-              <div className="flex items-center gap-1.5 text-[#5B657A] dark:text-slate-400">
-                <CiCalendar className="text-[#7C5CFA] dark:text-[#7C5CFA] hidden sm:block w-4 h-4" />
-                <span
-                  className="font-medium text-[#1F2430] dark:text-slate-200 text-xs sm:text-sm"
-                  dir="rtl"
-                >
-                  {currentTime.shamsi}
+        {/* هدر ساعت/تاریخ — مشابه بقیه‌ی سکشن‌ها کادر دارد */}
+        <div id="news1" className="px-4 pt-3 pb-2">
+          <div className="rounded-xl border border-[#E3E7F0] dark:border-[#3C3C3C] bg-white dark:bg-transparent px-4 py-3">
+            <div className="flex flex-col items-center justify-center gap-2">
+              <div className="flex items-center gap-3">
+                <IoMdTime className="text-[#7C5CFA] dark:text-[#7C5CFA] w-5 h-5 hidden md:block" />
+                <span className="md:text-3xl font-bold text-[#1F2430] dark:text-white tracking-wider tabular-nums">
+                  {currentTime.timeStr}
                 </span>
               </div>
 
-              <span className="text-[#D6DCE8] dark:text-[#3C3C3C] text-xs">
-                |
-              </span>
+              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm">
+                <div className="flex items-center gap-1.5 text-[#5B657A] dark:text-slate-400">
+                  <CiCalendar className="text-[#7C5CFA] dark:text-[#7C5CFA] hidden sm:block w-4 h-4" />
+                  <span
+                    className="font-medium text-[#1F2430] dark:text-slate-200 text-xs sm:text-sm"
+                    dir="rtl"
+                  >
+                    {currentTime.shamsi}
+                  </span>
+                </div>
 
-              <div className="flex items-center gap-1.5 text-[#5B657A] dark:text-slate-400">
-                <CiCalendar className="text-[#7C5CFA] dark:text-[#7C5CFA] hidden sm:block w-4 h-4" />
-                <span className="font-medium text-xs sm:text-sm text-[#5B657A] dark:text-slate-400">
-                  {currentTime.gregorian}
+                <span className="text-[#D6DCE8] dark:text-[#3C3C3C] text-xs">
+                  |
                 </span>
+
+                <div className="flex items-center gap-1.5 text-[#5B657A] dark:text-slate-400">
+                  <CiCalendar className="text-[#7C5CFA] dark:text-[#7C5CFA] hidden sm:block w-4 h-4" />
+                  <span className="font-medium text-xs sm:text-sm text-[#5B657A] dark:text-slate-400">
+                    {currentTime.gregorian}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -812,14 +879,14 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 className="absolute z-30 flex flex-col items-center"
                 style={{
                   top: isMobile ? 4 : 6,
-                  [isRtl ? "right" : "left"]: pct(cur),
-                  transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
+                  left: pct(cur),
+                  transform: "translateX(-50%)",
                 }}
               >
                 <div
                   className="rounded-md px-1.5 sm:px-2 py-1 sm:py-1.5 flex flex-col items-center gap-0.5 border border-[#7C5CFA] text-white whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-lg"
                   style={{
-                    background: COLORS.brandPrimary, // #7C5CFA
+                    background: COLORS.brandPrimary,
                     boxShadow: `0 0 10px rgba(124, 92, 250, 0.5)`,
                     minWidth: isMobile ? 40 : 55,
                   }}
@@ -851,7 +918,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 const topOffset = newsAreaBaseTop + row * newsAreaRowGap;
                 const zIdx = isNext ? 50 : isPast ? 15 - i : 25 + i;
 
-                const sessionColor = getSessionColorByTime(n.time);
                 const impactColor = getImpactColor(n.impact);
 
                 return (
@@ -860,8 +926,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     className="news-marker absolute flex flex-col items-center cursor-pointer tooltip-trigger"
                     style={{
                       top: topOffset,
-                      [isRtl ? "right" : "left"]: pct(n.time),
-                      transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
+                      left: pct(n.time),
+                      transform: "translateX(-50%)",
                       zIndex: zIdx,
                       opacity: isPast ? 0.5 : 1,
                     }}
@@ -900,25 +966,25 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                         style={{
                           padding: isMobile ? "2px 5px" : "5px 8px",
                           background: isPast
-                            ? COLORS.bgSoft // #EEF1F7
+                            ? COLORS.bgSoft
                             : isNext
-                              ? `${sessionColor}30`
-                              : `${sessionColor}20`,
+                              ? `${impactColor}30`
+                              : `${impactColor}18`,
                           borderColor: isPast
-                            ? COLORS.borderDefault // #E3E7F0
+                            ? COLORS.borderDefault
                             : isNext
-                              ? sessionColor
-                              : `${sessionColor}80`,
+                              ? impactColor
+                              : `${impactColor}80`,
                           color: isPast
-                            ? COLORS.textTertiary // #8A93A6
+                            ? COLORS.textTertiary
                             : isNext
-                              ? COLORS.textPrimary // #1F2430
-                              : COLORS.textSecondary, // #5B657A
+                              ? COLORS.textPrimary
+                              : COLORS.textSecondary,
                           boxShadow: isPast
                             ? "none"
                             : isNext
-                              ? `0 0 14px ${sessionColor}60`
-                              : `0 0 8px ${sessionColor}30`,
+                              ? `0 0 14px ${impactColor}60`
+                              : `0 0 8px ${impactColor}30`,
                           filter: isPast ? "grayscale(0.5)" : "none",
                           minWidth: isMobile ? 32 : 45,
                         }}
@@ -964,11 +1030,10 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                             </span>
                             <CiCalendar
                               size={16}
-                              className={
-                                isPast ? "text-[#8A93A6]" : "text-[#7C5CFA]"
-                              }
                               style={{
-                                color: isPast ? undefined : sessionColor,
+                                color: isPast
+                                  ? COLORS.textTertiary
+                                  : impactColor,
                               }}
                             />
                           </>
@@ -982,8 +1047,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                         background: isPast
                           ? COLORS.borderDefault
                           : isNext
-                            ? sessionColor
-                            : `${sessionColor}80`,
+                            ? impactColor
+                            : `${impactColor}80`,
                       }}
                     />
                   </div>
@@ -996,7 +1061,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               style={{ height: isMobile ? 20 : 24 }}
             >
               {hourLabels.map((h) => {
-                if (h % 2 !== 0) return null;
+                if (h % 2 !== 0 && h !== 24) return null;
 
                 return (
                   <div
@@ -1004,8 +1069,13 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     className="absolute font-medium flex"
                     style={{
                       top: "20%",
-                      [isRtl ? "left" : "left"]: `${((h % 24) / 24) * 100}%`,
-                      transform: isRtl ? "translateX(50%)" : "translateX(-50%)",
+                      left: `${(h / 24) * 100}%`,
+                      transform:
+                        h === 24
+                          ? "translateX(-100%)"
+                          : h === 0
+                            ? "translateX(0%)"
+                            : "translateX(-50%)",
                       textAlign: "center",
                       color: "#8A93A6",
                       letterSpacing: "0.3px",
@@ -1065,12 +1135,12 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   <rect width="1000" height="420" fill="url(#bgGradient)" />
                   <rect width="1000" height="420" fill="url(#dp2)" />
 
+                  {/* موقعیت دقیق هر شهر روی نقشه از مختصات mapX/mapY خودِ دیتا می‌آید،
+                      نه از محاسبه‌ی زمانی — یعنی دایره‌ها همیشه سرجای جغرافیایی درست‌شان هستند */}
                   {SESSIONS.map((s) => {
                     const on = activeSessions.includes(s.id);
-                    const mid = ((s.start + s.end) / 2) % 24;
-                    const cx = (mid / 24) * 1000;
-                    const barTopUnits = (s.barTop / 100) * 420;
-                    const cy = Math.max(16, barTopUnits - 14);
+                    const cx = ((s.mapX ?? 50) / 100) * 1000;
+                    const cy = ((s.mapY ?? 50) / 100) * 420;
 
                     return (
                       <g key={s.id}>
@@ -1107,7 +1177,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                           y={cy - 16}
                           fontSize="9"
                           fontWeight="normal"
-                          fill={on ? COLORS.textPrimary : COLORS.textTertiary} // #1F2430 or #8A93A6
+                          fill={on ? COLORS.textPrimary : COLORS.textTertiary}
                           textAnchor="middle"
                           dominantBaseline="middle"
                         >
@@ -1125,10 +1195,10 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 <div
                   className="absolute top-0 bottom-0 w-px z-10 transition-all duration-300"
                   style={{
-                    [isRtl ? "right" : "left"]: pct(cur),
+                    left: pct(cur),
                     background:
                       hoveredLine === "current"
-                        ? COLORS.brandPrimary // #7C5CFA
+                        ? COLORS.brandPrimary
                         : `${COLORS.brandPrimary}80`,
                     boxShadow:
                       hoveredLine === "current"
@@ -1140,7 +1210,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 <div
                   className="absolute top-0 bottom-0 z-20 tooltip-trigger"
                   style={{
-                    [isRtl ? "right" : "left"]: `calc(${pct(cur)} - 12px)`,
+                    left: `calc(${pct(cur)} - 12px)`,
                     width: "24px",
                     cursor: "pointer",
                   }}
@@ -1175,21 +1245,21 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 {sorted.map((n) => {
                   const isPast = n.time < cur;
                   const isHovered = hoveredLine === `news-${n.id}`;
-                  const sessionColor = getSessionColorByTime(n.time);
+                  const impactColor = getImpactColor(n.impact);
 
                   return (
                     <div
                       key={`line-${n.id}`}
                       className="absolute top-0 bottom-0 w-px z-10 transition-all duration-300"
                       style={{
-                        [isRtl ? "right" : "left"]: pct(n.time),
+                        left: pct(n.time),
                         backgroundImage: isPast
                           ? `repeating-linear-gradient(to bottom,${COLORS.borderStrong} 0,${COLORS.borderStrong} 5px,transparent 5px,transparent 10px)`
-                          : `repeating-linear-gradient(to bottom,${sessionColor} 0,${sessionColor} 5px,transparent 5px,transparent 10px)`,
+                          : `repeating-linear-gradient(to bottom,${impactColor} 0,${impactColor} 5px,transparent 5px,transparent 10px)`,
                         opacity: isPast ? 0.3 : 0.75,
                         boxShadow:
                           isHovered && !isPast
-                            ? `0 0 20px ${sessionColor}80, 0 0 60px ${sessionColor}40`
+                            ? `0 0 20px ${impactColor}80, 0 0 60px ${impactColor}40`
                             : "none",
                         transform: isHovered ? "scaleX(2)" : "scaleX(1)",
                       }}
@@ -1202,7 +1272,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     key={`hit-${n.id}`}
                     className="absolute top-0 bottom-0 z-20 tooltip-trigger"
                     style={{
-                      [isRtl ? "right" : "left"]: `calc(${pct(n.time)} - 12px)`,
+                      left: `calc(${pct(n.time)} - 12px)`,
                       width: "24px",
                       cursor: "pointer",
                     }}
@@ -1240,7 +1310,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       key={`${s.id}-${sH}`}
                       className="absolute md:flex items-center overflow-hidden rounded-lg border"
                       style={{
-                        [isRtl ? "left" : "right"]: pct(sH),
+                        left: pct(sH),
                         width: pct(eH - sH),
                         top: `${s.barTop}%`,
                         height: barH,
@@ -1270,7 +1340,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                           </span>
                           <div
                             style={{
-                              textAlign: isRtl ? "center" : "center",
+                              textAlign: "center",
                               lineHeight: 1.3,
                               overflow: "hidden",
                             }}
@@ -1291,7 +1361,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                               <div
                                 style={{
                                   fontSize: 10,
-                                  color: COLORS.textTertiary, // #8A93A6
+                                  color: COLORS.textTertiary,
                                   opacity: 0.85,
                                 }}
                               >
@@ -1315,11 +1385,15 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             )}
           </div>
 
-          {/* موبایل - کارت‌های جداگانه با تایم لاین اخبار */}
+          {/* موبایل - کارت‌های جداگانه، ترتیب داینامیک بر اساس سشن جاری */}
           <div className="md:hidden">
             <div className="flex flex-col px-1 py-2">
-              {SESSIONS.map((session) => (
-                <MobileSessionCard key={session.id} session={session} />
+              {orderedSessions.map((session) => (
+                <MobileSessionCard
+                  key={session.id}
+                  session={session}
+                  state={getSessionState(session, cur)}
+                />
               ))}
             </div>
           </div>
@@ -1359,6 +1433,13 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     opacity: isActive ? 1 : 0.5,
                   }}
                 >
+                  {/* آیکون اختصاصی هر شهر (برج آزادی برای نیویورک و ...) کنار نقطه‌ی رنگی */}
+                  <img
+                    src={session.icon}
+                    className="w-3.5 h-3.5 object-contain shrink-0"
+                    alt=""
+                  />
+
                   <span className="relative flex items-center justify-center">
                     <span
                       className="block w-2.5 h-2.5 rounded-full transition-all duration-500 ease-out"

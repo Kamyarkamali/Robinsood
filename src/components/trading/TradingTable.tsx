@@ -12,6 +12,11 @@ import {
   Hash,
   Tag,
   RefreshCw,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  Percent,
+  ListChecks,
 } from "lucide-react";
 import { useMemo, useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
@@ -132,6 +137,128 @@ function generateFakeTrades(count: number): ExtendedTrades[] {
     });
   }
   return out;
+}
+
+function StatsHeader({
+  trades,
+  lang,
+}: {
+  trades: ExtendedTrades[];
+  lang: string;
+}) {
+  const isRtl = lang === "fa";
+
+  const stats = useMemo(() => {
+    const total = trades.length;
+    const wins = trades.filter((t) => t.result === "profit");
+    const losses = trades.filter((t) => t.result === "loss");
+    const winCount = wins.length;
+    const lossCount = losses.length;
+    const winPct = total ? (winCount / total) * 100 : 0;
+    const lossPct = total ? (lossCount / total) * 100 : 0;
+    const netProfit = trades.reduce((sum, t) => sum + (t.profitLoss || 0), 0);
+
+    const closedTrades = trades.filter(
+      (t) => t.status === "closed" && t.result !== "pending",
+    );
+    const avgReturn =
+      closedTrades.length > 0
+        ? closedTrades.reduce((sum, t) => {
+            const base = t.entryPrice * t.volume;
+            return sum + (base > 0 ? (t.profitLoss / base) * 100 : 0);
+          }, 0) / closedTrades.length
+        : 0;
+
+    return {
+      total,
+      winCount,
+      lossCount,
+      winPct,
+      lossPct,
+      netProfit,
+      avgReturn,
+    };
+  }, [trades]);
+
+  const items = [
+    {
+      key: "total",
+      label: isRtl ? "تعداد کل معاملات" : "Total Trades",
+      value: stats.total.toLocaleString(),
+      icon: <ListChecks size={16} />,
+      valueColor: "text-gray-700 dark:text-gray-200",
+      iconBg: "bg-gray-500/15",
+      iconColor: "text-gray-500 dark:text-gray-400",
+    },
+    {
+      key: "wins",
+      label: isRtl ? "معاملات سودده" : "Winning Trades",
+      value: `${stats.winCount.toLocaleString()} (${stats.winPct.toFixed(1)}%)`,
+      icon: <TrendingUp size={16} />,
+      valueColor: "text-emerald-500",
+      iconBg: "bg-emerald-500/15",
+      iconColor: "text-emerald-500",
+    },
+    {
+      key: "losses",
+      label: isRtl ? "معاملات زیان‌ده" : "Losing Trades",
+      value: `${stats.lossCount.toLocaleString()} (${stats.lossPct.toFixed(1)}%)`,
+      icon: <TrendingDown size={16} />,
+      valueColor: "text-rose-500",
+      iconBg: "bg-rose-500/15",
+      iconColor: "text-rose-500",
+    },
+    {
+      key: "netProfit",
+      label: isRtl ? "مجموع سود خالص" : "Total Net Profit",
+      value: stats.netProfit.toLocaleString(undefined, {
+        maximumFractionDigits: 0,
+      }),
+      icon: <Wallet size={16} />,
+      valueColor: stats.netProfit >= 0 ? "text-emerald-500" : "text-rose-500",
+      iconBg: stats.netProfit >= 0 ? "bg-emerald-500/15" : "bg-rose-500/15",
+      iconColor: stats.netProfit >= 0 ? "text-emerald-500" : "text-rose-500",
+    },
+    {
+      key: "avgReturn",
+      label: isRtl ? "میانگین بازدهی" : "Average Return",
+      value: `${stats.avgReturn.toFixed(2)}%`,
+      icon: <Percent size={16} />,
+      valueColor: "text-violet-500",
+      iconBg: "bg-violet-500/15",
+      iconColor: "text-violet-500",
+    },
+  ];
+
+  return (
+    <div
+      dir={isRtl ? "rtl" : "ltr"}
+      className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 divide-x divide-y sm:divide-y-0 divide-gray-200 dark:divide-[#3a3a3a] rounded-2xl border border-gray-200 dark:border-[#3a3a3a] bg-white dark:bg-[#2B2B2B] overflow-hidden mb-3"
+    >
+      {items.map((item) => (
+        <div
+          key={item.key}
+          className="flex items-center justify-between gap-2 px-4 py-3"
+        >
+          <div className="min-w-0">
+            <p className="text-[10px] text-gray-400 dark:text-gray-500 whitespace-nowrap mb-1">
+              {item.label}
+            </p>
+            <p
+              className={`text-sm font-bold whitespace-nowrap ${item.valueColor}`}
+            >
+              {item.value}
+            </p>
+          </div>
+          <div
+            className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${item.iconBg} ${item.iconColor}`}
+          >
+            {item.icon}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function emptyFilters(): Filters {
@@ -1008,6 +1135,9 @@ export default function TradingTable() {
         className="w-full mt-3 max-w-full mx-auto font-lahzeh rounded-[25px] border-4
         dark:border-[#3C3C3C] border-gray-300"
       >
+        <div className="px-4 sm:px-6 pt-4">
+          <StatsHeader trades={filteredSorted} lang={lang} />
+        </div>
         <div className="mx-auto rounded-2xl bg-white dark:bg-linear-to-b dark:from-[#2C2C2C] dark:bg-[#303030] shadow-xl overflow-hidden border border-gray-200 dark:border-[#3a3a3a]">
           <div className="flex flex-col lg:flex-row items-center gap-4 px-4 sm:px-6 py-4">
             <div

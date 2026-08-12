@@ -77,24 +77,32 @@ export default function ChallengeGrid() {
           </button>
         </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-linear-to-br bg-[#EDE9FF] dark:from-[#2a2a2a] dark:to-[#323232] shadow-sm w-full sm:w-auto justify-center">
-          <FiCalendar
-            size={12}
-            className="text-blue-500 dark:text-blue-400 sm:w-3.5 sm:h-3.5"
-          />
-          <span className="text-[10px] xs:text-[11px] sm:text-[12px] md:text-[13px] text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
-            {persianDate}
-          </span>
-          <span className="text-gray-300 dark:text-gray-600 text-[10px] sm:text-xs">
-            |
-          </span>
-          <IoTimeOutline
-            size={12}
-            className="text-orange-500 dark:text-orange-400 sm:w-3.5 sm:h-3.5"
-          />
-          <span className="text-[10px] xs:text-[11px] sm:text-[12px] md:text-[13px] text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
-            {persianTime}
-          </span>
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 mb-4 mt-3">
+          <div className="flex items-center gap-2 sm:gap-3 w-full sm:w-auto justify-center sm:justify-start"></div>
+
+          <div className="flex items-center justify-center flex-1 w-full sm:w-auto">
+            <div className="flex items-center gap-1.5 sm:gap-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-xl bg-linear-to-br bg-[#EDE9FF] dark:from-[#2a2a2a] dark:to-[#323232] shadow-sm">
+              <FiCalendar
+                size={12}
+                className="text-blue-500 dark:text-blue-400 sm:w-3.5 sm:h-3.5"
+              />
+              <span className="text-[10px] xs:text-[11px] sm:text-[12px] md:text-[13px] text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
+                {persianDate}
+              </span>
+              <span className="text-gray-300 dark:text-gray-600 text-[10px] sm:text-xs">
+                |
+              </span>
+              <IoTimeOutline
+                size={12}
+                className="text-orange-500 dark:text-orange-400 sm:w-3.5 sm:h-3.5"
+              />
+              <span className="text-[10px] xs:text-[11px] sm:text-[12px] md:text-[13px] text-gray-700 dark:text-gray-300 font-medium whitespace-nowrap">
+                {persianTime}
+              </span>
+            </div>
+          </div>
+
+          <div className="hidden lg:block w-[160px]"></div>
         </div>
 
         <div className="hidden lg:block w-[160px]"></div>

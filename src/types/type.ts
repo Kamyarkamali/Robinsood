@@ -5,7 +5,7 @@ export type Lang = "fa" | "en";
 
 export type Theme = "dark" | "light";
 export type ParamKey = "pnl" | "winrate" | "trades" | "rr";
-export type DateKey = "dec24" | "nov24" | "oct24" | "q4_24" | "q3_24";
+export type DateKey = any;
 export type Locale = "fa" | "en";
 
 interface DayData {

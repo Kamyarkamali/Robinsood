@@ -11,7 +11,6 @@ import {
   ComposedChart,
   Bar,
 } from "recharts";
-import { AreaTooltip } from "./Tooltips";
 import type { CandleDataPoint, ChartModalProps } from "./typesChart";
 import i18next from "i18next";
 
@@ -89,24 +88,6 @@ const ModalCandleBar: React.FC<ModalCandleBarProps> = ({
   );
 };
 
-// یک ستون OHLC برای نوار بالای چارت کندل‌استیک (استاندارد پلتفرم‌های معاملاتی)
-const OhlcLegendStat: React.FC<{
-  label: string;
-  value: number | string;
-  colorClass: string;
-}> = ({ label, value, colorClass }) => (
-  <div className="flex items-center gap-1">
-    <span className="text-[11px] sm:text-xs font-medium text-gray-400 dark:text-white/40">
-      {label}
-    </span>
-    <span
-      className={`text-[11px] sm:text-xs font-bold tabular-nums ${colorClass}`}
-    >
-      {value}
-    </span>
-  </div>
-);
-
 export const ChartModal: React.FC<ChartModalProps> = ({
   isOpen,
   onClose,
@@ -114,7 +95,6 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   title,
   lang,
 }) => {
-  // مقدار کندلی که هاور شده (برای نوار OHLC بالای چارت)
   const [hoveredCandle, setHoveredCandle] = useState<{
     open: number;
     close: number;
@@ -197,6 +177,8 @@ export const ChartModal: React.FC<ChartModalProps> = ({
 
   const renderChart = () => {
     if (isCandle) {
+      const isFa = lang === "fa";
+      
       return (
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -240,17 +222,60 @@ export const ChartModal: React.FC<ChartModalProps> = ({
               }}
             />
 
+            {/* تولتیپ مشابه CandleCard */}
             <Tooltip
-              content={(props: any) => (
-                <AreaTooltip
-                  active={props.active}
-                  payload={props.payload}
-                  label={String(props.label)}
-                  lang={lang}
-                  // @ts-ignore
-                  chartType="candlestick"
-                />
-              )}
+              content={({ active, payload, label }) => {
+                if (!active || !payload?.length) return null;
+                const data = payload[0]?.payload;
+                if (!data) return null;
+
+                return (
+                  <div className="backdrop-blur-2xl rounded-xl px-3 py-2 text-white text-xs max-w-[180px]"
+                       style={{
+                         backgroundColor: isDark ? "rgba(43, 43, 43, 0.95)" : "rgba(255, 255, 255, 0.95)",
+                         border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
+                         boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+                       }}>
+                    <p className="text-purple-300 font-bold text-center mb-1">
+                      {label}
+                    </p>
+                    <div className="flex flex-col gap-0.5">
+                      <div className="flex justify-between gap-4">
+                        <span className="text-gray-400">
+                          {isFa ? "باز شدن:" : "Open:"}
+                        </span>
+                        <span className="font-medium" style={{ color: isDark ? "#fff" : "#333" }}>
+                          {data.open}
+                        </span>
+                      </div>
+                      <div className="flex justify-between gap-4">
+                        <span className="text-gray-400">
+                          {isFa ? "بسته شدن:" : "Close:"}
+                        </span>
+                        <span className="font-medium" style={{ color: isDark ? "#fff" : "#333" }}>
+                          {data.close}
+                        </span>
+                      </div>
+                      <div className="flex justify-between gap-4">
+                        <span className="text-gray-400">
+                          {isFa ? "بیشترین:" : "High:"}
+                        </span>
+                        <span className="text-green-400 font-medium">
+                          {data.high}
+                        </span>
+                      </div>
+                      <div className="flex justify-between gap-4">
+                        <span className="text-gray-400">
+                          {isFa ? "کمترین:" : "Low:"}
+                        </span>
+                        <span className="text-red-400 font-medium">
+                          {data.low}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                );
+              }}
             />
 
             <Bar
@@ -333,14 +358,32 @@ export const ChartModal: React.FC<ChartModalProps> = ({
           />
 
           <Tooltip
-            content={(props: any) => (
-              <AreaTooltip
-                active={props.active}
-                payload={props.payload}
-                label={String(props.label)}
-                lang={lang}
-              />
-            )}
+            content={(props: any) => {
+              if (!props.active || !props.payload?.length) return null;
+              const data = props.payload[0]?.payload;
+              if (!data) return null;
+
+              return (
+                <div className="backdrop-blur-2xl rounded-xl px-3 py-2 text-white text-xs max-w-[180px]"
+                     style={{
+                       backgroundColor: isDark ? "rgba(43, 43, 43, 0.95)" : "rgba(255, 255, 255, 0.95)",
+                       border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
+                       boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
+                     }}>
+                  <p className="text-purple-300 font-bold text-center mb-1">
+                    {props.label}
+                  </p>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-gray-400">
+                      {lang === "fa" ? "مقدار:" : "Value:"}
+                    </span>
+                    <span className="font-medium" style={{ color: isDark ? "#fff" : "#333" }}>
+                      {data.v || data.close || data.value}
+                    </span>
+                  </div>
+                </div>
+              );
+            }}
           />
 
           <Area
@@ -409,65 +452,6 @@ export const ChartModal: React.FC<ChartModalProps> = ({
               <X className={`w-5 h-5 ${theme.text}`} />
             </button>
           </div>
-
-          {/* نوار OHLC — فقط برای چارت کندل‌استیک، استاندارد پلتفرم‌های ترید مثل TradingView */}
-          {isCandle && activeCandle && (
-            <div
-              className={`
-                flex flex-wrap items-center gap-x-4 gap-y-1.5
-                px-5 py-2.5
-                border-b
-                ${theme.legendBar}
-              `}
-              dir="ltr"
-            >
-              <OhlcLegendStat
-                label="O"
-                value={activeCandle.open}
-                colorClass={theme.text}
-              />
-              <OhlcLegendStat
-                label="H"
-                value={activeCandle.high}
-                colorClass="text-[#22c55e] dark:text-[#4ade80]"
-              />
-              <OhlcLegendStat
-                label="L"
-                value={activeCandle.low}
-                colorClass="text-[#ef4444] dark:text-[#f87171]"
-              />
-              <OhlcLegendStat
-                label="C"
-                value={activeCandle.close}
-                colorClass={theme.text}
-              />
-
-              {activeChange && (
-                <span
-                  className={`
-                    text-[11px] sm:text-xs font-bold tabular-nums px-2 py-0.5 rounded-md
-                    ${
-                      activeChange.isUp
-                        ? "text-[#16a34a] bg-[#22c55e]/10 dark:text-[#4ade80] dark:bg-[#4ade80]/10"
-                        : "text-[#dc2626] bg-[#ef4444]/10 dark:text-[#f87171] dark:bg-[#f87171]/10"
-                    }
-                  `}
-                >
-                  {activeChange.isUp ? "+" : ""}
-                  {activeChange.diff.toFixed(2)} ({activeChange.isUp ? "+" : ""}
-                  {activeChange.pct.toFixed(2)}%)
-                </span>
-              )}
-
-              {activeCandle.t !== undefined && (
-                <span
-                  className={`ms-auto text-[10px] sm:text-[11px] ${theme.muted}`}
-                >
-                  {activeCandle.t}
-                </span>
-              )}
-            </div>
-          )}
 
           <div className="flex-1 w-full h-full p-4 min-h-0">
             {renderChart()}

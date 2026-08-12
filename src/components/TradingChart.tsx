@@ -118,13 +118,11 @@ function formatTimeByFrame(
 function generateData(tf: TimeFrame): DataPoint[] {
   const seed = tf.length * 7 + tf.charCodeAt(0);
 
-  // تعداد نقاط ثابت برای همه تایم‌فریم‌ها
   const COUNT = 200; // ← ثابت
   const pts: DataPoint[] = [];
   let balance: number = 400;
   const timeStep = getTimeStep(tf);
 
-  // شروع از تاریخ امروز - 30 روز
   const startDate = new Date();
   startDate.setDate(startDate.getDate() - 30);
   startDate.setHours(9, 30, 0, 0);
@@ -132,7 +130,6 @@ function generateData(tf: TimeFrame): DataPoint[] {
   for (let i = 0; i < COUNT; i++) {
     const date = new Date(startDate.getTime() + i * timeStep);
 
-    // شبیه‌سازی حرکات قیمت با نویز بیشتر برای دقیقه‌ها
     const noise = tf.includes("min") ? 0.5 : 0.2;
     const drift = (i / COUNT) * 620 + 380;
     balance = Math.max(
@@ -151,7 +148,6 @@ function generateData(tf: TimeFrame): DataPoint[] {
     const low =
       Math.min(open, close) - Math.abs(Math.sin(i * 1.7 + seed)) * 15 * noise;
 
-    // فرمت زمان بر اساس تایم‌فریم
     let timeString = "";
     if (tf === "1day") {
       const day = String(date.getDate()).padStart(2, "0");
@@ -354,28 +350,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
         </p>
       </div>
 
-      <div className="space-y-0.5 py-1">
-        {payload
-          .filter((p: any) => p.dataKey !== "equity")
-          .map((p: any) => (
-            <div
-              key={p.dataKey}
-              className="flex justify-between items-center gap-2 sm:gap-4 px-0.5 sm:px-1 rounded-lg hover:bg-white/5 transition-colors"
-              style={{
-                color:
-                  p.stroke || p.color || settings?.colors?.text || "#a0a0c0",
-              }}
-            >
-              <span className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium truncate">
-                {p.name}
-              </span>
-              <strong className="text-white font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
-                {Number(p.value).toFixed(2)}
-              </strong>
-            </div>
-          ))}
-      </div>
-
       {equityData && (
         <>
           <div className="relative my-0.5 sm:my-1">
@@ -388,6 +362,27 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
               </span>
             </div>
           </div>
+
+          {/* balance - یک بار */}
+          {(() => {
+            const balancePayload = payload.find(
+              (p: any) => p.dataKey === "balance",
+            );
+            if (!balancePayload) return null;
+            return (
+              <div className="flex justify-between items-center gap-2 sm:gap-4 px-0.5 sm:px-1 rounded-lg hover:bg-white/5 transition-colors mb-1.5">
+                <span
+                  className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium truncate"
+                  style={{ color: settings?.colors?.text || "#a0a0c0" }}
+                >
+                  {balancePayload.name}
+                </span>
+                <strong className="text-white font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
+                  {Number(balancePayload.value).toFixed(2)}
+                </strong>
+              </div>
+            );
+          })()}
 
           <div className="grid grid-cols-2 gap-1 xs:gap-1.5 sm:gap-2">
             <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10 hover:border-purple-500/30 transition-all">
@@ -474,14 +469,6 @@ const TIME_FRAMES: TimeFrame[] = [
   "4h",
   "12h",
   "1day",
-];
-
-const SERIES_CONFIG: { key: SeriesKey; tKey: string; color: string }[] = [
-  { key: "target", tKey: "chart.target", color: "#b06aff" },
-  { key: "dailyDrawdown", tKey: "chart.dailyDrawdown", color: "#7c3aed" },
-  { key: "totalDrawdown", tKey: "chart.totalDrawdown", color: "#9d4edd" },
-  { key: "balance", tKey: "chart.balance", color: "#c77dff" },
-  { key: "equity", tKey: "chart.equity", color: "#6d28d9" },
 ];
 
 export default function TradingChart() {
@@ -619,6 +606,37 @@ export default function TradingChart() {
       Math.max(0, Math.min(TOTAL - visibleCount, tOff.current + delta)),
     );
   };
+
+  // اضافه کردن useMemo برای سری‌های پویا
+  const seriesConfig = useMemo(() => {
+    return [
+      {
+        key: "target" as SeriesKey,
+        tKey: "chart.target",
+        color: settings.colors.accent,
+      },
+      {
+        key: "dailyDrawdown" as SeriesKey,
+        tKey: "chart.dailyDrawdown",
+        color: settings.colors.primary,
+      },
+      {
+        key: "totalDrawdown" as SeriesKey,
+        tKey: "chart.totalDrawdown",
+        color: settings.colors.secondary,
+      },
+      {
+        key: "balance" as SeriesKey,
+        tKey: "chart.balance",
+        color: settings.colors.balanceLine,
+      },
+      {
+        key: "equity" as SeriesKey,
+        tKey: "chart.equity",
+        color: settings.colors.candleUp,
+      },
+    ];
+  }, [settings]);
 
   return (
     <>
@@ -1025,7 +1043,7 @@ export default function TradingChart() {
               isRtl ? "flex-row-reverse" : ""
             }`}
           >
-            {SERIES_CONFIG.map(({ key, tKey, color }) => (
+            {seriesConfig.map(({ key, tKey, color }) => (
               <button
                 key={key}
                 onClick={() => toggle(key)}

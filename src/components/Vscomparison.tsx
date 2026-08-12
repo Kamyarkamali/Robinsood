@@ -47,7 +47,7 @@ function MetricSection({
           </span>
         </div>
 
-        <div className="flex-4 flex items-center justify-center md:mr-4">
+        <div className="flex-4 flex items-center justify-center md:mr-4 mx-auto">
           <img src={VS} className="w-10 sm:w-10 object-contain" alt="VS" />
         </div>
       </div>

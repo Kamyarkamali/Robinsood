@@ -147,7 +147,7 @@ function CustomTooltip({
         <div className="flex items-center gap-2 text-sm mb-1.5">
           <span
             className="inline-block h-2.5 w-2.5 rounded-full shrink-0"
-            style={{ background: "#7c6af7" }}
+            style={{ background: "#FF2D55" }}
           />
           <span className="text-gray-300">{param1Label}:</span>
           <span className="font-bold text-white">
@@ -471,7 +471,7 @@ export default function TradingDualChart() {
                   offset: 0,
                   fill: "#ff2d55",
                   fontSize: isMobile ? 16 : 22,
-                  dx: isRtl ? -10 : 10,
+                  dx: isRtl ? -15 : 15,  
                   fontWeight: "bold",
                 }}
               />
@@ -497,7 +497,7 @@ export default function TradingDualChart() {
                   position: "top",
                   offset: 0,
                   fontSize: isMobile ? 16 : 18,
-                  dx: isRtl ? 10 : -10,
+                  dx: isRtl ? 15 : -15,
                   fill: "#7c6af7",
                   fontWeight: "bold",
                 }}
@@ -523,7 +523,6 @@ export default function TradingDualChart() {
                 tickFormatter={(value, index) => {
                   const item = data[index];
                   if (!item) return value;
-                  // تا سایز lg از نسخه کوتاه استفاده کن
                   if (useShortLabel) {
                     return item.shortLabel || value;
                   }
