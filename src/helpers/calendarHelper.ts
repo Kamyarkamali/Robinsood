@@ -25,6 +25,7 @@ const generateMonthData = (
 ): CalendarData => {
   return {
     cur: monthKey,
+    // @ts-ignore
     days: Array.from({ length: days }, (_, i) => ({
       d: i + 1,
       m: monthKey,

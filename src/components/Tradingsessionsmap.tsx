@@ -74,16 +74,10 @@ function fmt(h: number) {
   return `${String(hr).padStart(2, "0")}:${String(mn).padStart(2, "0")}`;
 }
 
-// موقعیت روی محور زمان همیشه از چپ(00:00) به راست(24:00) است،
-// صرف‌نظر از راست‌به‌چپ بودن رابط کاربری (RTL فقط برای متن/چیدمان کلی است، نه محور زمان).
 function pct(h: number) {
   return `${((h % 24) / 24) * 100}%`;
 }
-function pctNum(h: number) {
-  return ((h % 24) / 24) * 100;
-}
 
-// اختلاف بین دو ساعت را همیشه یک عدد مثبت در بازه‌ی [0,24) برمی‌گرداند
 function normDiff(a: number) {
   return ((a % 24) + 24) % 24;
 }

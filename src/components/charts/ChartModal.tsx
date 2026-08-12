@@ -95,7 +95,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   title,
   lang,
 }) => {
-  const [hoveredCandle, setHoveredCandle] = useState<{
+  const [setHoveredCandle] = useState<{
     open: number;
     close: number;
     high: number;
@@ -106,6 +106,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   const handleChartMouseMove = useCallback((state: any) => {
     if (state?.activePayload?.length) {
       const p = state.activePayload[0].payload;
+      // @ts-ignore
       setHoveredCandle({
         open: p.open,
         close: p.close,
@@ -117,6 +118,7 @@ export const ChartModal: React.FC<ChartModalProps> = ({
   }, []);
 
   const handleChartMouseLeave = useCallback(() => {
+    // @ts-ignore
     setHoveredCandle(null);
   }, []);
 
@@ -138,7 +140,6 @@ export const ChartModal: React.FC<ChartModalProps> = ({
 
   const isCandle = cfg?.id === "tradeCount";
 
-  // داده نرمال‌شده کندل + دامنه Y، فقط وقتی کارت کندل‌استیک باشه
   const candleData = useMemo(() => {
     if (!isCandle || !cfg?.data) return [];
     return cfg.data.map((d: CandleDataPoint) => ({
@@ -160,25 +161,12 @@ export const ChartModal: React.FC<ChartModalProps> = ({
     return [0, Math.ceil(max + padding)];
   }, [candleData]);
 
-  // کندل فعال برای نوار OHLC: هاور شده، وگرنه آخرین کندل
-  const activeCandle = useMemo(() => {
-    if (hoveredCandle) return hoveredCandle;
-    return candleData[candleData.length - 1] || null;
-  }, [hoveredCandle, candleData]);
-
-  const activeChange = useMemo(() => {
-    if (!activeCandle) return null;
-    const diff = activeCandle.close - activeCandle.open;
-    const pct = activeCandle.open !== 0 ? (diff / activeCandle.open) * 100 : 0;
-    return { diff, pct, isUp: diff >= 0 };
-  }, [activeCandle]);
-
   if (!cfg) return null;
 
   const renderChart = () => {
     if (isCandle) {
       const isFa = lang === "fa";
-      
+
       return (
         <ResponsiveContainer width="100%" height="100%">
           <ComposedChart
@@ -222,7 +210,6 @@ export const ChartModal: React.FC<ChartModalProps> = ({
               }}
             />
 
-            {/* تولتیپ مشابه CandleCard */}
             <Tooltip
               content={({ active, payload, label }) => {
                 if (!active || !payload?.length) return null;
@@ -230,12 +217,18 @@ export const ChartModal: React.FC<ChartModalProps> = ({
                 if (!data) return null;
 
                 return (
-                  <div className="backdrop-blur-2xl rounded-xl px-3 py-2 text-white text-xs max-w-[180px]"
-                       style={{
-                         backgroundColor: isDark ? "rgba(43, 43, 43, 0.95)" : "rgba(255, 255, 255, 0.95)",
-                         border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
-                         boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
-                       }}>
+                  <div
+                    className="backdrop-blur-2xl rounded-xl px-3 py-2 text-white text-xs max-w-[180px]"
+                    style={{
+                      backgroundColor: isDark
+                        ? "rgba(43, 43, 43, 0.95)"
+                        : "rgba(255, 255, 255, 0.95)",
+                      border: isDark
+                        ? "1px solid rgba(255,255,255,0.1)"
+                        : "1px solid rgba(0,0,0,0.1)",
+                      boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                    }}
+                  >
                     <p className="text-purple-300 font-bold text-center mb-1">
                       {label}
                     </p>
@@ -244,7 +237,10 @@ export const ChartModal: React.FC<ChartModalProps> = ({
                         <span className="text-gray-400">
                           {isFa ? "باز شدن:" : "Open:"}
                         </span>
-                        <span className="font-medium" style={{ color: isDark ? "#fff" : "#333" }}>
+                        <span
+                          className="font-medium"
+                          style={{ color: isDark ? "#fff" : "#333" }}
+                        >
                           {data.open}
                         </span>
                       </div>
@@ -252,7 +248,10 @@ export const ChartModal: React.FC<ChartModalProps> = ({
                         <span className="text-gray-400">
                           {isFa ? "بسته شدن:" : "Close:"}
                         </span>
-                        <span className="font-medium" style={{ color: isDark ? "#fff" : "#333" }}>
+                        <span
+                          className="font-medium"
+                          style={{ color: isDark ? "#fff" : "#333" }}
+                        >
                           {data.close}
                         </span>
                       </div>
@@ -364,12 +363,18 @@ export const ChartModal: React.FC<ChartModalProps> = ({
               if (!data) return null;
 
               return (
-                <div className="backdrop-blur-2xl rounded-xl px-3 py-2 text-white text-xs max-w-[180px]"
-                     style={{
-                       backgroundColor: isDark ? "rgba(43, 43, 43, 0.95)" : "rgba(255, 255, 255, 0.95)",
-                       border: isDark ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.1)",
-                       boxShadow: "0 8px 32px rgba(0,0,0,0.3)"
-                     }}>
+                <div
+                  className="backdrop-blur-2xl rounded-xl px-3 py-2 text-white text-xs max-w-[180px]"
+                  style={{
+                    backgroundColor: isDark
+                      ? "rgba(43, 43, 43, 0.95)"
+                      : "rgba(255, 255, 255, 0.95)",
+                    border: isDark
+                      ? "1px solid rgba(255,255,255,0.1)"
+                      : "1px solid rgba(0,0,0,0.1)",
+                    boxShadow: "0 8px 32px rgba(0,0,0,0.3)",
+                  }}
+                >
                   <p className="text-purple-300 font-bold text-center mb-1">
                     {props.label}
                   </p>
@@ -377,7 +382,10 @@ export const ChartModal: React.FC<ChartModalProps> = ({
                     <span className="text-gray-400">
                       {lang === "fa" ? "مقدار:" : "Value:"}
                     </span>
-                    <span className="font-medium" style={{ color: isDark ? "#fff" : "#333" }}>
+                    <span
+                      className="font-medium"
+                      style={{ color: isDark ? "#fff" : "#333" }}
+                    >
                       {data.v || data.close || data.value}
                     </span>
                   </div>
