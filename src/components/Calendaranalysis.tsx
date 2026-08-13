@@ -1,12 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import {
-  MdKeyboardArrowDown,
-  MdClose,
-  MdChevronLeft,
-  MdChevronRight,
-} from "react-icons/md";
+import { MdKeyboardArrowDown, MdClose } from "react-icons/md";
 
 import type { DateKey, ParamKey, Lang } from "../types/type";
 import { toFa } from "../helpers/helperFunc";
@@ -17,406 +12,6 @@ import FlashIcon from "../icons/FlashIcon";
 import i18next from "i18next";
 
 type YearKey = "2024" | "2025" | "2026";
-
-function CalendarPickerModal({
-  isOpen,
-  onClose,
-  days,
-  selectedDay,
-  onSelectDay,
-  title,
-  type,
-  lang,
-}: {
-  isOpen: boolean;
-  onClose: () => void;
-  days: DayDatas[];
-  selectedDay: DayDatas | null;
-  onSelectDay: (day: DayDatas) => void;
-  title: string;
-  type: "month" | "quarter";
-  lang: Lang;
-}) {
-  const isFa = lang === "fa";
-  const modalRef = useRef<HTMLDivElement>(null);
-
-  const [currentPage, setCurrentPage] = useState(0);
-
-  /*
-    ماه:
-    30 یا 31 روز
-
-    فصل:
-    90 روز
-
-    برای فصل، تقویم به چند صفحه 30 روزه تقسیم می‌شود
-    تا ظاهر آن مثل یک calendar واقعی کوچک باقی بماند.
-  */
-
-  const pageSize = type === "month" ? days.length : 30;
-
-  const totalPages = type === "month" ? 1 : Math.ceil(days.length / pageSize);
-
-  const startIndex = currentPage * pageSize;
-  const visibleDays = days.slice(startIndex, startIndex + pageSize);
-
-  /*
-    برای اینکه تقویم ظاهر طبیعی داشته باشد،
-    قبل از روز اول چند خانه خالی قرار می‌دهیم.
-
-    چون داده DayDatas معمولاً اطلاعات روز را دارد،
-    offset را ثابت و ساده نگه می‌داریم.
-  */
-  const firstDayOffset = 0;
-
-  const calendarCells: (DayDatas | null)[] = [
-    ...Array(firstDayOffset).fill(null),
-    ...visibleDays,
-  ];
-
-  /*
-    برای ماه 30/31 روز:
-    تقویم در نهایت 5 یا 6 ردیف خواهد داشت.
-
-    برای فصل:
-    هر صفحه 30 روز دارد.
-  */
-
-  useEffect(() => {
-    if (isOpen) {
-      setCurrentPage(0);
-      document.body.style.overflow = "hidden";
-    }
-
-    return () => {
-      document.body.style.overflow = "unset";
-    };
-  }, [isOpen]);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        onClose();
-      }
-    };
-
-    document.addEventListener("keydown", handleEscape);
-
-    return () => {
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen, onClose]);
-
-  const handleBackdropClick = useCallback(
-    (event: React.MouseEvent) => {
-      if (
-        modalRef.current &&
-        !modalRef.current.contains(event.target as Node)
-      ) {
-        onClose();
-      }
-    },
-    [onClose],
-  );
-
-  if (!isOpen) return null;
-
-  const weekDays = isFa
-    ? ["ش", "ی", "د", "س", "چ", "پ", "ج"]
-    : ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
-
-  const previousPage = () => {
-    setCurrentPage((prev) => Math.max(0, prev - 1));
-  };
-
-  const nextPage = () => {
-    setCurrentPage((prev) => Math.min(totalPages - 1, prev + 1));
-  };
-
-  return createPortal(
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      onClick={handleBackdropClick}
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-      style={{
-        backgroundColor: "rgba(0,0,0,0.55)",
-        backdropFilter: "blur(8px)",
-      }}
-    >
-      <motion.div
-        ref={modalRef}
-        dir={isFa ? "rtl" : "ltr"}
-        initial={{
-          opacity: 0,
-          scale: 0.94,
-          y: 15,
-        }}
-        animate={{
-          opacity: 1,
-          scale: 1,
-          y: 0,
-        }}
-        exit={{
-          opacity: 0,
-          scale: 0.94,
-          y: 15,
-        }}
-        transition={{
-          type: "spring",
-          damping: 26,
-          stiffness: 350,
-        }}
-        onClick={(e) => e.stopPropagation()}
-        className="
-          w-full max-w-[350px]
-          rounded-2xl
-          border
-          bg-white dark:bg-[#252525]
-          border-gray-200 dark:border-neutral-700
-          shadow-2xl
-          overflow-hidden
-        "
-      >
-        {/* ================= HEADER ================= */}
-
-        <div className="px-4 pt-4 pb-3">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-[10px] font-medium text-gray-400 dark:text-neutral-500">
-                {type === "month"
-                  ? isFa
-                    ? "انتخاب روز ماه"
-                    : "Select day"
-                  : isFa
-                    ? "انتخاب روز فصل"
-                    : "Select quarter day"}
-              </p>
-
-              <h3 className="mt-0.5 text-sm font-bold text-gray-800 dark:text-white">
-                {title}
-              </h3>
-            </div>
-
-            <button
-              onClick={onClose}
-              className="
-                flex items-center justify-center
-                w-7 h-7
-                rounded-full
-                text-gray-400
-                hover:text-gray-700
-                dark:hover:text-white
-                hover:bg-gray-100
-                dark:hover:bg-[#333]
-                transition-all
-              "
-            >
-              <MdClose className="w-4 h-4" />
-            </button>
-          </div>
-        </div>
-
-        {/* ================= MONTH / PAGE NAVIGATION ================= */}
-
-        <div className="flex items-center justify-between px-4 pb-3">
-          <button
-            onClick={previousPage}
-            disabled={currentPage === 0}
-            className="
-              flex items-center justify-center
-              w-7 h-7
-              rounded-lg
-              border
-              border-gray-200 dark:border-neutral-700
-              text-gray-500 dark:text-neutral-400
-              hover:bg-gray-100 dark:hover:bg-[#333]
-              disabled:opacity-30
-              disabled:cursor-not-allowed
-              transition-all
-            "
-          >
-            {isFa ? (
-              <MdChevronRight className="w-4 h-4" />
-            ) : (
-              <MdChevronLeft className="w-4 h-4" />
-            )}
-          </button>
-
-          <div className="text-[11px] font-semibold text-gray-500 dark:text-neutral-400">
-            {type === "quarter"
-              ? isFa
-                ? `بخش ${toFa(currentPage + 1)} از ${toFa(totalPages)}`
-                : `Part ${currentPage + 1} of ${totalPages}`
-              : `${visibleDays.length} ${isFa ? "روز" : "days"}`}
-          </div>
-
-          <button
-            onClick={nextPage}
-            disabled={currentPage === totalPages - 1}
-            className="
-              flex items-center justify-center
-              w-7 h-7
-              rounded-lg
-              border
-              border-gray-200 dark:border-neutral-700
-              text-gray-500 dark:text-neutral-400
-              hover:bg-gray-100 dark:hover:bg-[#333]
-              disabled:opacity-30
-              disabled:cursor-not-allowed
-              transition-all
-            "
-          >
-            {isFa ? (
-              <MdChevronLeft className="w-4 h-4" />
-            ) : (
-              <MdChevronRight className="w-4 h-4" />
-            )}
-          </button>
-        </div>
-
-        {/* ================= CALENDAR ================= */}
-
-        <div className="px-4 pb-4">
-          {/* Week Days */}
-
-          <div className="grid grid-cols-7 mb-1">
-            {weekDays.map((day) => (
-              <div
-                key={day}
-                className="
-                  h-7
-                  flex
-                  items-center
-                  justify-center
-                  text-[9px]
-                  font-bold
-                  text-gray-400
-                  dark:text-neutral-500
-                "
-              >
-                {day}
-              </div>
-            ))}
-          </div>
-
-          {/* Days */}
-
-          <div className="grid grid-cols-7 gap-1">
-            {calendarCells.map((day, index) => {
-              if (!day) {
-                return <div key={`empty-${index}`} className="aspect-square" />;
-              }
-
-              const isSelected =
-                selectedDay?.d === day.d && selectedDay?.m === day.m;
-
-              return (
-                <button
-                  key={`${day.m}-${day.d}-${index}`}
-                  onClick={() => {
-                    /*
-                      مهم:
-                      فقط selectedDay در خود picker تغییر می‌کند.
-                      هیچ setSelectedMonth / setSelectedQuarter
-                      و هیچ تغییری در جدول اصلی نداریم.
-                    */
-
-                    onSelectDay(day);
-                    onClose();
-                  }}
-                  className={`
-                    aspect-square
-                    rounded-lg
-                    flex
-                    items-center
-                    justify-center
-                    text-[11px]
-                    sm:text-xs
-                    font-medium
-                    transition-all
-                    duration-150
-
-                    ${
-                      isSelected
-                        ? `
-                          bg-indigo-600
-                          text-white
-                          shadow-[0_3px_10px_rgba(79,70,229,0.35)]
-                          scale-105
-                        `
-                        : `
-                          text-gray-600
-                          dark:text-neutral-300
-                          hover:bg-gray-100
-                          dark:hover:bg-[#353535]
-                          hover:text-indigo-600
-                          dark:hover:text-indigo-400
-                        `
-                    }
-                  `}
-                >
-                  {toFa(day.d)}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ================= FOOTER ================= */}
-
-        <div
-          className="
-            flex items-center justify-between
-            px-4 py-3
-            border-t
-            border-gray-200
-            dark:border-neutral-700
-            bg-gray-50/70
-            dark:bg-[#202020]
-          "
-        >
-          <span className="text-[9px] text-gray-400 dark:text-neutral-500">
-            {type === "month"
-              ? isFa
-                ? `${days.length} روز`
-                : `${days.length} days`
-              : isFa
-                ? "۹۰ روز"
-                : "90 days"}
-          </span>
-
-          <button
-            onClick={onClose}
-            className="
-              px-3
-              py-1.5
-              rounded-lg
-              text-[10px]
-              font-medium
-              text-gray-500
-              dark:text-neutral-400
-              hover:bg-gray-200
-              dark:hover:bg-[#333]
-              transition-all
-            "
-          >
-            {isFa ? "بستن" : "Close"}
-          </button>
-        </div>
-      </motion.div>
-    </motion.div>,
-    document.body,
-  );
-}
-
-/* =========================================================
-   Dropdown
-========================================================= */
 
 function Dropdown<T extends string>({
   label,
@@ -460,7 +55,6 @@ function Dropdown<T extends string>({
           rounded-full
           border
           text-xs sm:text-sm
-          font-normal
           transition-all
 
           border-gray-300
@@ -590,10 +184,6 @@ function Dropdown<T extends string>({
   );
 }
 
-/* =========================================================
-   Date Filter Modal
-========================================================= */
-
 function DateFilterModal({
   isOpen,
   onClose,
@@ -606,7 +196,8 @@ function DateFilterModal({
   onSelectQuarter,
   onSelectYear,
   lang,
-  onOpenDayPicker,
+  activeMode,
+  setActiveMode,
 }: {
   isOpen: boolean;
   onClose: () => void;
@@ -619,31 +210,21 @@ function DateFilterModal({
   onSelectQuarter: (v: DateKey) => void;
   onSelectYear: (v: YearKey) => void;
   lang: Lang;
-  onOpenDayPicker: (
-    type: "month" | "quarter",
-    key: DateKey,
-    label: string,
-  ) => void;
+  activeMode: "month" | "quarter" | null;
+  setActiveMode: (mode: "month" | "quarter" | null) => void;
 }) {
   const isFa = lang === "fa";
-
   const modalRef = useRef<HTMLDivElement>(null);
-
   const [yearDropdownOpen, setYearDropdownOpen] = useState(false);
-
   const years: YearKey[] = ["2024", "2025", "2026"];
 
   const getSortedQuarters = (items: { v: DateKey; l: string }[]) => {
     const order = ["q1", "q2", "q3", "q4"];
-
     return [...items].sort((a, b) => {
       const aKey = a.v as string;
       const bKey = b.v as string;
-
       const aOrder = order.findIndex((o) => aKey.includes(o));
-
       const bOrder = order.findIndex((o) => bKey.includes(o));
-
       return aOrder - bOrder;
     });
   };
@@ -654,7 +235,6 @@ function DateFilterModal({
     if (isOpen) {
       document.body.style.overflow = "hidden";
     }
-
     return () => {
       document.body.style.overflow = "unset";
     };
@@ -666,11 +246,9 @@ function DateFilterModal({
         onClose();
       }
     };
-
     if (isOpen) {
       document.addEventListener("keydown", handleEscape);
     }
-
     return () => {
       document.removeEventListener("keydown", handleEscape);
     };
@@ -695,7 +273,7 @@ function DateFilterModal({
       transition={{ duration: 0.2 }}
       className="
         fixed inset-0
-        z-[9999]
+        z-9999
         flex
         items-center
         justify-center
@@ -750,17 +328,13 @@ function DateFilterModal({
         "
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 rounded-full bg-indigo-600" />
-
             <h3 className="text-sm sm:text-base font-bold text-[#5B657A] dark:text-white">
               {isFa ? "انتخاب بازه زمانی" : "Select Time Range"}
             </h3>
           </div>
-
           <button
             onClick={onClose}
             className="
@@ -776,7 +350,6 @@ function DateFilterModal({
         </div>
 
         {/* Year */}
-
         <div className="flex justify-center mb-5">
           <div className="relative">
             <button
@@ -803,7 +376,6 @@ function DateFilterModal({
               "
             >
               <span>{selectedYear}</span>
-
               <MdKeyboardArrowDown
                 className={`
                   transition-transform
@@ -864,11 +436,7 @@ function DateFilterModal({
           </div>
         </div>
 
-        {/* ================= RANGE SELECT ================= */}
-
         <div className="flex flex-col sm:flex-row gap-5 sm:gap-6">
-          {/* Quarter */}
-
           <div className="sm:w-36 shrink-0">
             <p
               className={`
@@ -897,23 +465,14 @@ function DateFilterModal({
               "
             >
               {sortedQuarterItems.map((q) => {
-                const active = q.v === selectedQuarter;
-
+                const active =
+                  activeMode === "quarter" && q.v === selectedQuarter;
                 return (
                   <button
                     key={q.v}
                     onClick={() => {
-                      /*
-                        فقط فصل انتخاب می‌شود.
-                        سپس picker باز می‌شود.
-
-                        جدول اصلی دستکاری نمی‌شود.
-                      */
-
+                      setActiveMode("quarter");
                       onSelectQuarter(q.v);
-
-                      onOpenDayPicker("quarter", q.v, q.l);
-
                       onClose();
                     }}
                     className={`
@@ -949,7 +508,6 @@ function DateFilterModal({
               dark:bg-neutral-700
             "
           />
-
           <div
             className="
               block sm:hidden
@@ -958,8 +516,6 @@ function DateFilterModal({
               dark:bg-neutral-700
             "
           />
-
-          {/* Months */}
 
           <div className="flex-1">
             <p
@@ -978,21 +534,13 @@ function DateFilterModal({
 
             <div className="grid grid-cols-3 gap-1.5">
               {monthItems.map((m) => {
-                const active = m.v === selectedMonth;
-
+                const active = activeMode === "month" && m.v === selectedMonth;
                 return (
                   <button
                     key={m.v}
                     onClick={() => {
-                      /*
-                        ماه انتخاب می‌شود.
-                        جدول اصلی همچنان همان ساختار خودش را دارد.
-                      */
-
+                      setActiveMode("month");
                       onSelectMonth(m.v);
-
-                      onOpenDayPicker("month", m.v, m.l);
-
                       onClose();
                     }}
                     className={`
@@ -1018,14 +566,32 @@ function DateFilterModal({
           </div>
         </div>
 
-        {/* Footer */}
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={() => {
+              setActiveMode(null);
+              onClose();
+            }}
+            className="
+              text-xs
+              text-gray-500
+              dark:text-neutral-400
+              hover:text-indigo-600
+              dark:hover:text-indigo-400
+              transition-colors
+              underline
+            "
+          >
+            {isFa ? "پاک کردن انتخاب" : "Clear selection"}
+          </button>
+        </div>
 
         <div
           className="
             flex
             justify-end
             gap-2
-            mt-5
+            mt-3
             pt-4
             border-t
             border-gray-200
@@ -1057,10 +623,6 @@ function DateFilterModal({
   );
 }
 
-/* =========================================================
-   Date Filter Dropdown
-========================================================= */
-
 function DateFilterDropdown({
   monthItems,
   quarterItems,
@@ -1071,7 +633,8 @@ function DateFilterDropdown({
   onSelectQuarter,
   onSelectYear,
   lang,
-  onOpenDayPicker,
+  activeMode,
+  setActiveMode,
 }: {
   monthItems: { v: DateKey; l: string }[];
   quarterItems: { v: DateKey; l: string }[];
@@ -1082,26 +645,21 @@ function DateFilterDropdown({
   onSelectQuarter: (v: DateKey) => void;
   onSelectYear: (v: YearKey) => void;
   lang: Lang;
-  onOpenDayPicker: (
-    type: "month" | "quarter",
-    key: DateKey,
-    label: string,
-  ) => void;
+  activeMode: "month" | "quarter" | null;
+  setActiveMode: (mode: "month" | "quarter" | null) => void;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
   const isFa = lang === "fa";
 
-  const activeMonthLabel = monthItems.find((m) => m.v === selectedMonth)?.l;
+  let triggerLabel = isFa ? "بازه زمانی" : "Time Range";
 
-  const activeQuarterLabel = quarterItems.find(
-    (q) => q.v === selectedQuarter,
-  )?.l;
-
-  const triggerLabel =
-    activeMonthLabel ||
-    activeQuarterLabel ||
-    (isFa ? "بازه زمانی" : "Time Range");
+  if (activeMode === "month") {
+    const monthLabel = monthItems.find((m) => m.v === selectedMonth)?.l;
+    if (monthLabel) triggerLabel = monthLabel;
+  } else if (activeMode === "quarter") {
+    const quarterLabel = quarterItems.find((q) => q.v === selectedQuarter)?.l;
+    if (quarterLabel) triggerLabel = quarterLabel;
+  }
 
   return (
     <>
@@ -1141,8 +699,10 @@ function DateFilterDropdown({
         <span className="text-xs text-gray-400 dark:text-neutral-400">
           <MdKeyboardArrowDown />
         </span>
-
         <span>{triggerLabel}</span>
+        {activeMode && (
+          <span className="ml-1 w-1.5 h-1.5 rounded-full bg-indigo-600 inline-block" />
+        )}
       </button>
 
       <DateFilterModal
@@ -1157,25 +717,19 @@ function DateFilterDropdown({
         onSelectQuarter={onSelectQuarter}
         onSelectYear={onSelectYear}
         lang={lang}
-        onOpenDayPicker={onOpenDayPicker}
+        activeMode={activeMode}
+        setActiveMode={setActiveMode}
       />
     </>
   );
 }
 
-/* =========================================================
-   Streak Donut
-========================================================= */
-
 function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
   const r = 33;
   const circ = 2 * Math.PI * r;
   const gap = 3;
-
   const total = wins + losses;
-
   const winArc = total > 0 ? (circ * wins) / total : 0;
-
   const lossArc = circ - winArc;
 
   return (
@@ -1230,11 +784,6 @@ function StreakDonut({ wins, losses }: { wins: number; losses: number }) {
   );
 }
 
-/* =========================================================
-   Main Calendar Day Cell
-   این قسمت جدول اصلی است و دست نخورده باقی می‌ماند.
-========================================================= */
-
 function DayCell({
   day,
   isCur,
@@ -1247,7 +796,6 @@ function DayCell({
   onSelect: (day: DayDatas) => void;
 }) {
   const has = day.p !== undefined;
-
   const isProfit = has && day.p! > 0;
   const isLoss = has && day.p! < 0;
 
@@ -1307,7 +855,7 @@ function DayCell({
       </span>
 
       {has && (
-        <div className="flex flex-col gap-0.5 text-center">
+        <div dir="ltr" className="flex flex-col gap-0.5 text-center">
           <span
             className="
               text-white
@@ -1340,116 +888,74 @@ function DayCell({
   );
 }
 
-/* =========================================================
-   MAIN
-========================================================= */
-
 export default function CalendarAnalysis() {
   const [lang, setLang] = useState<Lang>(() => {
     const currentLang = i18next.language;
-
     return currentLang === "en" || currentLang === "fa"
       ? (currentLang as Lang)
       : "fa";
   });
 
   const [sp, setSp] = useState<ParamKey>("pnl");
-
   const [selectedYear, setSelectedYear] = useState<YearKey>("2025");
-
   const [selectedMonth, setSelectedMonth] = useState<DateKey>("jan25");
-
   const [selectedQuarter, setSelectedQuarter] = useState<DateKey>("q1_25");
-
-  /*
-    این selectedDay فقط برای هایلایت کردن روز
-    در calendar picker و جدول اصلی است.
-  */
   const [selectedDay, setSelectedDay] = useState<DayDatas | null>(null);
 
-  /*
-    وضعیت Calendar Picker
-  */
-
-  const [isDayPickerOpen, setIsDayPickerOpen] = useState(false);
-
-  const [pickerDays, setPickerDays] = useState<DayDatas[]>([]);
-
-  const [pickerTitle, setPickerTitle] = useState("");
-
-  const [pickerType, setPickerType] = useState<"month" | "quarter">("month");
-
-  /* =====================================================
-     Language
-  ===================================================== */
+  const [activeMode, setActiveMode] = useState<"month" | "quarter" | null>(
+    "month",
+  );
 
   useEffect(() => {
     const handleLanguageChange = () => {
       const newLang = i18next.language as Lang;
-
       if (newLang === "fa" || newLang === "en") {
         setLang(newLang);
       }
     };
-
     i18next.on("languageChanged", handleLanguageChange);
-
     return () => {
       i18next.off("languageChanged", handleLanguageChange);
     };
   }, []);
 
-  /* =====================================================
-     Data
-  ===================================================== */
-
   const T = i18n[lang];
-
-  const cd = CDLocalized[lang]?.[selectedMonth];
-
   const ap = T.params.find((p) => p.v === sp);
 
-  /* =====================================================
-     Default selected day
-  ===================================================== */
+  const getDisplayData = () => {
+    if (activeMode === "month") {
+      return CDLocalized[lang]?.[selectedMonth];
+    } else if (activeMode === "quarter") {
+      return CDLocalized[lang]?.[selectedQuarter];
+    }
+    return CDLocalized[lang]?.[selectedMonth];
+  };
+
+  const displayData = getDisplayData();
 
   useEffect(() => {
-    if (cd && cd.days && cd.days.length > 0) {
-      const dayWithPnl = cd.days.find((d) => d.p !== undefined);
-
+    if (displayData && displayData.days && displayData.days.length > 0) {
+      const dayWithPnl = displayData.days.find((d) => d.p !== undefined);
       if (dayWithPnl) {
+        // @ts-ignore
         setSelectedDay(dayWithPnl);
       } else {
-        setSelectedDay(cd.days[0]);
+        setSelectedDay(displayData.days[0]);
       }
     }
-  }, [cd]);
-
-  /* =====================================================
-     Main Table Weeks
-
-     این بخش مربوط به جدول اصلی است.
-  ===================================================== */
+  }, [displayData]);
 
   const weeks: DayDatas[][] = [];
-
-  if (cd && cd.days) {
-    for (let i = 0; i < cd.days.length; i += 7) {
-      weeks.push(cd.days.slice(i, i + 7));
+  if (displayData && displayData.days) {
+    for (let i = 0; i < displayData.days.length; i += 7) {
+      weeks.push(displayData.days.slice(i, i + 7));
     }
   }
 
-  /* =====================================================
-     Date Items
-  ===================================================== */
-
   const allDates = T.dates;
-
   const monthItems = allDates.filter((d) => {
     const v = d.v as string;
-
     const year = selectedYear.slice(-2);
-
     return (
       v.includes(year) &&
       !v.includes("q") &&
@@ -1470,72 +976,52 @@ export default function CalendarAnalysis() {
 
   const quarterItems = allDates.filter((d) => {
     const v = d.v as string;
-
     const year = selectedYear.slice(-2);
-
     return v.includes(year) && v.includes("q");
   });
-
-  /* =====================================================
-     Keep selected month valid
-  ===================================================== */
 
   useEffect(() => {
     if (monthItems.length > 0) {
       const exists = monthItems.some((m) => m.v === selectedMonth);
-
       if (!exists) {
+        // @ts-ignore
         setSelectedMonth(monthItems[0].v);
       }
     }
   }, [selectedYear, monthItems, selectedMonth]);
 
-  /* =====================================================
-     Keep selected quarter valid
-  ===================================================== */
-
   useEffect(() => {
     if (quarterItems.length > 0) {
       const exists = quarterItems.some((q) => q.v === selectedQuarter);
-
       if (!exists) {
+        // @ts-ignore
         setSelectedQuarter(quarterItems[0].v);
       }
     }
   }, [selectedYear, quarterItems, selectedQuarter]);
 
-  /* =====================================================
-     Main table day select
-  ===================================================== */
-
   const handleDaySelect = (day: DayDatas) => {
     setSelectedDay(day);
   };
 
-  /* =====================================================
-     Open small Calendar Picker
-
-     مهم‌ترین قسمت:
-     این تابع فقط picker را باز می‌کند.
-     جدول اصلی را تغییر نمی‌دهد.
-  ===================================================== */
-
-  const handleOpenDayPicker = (
-    type: "month" | "quarter",
-    key: DateKey,
-    label: string,
-  ) => {
-    const data = CDLocalized[lang]?.[key];
-
-    if (data && data.days && data.days.length > 0) {
-      setPickerType(type);
-
-      setPickerDays(data.days);
-
-      setPickerTitle(label);
-
-      setIsDayPickerOpen(true);
+  const getDisplayTitle = () => {
+    if (activeMode === "month") {
+      const monthLabel = monthItems.find((m) => m.v === selectedMonth)?.l;
+      return monthLabel || selectedMonth;
+    } else if (activeMode === "quarter") {
+      const quarterLabel = quarterItems.find((q) => q.v === selectedQuarter)?.l;
+      return quarterLabel || selectedQuarter;
     }
+    return lang === "fa" ? "انتخاب نشده" : "Not selected";
+  };
+
+  const getDisplayType = () => {
+    if (activeMode === "month") {
+      return lang === "fa" ? "ماه" : "Month";
+    } else if (activeMode === "quarter") {
+      return lang === "fa" ? "فصل" : "Quarter";
+    }
+    return "";
   };
 
   return (
@@ -1547,9 +1033,7 @@ export default function CalendarAnalysis() {
       <div
         className="
           bg-gray-50
-          dark:bg-linear-to-b
-          dark:from-[#2C2C2C]
-          dark:bg-[#303030]
+         dark:bg-[#2C2C2C]
 
           rounded-2xl
           border-4
@@ -1562,10 +1046,6 @@ export default function CalendarAnalysis() {
           lg:p-6
         "
       >
-        {/* =================================================
-            TOP CONTROLS
-        ================================================= */}
-
         <div
           id="date2"
           className="
@@ -1591,8 +1071,6 @@ export default function CalendarAnalysis() {
               sm:gap-2.5
             `}
           >
-            {/* Parameter */}
-
             <Dropdown
               label={ap?.l ?? T.pp}
               items={T.params}
@@ -1600,8 +1078,6 @@ export default function CalendarAnalysis() {
               section={T.psec}
               onSelect={setSp}
             />
-
-            {/* Date */}
 
             <DateFilterDropdown
               monthItems={
@@ -1617,13 +1093,10 @@ export default function CalendarAnalysis() {
               onSelectQuarter={setSelectedQuarter}
               onSelectYear={setSelectedYear}
               lang={lang}
-              onOpenDayPicker={handleOpenDayPicker}
+              activeMode={activeMode}
+              setActiveMode={setActiveMode}
             />
           </div>
-
-          {/* =================================================
-              MONTH PNL + STREAK
-          ================================================= */}
 
           <div
             className="
@@ -1640,8 +1113,6 @@ export default function CalendarAnalysis() {
               sm:w-auto
             "
           >
-            {/* Monthly PNL */}
-
             <div
               className="
                 flex
@@ -1677,7 +1148,7 @@ export default function CalendarAnalysis() {
                   dark:text-neutral-400
                 "
               >
-                {cd?.mpd?.date || "-"}
+                {displayData?.mpd?.date || "-"}
               </span>
 
               <span
@@ -1692,12 +1163,11 @@ export default function CalendarAnalysis() {
                   leading-tight
                 "
               >
-                ${cd?.mpd?.pnl ?? 0}
+                ${displayData?.mpd?.pnl ?? 0}
               </span>
             </div>
 
             {/* Divider */}
-
             <div
               className="
                 hidden
@@ -1709,8 +1179,6 @@ export default function CalendarAnalysis() {
                 dark:bg-neutral-700
               "
             />
-
-            {/* Streak */}
 
             <div
               id="analysis2"
@@ -1724,7 +1192,10 @@ export default function CalendarAnalysis() {
                 sm:w-auto
               "
             >
-              <StreakDonut wins={cd?.str?.w ?? 0} losses={cd?.str?.l ?? 0} />
+              <StreakDonut
+                wins={displayData?.str?.w ?? 0}
+                losses={displayData?.str?.l ?? 0}
+              />
 
               <div
                 className="
@@ -1757,7 +1228,7 @@ export default function CalendarAnalysis() {
                     truncate
                   "
                 >
-                  {cd?.str?.s || "-"} – {cd?.str?.e || "-"}
+                  {displayData?.str?.s || "-"} – {displayData?.str?.e || "-"}
                 </span>
 
                 <div
@@ -1780,7 +1251,8 @@ export default function CalendarAnalysis() {
                       whitespace-nowrap
                     "
                   >
-                    {cd?.str?.d || 0} {T.du} – {cd?.str?.t || 0} {T.tu}
+                    {displayData?.str?.d || 0} {T.du} –{" "}
+                    {displayData?.str?.t || 0} {T.tu}
                   </span>
 
                   <span className="text-yellow-400 text-[10px] sm:text-xs">
@@ -1803,7 +1275,7 @@ export default function CalendarAnalysis() {
                         text-white
                       "
                     >
-                      {cd?.str?.w || 0}
+                      {displayData?.str?.w || 0}
                     </span>
 
                     <span
@@ -1821,7 +1293,7 @@ export default function CalendarAnalysis() {
                         text-white
                       "
                     >
-                      {cd?.str?.l || 0}
+                      {displayData?.str?.l || 0}
                     </span>
                   </div>
                 </div>
@@ -1830,9 +1302,23 @@ export default function CalendarAnalysis() {
           </div>
         </div>
 
-        {/* =================================================
-            MAIN TABLE
-        ================================================= */}
+        <div className="flex justify-between items-center mb-2 px-1">
+          <div>
+            <span className="text-sm font-semibold text-gray-700 dark:text-white">
+              {getDisplayTitle()}
+            </span>
+            {activeMode && (
+              <span className="ml-2 text-xs text-gray-500 dark:text-neutral-400">
+                ({getDisplayType()})
+              </span>
+            )}
+          </div>
+          <span className="text-xs text-gray-500 dark:text-neutral-400">
+            {lang === "fa"
+              ? `${displayData?.days?.length || 0} روز`
+              : `${displayData?.days?.length || 0} days`}
+          </span>
+        </div>
 
         <hr
           className="
@@ -1859,8 +1345,6 @@ export default function CalendarAnalysis() {
               sm:px-0
             "
           >
-            {/* Week Days */}
-
             <div
               className="
                 grid
@@ -1888,26 +1372,24 @@ export default function CalendarAnalysis() {
               ))}
             </div>
 
-            {/* Main Calendar */}
-
             {weeks.length > 0 ? (
               weeks.map((week, wi) => (
                 <div
                   key={wi}
                   className="
-                      grid
-                      grid-cols-7
-                      gap-1
-                      sm:gap-5
-                      mb-1.5
-                      sm:mb-2.5
-                    "
+                    grid
+                    grid-cols-7
+                    gap-1
+                    sm:gap-5
+                    mb-1.5
+                    sm:mb-2.5
+                  "
                 >
                   {week.map((day, di) => (
                     <DayCell
                       key={`${wi}-${di}`}
                       day={day}
-                      isCur={day.m === cd?.cur}
+                      isCur={day.m === displayData?.cur}
                       isSelected={
                         selectedDay?.d === day.d && selectedDay?.m === day.m
                       }
@@ -1933,32 +1415,6 @@ export default function CalendarAnalysis() {
           </div>
         </div>
       </div>
-
-      {/* =================================================
-          SMALL CALENDAR PICKER
-
-          این کامپوننت مستقل است و انتخاب روز داخلش
-          جدول اصلی را تغییر نمی‌دهد.
-      ================================================= */}
-
-      <CalendarPickerModal
-        isOpen={isDayPickerOpen}
-        onClose={() => setIsDayPickerOpen(false)}
-        days={pickerDays}
-        selectedDay={selectedDay}
-        onSelectDay={(day) => {
-          /*
-            فقط روز انتخابی را نگه می‌داریم.
-            هیچ تغییری در ماه / فصل / جدول اصلی
-            ایجاد نمی‌شود.
-          */
-
-          setSelectedDay(day);
-        }}
-        title={pickerTitle}
-        type={pickerType}
-        lang={lang}
-      />
     </div>
   );
 }

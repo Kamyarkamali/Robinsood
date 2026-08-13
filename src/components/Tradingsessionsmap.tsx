@@ -2,7 +2,13 @@ import { useState, useEffect, useRef } from "react";
 import { CiCircleAlert } from "react-icons/ci";
 import { IoMdTime } from "react-icons/io";
 import { CiCalendar } from "react-icons/ci";
-import { FiX, FiFilter, FiArrowLeft, FiArrowRight } from "react-icons/fi";
+import {
+  FiX,
+  FiFilter,
+  FiArrowLeft,
+  FiArrowRight,
+  FiCheckCircle,
+} from "react-icons/fi";
 import type { NewsEvent, Session } from "../types/interfaces";
 import { NEWS, SESSIONS } from "../data/fakeData";
 import i18next from "i18next";
@@ -112,6 +118,11 @@ function getSessionSortKey(s: Session, cur: number) {
   if (state === "live") return 0 + normDiff(cur - s.start) / 100;
   if (state === "upcoming") return 1000 + hoursUntilStart;
   return 2000 + hoursSinceEnd;
+}
+
+function getSessionMidHour(s: Session) {
+  const duration = s.end > 24 ? s.end - 24 - s.start + 24 : s.end - s.start;
+  return (s.start + duration / 2) % 24;
 }
 
 function getDates() {
@@ -377,14 +388,23 @@ export default function TradingSessionsMap({ lang = "fa" }) {
   const upcoming = [...filteredNews]
     .filter((n) => n.time >= cur)
     .sort((a, b) => a.time - b.time);
-  const nextUpId =
+  const nextUpId: string | null =
     upcoming.length > 0
       ? upcoming[0].id
       : filteredNews.length > 0
         ? [...filteredNews].sort((a, b) => a.time - b.time)[0].id
         : null;
 
-  // ترتیب داینامیک سشن‌ها: سشن جاری بالا، بعد نزدیک‌ترین سشن آینده، در آخر سشن‌های تمام‌شده
+  const past = [...filteredNews]
+    .filter((n) => n.time < cur)
+    .sort((a, b) => b.time - a.time);
+  const prevNewsId: string | null =
+    past.length > 0
+      ? past[0].id
+      : filteredNews.length > 0
+        ? [...filteredNews].sort((a, b) => b.time - a.time)[0].id
+        : null;
+
   const orderedSessions = [...SESSIONS].sort(
     (a, b) => getSessionSortKey(a, cur) - getSessionSortKey(b, cur),
   );
@@ -506,6 +526,45 @@ export default function TradingSessionsMap({ lang = "fa" }) {
     );
   };
 
+  const NewsFlowBadge = ({ kind }: { kind: "prev" | "next" }) => {
+    const isNext = kind === "next";
+    const label = isNext
+      ? i18next.language === "fa"
+        ? "بعدی"
+        : "Next"
+      : i18next.language === "fa"
+        ? "قبلی"
+        : "Previous";
+    const color = isNext ? COLORS.warning : COLORS.info;
+
+    return (
+      <span
+        className="inline-flex items-center gap-0.5 px-1 py-[1px] rounded-full text-[7px] sm:text-[8px] font-bold whitespace-nowrap"
+        style={{
+          background: `${color}22`,
+          color,
+          border: `1px solid ${color}55`,
+        }}
+      >
+        {isNext ? (
+          <span className="relative flex h-1.5 w-1.5">
+            <span
+              className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+              style={{ background: color }}
+            />
+            <span
+              className="relative inline-flex rounded-full h-1.5 w-1.5"
+              style={{ background: color }}
+            />
+          </span>
+        ) : (
+          <FiCheckCircle size={8} />
+        )}
+        {label}
+      </span>
+    );
+  };
+
   const MobileSessionCard = ({
     session,
     state,
@@ -540,13 +599,21 @@ export default function TradingSessionsMap({ lang = "fa" }) {
         }`}
       >
         <div className="flex items-center gap-3 mb-3">
-          <div className="relative shrink-0">
+          <div className="relative shrink-0 w-2.5 h-2.5">
+            <span
+              className="block w-2.5 h-2.5 rounded-full"
+              style={{
+                background: isActive ? session.dot : COLORS.textDisabled,
+                boxShadow:
+                  isActive && live ? `0 0 10px ${session.dot}80` : "none",
+              }}
+            />
             {isActive && live && (
               <div
                 className="absolute inset-0 rounded-full animate-ping"
                 style={{
                   background: session.dot,
-                  opacity: 0.15,
+                  opacity: 0.35,
                   animationDuration: "1.5s",
                 }}
               />
@@ -567,7 +634,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 <SessionStateBadge state={state} />
               </span>
               <span
-                dir={lang === "fa" ? "ltr" : "rtl"}
+                dir={lang === "fa" ? "rtl" : "ltr"}
                 className="text-xs font-mono"
                 style={{
                   color: isActive ? session.color : COLORS.textDisabled,
@@ -579,9 +646,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
         </div>
 
-        {/* Combined Timeline Area — فقط بازه‌ی همین سشن */}
         <div className="relative flex flex-col h-[80px] bg-[#F6F8FA] dark:bg-transparent rounded-lg border border-[#EDF1F5] dark:border-[#3C3C3C] overflow-hidden">
-          {/* 1. Session Color Bar (Background) */}
           <div
             className="absolute top-[40%] left-0 h-[20px] w-full rounded-full transition-all duration-500 opacity-60"
             style={{
@@ -591,7 +656,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             }}
           />
 
-          {/* 2. Hour Grid & Labels — فقط شروع/میانه/پایان همین سشن */}
           <div className="absolute top-[40%] w-full h-[20px] flex justify-between px-2 z-0">
             <span className="text-[8px] text-[#8A93A6] dark:text-slate-500 font-mono">
               {fmt(session.start)}
@@ -616,6 +680,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               const impactColor = getImpactColor(n.impact);
               const isPastNews = n.time < cur;
               const isNext = n.id === nextUpId && !isPastNews;
+              const isPrev = n.id === prevNewsId && isPastNews;
 
               return (
                 <div
@@ -663,11 +728,10 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     />
                   </div>
 
-                  {isNext && (
-                    <span className="absolute -top-1 right-1/2 translate-x-1/2 flex h-2.5 w-2.5 z-10">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D9A441] opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#D9A441]" />
-                    </span>
+                  {(isNext || isPrev) && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                      <NewsFlowBadge kind={isNext ? "next" : "prev"} />
+                    </div>
                   )}
                 </div>
               );
@@ -686,7 +750,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           )}
         </div>
 
-        {/* NEWS FEED LIST MOBILE UI */}
         <div className="mt-3 pt-2 border-t border-[#EDF1F5] dark:border-[#3C3C3C] relative group">
           <div className="flex items-center justify-between text-[10px] mb-2">
             <span className="font-bold text-[#5B657A] dark:text-slate-400">
@@ -701,6 +764,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
             {sessionNews.map((n) => {
               const isPast = n.time < cur;
               const isNext = n.id === nextUpId && !isPast;
+              const isPrev = n.id === prevNewsId && isPast;
               const impactColor = getImpactColor(n.impact);
 
               return (
@@ -709,7 +773,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                   onClick={(e) => {
                     e.stopPropagation();
                     handleTooltip(
-                      e as any,
+                      e,
                       "news",
                       n,
                       n.time,
@@ -717,12 +781,14 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       `feed-news-${n.id}`,
                     );
                   }}
-                  className={`shrink-0 flex items-center gap-1.5 px-2 py-1.5 rounded-md border cursor-pointer transition-all duration-200 ${
+                  className={`shrink-0 flex flex-col items-start gap-1 px-2 py-1.5 rounded-md border cursor-pointer transition-all duration-200 ${
                     isNext
                       ? "bg-[#EDE9FF] dark:bg-[#2a2a2a] border-[#7C5CFA] dark:border-[#7C5CFA] shadow-sm"
-                      : isPast
-                        ? "bg-[#F6F8FA] dark:bg-transparent border-[#E3E7F0] dark:border-[#3C3C3C] opacity-60"
-                        : "bg-white dark:bg-[#2a2a2a] border-[#EDF1F5] dark:border-[#4A4A4A] hover:border-[#7C5CFA]"
+                      : isPrev
+                        ? "bg-[#EAF0FF] dark:bg-[#2a2a2a] border-[#4F7CFF] dark:border-[#4F7CFF] shadow-sm"
+                        : isPast
+                          ? "bg-[#F6F8FA] dark:bg-transparent border-[#E3E7F0] dark:border-[#3C3C3C] opacity-60"
+                          : "bg-white dark:bg-[#2a2a2a] border-[#EDF1F5] dark:border-[#4A4A4A] hover:border-[#7C5CFA]"
                   }`}
                   style={{
                     boxShadow: !isPast
@@ -730,30 +796,36 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       : "none",
                   }}
                 >
-                  <img
-                    className="w-4 h-3 rounded-sm object-cover"
-                    src={n.flag}
-                    alt=""
-                  />
-                  <span
-                    className={`text-[9px] whitespace-nowrap max-w-[60px] truncate ${
-                      isNext
-                        ? "font-bold text-[#1F2430] dark:text-white"
-                        : "text-[#5B657A] dark:text-slate-400"
-                    }`}
-                  >
-                    {i18next.language === "fa" ? n.fa : n.en}
-                  </span>
-                  <span className="text-[8px] font-mono text-[#8A93A6] dark:text-slate-500 ml-0.5">
-                    {fmt(n.time)}
-                  </span>
-                  <span
-                    className="w-1.5 h-1.5 rounded-full shrink-0"
-                    style={{
-                      background: impactColor,
-                      boxShadow: isNext ? `0 0 6px ${impactColor}` : "none",
-                    }}
-                  />
+                  {(isNext || isPrev) && (
+                    <NewsFlowBadge kind={isNext ? "next" : "prev"} />
+                  )}
+                  <div className="flex items-center gap-1.5">
+                    <img
+                      className="w-4 h-3 rounded-sm object-cover"
+                      src={n.flag}
+                      alt=""
+                    />
+                    <span
+                      className={`text-[9px] whitespace-nowrap max-w-[60px] truncate ${
+                        isNext || isPrev
+                          ? "font-bold text-[#1F2430] dark:text-white"
+                          : "text-[#5B657A] dark:text-slate-400"
+                      }`}
+                    >
+                      {i18next.language === "fa" ? n.fa : n.en}
+                    </span>
+                    <span className="text-[8px] font-mono text-[#8A93A6] dark:text-slate-500 ml-0.5">
+                      {fmt(n.time)}
+                    </span>
+                    <span
+                      className="w-1.5 h-1.5 rounded-full shrink-0"
+                      style={{
+                        background: impactColor,
+                        boxShadow:
+                          isNext || isPrev ? `0 0 6px ${impactColor}` : "none",
+                      }}
+                    />
+                  </div>
                 </div>
               );
             })}
@@ -815,27 +887,28 @@ export default function TradingSessionsMap({ lang = "fa" }) {
       <div
         id="tabale1"
         ref={rootRef}
-        className="step-test43 rounded-2xl bg-[#FAFBFD] dark:bg-transparent border border-[#E3E7F0] dark:border-[#3C3C3C] md:pr-2 md:pl-2 mt-3 text-[#1F2430] dark:text-slate-200 w-full min-h-0 pb-3 overflow-hidden select-none shadow-sm"
+        className="step-test43 rounded-2xl  dark:bg-[#2C2C2C]  border border-[#E3E7F0] dark:border-[#3C3C3C] md:pr-2 md:pl-2 mt-3 text-[#1F2430] dark:text-slate-200 w-full min-h-0 pb-3 overflow-hidden select-none shadow-sm"
         onClick={(e) => {
           if (!(e.target as HTMLElement).closest(".tooltip-trigger")) {
             clearTooltip();
           }
         }}
       >
-        {/* هدر ساعت/تاریخ — مشابه بقیه‌ی سکشن‌ها کادر دارد */}
-        <div id="news1" className="px-4 pt-3 pb-2">
-          <div className="rounded-xl border border-[#E3E7F0] dark:border-[#3C3C3C] bg-white dark:bg-transparent px-4 py-3">
+        <div id="news1" className="px-3 sm:px-4 pt-3 pb-2">
+          <div className="rounded-xl border border-[#E3E7F0] dark:border-[#3C3C3C] bg-white dark:bg-transparent px-3 sm:px-4 py-2.5 sm:py-3">
             <div className="flex flex-col items-center justify-center gap-2">
-              <div className="flex items-center gap-3">
-                <IoMdTime className="text-[#7C5CFA] dark:text-[#7C5CFA] w-5 h-5 hidden md:block" />
-                <span className="md:text-3xl font-bold text-[#1F2430] dark:text-white tracking-wider tabular-nums">
+              <div className="flex items-center justify-center gap-2 w-full">
+                <IoMdTime className="text-[#7C5CFA] w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+
+                <span className="text-lg sm:text-2xl md:text-3xl font-bold text-[#1F2430] dark:text-white tracking-wider tabular-nums leading-none">
                   {currentTime.timeStr}
                 </span>
               </div>
 
-              <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 text-sm">
+              <div className="flex items-center justify-center gap-2 sm:gap-3 text-sm whitespace-nowrap">
                 <div className="flex items-center gap-1.5 text-[#5B657A] dark:text-slate-400">
-                  <CiCalendar className="text-[#7C5CFA] dark:text-[#7C5CFA] hidden sm:block w-4 h-4" />
+                  <CiCalendar className="text-[#7C5CFA] w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+
                   <span
                     className="font-medium text-[#1F2430] dark:text-slate-200 text-xs sm:text-sm"
                     dir="rtl"
@@ -849,7 +922,8 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                 </span>
 
                 <div className="flex items-center gap-1.5 text-[#5B657A] dark:text-slate-400">
-                  <CiCalendar className="text-[#7C5CFA] dark:text-[#7C5CFA] hidden sm:block w-4 h-4" />
+                  <CiCalendar className="text-[#7C5CFA] w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0" />
+
                   <span className="font-medium text-xs sm:text-sm text-[#5B657A] dark:text-slate-400">
                     {currentTime.gregorian}
                   </span>
@@ -859,8 +933,89 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
         </div>
 
+        <div
+          id="news3"
+          className="flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 pt-1 pb-2"
+        >
+          <button
+            onClick={toggleAllSessions}
+            className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#D6DCE8] dark:border-[#4A4A4A] bg-[#FAFBFD] dark:bg-transparent text-[#5B657A] dark:text-slate-400 hover:border-[#7C5CFA] hover:scale-105 active:scale-95"
+          >
+            {activeSessions.length === SESSIONS.length ? (
+              <span className="flex items-center gap-1.5">
+                {i18next.language === "fa" ? "مخفی کردن همه" : "Hide All"}
+              </span>
+            ) : (
+              <span className="flex items-center gap-1.5">
+                {i18next.language === "fa" ? "نمایش همه" : "Show All"}
+              </span>
+            )}
+          </button>
+
+          <div className="w-px h-4 sm:h-6 bg-[#E3E7F0] dark:bg-[#3C3C3C]" />
+
+          {SESSIONS.map((session) => {
+            const isActive = activeSessions.includes(session.id);
+            return (
+              <button
+                key={session.id}
+                onClick={() => toggleSession(session.id)}
+                className="group flex items-center gap-1 cursor-pointer sm:gap-1.5 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#D6DCE8] dark:border-[#4A4A4A] bg-[#FAFBFD] dark:bg-transparent hover:border-[#7C5CFA] hover:scale-105 active:scale-95"
+                style={{
+                  color: isActive ? COLORS.textPrimary : COLORS.textDisabled,
+                  opacity: isActive ? 1 : 0.5,
+                }}
+              >
+                <img
+                  src={session.icon}
+                  className="w-3.5 h-3.5 object-contain shrink-0"
+                  alt=""
+                />
+
+                <span className="relative flex items-center justify-center">
+                  <span
+                    className="block w-2.5 h-2.5 rounded-full transition-all duration-500 ease-out"
+                    style={{
+                      background: isActive ? session.dot : COLORS.textDisabled,
+                      boxShadow: isActive
+                        ? `0 0 12px ${session.dot}60`
+                        : "none",
+                    }}
+                  />
+                  {isActive && (
+                    <>
+                      <span
+                        className="absolute inset-0 rounded-full animate-ping"
+                        style={{
+                          background: session.dot,
+                          opacity: 0.3,
+                          animationDuration: "1.2s",
+                        }}
+                      />
+                      <span
+                        className="absolute inset-0 rounded-full animate-ping"
+                        style={{
+                          background: session.dot,
+                          opacity: 0.15,
+                          animationDuration: "1.8s",
+                          animationDelay: "0.6s",
+                        }}
+                      />
+                    </>
+                  )}
+                </span>
+
+                <span className="transition-all text-[#5B657A] dark:text-slate-400 duration-300 group-hover:tracking-wider">
+                  {i18next.language === "fa"
+                    ? session.fa.replace("سشن ", "")
+                    : session.en.replace(" Session", "")}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
         <div className="mx-2 sm:mx-auto rounded-xl overflow-hidden relative">
-          {/* دسکتاپ */}
           <div className="hidden md:block">
             <div
               className="relative bg-[#F6F8FA] dark:bg-transparent"
@@ -905,6 +1060,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
               {sorted.map((n, i) => {
                 const isPast = n.time < cur;
                 const isNext = n.id === nextUpId && !isPast;
+                const isPrev = n.id === prevNewsId && isPast;
                 const row = rowMap[n.id] ?? 0;
                 const topOffset = newsAreaBaseTop + row * newsAreaRowGap;
                 const zIdx = isNext ? 50 : isPast ? 15 - i : 25 + i;
@@ -945,12 +1101,11 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       );
                     }}
                   >
-                    <div className="relative">
-                      {isNext && (
-                        <span className="absolute -top-1.5 -right-1.5 flex h-2.5 w-2.5 z-10">
-                          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#D9A441] opacity-75" />
-                          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#D9A441]" />
-                        </span>
+                    <div className="relative mt-5">
+                      {(isNext || isPrev) && (
+                        <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-10">
+                          <NewsFlowBadge kind={isNext ? "next" : "prev"} />
+                        </div>
                       )}
                       <div
                         className="rounded-md flex flex-col items-center gap-0.5 border whitespace-nowrap transition-all duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
@@ -1128,8 +1283,9 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
                   {SESSIONS.map((s) => {
                     const on = activeSessions.includes(s.id);
-                    const cx = ((s.mapX ?? 50) / 100) * 1000;
-                    const cy = ((s.mapY ?? 50) / 100) * 420;
+
+                    const cx = (getSessionMidHour(s) / 24) * 1000;
+                    const cy = (s.barTop / 100) * 420;
 
                     return (
                       <g key={s.id}>
@@ -1387,92 +1543,6 @@ export default function TradingSessionsMap({ lang = "fa" }) {
           </div>
         </div>
 
-        {!isMobile && (
-          <div
-            id="news3"
-            className="hidden md:flex flex-wrap items-center justify-center gap-1.5 sm:gap-2 px-2 sm:px-4 pt-3 pb-1 border-t border-[#EDF1F5] dark:border-[#3C3C3C] mt-2"
-          >
-            <button
-              onClick={toggleAllSessions}
-              className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#D6DCE8] dark:border-[#4A4A4A] bg-[#FAFBFD] dark:bg-transparent text-[#5B657A] dark:text-slate-400 hover:border-[#7C5CFA] hover:scale-105 active:scale-95"
-            >
-              {activeSessions.length === SESSIONS.length ? (
-                <span className="flex items-center gap-1.5">
-                  {i18next.language === "fa" ? "مخفی کردن همه" : "Hide All"}
-                </span>
-              ) : (
-                <span className="flex items-center gap-1.5">
-                  {i18next.language === "fa" ? "نمایش همه" : "Show All"}
-                </span>
-              )}
-            </button>
-
-            <div className="w-px h-4 sm:h-6 bg-[#E3E7F0] dark:bg-[#3C3C3C]" />
-
-            {SESSIONS.map((session) => {
-              const isActive = activeSessions.includes(session.id);
-              return (
-                <button
-                  key={session.id}
-                  onClick={() => toggleSession(session.id)}
-                  className="group flex items-center gap-1 cursor-pointer sm:gap-1.5 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-medium transition-all duration-300 border border-[#D6DCE8] dark:border-[#4A4A4A] bg-[#FAFBFD] dark:bg-transparent hover:border-[#7C5CFA] hover:scale-105 active:scale-95"
-                  style={{
-                    color: isActive ? COLORS.textPrimary : COLORS.textDisabled,
-                    opacity: isActive ? 1 : 0.5,
-                  }}
-                >
-                  <img
-                    src={session.icon}
-                    className="w-3.5 h-3.5 object-contain shrink-0"
-                    alt=""
-                  />
-
-                  <span className="relative flex items-center justify-center">
-                    <span
-                      className="block w-2.5 h-2.5 rounded-full transition-all duration-500 ease-out"
-                      style={{
-                        background: isActive
-                          ? session.dot
-                          : COLORS.textDisabled,
-                        boxShadow: isActive
-                          ? `0 0 12px ${session.dot}60`
-                          : "none",
-                      }}
-                    />
-                    {isActive && (
-                      <>
-                        <span
-                          className="absolute inset-0 rounded-full animate-ping"
-                          style={{
-                            background: session.dot,
-                            opacity: 0.3,
-                            animationDuration: "1.2s",
-                          }}
-                        />
-                        <span
-                          className="absolute inset-0 rounded-full animate-ping"
-                          style={{
-                            background: session.dot,
-                            opacity: 0.15,
-                            animationDuration: "1.8s",
-                            animationDelay: "0.6s",
-                          }}
-                        />
-                      </>
-                    )}
-                  </span>
-
-                  <span className="transition-all text-[#5B657A] dark:text-slate-400 duration-300 group-hover:tracking-wider">
-                    {i18next.language === "fa"
-                      ? session.fa.replace("سشن ", "")
-                      : session.en.replace(" Session", "")}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        )}
-
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 px-3 sm:px-4 pt-3 pb-1 border-t border-[#EDF1F5] dark:border-[#3C3C3C] mt-2">
           <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#8A93A6] dark:text-slate-500">
             <CiCircleAlert
@@ -1537,7 +1607,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                       : tooltip.data.en}
                   </span>
                 </div>
-                <div className="mb-1.5 sm:mb-2">
+                <div className="mb-1.5 sm:mb-2 flex flex-wrap items-center gap-1.5">
                   <span
                     className="inline-flex items-center gap-1.5 font-semibold px-2 py-0.5 rounded"
                     style={{

@@ -266,7 +266,10 @@ const CandleBar = ({
 const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
   if (!active || !payload?.length) return null;
 
-  const fullDate = payload[0]?.payload?.fullDate;
+  const data = payload[0]?.payload;
+  if (!data) return null;
+
+  const fullDate = data.fullDate;
   const timeLabel = label || "";
 
   let dateString = "";
@@ -274,13 +277,17 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
 
   if (fullDate) {
     const date = new Date(fullDate);
+
     if (isRtl) {
       const year = date.getFullYear();
       const month = String(date.getMonth() + 1).padStart(2, "0");
       const day = String(date.getDate()).padStart(2, "0");
+
       dateString = `${year}/${month}/${day}`;
+
       const hours = String(date.getHours()).padStart(2, "0");
       const minutes = String(date.getMinutes()).padStart(2, "0");
+
       timeString = `${hours}:${minutes}`;
     } else {
       dateString = date.toLocaleDateString("en-US", {
@@ -288,6 +295,7 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
         month: "short",
         day: "numeric",
       });
+
       timeString = date.toLocaleTimeString("en-US", {
         hour: "2-digit",
         minute: "2-digit",
@@ -295,44 +303,45 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
     }
   }
 
-  const equityPayload = payload.find((p: any) => p.dataKey === "equity");
-  const equityData = equityPayload?.payload;
-
-  let equityOpen = equityData?.equityOpen || 0;
-  let equityHigh = equityData?.equityHigh || 0;
-  let equityLow = equityData?.equityLow || 0;
-  let equityClose = equityData?.equityClose || 0;
-
-  const ensureFiveDigits = (num: number): number => {
-    if (num < 10000) {
-      return 10000 + (num % 90000);
-    }
-    if (num > 99999) {
-      return 10000 + (num % 90000);
-    }
-    return num;
-  };
-
-  equityOpen = ensureFiveDigits(equityOpen);
-  equityHigh = ensureFiveDigits(equityHigh);
-  equityLow = ensureFiveDigits(equityLow);
-  equityClose = ensureFiveDigits(equityClose);
-
   const formatNumber = (num: number): string => {
     return Math.round(num).toLocaleString("en-US");
   };
 
+  const formatDecimal = (num: number): string => {
+    return Number(num).toLocaleString("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    });
+  };
+
+  const balance = Number(data.balance ?? 0);
+  const target = Number(data.target ?? 0);
+  const equity = Number(data.equity ?? 0);
+  const dailyDrawdown = Number(data.dailyDrawdown ?? 0);
+  const totalDrawdown = Number(data.totalDrawdown ?? 0);
+
+  const equityOpen = Number(data.equityOpen ?? 0);
+  const equityHigh = Number(data.equityHigh ?? 0);
+  const equityLow = Number(data.equityLow ?? 0);
+  const equityClose = Number(data.equityClose ?? 0);
+
   return (
     <div
       className={`
-        flex flex-col gap-1 
-        backdrop-blur-2xl 
-        border border-[#4a2a7a]/50 
-        rounded-xl sm:rounded-2xl 
-        px-2 sm:px-4 py-2 sm:py-3 
-        shadow-2xl shadow-purple-900/20 
-        
-        max-w-[200px] xs:max-w-[240px] sm:max-w-64 md:max-w-72 
+        flex flex-col gap-1
+        backdrop-blur-2xl
+        border
+        rounded-xl sm:rounded-2xl
+        px-2 sm:px-4
+        py-2 sm:py-3
+        shadow-2xl shadow-purple-900/20
+
+        min-w-[185px]
+        max-w-[220px]
+        sm:min-w-[230px]
+        sm:max-w-64
+        md:max-w-72
+
         ${isRtl ? "text-right" : "text-left"}
         transition-all duration-200
       `}
@@ -341,96 +350,162 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
         borderColor: settings?.colors?.primary || "#4a2a7a",
       }}
     >
-      <div className="flex flex-col items-center gap-0.5 pb-1 border-b border-purple-500/20">
+      {/* Date / Time */}
+      <div className="flex flex-col items-center gap-0.5 pb-1.5 border-b border-purple-500/20">
         <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[12px]">
           {dateString}
         </p>
+
         <p className="text-[#8b8baa] font-medium text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
           {timeString}
         </p>
       </div>
 
-      {equityData && (
-        <>
-          <div className="relative my-0.5 sm:my-1">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-purple-500/20"></div>
-            </div>
-            <div className="relative flex justify-center">
-              <span className="bg-[#1a1230] px-2 sm:px-3 text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 whitespace-nowrap">
-                {isRtl ? "📊 اکوییتی" : "📊 Equity"}
-              </span>
-            </div>
+      {/* Main Account Stats */}
+      <div className="mt-1 space-y-1">
+        {/* Balance */}
+        <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
+          <span
+            className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium"
+            style={{
+              color: settings?.colors?.text || "#a0a0c0",
+            }}
+          >
+            {isRtl ? "موجودی" : "Balance"}
+          </span>
+
+          <strong
+            className="font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]"
+            style={{
+              color: settings?.colors?.balanceLine || "#a78bfa",
+            }}
+          >
+            {formatDecimal(balance)}
+          </strong>
+        </div>
+
+        {/* Target */}
+        <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
+          <span
+            className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium"
+            style={{
+              color: settings?.colors?.text || "#a0a0c0",
+            }}
+          >
+            {isRtl ? "هدف" : "Target"}
+          </span>
+
+          <strong
+            className="font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]"
+            style={{
+              color: settings?.colors?.accent || "#c084fc",
+            }}
+          >
+            {formatDecimal(target)}
+          </strong>
+        </div>
+
+        {/* Equity */}
+        <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
+          <span
+            className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium"
+            style={{
+              color: settings?.colors?.text || "#a0a0c0",
+            }}
+          >
+            {isRtl ? "اکوییتی" : "Equity"}
+          </span>
+
+          <strong className="text-blue-400 font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
+            {formatDecimal(equity)}
+          </strong>
+        </div>
+
+        {/* Daily Drawdown */}
+        <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
+          <span className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium text-[#a0a0c0]">
+            {isRtl ? "دراودان روزانه" : "Daily Drawdown"}
+          </span>
+
+          <strong className="text-orange-400 font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
+            {formatDecimal(dailyDrawdown)}
+          </strong>
+        </div>
+
+        {/* Total Drawdown */}
+        <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
+          <span className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium text-[#a0a0c0]">
+            {isRtl ? "دراودان کل" : "Total Drawdown"}
+          </span>
+
+          <strong className="text-red-400 font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
+            {formatDecimal(totalDrawdown)}
+          </strong>
+        </div>
+      </div>
+
+      <div className="relative my-1">
+        <div className="absolute inset-0 flex items-center"></div>
+
+        <div className="relative flex justify-center">
+          <span className="bg-[#1a1230] px-2 sm:px-3 text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400 whitespace-nowrap">
+            {isRtl ? "📊 جزئیات اکوییتی" : "📊 Equity Details"}
+          </span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-2 gap-1 xs:gap-1.5 sm:gap-2">
+        <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10">
+          <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+            <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
+              {isRtl ? "باز شدن" : "Open"}
+            </span>
+
+            <strong className="text-blue-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+              {formatNumber(equityOpen)}
+            </strong>
           </div>
+        </div>
 
-          {/* balance - یک بار */}
-          {(() => {
-            const balancePayload = payload.find(
-              (p: any) => p.dataKey === "balance",
-            );
-            if (!balancePayload) return null;
-            return (
-              <div className="flex justify-between items-center gap-2 sm:gap-4 px-0.5 sm:px-1 rounded-lg hover:bg-white/5 transition-colors mb-1.5">
-                <span
-                  className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium truncate"
-                  style={{ color: settings?.colors?.text || "#a0a0c0" }}
-                >
-                  {balancePayload.name}
-                </span>
-                <strong className="text-white font-bold text-[8px] xs:text-[9px] sm:text-[10px] md:text-[11px]">
-                  {Number(balancePayload.value).toFixed(2)}
-                </strong>
-              </div>
-            );
-          })()}
+        {/* Close */}
+        <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10">
+          <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+            <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
+              {isRtl ? "بسته شدن" : "Close"}
+            </span>
 
-          <div className="grid grid-cols-2 gap-1 xs:gap-1.5 sm:gap-2">
-            <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10 hover:border-purple-500/30 transition-all">
-              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
-                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
-                  {isRtl ? "باز شدن" : "Open"}
-                </span>
-                <strong className="text-blue-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
-                  {formatNumber(equityOpen)}
-                </strong>
-              </div>
-            </div>
-
-            <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10 hover:border-purple-500/30 transition-all">
-              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
-                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
-                  {isRtl ? "بسته شدن" : "Close"}
-                </span>
-                <strong className="text-purple-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
-                  {formatNumber(equityClose)}
-                </strong>
-              </div>
-            </div>
-
-            <div className="bg-green-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-green-500/10 hover:border-green-500/30 transition-all">
-              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
-                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
-                  {isRtl ? "بیشترین" : "High"}
-                </span>
-                <strong className="text-green-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
-                  {formatNumber(equityHigh)}
-                </strong>
-              </div>
-            </div>
-
-            <div className="bg-red-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-red-500/10 hover:border-red-500/30 transition-all">
-              <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
-                <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium truncate">
-                  {isRtl ? "کمترین" : "Low"}
-                </span>
-                <strong className="text-red-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
-                  {formatNumber(equityLow)}
-                </strong>
-              </div>
-            </div>
+            <strong className="text-purple-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+              {formatNumber(equityClose)}
+            </strong>
           </div>
-        </>
-      )}
+        </div>
+
+        {/* High */}
+        <div className="bg-green-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-green-500/10">
+          <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+            <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
+              {isRtl ? "بیشترین" : "High"}
+            </span>
+
+            <strong className="text-green-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+              {formatNumber(equityHigh)}
+            </strong>
+          </div>
+        </div>
+
+        {/* Low */}
+        <div className="bg-red-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-red-500/10">
+          <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
+            <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
+              {isRtl ? "کمترین" : "Low"}
+            </span>
+
+            <strong className="text-red-400 font-bold text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px]">
+              {formatNumber(equityLow)}
+            </strong>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
