@@ -118,8 +118,9 @@ function formatTimeByFrame(
 function generateData(tf: TimeFrame): DataPoint[] {
   const seed = tf.length * 7 + tf.charCodeAt(0);
 
-  const COUNT = 200; // ← ثابت
+  const COUNT = 200; 
   const pts: DataPoint[] = [];
+  
   let balance: number = 400;
   const timeStep = getTimeStep(tf);
 
@@ -361,9 +362,7 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
         </p>
       </div>
 
-      {/* Main Account Stats */}
       <div className="mt-1 space-y-1">
-        {/* Balance */}
         <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
           <span
             className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium"
@@ -384,7 +383,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </strong>
         </div>
 
-        {/* Target */}
         <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
           <span
             className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium"
@@ -405,7 +403,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </strong>
         </div>
 
-        {/* Equity */}
         <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
           <span
             className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium"
@@ -421,7 +418,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </strong>
         </div>
 
-        {/* Daily Drawdown */}
         <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
           <span className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium text-[#a0a0c0]">
             {isRtl ? "دراودان روزانه" : "Daily Drawdown"}
@@ -432,7 +428,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </strong>
         </div>
 
-        {/* Total Drawdown */}
         <div className="flex items-center justify-between gap-2 px-1 py-1 rounded-lg hover:bg-white/5 transition-colors">
           <span className="text-[7px] xs:text-[8px] sm:text-[9px] md:text-[10px] font-medium text-[#a0a0c0]">
             {isRtl ? "دراودان کل" : "Total Drawdown"}
@@ -467,7 +462,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </div>
         </div>
 
-        {/* Close */}
         <div className="bg-purple-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-purple-500/10">
           <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
             <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
@@ -480,7 +474,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </div>
         </div>
 
-        {/* High */}
         <div className="bg-green-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-green-500/10">
           <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
             <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
@@ -493,7 +486,6 @@ const ChartTooltip = ({ active, payload, label, isRtl, settings }: any) => {
           </div>
         </div>
 
-        {/* Low */}
         <div className="bg-red-500/5 rounded-lg sm:rounded-xl px-1 xs:px-1.5 sm:px-2 py-1 xs:py-1.5 sm:py-2 border border-red-500/10">
           <div className="flex flex-col xs:flex-row justify-between items-start xs:items-center gap-0.5 xs:gap-1">
             <span className="text-[#6b6b99] text-[6px] xs:text-[7px] sm:text-[8px] font-medium">
