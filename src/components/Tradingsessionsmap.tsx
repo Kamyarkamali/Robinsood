@@ -454,7 +454,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
   const newsAreaBaseTop = isMobile ? 4 : 6;
   const newsAreaRowGap = isMobile ? 34 : 46;
-  const newsAreaHeight = isMobile ? 90 : 116;
+  const newsAreaHeight = isMobile ? 90 : 90;
 
   const getImpactColor = (impact: string) => {
     return (
@@ -539,7 +539,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
 
     return (
       <span
-        className="inline-flex items-center gap-0.5 px-1 py-[1px] rounded-full text-[7px] sm:text-[8px] font-bold whitespace-nowrap"
+        className="inline-flex items-center gap-0.5 px-1 py-[1px] mt-5 rounded-full text-[7px] sm:text-[8px] font-bold whitespace-nowrap"
         style={{
           background: `${color}22`,
           color,
@@ -703,7 +703,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     );
                   }}
                 >
-                  <span className="text-[9px] font-bold text-[#5B657A] dark:text-slate-300 mb-1 group-hover:text-[#7C5CFA] transition-colors whitespace-nowrap">
+                  <span className="text-[9px] mt-4 font-bold text-[#5B657A] dark:text-slate-300 mb-1 group-hover:text-[#7C5CFA] transition-colors whitespace-nowrap">
                     {fmt(n.time)}
                   </span>
 
@@ -1285,7 +1285,7 @@ export default function TradingSessionsMap({ lang = "fa" }) {
                     const on = activeSessions.includes(s.id);
 
                     const cx = (getSessionMidHour(s) / 24) * 1000;
-                    const cy = (s.barTop / 100) * 420;
+                    const cy = (s.barTop / 60) * 420;
 
                     return (
                       <g key={s.id}>
